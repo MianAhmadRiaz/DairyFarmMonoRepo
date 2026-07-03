@@ -49,6 +49,7 @@ const API_CONFIG = {
   // Health / treatments
   TREATMENTS: '/treatments',
   TREATMENT_WITHDRAWALS: '/treatments/withdrawals',
+  TREATMENT_SUMMARY: '/treatments/summary',
   // Milk
   MILK: {
     BASE: '/milk',
@@ -122,7 +123,9 @@ const API_CONFIG = {
   DASHBOARD: {
     HERD: '/dashboard',
     MILK: '/dashboard/milk',
-    LACTATION: '/dashboard/milk/lactation'
+    LACTATION: '/dashboard/milk/lactation',
+    COMPARISON: '/dashboard/comparison',
+    FINANCIALS_ESTIMATE: '/dashboard/financials-estimate'
   }
 }
 

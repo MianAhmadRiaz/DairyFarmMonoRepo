@@ -1,18 +1,14 @@
 import moment from 'moment'
 import React from 'react'
-import { Dimensions, View } from 'react-native'
-import { LineChart } from 'react-native-chart-kit'
-import AppText from 'shared/components/AppText/AppText'
 import { COLORS } from 'shared/theme'
-import { RF } from 'shared/theme/responsive'
 import { MilkTrendPoint } from 'shared/services/dashboard.services'
+import EmptyState from './EmptyState'
 import GlassCard from './GlassCard'
+import TrendLineChart from './TrendLineChart'
 
 interface Props {
   data: MilkTrendPoint[]
 }
-
-const CHART_WIDTH = Dimensions.get('window').width - RF(64)
 
 /**
  * 30-day milk trend — mirrors the web Overview tab's TrendLineChart
@@ -22,12 +18,7 @@ const MilkTrendChart = ({ data }: Props) => {
   if (!data?.length) {
     return (
       <GlassCard title="30-Day Milk Trend">
-        <View style={{ paddingVertical: RF(24), alignItems: 'center' }}>
-          <AppText fontSize="h5">🧴</AppText>
-          <AppText medium color="labelGrey" style={{ marginTop: RF(6) }}>
-            No milk records yet
-          </AppText>
-        </View>
+        <EmptyState title="No milk records yet" icon="🧴" />
       </GlassCard>
     )
   }
@@ -41,29 +32,10 @@ const MilkTrendChart = ({ data }: Props) => {
 
   return (
     <GlassCard title="30-Day Milk Trend" subtitle="Total litres per day">
-      <LineChart
-        data={{ labels, datasets: [{ data: values }] }}
-        width={CHART_WIDTH}
-        height={RF(180)}
-        bezier
-        withDots={false}
-        withInnerLines={false}
-        withOuterLines={false}
-        fromZero
-        yAxisSuffix=" L"
-        chartConfig={{
-          backgroundGradientFrom: COLORS.white,
-          backgroundGradientTo: COLORS.white,
-          fillShadowGradientFrom: COLORS.chartGreen,
-          fillShadowGradientFromOpacity: 0.28,
-          fillShadowGradientTo: COLORS.white,
-          fillShadowGradientToOpacity: 0.02,
-          decimalPlaces: 0,
-          color: () => COLORS.chartGreen,
-          labelColor: () => COLORS.labelGrey,
-          propsForLabels: { fontSize: RF(9) }
-        }}
-        style={{ marginLeft: -RF(8), borderRadius: RF(12) }}
+      <TrendLineChart
+        labels={labels}
+        series={[{ data: values, color: COLORS.chartGreen, name: 'Milk (L)' }]}
+        ySuffix=" L"
       />
     </GlassCard>
   )

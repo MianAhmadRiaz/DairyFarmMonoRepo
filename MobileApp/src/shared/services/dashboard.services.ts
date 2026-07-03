@@ -31,7 +31,67 @@ export interface ReproductionSummary {
   avgCalvingIntervalDays?: number
   avgDaysOpen?: number
   avgServicesPerConception?: number
-  funnel?: { stage: string; count: number }[]
+  funnel?: {
+    heatEvents: number
+    aiEvents: number
+    bullEvents: number
+    pregnancyConfirmed: number
+    calvings: number
+  }
+}
+
+export interface TreatmentSummary {
+  sickAnimals?: any[]
+  totalCost?: number
+  topDiagnoses?: { diagnosis: string; count: number }[]
+  byType?: { treatmentType: string; count: number }[]
+  daysSinceLastVaccinationOrDeworming?: {
+    animal?: { uuid?: string; name?: string; tagName?: string }
+    treatmentType: string
+    lastDate?: string
+    daysSince: number
+  }[]
+}
+
+export interface Withdrawal {
+  uuid: string
+  animal?: { uuid?: string; name?: string; tagName?: string }
+  diagnosis?: string
+  treatmentType?: string
+  milkWithdrawalUntil?: string
+  meatWithdrawalUntil?: string
+}
+
+export interface YearTotals {
+  totalMilk: number
+  avgMilkPerCow: number
+  calvingCount: number
+  treatmentCount: number
+  treatmentCost: number
+  mortalityCount: number
+}
+
+export interface HerdComparison {
+  currentYear: number
+  compareYear: number
+  totals: Record<string, YearTotals>
+  monthlyMilkTrend: ({ month: string } & Record<string, any>)[]
+  currentAnimalCountsNote?: string
+}
+
+export interface FinancialsEstimate {
+  isEstimate?: boolean
+  estimateNotes?: string
+  hasFeedData?: boolean
+  bottomPerformers?: {
+    uuid: string
+    name?: string
+    tagName?: string
+    totalMilk: number
+    realCostOfCare: number
+    estimatedMilkIncome: number
+    estimatedNetProfit: number
+  }[]
 }
 
 export interface HerdAlertItem {
@@ -77,3 +137,33 @@ export const fetchReproductionSummary =
     unwrap(
       await HTTP_CLIENT.get(API_CONFIG.BREEDING_EVENTS.REPRODUCTION_SUMMARY)
     )
+
+export const fetchTreatmentSummary = async (
+  year?: number
+): Promise<TreatmentSummary> =>
+  unwrap(
+    await HTTP_CLIENT.get(API_CONFIG.TREATMENT_SUMMARY, {
+      params: year ? { year } : {}
+    })
+  )
+
+export const fetchWithdrawals = async (): Promise<Withdrawal[]> =>
+  unwrap(await HTTP_CLIENT.get(API_CONFIG.TREATMENT_WITHDRAWALS))
+
+export const fetchHerdComparison = async (
+  year?: number
+): Promise<HerdComparison> =>
+  unwrap(
+    await HTTP_CLIENT.get(API_CONFIG.DASHBOARD.COMPARISON, {
+      params: year ? { year } : {}
+    })
+  )
+
+export const fetchFinancialsEstimate = async (
+  year?: number
+): Promise<FinancialsEstimate> =>
+  unwrap(
+    await HTTP_CLIENT.get(API_CONFIG.DASHBOARD.FINANCIALS_ESTIMATE, {
+      params: year ? { year } : {}
+    })
+  )

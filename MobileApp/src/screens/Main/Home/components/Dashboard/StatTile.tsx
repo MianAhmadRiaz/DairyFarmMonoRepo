@@ -4,23 +4,52 @@ import AppText from 'shared/components/AppText/AppText'
 import { COLORS, THEME } from 'shared/theme'
 import { RF, WP } from 'shared/theme/responsive'
 
+export interface Trend {
+  direction: 'up' | 'down' | 'flat'
+  label: string
+}
+
 interface Props {
   label: string
   value: string | number
   sublabel?: string
   icon: string // emoji, matching the web dashboard's StatTiles
   tint?: string
+  accent?: string
+  trend?: Trend
   loading?: boolean
 }
 
+const trendColor = (t: Trend) =>
+  t.direction === 'up'
+    ? COLORS.trendUp
+    : t.direction === 'down'
+      ? COLORS.trendDown
+      : COLORS.labelGrey
+
+const trendArrow = (t: Trend) =>
+  t.direction === 'up' ? '▲' : t.direction === 'down' ? '▼' : '—'
+
 /**
  * KPI tile matching the web app's StatTile: emoji icon in a tinted rounded
- * square, big bold value, small label + optional sublabel. Laid out 2-up.
+ * square, big bold value, small label + optional sublabel/trend. Laid out 2-up.
  */
-const StatTile = ({ label, value, sublabel, icon, tint, loading }: Props) => (
-  <View style={styles.tile}>
+const StatTile = ({
+  label,
+  value,
+  sublabel,
+  icon,
+  tint,
+  accent,
+  trend,
+  loading
+}: Props) => (
+  <View style={[styles.tile, accent ? { borderColor: `${accent}55` } : null]}>
     <View
-      style={[styles.iconBadge, { backgroundColor: tint ?? COLORS.tileTint }]}
+      style={[
+        styles.iconBadge,
+        { backgroundColor: tint ?? (accent ? `${accent}1F` : COLORS.tileTint) }
+      ]}
     >
       <AppText fontSize="h6" style={{ lineHeight: RF(24) }}>
         {icon}
@@ -42,6 +71,16 @@ const StatTile = ({ label, value, sublabel, icon, tint, loading }: Props) => (
       {!!sublabel && !loading && (
         <AppText fontSize="10" medium color="descriptionColor" numberOfLines={1}>
           {sublabel}
+        </AppText>
+      )}
+      {!!trend && !loading && (
+        <AppText
+          fontSize="10"
+          semiBold
+          numberOfLines={1}
+          style={{ color: trendColor(trend), marginTop: RF(1) }}
+        >
+          {trendArrow(trend)} {trend.label}
         </AppText>
       )}
     </View>

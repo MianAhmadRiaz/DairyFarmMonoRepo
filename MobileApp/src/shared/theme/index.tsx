@@ -1,4 +1,7 @@
 import { RF } from './responsive'
+
+// Palette aligned with the CattleCare web app (src/shared/theme/theme.jsx):
+// teal #0f7c8f primary, green #4cceac accent, mint-white #F4F8F7 canvas.
 export const COLORS = {
   //App Colors
   white: '#FFFFFF',
@@ -9,31 +12,51 @@ export const COLORS = {
   purple: '#9E77ED',
   indigo: '#6366F1',
   blue: '#2970FF',
-  primaryLightest: '#EBF7F8',
-  primaryLight: '#D4ECEE',
-  primaryMain: '#236476',
-  orange:"",
-  primaryDark: '#173142',
+  primaryLightest: '#EBF6F8',
+  primaryLight: '#CFE7EC',
+  primaryMain: '#0F7C8F',
+  orange: '#E2A23B',
+  primaryDark: '#0A5768',
   textLight: '#4B465C',
 
-  secondaryLightest: '#E9F4D1',
-  secondaryLight: '#C8E3A3',
-  secondaryMain: '#7DAD3F',
-  secondaryDark: '#4A6C2F',
-  lightestGrey: '##F8F9FA',
-  lightGrey: '##F3F4F6',
+  secondaryLightest: '#E4F8F2',
+  secondaryLight: '#A9E8D6',
+  secondaryMain: '#4CCEAC',
+  secondaryDark: '#2E7C67',
+  lightestGrey: '#F8F9FA',
+  lightGrey: '#F3F4F6',
   grey: '#384250',
   lightSilver: '#D2D6DB',
   mediumGrey: '#CECECE',
   darkGrey: '#1C2536',
   darkestGrey: '#111927',
-  placeholder: '#808080',
+  placeholder: '#94A3B8',
   cardGrey: 'rgba(17, 25, 39, 0.08)',
   descriptionColor: '#6C737F',
   erieBlack: '#1A1A1A',
   labelColor: '#14181E',
-  //App Colors start here,
 
+  // Background helpers (referenced by PrimaryButton, biometry, etc.)
+  primaryLightBackground: '#0F7C8F',
+  primaryDarkBackground: '#0A5768',
+  secondaryLightBackground: '#4CCEAC',
+  secondaryDarkBackground: '#2E7C67',
+  biometryCircleButtonColor: '#0F7C8F',
+
+  // Chart / status accents (mirroring the web dashboard)
+  chartGreen: '#4CCEAC',
+  chartBlue: '#6870FA',
+  chartRed: '#DB4F4A',
+  chartAmber: '#E2A23B',
+  trendUp: '#3DA58A',
+  trendDown: '#DB4F4A',
+
+  // Surfaces
+  cardBorder: 'rgba(15, 124, 143, 0.14)',
+  cardShadow: 'rgba(10, 87, 104, 0.16)',
+  tileTint: 'rgba(15, 124, 143, 0.08)',
+
+  //App Colors start here,
   WHITE_TRANS: 'rgba(255,255,255,0.3)',
   errorFade: 'rgba(255,127,127,0.3)',
   BLACK_TRANS: 'rgba(0,0,0,0.3)',
@@ -95,8 +118,17 @@ export const THEME = {
   RADIUS: {
     BOX: RF(10),
     SMALLBOX: RF(5),
+    CARD: RF(16),
     OVAL: RF(24),
     OVALBOX: RF(20)
+  },
+  // Shared soft shadow for cards (glass-card look from the web app)
+  CARD_SHADOW: {
+    shadowColor: '#0A5768',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.08,
+    shadowRadius: 12,
+    elevation: 3
   }
 }
 

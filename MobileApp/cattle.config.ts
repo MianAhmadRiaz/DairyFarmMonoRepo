@@ -43,7 +43,8 @@ const API_CONFIG = {
     CALVING: '/breeding-events/calving',
     DRYOFF: '/breeding-events/dryoff',
     PROTOCOL: '/breeding-events/protocol',
-    ALERTS: '/breeding-events/alerts'
+    ALERTS: '/breeding-events/alerts',
+    REPRODUCTION_SUMMARY: '/breeding-events/reproduction-summary'
   },
   // Health / treatments
   TREATMENTS: '/treatments',

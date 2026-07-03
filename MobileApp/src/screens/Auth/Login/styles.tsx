@@ -1,63 +1,115 @@
-import {StyleSheet} from 'react-native';
-import {RF} from 'shared/theme/responsive';
-import {COLORS, THEME} from '../../../shared/theme';
+import { StyleSheet } from 'react-native'
+import { RF } from 'shared/theme/responsive'
+import { COLORS, THEME } from '../../../shared/theme'
 
 const styles = StyleSheet.create({
-  container: {
+  root: {
     flex: 1,
+    backgroundColor: COLORS.primaryMain
   },
-  mainContainer: {
+
+  // ── Hero ────────────────────────────────────────────────────────
+  hero: {
+    flex: 0.42,
+    backgroundColor: COLORS.primaryMain,
+    overflow: 'hidden'
+  },
+  heroContent: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  heroCircleLarge: {
+    position: 'absolute',
+    top: -RF(70),
+    right: -RF(70),
+    width: RF(220),
+    height: RF(220),
+    borderRadius: RF(110),
+    backgroundColor: 'rgba(255,255,255,0.08)'
+  },
+  heroCircleSmall: {
+    position: 'absolute',
+    bottom: RF(20),
+    left: -RF(40),
+    width: RF(120),
+    height: RF(120),
+    borderRadius: RF(60),
+    backgroundColor: 'rgba(255,255,255,0.06)'
+  },
+  logoBadge: {
+    width: RF(96),
+    height: RF(96),
+    borderRadius: RF(28),
+    backgroundColor: COLORS.white,
+    alignItems: 'center',
+    justifyContent: 'center',
+    ...THEME.CARD_SHADOW,
+    shadowOpacity: 0.25
+  },
+  logo: {
+    width: RF(72),
+    height: RF(72)
+  },
+  brand: {
+    marginTop: RF(14),
+    letterSpacing: 0.5
+  },
+  tagline: {
+    color: 'rgba(255,255,255,0.85)',
+    marginTop: RF(4)
+  },
+
+  // ── Form sheet ──────────────────────────────────────────────────
+  sheet: {
     flex: 1,
     backgroundColor: COLORS.white,
+    borderTopLeftRadius: RF(28),
+    borderTopRightRadius: RF(28),
+    marginTop: -RF(24)
   },
-  topContainer: {
-    
-    flex: 0.6,
-    justifyContent: 'center',
-    alignItems: 'center',
-    
+  sheetContent: {
+    paddingHorizontal: THEME.PADDING.HIGH,
+    paddingTop: THEME.PADDING.VERYHIGH,
+    paddingBottom: THEME.PADDING.SUPERHIGH
   },
-  
-  bottomContainer: {
-    borderTopLeftRadius: THEME.RADIUS.OVAL,
-    borderTopRightRadius: THEME.RADIUS.OVAL,
-    overflow:"hidden",
-    flex: 1,
-    paddingHorizontal: THEME.PADDING.MID_LOW,
-    backgroundColor: COLORS.primaryLight,
-    
+  subheading: {
+    marginTop: RF(4),
+    marginBottom: THEME.MARGIN.HIGH
   },
-  inputView: {marginVertical: THEME.MARGIN.VERYHIGH},
-  
-  
+  inputView: {
+    marginBottom: THEME.MARGIN.LOW
+  },
   inputStyle: {
-    color:"red",
-    borderColor: COLORS.primaryMain,
-    backgroundColor:"white",
-
+    width: '100%',
+    backgroundColor: COLORS.lightestGrey,
+    borderColor: COLORS.cardBorder,
+    borderRadius: RF(14)
+  },
+  inputLabel: {
+    marginLeft: RF(4),
+    color: COLORS.textLight
   },
   forgotPassword: {
-    
     alignSelf: 'flex-end',
-    
-    marginRight: THEME.MARGIN.NORMAL,
+    marginBottom: THEME.MARGIN.HIGH
   },
   buttonStyle: {
-    backgroundColor:COLORS.primaryMain,
-    
+    width: '100%',
+    backgroundColor: COLORS.primaryMain,
+    borderColor: COLORS.primaryMain,
+    borderRadius: RF(14),
+    ...THEME.CARD_SHADOW,
+    shadowColor: COLORS.primaryMain,
+    shadowOpacity: 0.35
   },
-  buttonText: {color: COLORS.white},
-  noAccountText: {
+  buttonText: {
     color: COLORS.white,
-    alignSelf: 'flex-end',
-    fontSize: THEME.FONTS.SIZE.XXSMALL,
+    fontFamily: THEME.FONTS.TYPE.BOLD
+  },
+  fcmRow: {
+    marginTop: RF(40)
+  }
+})
 
-    marginRight: THEME.MARGIN.NORMAL,
-  },
-  errors: {
-    fontSize: THEME.FONTS.SIZE.XXXSMALL,
-    color: COLORS.error,
-    marginLeft: RF(10),
-  },
-});
-export default styles;
+export default styles

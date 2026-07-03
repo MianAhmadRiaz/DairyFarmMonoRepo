@@ -1,0 +1,879 @@
+openapi: 3.0.0
+info:
+  title: Cattle Care Web API
+  version: 1.0.0
+  description: |
+    # Cattle Care Management System API Documentation
+    
+    Complete API documentation for the Cattle Care Management System with advanced **Feeding Module**.
+    
+    ## Key Features:
+    - 🐄 **Animal Management**: Complete livestock tracking and management
+    - 🥛 **Milk Production**: Recording and tracking milk production data
+    - 🌾 **Feeding Module**: Advanced feeding management with intelligent automation
+    - 👥 **Staff Management**: Employee and role management
+    - 📊 **Reporting**: Comprehensive reporting and analytics
+    - 🔐 **Authentication**: Secure JWT-based authentication
+    
+    ## Feeding Module Highlights:
+    - **Shed & Pen Management**: Organize animals by location and type
+    - **Recipe Groups**: Categorize feed formulations by animal type
+    - **Feed Brands**: Manage commercial feed products
+    - **Intelligent Scheduling**: Automated feeding schedules with stock deduction
+    - **Real-time Tracking**: Monitor feeding status and completion
+    - **Comprehensive Reporting**: Detailed feeding reports and analytics
+    
+    ## Authentication
+    Most endpoints require JWT authentication. Include the token in the Authorization header:
+    ```
+    Authorization: Bearer <your-jwt-token>
+    ```
+  contact:
+    name: API Support
+    email: support@cattlecare.com
+  license:
+    name: MIT
+    url: https://opensource.org/licenses/MIT
+
+servers:
+  - url: http://localhost:2500
+    description: Development server
+  - url: https://api.cattlecare.com
+    description: Production server
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: JWT Authorization header using the Bearer scheme
+
+  schemas:
+    ApiResponse:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          example: 200
+        success:
+          type: boolean
+          example: true
+        message:
+          type: string
+          example: Operation completed successfully
+        type:
+          type: string
+          example: data
+        data:
+          type: object
+
+    ErrorResponse:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          example: 400
+        success:
+          type: boolean
+          example: false
+        message:
+          type: string
+          example: Validation error
+        error:
+          type: object
+
+    # Feeding Module Schemas
+    Shed:
+      type: object
+      properties:
+        uuid:
+          type: string
+          format: uuid
+          description: Unique identifier for the shed
+        name:
+          type: string
+          description: Name of the shed
+        description:
+          type: string
+          description: Description of the shed
+        capacity:
+          type: integer
+          description: Maximum number of animals the shed can hold
+        current_occupancy:
+          type: integer
+          description: Current number of animals in the shed
+        shed_type:
+          type: string
+          enum: [lactating, dry, heifer, calf, bull, mixed]
+          description: Type of animals primarily housed
+        farmId:
+          type: string
+          format: uuid
+          description: ID of the farm this shed belongs to
+
+    RecipeGroup:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Unique identifier for the recipe group
+        name:
+          type: string
+          description: Name of the recipe group
+        description:
+          type: string
+          description: Description of the recipe group
+        animal_category:
+          type: string
+          enum: [lactating_cows, dry_cows, heifers, calves, bulls, pregnant_cows, fresh_cows, high_producing, maintenance]
+          description: Target animal category
+        nutritional_focus:
+          type: string
+          enum: [high_protein, high_energy, maintenance, growth, reproduction, milk_production, weight_gain]
+          description: Primary nutritional objective
+        farmId:
+          type: string
+          format: uuid
+          description: ID of the farm this recipe group belongs to
+
+    FeedBrand:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Unique identifier for the feed brand
+        brand_name:
+          type: string
+          description: Name of the feed brand
+        product_name:
+          type: string
+          description: Specific product name
+        manufacturer:
+          type: string
+          description: Manufacturer of the feed
+        brand_type:
+          type: string
+          enum: [commercial, concentrate, supplement, mineral, vitamin, premix]
+          description: Type of feed brand
+        protein_content:
+          type: number
+          format: decimal
+          description: Protein content percentage
+        energy_content:
+          type: number
+          format: decimal
+          description: Energy content (MJ/kg)
+        target_animals:
+          type: string
+          description: Target animal types for this feed
+
+    FeedingSchedule:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Unique identifier for the feeding schedule
+        shedId:
+          type: string
+          format: uuid
+          description: ID of the shed to be fed
+        penId:
+          type: string
+          format: uuid
+          description: ID of the pen to be fed
+        feedFormulationId:
+          type: string
+          format: uuid
+          description: ID of the feed formulation to use
+        feeding_date:
+          type: string
+          format: date
+          description: Date of feeding
+        meal_time:
+          type: string
+          enum: [morning, afternoon, evening, night]
+          description: Time of day for feeding
+        planned_quantity:
+          type: number
+          format: decimal
+          description: Planned quantity to feed (kg)
+        actual_quantity:
+          type: number
+          format: decimal
+          description: Actual quantity fed (kg)
+        animal_count:
+          type: integer
+          description: Number of animals fed
+        feeding_status:
+          type: string
+          enum: [scheduled, in_progress, completed, skipped, partially_completed]
+          description: Current status of feeding
+        stock_deducted:
+          type: boolean
+          description: Whether stock has been deducted
+
+    Animal:
+      type: object
+      properties:
+        uuid:
+          type: string
+          format: uuid
+        tag:
+          type: string
+        name:
+          type: string
+        breed:
+          type: string
+        gender:
+          type: string
+          enum: [male, female]
+        birthDate:
+          type: string
+          format: date
+        status:
+          type: string
+
+    FeedFormulation:
+      type: object
+      properties:
+        uuid:
+          type: string
+          format: uuid
+        name:
+          type: string
+        description:
+          type: string
+        target_animal_count:
+          type: integer
+        cost_per_kg:
+          type: number
+          format: decimal
+
+security:
+  - bearerAuth: []
+
+paths:
+  # Authentication Endpoints
+  /auth/login:
+    post:
+      tags:
+        - Authentication
+      summary: User login
+      description: Authenticate user and receive JWT token
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - email
+                - password
+              properties:
+                email:
+                  type: string
+                  format: email
+                  example: admin@cattlecare.com
+                password:
+                  type: string
+                  example: password123
+      responses:
+        '200':
+          description: Login successful
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/ApiResponse'
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          token:
+                            type: string
+                            description: JWT authentication token
+                          user:
+                            type: object
+                            description: User information
+        '401':
+          description: Invalid credentials
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  # Feeding Module Endpoints
+  /feeding/pens-with-animals:
+    get:
+      tags:
+        - Feeding Management
+      summary: Get pens with animals for feeding
+      description: Retrieve all pens with their animal counts for feeding operations
+      responses:
+        '200':
+          description: Pens retrieved successfully
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/ApiResponse'
+                  - type: object
+                    properties:
+                      data:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            penId:
+                              type: string
+                              format: uuid
+                            penName:
+                              type: string
+                            animalCount:
+                              type: integer
+                            shedName:
+                              type: string
+
+  /feeding/feed-ingredients:
+    get:
+      tags:
+        - Feeding Management
+      summary: Get available feed ingredients
+      description: Retrieve all available stock items that can be used as feed ingredients
+      responses:
+        '200':
+          description: Feed ingredients retrieved successfully
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/ApiResponse'
+                  - type: object
+                    properties:
+                      data:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            uuid:
+                              type: string
+                              format: uuid
+                            name:
+                              type: string
+                            currentStock:
+                              type: number
+                            unit:
+                              type: string
+
+  /feeding/recipe-groups:
+    get:
+      tags:
+        - Recipe Management
+      summary: Get all recipe groups
+      description: Retrieve all recipe groups for organizing feed formulations
+      responses:
+        '200':
+          description: Recipe groups retrieved successfully
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/ApiResponse'
+                  - type: object
+                    properties:
+                      data:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/RecipeGroup'
+
+    post:
+      tags:
+        - Recipe Management
+      summary: Create new recipe group
+      description: Create a new recipe group for categorizing feed formulations
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - name
+                - animal_category
+              properties:
+                name:
+                  type: string
+                  example: High Protein Lactating Cows
+                description:
+                  type: string
+                  example: Recipe group for high-producing lactating cows
+                animal_category:
+                  type: string
+                  enum: [lactating_cows, dry_cows, heifers, calves, bulls, pregnant_cows, fresh_cows, high_producing, maintenance]
+                  example: lactating_cows
+                nutritional_focus:
+                  type: string
+                  enum: [high_protein, high_energy, maintenance, growth, reproduction, milk_production, weight_gain]
+                  example: milk_production
+      responses:
+        '201':
+          description: Recipe group created successfully
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/ApiResponse'
+                  - type: object
+                    properties:
+                      data:
+                        $ref: '#/components/schemas/RecipeGroup'
+
+  /feeding/recipes:
+    get:
+      tags:
+        - Recipe Management
+      summary: Get all feed recipes
+      description: Retrieve all feed formulations/recipes
+      parameters:
+        - name: recipeGroupId
+          in: query
+          description: Filter by recipe group ID
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Recipes retrieved successfully
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/ApiResponse'
+                  - type: object
+                    properties:
+                      data:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/FeedFormulation'
+
+    post:
+      tags:
+        - Recipe Management
+      summary: Create new feed recipe
+      description: Create a new feed formulation/recipe with ingredients
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - name
+                - ingredients
+              properties:
+                name:
+                  type: string
+                  example: High Energy Lactating Mix
+                description:
+                  type: string
+                  example: High energy feed mix for lactating cows
+                recipeGroupId:
+                  type: integer
+                  example: 1
+                target_animal_count:
+                  type: integer
+                  example: 50
+                ingredients:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      stockItemId:
+                        type: string
+                        format: uuid
+                      quantity:
+                        type: number
+                      unit:
+                        type: string
+      responses:
+        '201':
+          description: Recipe created successfully
+
+  /feeding/apply-recipe-shed:
+    post:
+      tags:
+        - Feeding Application
+      summary: Apply feed recipe to entire shed
+      description: Apply a feed recipe to all animals in a specific shed
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - shedId
+                - recipeId
+                - mealTime
+              properties:
+                shedId:
+                  type: string
+                  format: uuid
+                  example: "123e4567-e89b-12d3-a456-426614174000"
+                recipeId:
+                  type: string
+                  format: uuid
+                  example: "123e4567-e89b-12d3-a456-426614174001"
+                mealTime:
+                  type: string
+                  enum: [morning, afternoon, evening, night]
+                  example: morning
+                feedingDate:
+                  type: string
+                  format: date
+                  example: "2025-10-11"
+                notes:
+                  type: string
+                  example: Extra feeding for high producers
+      responses:
+        '200':
+          description: Recipe applied successfully
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/ApiResponse'
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          scheduledFeedings:
+                            type: integer
+                          totalQuantity:
+                            type: number
+                          estimatedCost:
+                            type: number
+
+  /feeding/apply-recipe-adjustable-shed:
+    post:
+      tags:
+        - Feeding Application
+      summary: Apply feed recipe to shed with adjustments
+      description: Apply a feed recipe to a shed with custom quantity adjustments per pen
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - shedId
+                - recipeId
+                - mealTime
+                - penAdjustments
+              properties:
+                shedId:
+                  type: string
+                  format: uuid
+                recipeId:
+                  type: string
+                  format: uuid
+                mealTime:
+                  type: string
+                  enum: [morning, afternoon, evening, night]
+                feedingDate:
+                  type: string
+                  format: date
+                penAdjustments:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      penId:
+                        type: string
+                        format: uuid
+                      quantityAdjustment:
+                        type: number
+                        description: Multiplier for base quantity (1.0 = normal, 1.2 = 20% more)
+      responses:
+        '200':
+          description: Recipe applied with adjustments successfully
+
+  /feeding/shed-feed-report:
+    get:
+      tags:
+        - Feeding Reports
+      summary: Get shed feeding report
+      description: Generate comprehensive feeding report for a specific shed
+      parameters:
+        - name: shedId
+          in: query
+          required: true
+          description: ID of the shed
+          schema:
+            type: string
+            format: uuid
+        - name: startDate
+          in: query
+          required: true
+          description: Start date for report
+          schema:
+            type: string
+            format: date
+        - name: endDate
+          in: query
+          required: true
+          description: End date for report
+          schema:
+            type: string
+            format: date
+      responses:
+        '200':
+          description: Feeding report generated successfully
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/ApiResponse'
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          shedInfo:
+                            type: object
+                          feedingSummary:
+                            type: object
+                          dailyFeedings:
+                            type: array
+
+  /feeding/date-wise-feed-report:
+    get:
+      tags:
+        - Feeding Reports
+      summary: Get date-wise feeding report
+      description: Generate feeding report for all sheds on a specific date
+      parameters:
+        - name: date
+          in: query
+          required: true
+          description: Date for the report
+          schema:
+            type: string
+            format: date
+      responses:
+        '200':
+          description: Date-wise feeding report generated successfully
+
+  /feeding/shed-feed-stock-print:
+    get:
+      tags:
+        - Feeding Reports
+      summary: Get printable shed feed stock report
+      description: Generate a printable feeding and stock report for a shed
+      parameters:
+        - name: shedId
+          in: query
+          required: true
+          description: ID of the shed
+          schema:
+            type: string
+            format: uuid
+        - name: date
+          in: query
+          required: true
+          description: Date for the report
+          schema:
+            type: string
+            format: date
+      responses:
+        '200':
+          description: Printable report generated successfully
+
+  # Animal Management Endpoints
+  /animal:
+    get:
+      tags:
+        - Animal Management
+      summary: Get all animals
+      description: Retrieve list of all animals in the farm
+      parameters:
+        - name: page
+          in: query
+          description: Page number
+          schema:
+            type: integer
+            default: 1
+        - name: limit
+          in: query
+          description: Number of animals per page
+          schema:
+            type: integer
+            default: 10
+        - name: search
+          in: query
+          description: Search by tag or name
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Animals retrieved successfully
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/ApiResponse'
+                  - type: object
+                    properties:
+                      data:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/Animal'
+
+    post:
+      tags:
+        - Animal Management
+      summary: Add new animal
+      description: Register a new animal in the system
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - tag
+                - name
+                - breed
+                - gender
+                - birthDate
+              properties:
+                tag:
+                  type: string
+                  example: "CTL001"
+                name:
+                  type: string
+                  example: "Bella"
+                breed:
+                  type: string
+                  example: "Holstein"
+                gender:
+                  type: string
+                  enum: [male, female]
+                  example: "female"
+                birthDate:
+                  type: string
+                  format: date
+                  example: "2023-01-15"
+      responses:
+        '201':
+          description: Animal created successfully
+
+  # Milk Production Endpoints
+  /milk:
+    get:
+      tags:
+        - Milk Production
+      summary: Get milk production records
+      description: Retrieve milk production data
+      parameters:
+        - name: date
+          in: query
+          description: Filter by specific date
+          schema:
+            type: string
+            format: date
+        - name: animalId
+          in: query
+          description: Filter by animal ID
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Milk records retrieved successfully
+
+    post:
+      tags:
+        - Milk Production
+      summary: Record milk production
+      description: Record milk production for animals
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - animalId
+                - quantity
+                - milkingSession
+              properties:
+                animalId:
+                  type: string
+                  format: uuid
+                quantity:
+                  type: number
+                  format: decimal
+                  example: 15.5
+                milkingSession:
+                  type: string
+                  enum: [morning, evening]
+                  example: morning
+                quality:
+                  type: string
+                  enum: [excellent, good, average, poor]
+                  example: good
+      responses:
+        '201':
+          description: Milk production recorded successfully
+
+  # Dashboard Endpoints
+  /dashboard/summary:
+    get:
+      tags:
+        - Dashboard
+      summary: Get dashboard summary
+      description: Retrieve key farm statistics and metrics
+      responses:
+        '200':
+          description: Dashboard data retrieved successfully
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/ApiResponse'
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          totalAnimals:
+                            type: integer
+                          totalMilkToday:
+                            type: number
+                          pendingFeedings:
+                            type: integer
+                          activeSheds:
+                            type: integer
+
+tags:
+  - name: Authentication
+    description: User authentication and authorization
+  - name: Feeding Management
+    description: Advanced feeding module with intelligent automation
+  - name: Recipe Management
+    description: Feed recipe and formulation management
+  - name: Feeding Application
+    description: Apply feeding recipes to sheds and pens
+  - name: Feeding Reports
+    description: Comprehensive feeding reports and analytics
+  - name: Animal Management
+    description: Livestock tracking and management
+  - name: Milk Production
+    description: Milk production recording and tracking
+  - name: Dashboard
+    description: Farm overview and key metrics

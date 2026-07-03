@@ -1,0 +1,4 @@
+<resources>
+    <!-- Define the missing ic_launcher_background color -->
+    <color name="ic_launcher_background">#FFFFFF</color>  <!-- You can change this color to match your app's theme -->
+</resources>

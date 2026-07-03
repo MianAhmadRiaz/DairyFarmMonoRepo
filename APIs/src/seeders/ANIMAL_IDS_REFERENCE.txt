@@ -1,0 +1,262 @@
+================================================================================
+                      ANIMAL IDS QUICK REFERENCE
+================================================================================
+
+MILKING COWS (8) - Active Lactation
+================================================================================
+ID          Name        Gender  Breed               Status
+────────────────────────────────────────────────────────────────────────────
+MILK-001    Bessie      Female  Holstein-Friesian  Milking Pen A
+MILK-002    Daisy       Female  Holstein-Friesian  Milking Pen A
+MILK-003    Molly       Female  Holstein-Friesian  Milking Pen A
+MILK-004    Ella        Female  Holstein-Friesian  Milking Pen A
+MILK-005    Lucy        Female  Holstein-Friesian  Milking Pen A
+MILK-006    Ruby        Female  Holstein-Friesian  Milking Pen B
+MILK-007    Sofia       Female  Holstein-Friesian  Milking Pen B
+MILK-008    Bella       Female  Holstein-Friesian  Milking Pen B
+
+Production: 24-45L/day each
+Records: 30 milk entries per animal
+Data: 2-year history available
+
+
+DRY COWS (4) - Pregnant, Pre-Calving
+================================================================================
+ID          Name        Gender  Breed       Status          Pregnancy
+────────────────────────────────────────────────────────────────────────────
+DRY-001     Chloe       Female  Jersey      Dry Pen A       Pregnant
+DRY-002     Ivy         Female  Jersey      Dry Pen A       Pregnant
+DRY-003     Sadie       Female  Jersey      Dry Pen B       Pregnant
+DRY-004     Olive       Female  Jersey      Dry Pen B       Pregnant
+
+Lactation: 3-6 previous cycles
+Events: Calving event history available
+Notes: All pregnant, near calving
+
+
+HEIFERS (5) - Young Females, Pre-Breeding
+================================================================================
+ID          Name        Gender  Breed       Status          Pregnancy
+────────────────────────────────────────────────────────────────────────────
+HEIF-001    Rose        Female  Guernsey    Heifer Pen A    Mixed
+HEIF-002    Penny       Female  Guernsey    Heifer Pen A    Mixed
+HEIF-003    Hope        Female  Guernsey    Heifer Pen A    Mixed
+HEIF-004    Grace       Female  Guernsey    Heifer Pen B    Mixed
+HEIF-005    Stella      Female  Guernsey    Heifer Pen B    Mixed
+
+Age: 1-2 years
+Never Calved: Lactation = 0
+Status: Growing toward first breeding
+
+
+CALVES (6) - Young Offspring
+================================================================================
+ID          Name        Gender  Breed               Location
+────────────────────────────────────────────────────────────────────────────
+CALF-001    Luna        Mixed   Brown Swiss         Calf Pen A
+CALF-002    Lily        Mixed   Brown Swiss         Calf Pen A
+CALF-003    Amber       Mixed   Brown Swiss         Calf Pen A
+CALF-004    Emmy        Mixed   Brown Swiss         Calf Pen B
+CALF-005    Nora        Mixed   Brown Swiss         Calf Pen B
+CALF-006    Zoe         Mixed   Brown Swiss         Calf Pen B
+
+Age: 1-6 months old
+Weight: 50-180 kg
+Status: Early development
+
+
+BULLS (2) - Breeding Males
+================================================================================
+ID          Name        Gender  Breed               Location
+────────────────────────────────────────────────────────────────────────────
+BULL-001    Thor        Male    Holstein-Friesian  Bull Pen A
+BULL-002    Duke        Male    Jersey              Bull Pen B
+
+Age: 2-5 years
+Weight: 500-650 kg
+Status: Active breeding animals
+
+
+QUICK LOOKUP BY LOCATION
+================================================================================
+
+MILKING PEN A (5 animals)
+  MILK-001 (Bessie)
+  MILK-002 (Daisy)
+  MILK-003 (Molly)
+  MILK-004 (Ella)
+  MILK-005 (Lucy)
+
+MILKING PEN B (3 animals)
+  MILK-006 (Ruby)
+  MILK-007 (Sofia)
+  MILK-008 (Bella)
+
+DRY PEN A (2 animals)
+  DRY-001 (Chloe)
+  DRY-002 (Ivy)
+
+DRY PEN B (2 animals)
+  DRY-003 (Sadie)
+  DRY-004 (Olive)
+
+HEIFER PEN A (3 animals)
+  HEIF-001 (Rose)
+  HEIF-002 (Penny)
+  HEIF-003 (Hope)
+
+HEIFER PEN B (2 animals)
+  HEIF-004 (Grace)
+  HEIF-005 (Stella)
+
+CALF PEN A (3 animals)
+  CALF-001 (Luna)
+  CALF-002 (Lily)
+  CALF-003 (Amber)
+
+CALF PEN B (3 animals)
+  CALF-004 (Emmy)
+  CALF-005 (Nora)
+  CALF-006 (Zoe)
+
+BULL PEN A (1 animal)
+  BULL-001 (Thor)
+
+BULL PEN B (1 animal)
+  BULL-002 (Duke)
+
+
+QUICK LOOKUP BY BREED
+================================================================================
+
+HOLSTEIN-FRIESIAN (9)
+  ├─ MILK-001 (Bessie)     ├─ MILK-002 (Daisy)      ├─ MILK-003 (Molly)
+  ├─ MILK-004 (Ella)       ├─ MILK-005 (Lucy)       ├─ MILK-006 (Ruby)
+  ├─ MILK-007 (Sofia)      ├─ MILK-008 (Bella)      └─ BULL-001 (Thor)
+
+JERSEY (6)
+  ├─ DRY-001 (Chloe)       ├─ DRY-002 (Ivy)         ├─ DRY-003 (Sadie)
+  ├─ DRY-004 (Olive)       └─ BULL-002 (Duke)
+
+GUERNSEY (5)
+  ├─ HEIF-001 (Rose)       ├─ HEIF-002 (Penny)      ├─ HEIF-003 (Hope)
+  ├─ HEIF-004 (Grace)      └─ HEIF-005 (Stella)
+
+BROWN SWISS (6)
+  ├─ CALF-001 (Luna)       ├─ CALF-002 (Lily)       ├─ CALF-003 (Amber)
+  ├─ CALF-004 (Emmy)       ├─ CALF-005 (Nora)       └─ CALF-006 (Zoe)
+
+
+QUICK LOOKUP BY LIFECYCLE STAGE
+================================================================================
+
+🥛 MILKING COWS (Active Production) - 8 animals
+   MILK-001 through MILK-008
+   Location: Milking Pens A & B
+   Production: 24-45L/day each
+   Records: 240 total milk entries
+
+🤰 DRY COWS (Pregnant) - 4 animals
+   DRY-001 through DRY-004
+   Location: Dry Pens A & B
+   Status: All pregnant
+   Events: Calving event history available
+
+👧 HEIFERS (Young Females) - 5 animals
+   HEIF-001 through HEIF-005
+   Location: Heifer Pens A & B
+   Age: 1-2 years
+   Status: Pre-breeding or recently inseminated
+
+👶 CALVES (Young Offspring) - 6 animals
+   CALF-001 through CALF-006
+   Location: Calf Pens A & B
+   Age: 1-6 months
+   Gender: Mixed
+
+🐂 BULLS (Breeding Males) - 2 animals
+   BULL-001, BULL-002
+   Location: Bull Pens A & B
+   Status: Active breeding
+
+
+DATA AVAILABLE PER ANIMAL CATEGORY
+================================================================================
+
+MILKING COWS
+  ✓ Milk production records (30 per animal, 2-year history)
+  ✓ Lactation cycle number (2-5)
+  ✓ Pregnancy status (mixed)
+  ✓ Weight & health status
+  ✓ Arrival date & purchase price
+
+DRY COWS
+  ✓ Pregnancy status (all pregnant)
+  ✓ Historical calving events
+  ✓ Previous lactation numbers
+  ✓ Weight & health status
+  ✓ Estimated due dates
+
+HEIFERS
+  ✓ Growth/development data
+  ✓ Pregnancy status (mixed)
+  ✓ Insemination dates (for pregnant ones)
+  ✓ Age and weight tracking
+  ✓ Breed information
+
+CALVES
+  ✓ Birth date
+  ✓ Gender information
+  ✓ Weight at records
+  ✓ Dam (mother) information
+  ✓ Pedigree tracking ready
+
+BULLS
+  ✓ Breed characteristics
+  ✓ Age and health status
+  ✓ Purchase price
+  ✓ Active breeding status
+  ✓ Genetic quality indicators
+
+
+TAGS ASSIGNED
+================================================================================
+
+15 animals have ear/leg tags:
+  TAG-MILK-001 (MILK-001)     TAG-MILK-002 (MILK-002)
+  TAG-MILK-003 (MILK-003)     TAG-MILK-004 (MILK-004)
+  TAG-MILK-005 (MILK-005)     TAG-MILK-006 (MILK-006)
+  TAG-MILK-007 (MILK-007)     TAG-MILK-008 (MILK-008)
+  TAG-DRY-001  (DRY-001)      TAG-DRY-002  (DRY-002)
+  TAG-DRY-003  (DRY-003)      TAG-DRY-004  (DRY-004)
+  TAG-HEIF-001 (HEIF-001)     TAG-HEIF-002 (HEIF-002)
+  TAG-HEIF-003 (HEIF-003)
+
+
+USEFUL QUERIES
+================================================================================
+
+Find all milking cows:
+  WHERE animalCategory = 'milk' AND animalType = 'Cattle'
+
+Find all pregnant animals:
+  WHERE ispregnant = true
+
+Find animals by breed:
+  WHERE breedType = 'Holstein-Friesian'
+
+Find animals in specific pen:
+  WHERE penId = [PEN_UUID]
+
+Find production data:
+  SELECT * FROM milk_in WHERE date > '2024-01-01'
+
+Find all user-created animals:
+  WHERE createdBy = 'owner@riverdale.com'
+
+Find animals needing attention:
+  WHERE healthStatus IN ('sick', 'culling')
+
+================================================================================
+For more details, see SEED_DATA_GUIDE.md and TEST_CREDENTIALS.txt
+================================================================================

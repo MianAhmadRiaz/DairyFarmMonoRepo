@@ -1,0 +1,60 @@
+/* eslint-disable no-undef */
+import cluster from "cluster";
+import "./src/config/db.js";
+import "./src/models/index.js"
+import "./src/jobs/index.js";
+import os from "os";
+import cors from "cors";
+import AppRoutes from "./src/routes/index.js";
+import ENV from "./src/config/keys.js";
+import print from "./src/utils/print.js";
+import { globalErrorHandlerMiddleware, handleApiNotFound, handleUncaughtException } from "./src/utils/globalErrorHandlers.js";
+import express from "express";
+
+const app = express();
+
+app.use(express.json());
+app.use(cors());
+app.use(express.urlencoded({ extended: true }));
+
+const production = false;
+if (cluster.isPrimary && process.env.NODE_ENV === "production" && production) {
+    const cpus = os.cpus().length;
+    print("info", `Forking for ${cpus} CPUs`);
+
+    // run nodejs on all cpus available on the System
+    for (let i = 0; i < cpus; i++) {
+        cluster.fork();
+    }
+
+    // respawn a new worker if one dies
+    cluster.on("exit", (worker) => {
+        print("info", `worker ${worker.process.pid} died`);
+        cluster.fork();
+    });
+} else {
+    // helloo
+    const dateDeployed = `${new Date().toLocaleDateString()} at ${new Date().toLocaleTimeString()}`;
+    app.get("/", (req, res) => {
+        res.send(`Welcome Dairy farm API (${process.env.NODE_ENV})  LDA : ${dateDeployed} . Hello from worker: ${process.pid}`);
+    });
+
+    // apis
+    app.use("/api/v1/", AppRoutes);
+
+    // route not found
+    app.use(handleApiNotFound);
+
+    // error handler
+    app.use(globalErrorHandlerMiddleware);
+
+    // uncaughtException and unhandledRejection
+    process.on("uncaughtException", handleUncaughtException);
+    process.on("unhandledRejection", handleUncaughtException);
+
+    app.listen(ENV.PORT, async () => {
+        print("info", `Dairy Form is running on port ${ENV.PORT}...`);
+        print("info", `This is ${process.env.NODE_ENV} environment...`);
+    });
+
+}

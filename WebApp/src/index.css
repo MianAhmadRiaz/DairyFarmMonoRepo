@@ -1,0 +1,22 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Global scroll behavior - ensures consistent scroll restoration */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Reset scroll behavior for instant scrolling when needed */
+.instant-scroll {
+  scroll-behavior: auto !important;
+}
+
+/* Ensure all scrollable containers start from top */
+.scrollable-container {
+  scroll-behavior: smooth;
+}
+
+.scrollable-container.reset {
+  scroll-behavior: auto !important;
+}

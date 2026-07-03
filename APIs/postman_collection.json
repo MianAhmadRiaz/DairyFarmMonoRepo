@@ -1,0 +1,1409 @@
+{
+  "info": {
+    "name": "Cattle Care Web API - Complete Collection",
+    "description": "Complete API collection for Cattle Care Management System - All endpoints included",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_postman_id": "cattle-care-api-complete"
+  },
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{auth_token}}",
+        "type": "string"
+      }
+    ]
+  },
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:2500/api/v1",
+      "type": "string"
+    },
+    {
+      "key": "auth_token",
+      "value": "",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "Authentication",
+      "item": [
+        {
+          "name": "Login",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"admin@cattlecare.com\",\n  \"password\": \"password123\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/auth/login",
+              "host": ["{{base_url}}"],
+              "path": ["auth", "login"]
+            }
+          }
+        },
+        {
+          "name": "Register",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"user@example.com\",\n  \"password\": \"password123\",\n  \"firstName\": \"John\",\n  \"lastName\": \"Doe\",\n  \"role\": \"employee\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/auth/register",
+              "host": ["{{base_url}}"],
+              "path": ["auth", "register"]
+            }
+          }
+        },
+        {
+          "name": "Logout",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/auth/logout",
+              "host": ["{{base_url}}"],
+              "path": ["auth", "logout"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Animals",
+      "item": [
+        {
+          "name": "Get All Animals",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/animals?limit=10&page=1",
+              "host": ["{{base_url}}"],
+              "path": ["animals"],
+              "query": [
+                {"key": "limit", "value": "10"},
+                {"key": "page", "value": "1"}
+              ]
+            }
+          }
+        },
+        {
+          "name": "Add Animal",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Bessie\",\n  \"breed\": \"Holstein\",\n  \"dateOfBirth\": \"2020-05-15\",\n  \"gender\": \"female\",\n  \"weight\": 450,\n  \"animalType\": \"cattle\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/animals",
+              "host": ["{{base_url}}"],
+              "path": ["animals"]
+            }
+          }
+        },
+        {
+          "name": "Update Animal",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"weight\": 470,\n  \"healthStatus\": \"healthy\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/animals/:id",
+              "host": ["{{base_url}}"],
+              "path": ["animals", ":id"],
+              "variable": [{"key": "id", "value": "animal_id"}]
+            }
+          }
+        },
+        {
+          "name": "Delete Animal",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/animals/:id",
+              "host": ["{{base_url}}"],
+              "path": ["animals", ":id"],
+              "variable": [{"key": "id", "value": "animal_id"}]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Animal Types",
+      "item": [
+        {
+          "name": "Get Animal Types",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/animalTypes",
+              "host": ["{{base_url}}"],
+              "path": ["animalTypes"]
+            }
+          }
+        },
+        {
+          "name": "Add Animal Type",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Cattle\",\n  \"description\": \"Domestic cattle for milk and meat production\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/animalTypes",
+              "host": ["{{base_url}}"],
+              "path": ["animalTypes"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Animal Sub-Categories",
+      "item": [
+        {
+          "name": "Get Animal Sub-Categories",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/animalSubCategories",
+              "host": ["{{base_url}}"],
+              "path": ["animalSubCategories"]
+            }
+          }
+        },
+        {
+          "name": "Add Animal Sub-Category",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Dairy Cows\",\n  \"categoryId\": \"cattle_id\",\n  \"description\": \"Cows specifically for milk production\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/animalSubCategories",
+              "host": ["{{base_url}}"],
+              "path": ["animalSubCategories"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Employees",
+      "item": [
+        {
+          "name": "Get All Employees",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/employee",
+              "host": ["{{base_url}}"],
+              "path": ["employee"]
+            }
+          }
+        },
+        {
+          "name": "Add Employee",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"firstName\": \"John\",\n  \"lastName\": \"Smith\",\n  \"email\": \"john.smith@farm.com\",\n  \"phone\": \"+1234567890\",\n  \"position\": \"Farm Worker\",\n  \"department\": \"Operations\",\n  \"salary\": 3500,\n  \"hireDate\": \"2024-01-15\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/employee",
+              "host": ["{{base_url}}"],
+              "path": ["employee"]
+            }
+          }
+        },
+        {
+          "name": "Update Employee",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"salary\": 3750,\n  \"position\": \"Senior Farm Worker\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/employee/:id",
+              "host": ["{{base_url}}"],
+              "path": ["employee", ":id"],
+              "variable": [{"key": "id", "value": "employee_id"}]
+            }
+          }
+        },
+        {
+          "name": "Delete Employee",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/employee/:id",
+              "host": ["{{base_url}}"],
+              "path": ["employee", ":id"],
+              "variable": [{"key": "id", "value": "employee_id"}]
+            }
+          }
+        },
+        {
+          "name": "Employee Dashboard Metrics",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/employee/dashboard",
+              "host": ["{{base_url}}"],
+              "path": ["employee", "dashboard"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Salary Management",
+      "item": [
+        {
+          "name": "Get Employee Salaries",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/salary/employees",
+              "host": ["{{base_url}}"],
+              "path": ["salary", "employees"]
+            }
+          }
+        },
+        {
+          "name": "Update Employee Salary",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"employeeId\": \"emp_123\",\n  \"newSalary\": 4000,\n  \"effectiveDate\": \"2024-01-01\",\n  \"reason\": \"Annual increment\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/salary/update",
+              "host": ["{{base_url}}"],
+              "path": ["salary", "update"]
+            }
+          }
+        },
+        {
+          "name": "Batch Update Salaries",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"salaryUpdates\": [\n    {\n      \"employeeId\": \"emp_123\",\n      \"newSalary\": 4000\n    },\n    {\n      \"employeeId\": \"emp_456\",\n      \"newSalary\": 3800\n    }\n  ],\n  \"effectiveDate\": \"2024-01-01\",\n  \"reason\": \"Annual review\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/salary/batch-update",
+              "host": ["{{base_url}}"],
+              "path": ["salary", "batch-update"]
+            }
+          }
+        },
+        {
+          "name": "Give Advance",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"employeeId\": \"emp_123\",\n  \"amount\": 500,\n  \"reason\": \"Emergency medical expense\",\n  \"dueDate\": \"2024-03-01\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/salary/advance/give",
+              "host": ["{{base_url}}"],
+              "path": ["salary", "advance", "give"]
+            }
+          }
+        },
+        {
+          "name": "Receive Advance Payment",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"advanceTransactionId\": \"adv_123\",\n  \"amount\": 200,\n  \"paymentMethod\": \"cash\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/salary/advance/receive",
+              "host": ["{{base_url}}"],
+              "path": ["salary", "advance", "receive"]
+            }
+          }
+        },
+        {
+          "name": "Get Advance Transactions",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/salary/advance/transactions?employeeId=emp_123",
+              "host": ["{{base_url}}"],
+              "path": ["salary", "advance", "transactions"],
+              "query": [{"key": "employeeId", "value": "emp_123"}]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Attendance",
+      "item": [
+        {
+          "name": "Get Attendance Records",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/attendance?employeeId=emp_123&startDate=2024-01-01&endDate=2024-01-31",
+              "host": ["{{base_url}}"],
+              "path": ["attendance"],
+              "query": [
+                {"key": "employeeId", "value": "emp_123"},
+                {"key": "startDate", "value": "2024-01-01"},
+                {"key": "endDate", "value": "2024-01-31"}
+              ]
+            }
+          }
+        },
+        {
+          "name": "Mark Attendance",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"employeeId\": \"emp_123\",\n  \"date\": \"2024-01-15\",\n  \"checkIn\": \"08:00\",\n  \"checkOut\": \"17:00\",\n  \"status\": \"present\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/attendance",
+              "host": ["{{base_url}}"],
+              "path": ["attendance"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Milk Management",
+      "item": [
+        {
+          "name": "Record Milk Production",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"animalId\": \"animal_123\",\n  \"quantity\": 25.5,\n  \"quality\": \"A\",\n  \"date\": \"2024-01-15\",\n  \"session\": \"morning\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/milk",
+              "host": ["{{base_url}}"],
+              "path": ["milk"]
+            }
+          }
+        },
+        {
+          "name": "Get Milk Records",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/milk?animalId=animal_123&startDate=2024-01-01",
+              "host": ["{{base_url}}"],
+              "path": ["milk"],
+              "query": [
+                {"key": "animalId", "value": "animal_123"},
+                {"key": "startDate", "value": "2024-01-01"}
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Milk Analytics",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/milk/analytics?period=month",
+              "host": ["{{base_url}}"],
+              "path": ["milk", "analytics"],
+              "query": [{"key": "period", "value": "month"}]
+            }
+          }
+        },
+        {
+          "name": "Get Milk Graph Data",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/milk/graph?period=week",
+              "host": ["{{base_url}}"],
+              "path": ["milk", "graph"],
+              "query": [{"key": "period", "value": "week"}]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Milk Categories",
+      "item": [
+        {
+          "name": "Get Milk Categories",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/milkCategories",
+              "host": ["{{base_url}}"],
+              "path": ["milkCategories"]
+            }
+          }
+        },
+        {
+          "name": "Add Milk Category",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Premium Grade\",\n  \"description\": \"High quality milk with >3.5% fat content\",\n  \"fatContent\": 3.8\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/milkCategories",
+              "host": ["{{base_url}}"],
+              "path": ["milkCategories"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Bulls",
+      "item": [
+        {
+          "name": "Get All Bulls",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/bull?limit=10&page=1",
+              "host": ["{{base_url}}"],
+              "path": ["bull"],
+              "query": [
+                {"key": "limit", "value": "10"},
+                {"key": "page", "value": "1"}
+              ]
+            }
+          }
+        },
+        {
+          "name": "Add Bull",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Thunder\",\n  \"breed\": \"Holstein\",\n  \"age\": 4,\n  \"weight\": 800,\n  \"healthStatus\": \"excellent\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/bull",
+              "host": ["{{base_url}}"],
+              "path": ["bull"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Breeding",
+      "item": [
+        {
+          "name": "Get Breeding Events",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/breedingEvent",
+              "host": ["{{base_url}}"],
+              "path": ["breedingEvent"]
+            }
+          }
+        },
+        {
+          "name": "Create Breeding Event",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"animalId\": \"animal_123\",\n  \"bullId\": \"bull_456\",\n  \"breedingDate\": \"2024-01-15\",\n  \"method\": \"artificial\",\n  \"expectedCalvingDate\": \"2024-10-15\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/breedingEvent",
+              "host": ["{{base_url}}"],
+              "path": ["breedingEvent"]
+            }
+          }
+        },
+        {
+          "name": "Get Breed Types",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/breedTypes",
+              "host": ["{{base_url}}"],
+              "path": ["breedTypes"]
+            }
+          }
+        },
+        {
+          "name": "Add Breed Type",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Holstein Friesian\",\n  \"description\": \"High milk producing dairy breed\",\n  \"origin\": \"Netherlands\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/breedTypes",
+              "host": ["{{base_url}}"],
+              "path": ["breedTypes"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Feed Management",
+      "item": [
+        {
+          "name": "Get Feed Formulations",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/feedFormulation",
+              "host": ["{{base_url}}"],
+              "path": ["feedFormulation"]
+            }
+          }
+        },
+        {
+          "name": "Create Feed Formulation",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"High Protein Mix\",\n  \"description\": \"For lactating cows\",\n  \"ingredients\": [\n    {\n      \"name\": \"Soybean meal\",\n      \"quantity\": 20,\n      \"unit\": \"kg\"\n    },\n    {\n      \"name\": \"Corn\",\n      \"quantity\": 30,\n      \"unit\": \"kg\"\n    }\n  ]\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/feedFormulation",
+              "host": ["{{base_url}}"],
+              "path": ["feedFormulation"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Stock Management",
+      "item": [
+        {
+          "name": "Get Stock Categories",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/stockCategory",
+              "host": ["{{base_url}}"],
+              "path": ["stockCategory"]
+            }
+          }
+        },
+        {
+          "name": "Add Stock Category",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Feed & Nutrition\",\n  \"description\": \"All feed related items\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/stockCategory",
+              "host": ["{{base_url}}"],
+              "path": ["stockCategory"]
+            }
+          }
+        },
+        {
+          "name": "Get Stock Items",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/stockItem?categoryId=cat_123",
+              "host": ["{{base_url}}"],
+              "path": ["stockItem"],
+              "query": [{"key": "categoryId", "value": "cat_123"}]
+            }
+          }
+        },
+        {
+          "name": "Add Stock Item",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Wheat Bran\",\n  \"categoryId\": \"cat_123\",\n  \"quantity\": 100,\n  \"unit\": \"kg\",\n  \"minimumLevel\": 20,\n  \"price\": 25.50\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/stockItem",
+              "host": ["{{base_url}}"],
+              "path": ["stockItem"]
+            }
+          }
+        },
+        {
+          "name": "Get Stock Transactions",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/stockTransaction?itemId=item_123&transactionType=out",
+              "host": ["{{base_url}}"],
+              "path": ["stockTransaction"],
+              "query": [
+                {"key": "itemId", "value": "item_123"},
+                {"key": "transactionType", "value": "out"}
+              ]
+            }
+          }
+        },
+        {
+          "name": "Record Stock Transaction",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"itemId\": \"item_123\",\n  \"quantity\": 10,\n  \"transactionType\": \"out\",\n  \"remarks\": \"Fed to cattle pen A\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/stockTransaction",
+              "host": ["{{base_url}}"],
+              "path": ["stockTransaction"]
+            }
+          }
+        },
+        {
+          "name": "Get Stock Reports",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/StockReports?reportType=low_stock&startDate=2024-01-01&endDate=2024-01-31",
+              "host": ["{{base_url}}"],
+              "path": ["StockReports"],
+              "query": [
+                {"key": "reportType", "value": "low_stock"},
+                {"key": "startDate", "value": "2024-01-01"},
+                {"key": "endDate", "value": "2024-01-31"}
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Purchases",
+      "item": [
+        {
+          "name": "Get Purchase Items",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/purchaseItem",
+              "host": ["{{base_url}}"],
+              "path": ["purchaseItem"]
+            }
+          }
+        },
+        {
+          "name": "Record Purchase",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"itemName\": \"Premium Cattle Feed\",\n  \"quantity\": 500,\n  \"unitPrice\": 45.00,\n  \"supplierId\": \"supplier_123\",\n  \"purchaseDate\": \"2024-01-15\",\n  \"totalAmount\": 22500\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/purchaseItem",
+              "host": ["{{base_url}}"],
+              "path": ["purchaseItem"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Suppliers",
+      "item": [
+        {
+          "name": "Get Suppliers",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/supplier",
+              "host": ["{{base_url}}"],
+              "path": ["supplier"]
+            }
+          }
+        },
+        {
+          "name": "Add Supplier",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"ABC Feed Suppliers\",\n  \"contactPerson\": \"John Johnson\",\n  \"phone\": \"+1234567890\",\n  \"email\": \"contact@abcfeed.com\",\n  \"address\": \"123 Farm Supply Road, Rural City\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/supplier",
+              "host": ["{{base_url}}"],
+              "path": ["supplier"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Medicine",
+      "item": [
+        {
+          "name": "Get Medicine Categories",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/medicinceCategory",
+              "host": ["{{base_url}}"],
+              "path": ["medicinceCategory"]
+            }
+          }
+        },
+        {
+          "name": "Add Medicine Category",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Antibiotics\",\n  \"description\": \"Bacterial infection treatment medications\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/medicinceCategory",
+              "host": ["{{base_url}}"],
+              "path": ["medicinceCategory"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Pens",
+      "item": [
+        {
+          "name": "Get Pens",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/pen",
+              "host": ["{{base_url}}"],
+              "path": ["pen"]
+            }
+          }
+        },
+        {
+          "name": "Add Pen",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Pen A1\",\n  \"capacity\": 20,\n  \"location\": \"North Field\",\n  \"type\": \"dairy_cattle\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/pen",
+              "host": ["{{base_url}}"],
+              "path": ["pen"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Tags",
+      "item": [
+        {
+          "name": "Get Tags",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/tag",
+              "host": ["{{base_url}}"],
+              "path": ["tag"]
+            }
+          }
+        },
+        {
+          "name": "Create Tag",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"tagId\": \"TAG-001\",\n  \"animalId\": \"animal_123\",\n  \"color\": \"yellow\",\n  \"type\": \"ear_tag\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/tag",
+              "host": ["{{base_url}}"],
+              "path": ["tag"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Tasks",
+      "item": [
+        {
+          "name": "Get Tasks",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/tasks?assignedTo=emp_123&status=pending",
+              "host": ["{{base_url}}"],
+              "path": ["tasks"],
+              "query": [
+                {"key": "assignedTo", "value": "emp_123"},
+                {"key": "status", "value": "pending"}
+              ]
+            }
+          }
+        },
+        {
+          "name": "Create Task",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Clean barn area\",\n  \"description\": \"Thorough cleaning of barn area A1\",\n  \"assignedTo\": \"emp_123\",\n  \"dueDate\": \"2024-01-20\",\n  \"priority\": \"medium\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/tasks",
+              "host": ["{{base_url}}"],
+              "path": ["tasks"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Events",
+      "item": [
+        {
+          "name": "Get Events",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/events",
+              "host": ["{{base_url}}"],
+              "path": ["events"]
+            }
+          }
+        },
+        {
+          "name": "Create Event",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Vaccination Day\",\n  \"description\": \"Annual vaccination for all cattle\",\n  \"eventDate\": \"2024-02-15\",\n  \"eventType\": \"health_check\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/events",
+              "host": ["{{base_url}}"],
+              "path": ["events"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Protocols",
+      "item": [
+        {
+          "name": "Get Protocols",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/protocol",
+              "host": ["{{base_url}}"],
+              "path": ["protocol"]
+            }
+          }
+        },
+        {
+          "name": "Create Protocol",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Vaccination Protocol\",\n  \"description\": \"Standard vaccination procedure\",\n  \"steps\": [\n    {\n      \"stepNumber\": 1,\n      \"description\": \"Prepare vaccination area\"\n    },\n    {\n      \"stepNumber\": 2,\n      \"description\": \"Administer vaccine\"\n    }\n  ]\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/protocol",
+              "host": ["{{base_url}}"],
+              "path": ["protocol"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Dashboard",
+      "item": [
+        {
+          "name": "Get Dashboard Metrics",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/dashboard",
+              "host": ["{{base_url}}"],
+              "path": ["dashboard"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Companies",
+      "item": [
+        {
+          "name": "Get Companies",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/company",
+              "host": ["{{base_url}}"],
+              "path": ["company"]
+            }
+          }
+        },
+        {
+          "name": "Add Company",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Green Valley Farms\",\n  \"address\": \"456 Farm Road, Valley City\",\n  \"phone\": \"+1234567890\",\n  \"email\": \"info@greenvalleyfarms.com\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/company",
+              "host": ["{{base_url}}"],
+              "path": ["company"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Departments",
+      "item": [
+        {
+          "name": "Get Departments",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/department",
+              "host": ["{{base_url}}"],
+              "path": ["department"]
+            }
+          }
+        },
+        {
+          "name": "Add Department",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Operations\",\n  \"description\": \"Daily farm operations and management\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/department",
+              "host": ["{{base_url}}"],
+              "path": ["department"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Roles & Permissions",
+      "item": [
+        {
+          "name": "Get Roles",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/role",
+              "host": ["{{base_url}}"],
+              "path": ["role"]
+            }
+          }
+        },
+        {
+          "name": "Create Role",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Farm Manager\",\n  \"description\": \"Manages daily farm operations\",\n  \"permissions\": [\"read_animals\", \"write_animals\", \"read_milk\", \"write_milk\"]\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/role",
+              "host": ["{{base_url}}"],
+              "path": ["role"]
+            }
+          }
+        },
+        {
+          "name": "Get Permissions",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/permissions",
+              "host": ["{{base_url}}"],
+              "path": ["permissions"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Units",
+      "item": [
+        {
+          "name": "Get Units of Measurement",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/units",
+              "host": ["{{base_url}}"],
+              "path": ["units"]
+            }
+          }
+        },
+        {
+          "name": "Add Unit of Measurement",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Kilogram\",\n  \"symbol\": \"kg\",\n  \"type\": \"weight\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/units",
+              "host": ["{{base_url}}"],
+              "path": ["units"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Administration",
+      "item": [
+        {
+          "name": "Get Requests",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/requests?status=pending",
+              "host": ["{{base_url}}"],
+              "path": ["requests"],
+              "query": [{"key": "status", "value": "pending"}]
+            }
+          }
+        },
+        {
+          "name": "Create Request",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"type\": \"leave_request\",\n  \"description\": \"Need time off for medical appointment\",\n  \"requestedBy\": \"emp_123\",\n  \"urgency\": \"medium\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/requests",
+              "host": ["{{base_url}}"],
+              "path": ["requests"]
+            }
+          }
+        },
+        {
+          "name": "Admin Functions",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/admin",
+              "host": ["{{base_url}}"],
+              "path": ["admin"]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

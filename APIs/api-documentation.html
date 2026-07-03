@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cattle Care API Documentation</title>
+    <link rel="stylesheet" type="text/css" href="https://unpkg.com/swagger-ui-dist@4.15.5/swagger-ui.css" />
+    <style>
+        body { 
+            margin: 0; 
+            padding: 0; 
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background-color: #fafafa;
+        }
+        .swagger-ui .topbar { 
+            display: none !important; 
+        }
+        .swagger-ui .info { 
+            margin: 20px 0; 
+        }
+        .swagger-ui .info .title { 
+            font-size: 32px !important; 
+            color: #2c5234; 
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .swagger-ui .info .description { 
+            font-size: 14px;
+            line-height: 1.6;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        .swagger-ui .info .description h1 {
+            color: #2c5234;
+            border-bottom: 2px solid #2c5234;
+            padding-bottom: 10px;
+        }
+        .swagger-ui .info .description h2 {
+            color: #4a5568;
+            margin-top: 30px;
+        }
+        .header-banner {
+            background: linear-gradient(135deg, #2c5234 0%, #4a7c59 100%);
+            color: white;
+            padding: 30px 20px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .header-banner h1 {
+            margin: 0;
+            font-size: 2.5rem;
+            font-weight: 600;
+        }
+        .header-banner p {
+            margin: 10px 0 0 0;
+            opacity: 0.9;
+            font-size: 1.1rem;
+        }
+        .quick-links {
+            background: white;
+            padding: 20px;
+            margin: 20px auto;
+            max-width: 1000px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .quick-links h3 {
+            color: #2c5234;
+            margin-top: 0;
+        }
+        .link-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+        .link-item {
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 6px;
+            border-left: 4px solid #2c5234;
+        }
+        .link-item h4 {
+            margin: 0 0 8px 0;
+            color: #2c5234;
+            font-size: 14px;
+            font-weight: 600;
+        }
+        .link-item p {
+            margin: 0;
+            font-size: 12px;
+            color: #666;
+        }
+        @media print {
+            .swagger-ui .download-url-wrapper { display: none !important; }
+            .swagger-ui .scheme-container { display: none !important; }
+            .swagger-ui .servers { display: none !important; }
+            .header-banner { background: #2c5234 !important; }
+            body { print-color-adjust: exact; }
+        }
+        .yaml-download {
+            text-align: center;
+            margin: 20px;
+        }
+        .yaml-download a {
+            display: inline-block;
+            background: #2c5234;
+            color: white;
+            padding: 12px 24px;
+            text-decoration: none;
+            border-radius: 6px;
+            font-weight: 500;
+            transition: background 0.3s;
+        }
+        .yaml-download a:hover {
+            background: #1e3a24;
+        }
+    </style>
+</head>
+<body>
+    <div class="header-banner">
+        <h1>🐄 Cattle Care API Documentation</h1>
+        <p>Complete API Reference for Cattle Care Management System</p>
+    </div>
+
+    <div class="quick-links">
+        <h3>📋 Quick Reference Guide</h3>
+        <div class="link-grid">
+            <div class="link-item">
+                <h4>🔐 Authentication</h4>
+                <p>JWT token required for most endpoints. Use /auth/login to get token.</p>
+            </div>
+            <div class="link-item">
+                <h4>🌾 Feeding Module</h4>
+                <p>Advanced feeding management with 11 endpoints for complete automation.</p>
+            </div>
+            <div class="link-item">
+                <h4>🐄 Animal Management</h4>
+                <p>Complete livestock tracking, registration, and management system.</p>
+            </div>
+            <div class="link-item">
+                <h4>🥛 Milk Production</h4>
+                <p>Record and track daily milk production with quality metrics.</p>
+            </div>
+            <div class="link-item">
+                <h4>📊 Reporting</h4>
+                <p>Comprehensive reports for feeding, production, and farm analytics.</p>
+            </div>
+            <div class="link-item">
+                <h4>🏗️ Infrastructure</h4>
+                <p>Shed and pen management for organized animal housing.</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="yaml-download">
+        <a href="./cattle-care-api.yaml" download>📥 Download YAML File</a>
+    </div>
+
+    <div id="swagger-ui"></div>
+    
+    <script src="https://unpkg.com/swagger-ui-dist@4.15.5/swagger-ui-bundle.js"></script>
+    <script>
+        window.onload = function() {
+            SwaggerUIBundle({
+                url: './cattle-care-api.yaml',
+                dom_id: '#swagger-ui',
+                deepLinking: true,
+                presets: [
+                    SwaggerUIBundle.presets.apis,
+                    SwaggerUIBundle.presets.standalone
+                ],
+                plugins: [
+                    SwaggerUIBundle.plugins.DownloadUrl
+                ],
+                layout: "StandaloneLayout",
+                defaultModelsExpandDepth: 2,
+                defaultModelExpandDepth: 2,
+                docExpansion: "none",
+                filter: true,
+                showRequestHeaders: true,
+                showCommonExtensions: true,
+                tryItOutEnabled: true,
+                supportedSubmitMethods: ['get', 'post', 'put', 'delete', 'patch'],
+                validatorUrl: null,
+                operationsSorter: "alpha",
+                tagsSorter: "alpha"
+            });
+        }
+    </script>
+</body>
+</html>

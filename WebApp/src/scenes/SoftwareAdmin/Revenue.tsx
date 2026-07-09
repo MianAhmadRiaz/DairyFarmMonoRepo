@@ -29,6 +29,7 @@ import {
 } from 'recharts';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { useTranslation } from 'react-i18next';
 
 import {
   FarmPayment,
@@ -60,6 +61,7 @@ const statusColor: Record<string, any> = {
 const statusFilters = ['', 'paid', 'pending', 'failed', 'refunded'];
 
 const Revenue: React.FC = () => {
+  const { t } = useTranslation();
   const [dashboard, setDashboard] = useState<RevenueDashboard | null>(null);
   const [loading, setLoading] = useState(true);
 
@@ -75,7 +77,7 @@ const Revenue: React.FC = () => {
       try {
         setDashboard(await getRevenueDashboard());
       } catch (err: any) {
-        toast.error(err?.response?.data?.message || 'Failed to load revenue');
+        toast.error(err?.response?.data?.message || t('softwareAdmin.revenue.loadFailed'));
       } finally {
         setLoading(false);
       }
@@ -89,7 +91,7 @@ const Revenue: React.FC = () => {
       setPayments(res.payments);
       setTotalPages(res.totalPages || 1);
     } catch (err: any) {
-      toast.error(err?.response?.data?.message || 'Failed to load payments');
+      toast.error(err?.response?.data?.message || t('softwareAdmin.revenue.loadPaymentsFailed'));
     } finally {
       setPayLoading(false);
     }
@@ -114,27 +116,27 @@ const Revenue: React.FC = () => {
   return (
     <Box>
       <Typography variant="h4" fontWeight={700} mb={3}>
-        Revenue
+        {t('softwareAdmin.revenue.title')}
       </Typography>
 
       <Grid container spacing={2} mb={3}>
         <Grid item xs={12} sm={6} md={4} lg={2}>
-          <StatCard label="MRR" value={money(dashboard?.mrr)} color="#22c55e" />
+          <StatCard label={t('softwareAdmin.revenue.stats.mrr')} value={money(dashboard?.mrr)} color="#22c55e" />
         </Grid>
         <Grid item xs={12} sm={6} md={4} lg={2}>
-          <StatCard label="ARR" value={money(dashboard?.arr)} color="#3b82f6" />
+          <StatCard label={t('softwareAdmin.revenue.stats.arr')} value={money(dashboard?.arr)} color="#3b82f6" />
         </Grid>
         <Grid item xs={12} sm={6} md={4} lg={2}>
-          <StatCard label="Collected This Month" value={money(dashboard?.collectedThisMonth)} color="#8b5cf6" />
+          <StatCard label={t('softwareAdmin.revenue.stats.collectedThisMonth')} value={money(dashboard?.collectedThisMonth)} color="#8b5cf6" />
         </Grid>
         <Grid item xs={12} sm={6} md={4} lg={2}>
-          <StatCard label="Total Collected" value={money(dashboard?.collectedTotal)} color="#0ea5e9" />
+          <StatCard label={t('softwareAdmin.revenue.stats.totalCollected')} value={money(dashboard?.collectedTotal)} color="#0ea5e9" />
         </Grid>
         <Grid item xs={12} sm={6} md={4} lg={2}>
-          <StatCard label="Pending" value={money(dashboard?.pendingPayments)} color="#f59e0b" />
+          <StatCard label={t('softwareAdmin.revenue.stats.pending')} value={money(dashboard?.pendingPayments)} color="#f59e0b" />
         </Grid>
         <Grid item xs={12} sm={6} md={4} lg={2}>
-          <StatCard label="Outstanding" value={money(dashboard?.outstanding)} color="#ef4444" />
+          <StatCard label={t('softwareAdmin.revenue.stats.outstanding')} value={money(dashboard?.outstanding)} color="#ef4444" />
         </Grid>
       </Grid>
 
@@ -143,7 +145,7 @@ const Revenue: React.FC = () => {
         <Grid item xs={12} md={7}>
           <Paper sx={{ borderRadius: 3, p: 2, height: 340 }}>
             <Typography variant="h6" fontWeight={700} mb={1}>
-              Revenue Trend (6 months)
+              {t('softwareAdmin.revenue.trendTitle')}
             </Typography>
             {dashboard?.trend && dashboard.trend.length > 0 ? (
               <ResponsiveContainer width="100%" height={270}>
@@ -156,7 +158,7 @@ const Revenue: React.FC = () => {
                 </BarChart>
               </ResponsiveContainer>
             ) : (
-              <Typography color="text.secondary">No trend data.</Typography>
+              <Typography color="text.secondary">{t('softwareAdmin.revenue.noTrendData')}</Typography>
             )}
           </Paper>
         </Grid>
@@ -166,21 +168,21 @@ const Revenue: React.FC = () => {
           <Paper sx={{ borderRadius: 3, height: 340, overflow: 'auto' }}>
             <Box p={2}>
               <Typography variant="h6" fontWeight={700}>
-                Revenue by Plan
+                {t('softwareAdmin.revenue.byPlanTitle')}
               </Typography>
             </Box>
             <Table size="small">
               <TableHead>
                 <TableRow>
-                  <TableCell>Plan</TableCell>
-                  <TableCell align="right">Farms</TableCell>
-                  <TableCell align="right">Total</TableCell>
+                  <TableCell>{t('softwareAdmin.revenue.byPlanColumns.plan')}</TableCell>
+                  <TableCell align="right">{t('softwareAdmin.revenue.byPlanColumns.farms')}</TableCell>
+                  <TableCell align="right">{t('softwareAdmin.revenue.byPlanColumns.total')}</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
                 {(!dashboard?.revenueByPlan || dashboard.revenueByPlan.length === 0) && (
                   <TableRow>
-                    <TableCell colSpan={3}>No data.</TableCell>
+                    <TableCell colSpan={3}>{t('softwareAdmin.revenue.noData')}</TableCell>
                   </TableRow>
                 )}
                 {dashboard?.revenueByPlan?.map(row => (
@@ -201,12 +203,12 @@ const Revenue: React.FC = () => {
       {/* All-farm payments ledger */}
       <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
         <Typography variant="h6" fontWeight={700}>
-          Payments Ledger
+          {t('softwareAdmin.revenue.ledgerTitle')}
         </Typography>
         <TextField
           select
           size="small"
-          label="Status"
+          label={t('softwareAdmin.revenue.statusFilter')}
           value={status}
           onChange={e => {
             setPage(1);
@@ -216,7 +218,7 @@ const Revenue: React.FC = () => {
         >
           {statusFilters.map(s => (
             <MenuItem key={s || 'all'} value={s}>
-              {s === '' ? 'All' : s}
+              {s === '' ? t('softwareAdmin.revenue.all') : t('softwareAdmin.payments.status.' + s, s)}
             </MenuItem>
           ))}
         </TextField>
@@ -231,18 +233,18 @@ const Revenue: React.FC = () => {
           <Table>
             <TableHead>
               <TableRow>
-                <TableCell>Invoice</TableCell>
-                <TableCell>Farm</TableCell>
-                <TableCell>Amount</TableCell>
-                <TableCell>Method</TableCell>
-                <TableCell>Date</TableCell>
-                <TableCell>Status</TableCell>
+                <TableCell>{t('softwareAdmin.payments.columns.invoice')}</TableCell>
+                <TableCell>{t('softwareAdmin.payments.columns.farm')}</TableCell>
+                <TableCell>{t('softwareAdmin.payments.columns.amount')}</TableCell>
+                <TableCell>{t('softwareAdmin.payments.columns.method')}</TableCell>
+                <TableCell>{t('softwareAdmin.payments.columns.date')}</TableCell>
+                <TableCell>{t('softwareAdmin.payments.columns.status')}</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
               {payments.length === 0 && (
                 <TableRow>
-                  <TableCell colSpan={6}>No payments found.</TableCell>
+                  <TableCell colSpan={6}>{t('softwareAdmin.revenue.noPaymentsFound')}</TableCell>
                 </TableRow>
               )}
               {payments.map(p => (
@@ -252,10 +254,10 @@ const Revenue: React.FC = () => {
                   <TableCell>
                     {p.amount} {p.currency}
                   </TableCell>
-                  <TableCell>{p.method}</TableCell>
+                  <TableCell>{t('softwareAdmin.payments.methods.' + p.method, p.method)}</TableCell>
                   <TableCell>{p.payment_date}</TableCell>
                   <TableCell>
-                    <Chip size="small" label={p.status} color={statusColor[p.status]} />
+                    <Chip size="small" label={t('softwareAdmin.payments.status.' + p.status, p.status)} color={statusColor[p.status]} />
                   </TableCell>
                 </TableRow>
               ))}

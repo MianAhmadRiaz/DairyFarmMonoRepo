@@ -6,6 +6,7 @@ import {
   TextFieldProps,
   SelectChangeEvent
 } from '@mui/material';
+import { useTranslation } from 'react-i18next';
 
 export interface Option {
   /** value stored in state / sent to backend */
@@ -43,9 +44,12 @@ const Dropdown: React.FC<DropdownProps> = ({
   options,
   onChange,
   onAddNew,
-  addLabel = '+ Add New',
+  addLabel,
   textFieldProps
-}) => (
+}) => {
+  const { t } = useTranslation();
+
+  return (
   <TextField
     select
     fullWidth
@@ -71,10 +75,11 @@ const Dropdown: React.FC<DropdownProps> = ({
           borderTop: '1px solid #ddd'
         }}
       >
-        {addLabel}
+        {addLabel || t('shared.dropdown.addNew')}
       </MenuItem>
     )}
   </TextField>
-);
+  );
+};
 
 export default Dropdown;

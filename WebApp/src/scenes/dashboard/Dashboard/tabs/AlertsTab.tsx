@@ -1,22 +1,24 @@
 import React, { useEffect, useState } from 'react';
 import { Grid, Box, Typography, CircularProgress, Chip, useTheme } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import GlassCard from '../../../../shared/components/charts/GlassCard';
 import EmptyState from '../../../../shared/components/charts/EmptyState';
 import { fetchHerdAlerts } from '../../../../shared/services/dashboardV2.services';
 
-const SECTIONS: { key: string; title: string; icon: string; color: string; detail: (a: any) => string }[] = [
-  { key: 'heatWatch', title: 'Heat Watch', icon: '🔥', color: '#e2a23b', detail: (a) => a.reason || '—' },
-  { key: 'pregnancyCheckDue', title: 'Pregnancy Checks Due', icon: '🤰', color: '#6870fa', detail: () => 'Inseminated 30+ days ago' },
-  { key: 'dryOffDue', title: 'Dry-Off Due', icon: '🛑', color: '#db4f4a', detail: (a) => `Due: ${a.dryOffDueDate || '—'}` },
-  { key: 'calvingExpected', title: 'Calvings Expected (14 days)', icon: '🐄', color: '#4cceac', detail: (a) => `Expected: ${a.expectedCalvingDate || '—'}` },
-];
-
 const AlertsTab: React.FC = () => {
   const theme = useTheme();
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const [alerts, setAlerts] = useState<any>(null);
   const [loading, setLoading] = useState(true);
+
+  const SECTIONS: { key: string; title: string; icon: string; color: string; detail: (a: any) => string }[] = [
+    { key: 'heatWatch', title: t('dashboard.alerts.sections.heatWatch'), icon: '🔥', color: '#e2a23b', detail: (a) => a.reason || '—' },
+    { key: 'pregnancyCheckDue', title: t('dashboard.alerts.sections.pregnancyCheckDue'), icon: '🤰', color: '#6870fa', detail: () => t('dashboard.alerts.detail.inseminated') },
+    { key: 'dryOffDue', title: t('dashboard.alerts.sections.dryOffDue'), icon: '🛑', color: '#db4f4a', detail: (a) => t('dashboard.alerts.detail.due', { date: a.dryOffDueDate || '—' }) },
+    { key: 'calvingExpected', title: t('dashboard.alerts.sections.calvingExpected'), icon: '🐄', color: '#4cceac', detail: (a) => t('dashboard.alerts.detail.expected', { date: a.expectedCalvingDate || '—' }) },
+  ];
 
   useEffect(() => {
     fetchHerdAlerts()
@@ -59,12 +61,12 @@ const AlertsTab: React.FC = () => {
                       justifyContent: 'space-between',
                     }}
                   >
-                    <Typography sx={{ fontSize: 12.5, fontWeight: 600 }}>{a.name || a.tagName || 'Unnamed'}</Typography>
+                    <Typography sx={{ fontSize: 12.5, fontWeight: 600 }}>{a.name || a.tagName || t('dashboard.alerts.unnamed')}</Typography>
                     <Typography sx={{ fontSize: 11.5, color: theme.palette.text.secondary }}>{section.detail(a)}</Typography>
                   </Box>
                 ))
               ) : (
-                <EmptyState title="Nothing here right now" icon="✅" />
+                <EmptyState title={t('dashboard.alerts.nothingHere')} icon="✅" />
               )}
             </GlassCard>
           </Grid>

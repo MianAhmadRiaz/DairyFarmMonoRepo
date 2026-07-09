@@ -24,8 +24,10 @@ import {
   updateEmployee,
   GetEmployeeResponse
 } from '../../shared/services/EmployeeAPI/viewemployee.service';
+import { useTranslation } from 'react-i18next';
 
 const EmployeeProfile: React.FC = () => {
+  const { t } = useTranslation();
   const { id } = useParams<{ id: string }>();
   const [employee, setEmployee] = useState<GetEmployeeResponse | null>(null);
   const [loading, setLoading] = useState(true);
@@ -110,7 +112,7 @@ const EmployeeProfile: React.FC = () => {
   if (!employee) {
     return (
       <Box sx={{ p: 4, minHeight: '100vh' }}>
-        <Typography variant="h6">Employee not found.</Typography>
+        <Typography variant="h6">{t('employee.employeeProfile.notFound')}</Typography>
       </Box>
     );
   }
@@ -143,16 +145,16 @@ const EmployeeProfile: React.FC = () => {
             )}
           </Typography>
           <Typography variant="body2" color="textSecondary">
-            Employee Id: {employee.uuid}
+            {t('employee.employeeProfile.employeeId')}: {employee.uuid}
           </Typography>
         </Box>
 
         {/* Tabs */}
         <Box sx={{ borderBottom: 1, borderColor: 'divider', mt: 2 }}>
           <Tabs value={selectedTab} onChange={handleTabChange}>
-            <Tab label="Profile" />
-            <Tab label="Bank Info and Salary" />
-            <Tab label="Attendance" />
+            <Tab label={t('employee.employeeProfile.tabs.profile')} />
+            <Tab label={t('employee.employeeProfile.tabs.bankInfoAndSalary')} />
+            <Tab label={t('employee.common.attendance')} />
           </Tabs>
         </Box>
 
@@ -165,7 +167,7 @@ const EmployeeProfile: React.FC = () => {
               <Card sx={{ width: 320 }}>
                 <CardContent>
                   <Box display="flex" justifyContent="space-between">
-                    <Typography variant="h6">Basic Info</Typography>
+                    <Typography variant="h6">{t('employee.employeeProfile.basicInfo')}</Typography>
                     <IconButton
                       size="small"
                       onClick={() => setEditModalOpen(true)}
@@ -173,11 +175,11 @@ const EmployeeProfile: React.FC = () => {
                       <EditIcon fontSize="small" />
                     </IconButton>
                   </Box>
-                  <Typography>Name: {employee.name}</Typography>
-                  <Typography>Father Name: {employee.father_name || '-'}</Typography>
-                  <Typography>Phone: {employee.phone || '-'}</Typography>
-                  <Typography>City: {employee.city || '-'}</Typography>
-                  <Typography>Address: {employee.address || '-'}</Typography>
+                  <Typography>{t('employee.addNewEmployee.fields.name')}: {employee.name}</Typography>
+                  <Typography>{t('employee.addNewEmployee.fields.fatherName')}: {employee.father_name || '-'}</Typography>
+                  <Typography>{t('employee.addNewEmployee.fields.phone')}: {employee.phone || '-'}</Typography>
+                  <Typography>{t('employee.addNewEmployee.fields.city')}: {employee.city || '-'}</Typography>
+                  <Typography>{t('employee.addNewEmployee.fields.address')}: {employee.address || '-'}</Typography>
                 </CardContent>
               </Card>
 
@@ -185,7 +187,7 @@ const EmployeeProfile: React.FC = () => {
               <Card sx={{ flex: 1, minWidth: 300 }}>
                 <CardContent>
                   <Box display="flex" justifyContent="space-between">
-                    <Typography variant="h6">Professional Details</Typography>
+                    <Typography variant="h6">{t('employee.employeeProfile.professionalDetails')}</Typography>
                     <IconButton
                       size="small"
                       onClick={() => setEditProfessionalOpen(true)}
@@ -193,17 +195,17 @@ const EmployeeProfile: React.FC = () => {
                       <EditIcon fontSize="small" />
                     </IconButton>
                   </Box>
-                  <Typography>Role: {employee.designation || '-'}</Typography>
-                  <Typography>Department: {employee.department || '-'}</Typography>
+                  <Typography>{t('employee.editProfessionalInfo.role')}: {employee.designation || '-'}</Typography>
+                  <Typography>{t('employee.addNewEmployee.fields.department')}: {employee.department || '-'}</Typography>
                   <Typography>
-                    Joining Date:{' '}
+                    {t('employee.editProfessionalInfo.joiningDate')}:{' '}
                     {employee.doj ? employee.doj.slice(0, 10) : '-'}
                   </Typography>
-                  <Typography>Monthly Salary: {employee.salary ?? '-'}</Typography>
+                  <Typography>{t('employee.editProfessionalInfo.monthlySalary')}: {employee.salary ?? '-'}</Typography>
                   <Typography>
-                    Leave Allowed: {employee.leave_allow ?? '-'}
+                    {t('employee.employeeProfile.leaveAllowed')}: {employee.leave_allow ?? '-'}
                   </Typography>
-                  <Typography>Status: {employee.status || '-'}</Typography>
+                  <Typography>{t('employee.employeeProfile.status')}: {employee.status || '-'}</Typography>
                 </CardContent>
               </Card>
             </Box>

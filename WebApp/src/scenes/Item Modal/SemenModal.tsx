@@ -16,6 +16,7 @@ import {
   IconButton
 } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
+import { useTranslation } from 'react-i18next';
 
 interface AddSemen {
   open: boolean;
@@ -28,6 +29,7 @@ const AddSemen: React.FC<AddSemen> = ({
   onClose,
   onSave
 }) => {
+  const { t } = useTranslation();
   // Local form fields
   const [sireName, setSireName] = useState('');
   const [unit, setUnit] = useState('');
@@ -69,7 +71,7 @@ const AddSemen: React.FC<AddSemen> = ({
         }}
       >
         <Typography variant="h6" fontWeight="bold">
-          Add New
+          {t('itemModal.semen.addNew')}
         </Typography>
         <IconButton onClick={onClose}>
           <CloseIcon />
@@ -80,8 +82,8 @@ const AddSemen: React.FC<AddSemen> = ({
         <Grid container spacing={2}>
           <Grid item xs={12} md={4}>
             <TextField
-              label="Sire Name"
-              placeholder="Semen Name Here"
+              label={t('itemModal.semen.sireName')}
+              placeholder={t('itemModal.semen.sireNamePlaceholder')}
               value={sireName}
               onChange={(e) => setSireName(e.target.value)}
               fullWidth
@@ -89,24 +91,24 @@ const AddSemen: React.FC<AddSemen> = ({
           </Grid>
           <Grid item xs={12} md={4}>
             <FormControl fullWidth>
-              <InputLabel id="unit-label">Choose Unit</InputLabel>
+              <InputLabel id="unit-label">{t('itemModal.semen.chooseUnit')}</InputLabel>
               <Select
                 labelId="unit-label"
-                label="Choose Unit"
+                label={t('itemModal.semen.chooseUnit')}
                 value={unit}
                 onChange={(e) => setUnit(e.target.value as string)}
               >
                 <MenuItem value="">
-                  <em>Select</em>
+                  <em>{t('itemModal.semen.select')}</em>
                 </MenuItem>
-                <MenuItem value="Straw">Straw</MenuItem>
+                <MenuItem value="Straw">{t('itemModal.semen.units.straw')}</MenuItem>
                 <MenuItem value="ml">ml</MenuItem>
               </Select>
             </FormControl>
           </Grid>
           <Grid item xs={12} md={4}>
             <TextField
-              label="Rate w.r.t 1 Unit"
+              label={t('itemModal.semen.ratePerUnit')}
               placeholder="0"
               value={rate}
               onChange={(e) => setRate(e.target.value)}
@@ -115,7 +117,7 @@ const AddSemen: React.FC<AddSemen> = ({
           </Grid>
           <Grid item xs={12} md={4}>
             <TextField
-              label="Opening Stock Quantity"
+              label={t('itemModal.semen.openingStockQty')}
               placeholder="0"
               value={openingStockQty}
               onChange={(e) => setOpeningStockQty(e.target.value)}
@@ -124,7 +126,7 @@ const AddSemen: React.FC<AddSemen> = ({
           </Grid>
           <Grid item xs={12} md={4}>
             <TextField
-              label="Opening Stock rate w.r.t 1 Unit"
+              label={t('itemModal.semen.openingStockRate')}
               placeholder="0"
               value={openingStockRate}
               onChange={(e) => setOpeningStockRate(e.target.value)}
@@ -133,15 +135,15 @@ const AddSemen: React.FC<AddSemen> = ({
           </Grid>
           <Grid item xs={12} md={4}>
             <FormControl fullWidth>
-              <InputLabel id="company-label">Company</InputLabel>
+              <InputLabel id="company-label">{t('itemModal.semen.company')}</InputLabel>
               <Select
                 labelId="company-label"
-                label="Company"
+                label={t('itemModal.semen.company')}
                 value={company}
                 onChange={(e) => setCompany(e.target.value as string)}
               >
                 <MenuItem value="">
-                  <em>Select</em>
+                  <em>{t('itemModal.semen.select')}</em>
                 </MenuItem>
                 <MenuItem value="Semex">Semex</MenuItem>
                 <MenuItem value="Genex">Genex</MenuItem>
@@ -150,15 +152,15 @@ const AddSemen: React.FC<AddSemen> = ({
           </Grid>
           <Grid item xs={12} md={4}>
             <FormControl fullWidth>
-              <InputLabel id="tech-label">Tech</InputLabel>
+              <InputLabel id="tech-label">{t('itemModal.semen.tech')}</InputLabel>
               <Select
                 labelId="tech-label"
-                label="Tech"
+                label={t('itemModal.semen.tech')}
                 value={tech}
                 onChange={(e) => setTech(e.target.value as string)}
               >
                 <MenuItem value="">
-                  <em>Select</em>
+                  <em>{t('itemModal.semen.select')}</em>
                 </MenuItem>
                 <MenuItem value="Dr. Smith">Dr. Smith</MenuItem>
                 <MenuItem value="Dr. Jones">Dr. Jones</MenuItem>
@@ -170,14 +172,14 @@ const AddSemen: React.FC<AddSemen> = ({
 
       <DialogActions sx={{ p: 2 }}>
         <Button variant="outlined" onClick={onClose}>
-          Cancel
+          {t('common.cancel')}
         </Button>
         <Button
           variant="contained"
           sx={{ backgroundColor: '#005f73' }}
           onClick={handleSaveClick}
         >
-          Add New
+          {t('itemModal.semen.addNew')}
         </Button>
       </DialogActions>
     </Dialog>

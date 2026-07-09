@@ -17,6 +17,7 @@ import {
 } from '@mui/material';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { fetchAnimals } from '../../../shared/services/animalinfo.service';
 import { fetchPenList } from '../../../shared/services/herdinfo.services';
 import { addDryOffEvent } from '../../../shared/services/breeds.services';
@@ -28,6 +29,7 @@ import PageContainer from '../../../shared/components/Layout/PageContainer';
 
 const DryOff: React.FC = () => {
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
   const [category, setCategory] = useState<'Add' | 'Remove'>('Add');
 
@@ -74,7 +76,7 @@ const DryOff: React.FC = () => {
 
   const handleAddSubmit = async () => {
   if (!addTagId || !addPenId || !dryOffDate || !reason) {
-    const msg = "Please fill all the missing required fields";
+    const msg = t('breeding.common.fillMissingFields');
     if (toastId.current === null || !toast.isActive(toastId.current)) {
       toastId.current = toast.warning(msg);
     }
@@ -94,12 +96,12 @@ const DryOff: React.FC = () => {
 
   try {
     await addDryOffEvent(data);
-    toast.success('New event added successfully!');
+    toast.success(t('breeding.dryOff.addSuccess'));
     setTimeout(() => window.location.reload(), 3000);
   } catch (error) {
-    toast.error('Failed to add new event!');
+    toast.error(t('breeding.dryOff.addError'));
     console.error('Failed to add new event:', error);
-  } 
+  }
 finally {
     setIsSubmitting(false);
   }
@@ -109,7 +111,7 @@ finally {
 
   const handleRemoveSubmit = async () => {
   if (!removeTagId || !removePenId || !removalDate || !removeReason) {
-    const msg = "Please fill all the missing required fields";
+    const msg = t('breeding.common.fillMissingFields');
     if (toastId.current === null || !toast.isActive(toastId.current)) {
       toastId.current = toast.warning(msg);
     }
@@ -129,18 +131,18 @@ finally {
 
   try {
     await addDryOffEvent(newRemoveData);
-    toast.success('Event removed successfully!');
+    toast.success(t('breeding.dryOff.removeSuccess'));
     setTimeout(() => window.location.reload(), 3000);
-  
+
    } catch (error: any) {
   console.error("AddAnimal => error in handleSubmit =>", error);
-  toast.error('Failed to remove event!');
+  toast.error(t('breeding.dryOff.removeError'));
 
   const backendMessage =
-    error?.response?.data?.message || "Failed to add animal. Please try again.";
+    error?.response?.data?.message || t('breeding.dryOff.addAnimalError');
 
   if (toastId.current === null || !toast.isActive(toastId.current)) {
-    toastId.current = toast.warning(`🔶 Backend Validation: ${backendMessage}`);
+    toastId.current = toast.warning(t('breeding.dryOff.backendValidation', { message: backendMessage }));
   }
 }
   finally {
@@ -154,14 +156,14 @@ finally {
   };
 
   return (
-    <PageContainer title="Dry Off">
+    <PageContainer title={t('breeding.dryOff.pageTitle')}>
       <Button
         variant="text"
         startIcon={<ArrowBackIcon />}
         onClick={handleBack}
         sx={{ mb: 2, color: '#005f73', textTransform: 'none', fontWeight: 'bold' }}
       >
-        Back
+        {t('breeding.common.back')}
       </Button>
 
         <Card sx={{  p: { xs: 2, sm: 3, md: 1 },
@@ -172,15 +174,15 @@ finally {
         <CardContent sx={{ p: { xs: 2, md: 3 } }}>
           <Box sx={{ mb: 3, maxWidth: 300 }}>
             <FormControl fullWidth>
-              <InputLabel id="category-label">Category</InputLabel>
+              <InputLabel id="category-label">{t('breeding.dryOff.category')}</InputLabel>
               <Select
                 labelId="category-label"
                 value={category}
-                label="Category"
+                label={t('breeding.dryOff.category')}
                 onChange={(e) => setCategory(e.target.value as 'Add' | 'Remove')}
               >
-                <MenuItem value="Add">Add</MenuItem>
-                <MenuItem value="Remove">Remove</MenuItem>
+                <MenuItem value="Add">{t('breeding.dryOff.add')}</MenuItem>
+                <MenuItem value="Remove">{t('breeding.dryOff.remove')}</MenuItem>
               </Select>
             </FormControl>
           </Box>
@@ -191,7 +193,7 @@ finally {
                 <Grid item xs={12} sm={6} md={3.5}>
                   <TextField
                     fullWidth
-                    label="Tag Id"
+                    label={t('breeding.common.tagId')}
                     select
                     value={addTagId}
                     onChange={(e) => setAddTagId(e.target.value)}
@@ -207,7 +209,7 @@ finally {
                 <Grid item xs={12} md={4}>
                   <TextField
                     fullWidth
-                    label="Pen Id"
+                    label={t('breeding.common.penId')}
                     select
                     value={addPenId}
                     onChange={(e) => setAddPenId(e.target.value)}
@@ -222,7 +224,7 @@ finally {
                 </Grid>
                 <Grid item xs={12} md={3.5}>
                   <TextField
-                    label="Dry off Date"
+                    label={t('breeding.dryOff.dryOffDate')}
                     type="date"
                     value={dryOffDate}
                     onChange={(e) => setDryOffDate(e.target.value)}
@@ -232,17 +234,17 @@ finally {
                 </Grid>
                 <Grid item xs={12} md={3.5}>
                   <FormControl fullWidth>
-                    <InputLabel id="reason-label">Reason</InputLabel>
+                    <InputLabel id="reason-label">{t('breeding.common.reason')}</InputLabel>
                     <Select
                       labelId="reason-label"
-                      label="Reason"
+                      label={t('breeding.common.reason')}
                       value={reason}
                       onChange={(e) => setReason(e.target.value)}
                     >
-                      <MenuItem value="less milk">Less Milk</MenuItem>
-                      <MenuItem value="less milk + non pregnant">Less Milk + Non Pregnant</MenuItem>
-                      <MenuItem value="less milk + udder problem">Less Milk + Udder Problem</MenuItem>
-                      <MenuItem value="pregnant (due for calving)">Pregnant (Due For Calving)</MenuItem>
+                      <MenuItem value="less milk">{t('breeding.dryOff.reasons.lessMilk')}</MenuItem>
+                      <MenuItem value="less milk + non pregnant">{t('breeding.dryOff.reasons.lessMilkNonPregnant')}</MenuItem>
+                      <MenuItem value="less milk + udder problem">{t('breeding.dryOff.reasons.lessMilkUdderProblem')}</MenuItem>
+                      <MenuItem value="pregnant (due for calving)">{t('breeding.dryOff.reasons.pregnantDueForCalving')}</MenuItem>
 
                     </Select>
                   </FormControl>
@@ -255,7 +257,7 @@ finally {
                 <Grid item xs={12} sm={6} md={3.5}>
                   <TextField
                     fullWidth
-                    label="Tag Id"
+                    label={t('breeding.common.tagId')}
                     select
                     value={removeTagId}
                     onChange={(e) => setRemoveTagId(e.target.value)}
@@ -271,7 +273,7 @@ finally {
                 <Grid item xs={12} md={4}>
                   <TextField
                     fullWidth
-                    label="Pen Id"
+                    label={t('breeding.common.penId')}
                     select
                     value={removePenId}
                     onChange={(e) => setRemovePenId(e.target.value)}
@@ -286,7 +288,7 @@ finally {
                 </Grid>
                 <Grid item xs={12} md={3.5}>
                   <TextField
-                    label="Removal Date"
+                    label={t('breeding.dryOff.removalDate')}
                     type="date"
                     value={removalDate}
                     onChange={(e) => setRemovalDate(e.target.value)}
@@ -297,7 +299,7 @@ finally {
                 <Grid item xs={12}>
                   <TextField
                     fullWidth
-                    label="Reason"
+                    label={t('breeding.common.reason')}
                     multiline
                     minRows={3}
                     value={removeReason}
@@ -328,7 +330,7 @@ finally {
                   {isSubmitting ? (
                   <CircularProgress size={24} sx={{ color: '#0F7C8F' }} />
                   ) : (
-                  'Add' // or 'Remove'
+                  t('breeding.dryOff.add')
                    )}
               </Button>
             )}
@@ -351,7 +353,7 @@ finally {
                {isSubmitting ? (
                   <CircularProgress size={24} sx={{ color: '#0F7C8F' }} />
                   ) : (
-                  'Remove' // or 'Remove'
+                  t('breeding.dryOff.remove')
                    )}
 
               </Button>
@@ -370,7 +372,7 @@ finally {
               }}
               onClick={handleCancel}
             >
-              Cancel
+              {t('breeding.common.cancel')}
             </Button>
           </Box>
         </CardContent>

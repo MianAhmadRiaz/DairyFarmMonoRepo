@@ -16,6 +16,7 @@ import {
   useTheme,
 } from '@mui/material';
 import { tokens } from '../../shared/theme/theme';
+import { useTranslation } from 'react-i18next';
 
 interface AddMilkingModalProps {
   open: boolean;
@@ -28,6 +29,7 @@ const AddMilkingModal: React.FC<AddMilkingModalProps> = ({
   cowId,
   onClose,
 }) => {
+  const { t } = useTranslation();
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   // Local form states
@@ -57,21 +59,21 @@ const AddMilkingModal: React.FC<AddMilkingModalProps> = ({
 
   return (
     <Dialog open={open} onClose={onClose} maxWidth="md" fullWidth>
-      <DialogTitle sx={{ fontWeight: 'bold' }}>Add New</DialogTitle>
+      <DialogTitle sx={{ fontWeight: 'bold' }}>{t('milking.common.addNew')}</DialogTitle>
 
       <DialogContent>
         {/* Top row: Cow ID, Milking Time, Amount */}
         <Box sx={{ display: 'flex', gap: 2, mb: 2 }}>
           {/* Cow ID */}
           <FormControl fullWidth>
-            <InputLabel id="cow-id-modal-label">Cow ID</InputLabel>
+            <InputLabel id="cow-id-modal-label">{t('milking.common.cowId')}</InputLabel>
             <Select
               labelId="cow-id-modal-label"
-              label="Cow ID"
+              label={t('milking.common.cowId')}
               value={selectedCowId}
               onChange={(e) => setSelectedCowId(e.target.value as number | 'Select')}
             >
-              <MenuItem value="Select">Select</MenuItem>
+              <MenuItem value="Select">{t('milking.common.select')}</MenuItem>
               {/* Example cow IDs, or map your real IDs here */}
               <MenuItem value={1246}>1246</MenuItem>
               <MenuItem value={5674}>5674</MenuItem>
@@ -81,23 +83,23 @@ const AddMilkingModal: React.FC<AddMilkingModalProps> = ({
 
           {/* Milking Time */}
           <FormControl fullWidth>
-            <InputLabel id="milking-time-label">Milking Time</InputLabel>
+            <InputLabel id="milking-time-label">{t('milking.common.milkingTime')}</InputLabel>
             <Select
               labelId="milking-time-label"
-              label="Milking Time"
+              label={t('milking.common.milkingTime')}
               value={milkingTime}
               onChange={(e) => setMilkingTime(e.target.value as string)}
             >
-              <MenuItem value="">Select</MenuItem>
-              <MenuItem value="Morning">Morning</MenuItem>
-              <MenuItem value="Afternoon">Afternoon</MenuItem>
-              <MenuItem value="Evening">Evening</MenuItem>
+              <MenuItem value="">{t('milking.common.select')}</MenuItem>
+              <MenuItem value="Morning">{t('milking.common.milkingTimes.morning')}</MenuItem>
+              <MenuItem value="Afternoon">{t('milking.common.milkingTimes.afternoon')}</MenuItem>
+              <MenuItem value="Evening">{t('milking.common.milkingTimes.evening')}</MenuItem>
             </Select>
           </FormControl>
 
           {/* Amount in Liters */}
           <TextField
-            label="Amount in Liters"
+            label={t('milking.common.amountInLiters')}
             type="number"
             value={liters}
             onChange={(e) => setLiters(e.target.value)}
@@ -108,7 +110,7 @@ const AddMilkingModal: React.FC<AddMilkingModalProps> = ({
         {/* Remarks field */}
         <Box sx={{ mb: 2 }}>
           <TextField
-            label="Remarks"
+            label={t('milking.common.remarks')}
             multiline
             rows={4}
             value={remarks}
@@ -120,14 +122,14 @@ const AddMilkingModal: React.FC<AddMilkingModalProps> = ({
         {/* Report to dropdown */}
         <Box sx={{ width: '50%' }}>
           <FormControl fullWidth>
-            <InputLabel id="report-to-label">Report to</InputLabel>
+            <InputLabel id="report-to-label">{t('milking.common.reportTo')}</InputLabel>
             <Select
               labelId="report-to-label"
-              label="Select Tech"
+              label={t('milking.common.selectTech')}
               value={tech}
               onChange={(e) => setTech(e.target.value as string)}
             >
-              <MenuItem value="">Select Tech</MenuItem>
+              <MenuItem value="">{t('milking.common.selectTech')}</MenuItem>
               <MenuItem value="Tech A">Tech A</MenuItem>
               <MenuItem value="Tech B">Tech B</MenuItem>
             </Select>
@@ -141,7 +143,7 @@ const AddMilkingModal: React.FC<AddMilkingModalProps> = ({
           variant="outlined"
           sx={{ textTransform: 'none', mr: 2 }}
         >
-          Cancel
+          {t('common.cancel')}
         </Button>
         <Button
           onClick={handleSave}
@@ -152,7 +154,7 @@ const AddMilkingModal: React.FC<AddMilkingModalProps> = ({
             textTransform: 'none',
           }}
         >
-          Add
+          {t('common.add')}
         </Button>
       </DialogActions>
     </Dialog>

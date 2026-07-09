@@ -19,6 +19,7 @@ import {
 import PrintIcon from '@mui/icons-material/Print';
 import DeleteIcon from '@mui/icons-material/Delete';
 import CloseIcon from '@mui/icons-material/Close';
+import { useTranslation } from 'react-i18next';
 import { tokens } from '../../shared/theme/theme';
 import {
   fetchChartOfAccounts,
@@ -41,6 +42,7 @@ interface AccountRow {
 }
 
 export default function MakeJournalTransaction() {
+  const { t } = useTranslation();
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   const { can } = usePermissions();
@@ -136,22 +138,22 @@ export default function MakeJournalTransaction() {
   // Handle save
   const handleSave = async () => {
     if (!transactionDate) {
-      setSnackbar({ open: true, message: 'Please fill in Transaction Date', severity: 'error' });
+      setSnackbar({ open: true, message: t('accounts.makeJournalTransaction.fillDateError'), severity: 'error' });
       return;
     }
 
     if (accountRows.some(row => !row.selectAccount)) {
-      setSnackbar({ open: true, message: 'Please select all accounts', severity: 'error' });
+      setSnackbar({ open: true, message: t('accounts.makeJournalTransaction.selectAllAccountsError'), severity: 'error' });
       return;
     }
 
     if (totalDebit !== totalCredit) {
-      setSnackbar({ open: true, message: 'Total Debit and Credit must be equal for a balanced journal entry', severity: 'error' });
+      setSnackbar({ open: true, message: t('accounts.makeJournalTransaction.balanceError'), severity: 'error' });
       return;
     }
 
     if (totalDebit === 0 || totalCredit === 0) {
-      setSnackbar({ open: true, message: 'Please enter debit and credit amounts', severity: 'error' });
+      setSnackbar({ open: true, message: t('accounts.makeJournalTransaction.amountsError'), severity: 'error' });
       return;
     }
 
@@ -170,11 +172,11 @@ export default function MakeJournalTransaction() {
       if (entry?.id) {
         await postJournalEntry(entry.id);
       }
-      setSnackbar({ open: true, message: 'Journal transaction saved & posted successfully!', severity: 'success' });
+      setSnackbar({ open: true, message: t('accounts.makeJournalTransaction.saveSuccess'), severity: 'success' });
       handleReset();
     } catch (e) {
       console.error('Failed to save journal entry', e);
-      setSnackbar({ open: true, message: 'Failed to save journal transaction.', severity: 'error' });
+      setSnackbar({ open: true, message: t('accounts.makeJournalTransaction.saveError'), severity: 'error' });
     }
   };
 
@@ -194,7 +196,7 @@ export default function MakeJournalTransaction() {
     const printContent = `
       <html>
         <head>
-          <title>Journal Transaction</title>
+          <title>${t('accounts.makeJournalTransaction.title')}</title>
           <style>
             body { font-family: Arial, sans-serif; padding: 20px; }
             .header { text-align: center; margin-bottom: 30px; border-bottom: 2px solid #005f73; padding-bottom: 10px; }
@@ -212,23 +214,23 @@ export default function MakeJournalTransaction() {
         </head>
         <body>
           <div class="header">
-            <h2>Journal Transaction</h2>
-            <p>Generated on ${new Date().toLocaleDateString()}</p>
+            <h2>${t('accounts.makeJournalTransaction.title')}</h2>
+            <p>${t('accounts.common.generatedOn', { date: new Date().toLocaleDateString() })}</p>
           </div>
           <div class="details">
-            <div class="row"><span class="label">Invoice No:</span><span class="value">${invoiceNo}</span></div>
-            <div class="row"><span class="label">Transaction Date:</span><span class="value">${transactionDate}</span></div>
-            <div class="row"><span class="label">Narration:</span><span class="value">${narration}</span></div>
+            <div class="row"><span class="label">${t('accounts.makeJournalTransaction.invoiceNo')}:</span><span class="value">${invoiceNo}</span></div>
+            <div class="row"><span class="label">${t('accounts.makeJournalTransaction.transactionDate')}:</span><span class="value">${transactionDate}</span></div>
+            <div class="row"><span class="label">${t('accounts.common.columns.narration')}:</span><span class="value">${narration}</span></div>
           </div>
           <table>
             <thead>
               <tr>
-                <th>Account</th>
-                <th>Balance</th>
-                <th>Type</th>
-                <th>Debit</th>
-                <th>Credit</th>
-                <th>Narration</th>
+                <th>${t('accounts.common.columns.account')}</th>
+                <th>${t('accounts.common.columns.balance')}</th>
+                <th>${t('accounts.common.columns.type')}</th>
+                <th>${t('accounts.common.columns.debit')}</th>
+                <th>${t('accounts.common.columns.credit')}</th>
+                <th>${t('accounts.common.columns.narration')}</th>
               </tr>
             </thead>
             <tbody>
@@ -245,10 +247,10 @@ export default function MakeJournalTransaction() {
             </tbody>
           </table>
           <div class="total">
-            <div>Total Debit: ${totalDebit}</div>
-            <div>Total Credit: ${totalCredit}</div>
+            <div>${t('accounts.makeJournalTransaction.totalDebit', { amount: totalDebit })}</div>
+            <div>${t('accounts.makeJournalTransaction.totalCredit', { amount: totalCredit })}</div>
             <div class="${totalDebit === totalCredit ? 'balanced' : 'unbalanced'}">
-              ${totalDebit === totalCredit ? 'BALANCED ✓' : 'UNBALANCED ✗'}
+              ${totalDebit === totalCredit ? t('accounts.makeJournalTransaction.balanced') : t('accounts.makeJournalTransaction.unbalanced')}
             </div>
           </div>
         </body>
@@ -268,7 +270,7 @@ export default function MakeJournalTransaction() {
   };
 
   return (
-    <PageContainer title="Journal Transaction">
+    <PageContainer title={t('accounts.makeJournalTransaction.title')}>
         {/* Main Card */}
         <Paper elevation={0} sx={{ p: 0, borderRadius: 2, border: `1px solid ${theme.palette.divider}`, bgcolor: 'background.paper' }}>
           
@@ -287,7 +289,7 @@ export default function MakeJournalTransaction() {
           >
             <Typography variant="h6" fontWeight={600} sx={{ display: 'flex', alignItems: 'center' }}>
               <Box component="span" sx={{ mr: 1 }}>📋</Box>
-              Journal Transaction
+              {t('accounts.makeJournalTransaction.title')}
             </Typography>
             <Stack direction="row" spacing={1}>
               <IconButton size="small" onClick={handlePrint} sx={{ color: '#005f73' }}>
@@ -304,14 +306,14 @@ export default function MakeJournalTransaction() {
             {/* Top Row Fields */}
             <Stack direction={{ xs: 'column', md: 'row' }} spacing={3} sx={{ mb: 3 }}>
               <TextField
-                label="Invoice No"
+                label={t('accounts.makeJournalTransaction.invoiceNo')}
                 value={invoiceNo}
                 onChange={(e) => setInvoiceNo(e.target.value)}
                 size="small"
                 sx={{ flex: 1 }}
               />
               <TextField
-                label="Transaction Date"
+                label={t('accounts.makeJournalTransaction.transactionDate')}
                 type="date"
                 value={transactionDate}
                 onChange={(e) => setTransactionDate(e.target.value)}
@@ -321,7 +323,7 @@ export default function MakeJournalTransaction() {
                 sx={{ flex: 1 }}
               />
               <TextField
-                label="Narration"
+                label={t('accounts.common.columns.narration')}
                 value={narration}
                 onChange={(e) => setNarration(e.target.value)}
                 multiline
@@ -334,7 +336,7 @@ export default function MakeJournalTransaction() {
             {/* Select Accounts Section */}
             <Box sx={{ mb: 3 }}>
               <Typography variant="h6" sx={{ color: '#005f73', mb: 2, display: 'flex', alignItems: 'center', fontWeight: 'bold' }}>
-                🛒 Select Accounts
+                🛒 {t('accounts.makeJournalTransaction.selectAccounts')}
               </Typography>
 
               {/* Add Items Button */}
@@ -354,18 +356,18 @@ export default function MakeJournalTransaction() {
                     }
                   }}
                 >
-                  Add Items
+                  {t('accounts.makeJournalTransaction.addItems')}
                 </Button>
               </Box>
 
               {/* Table Header */}
               <Box sx={{ display: 'flex', bgcolor: theme.palette.mode === 'dark' ? colors.primary[400] : '#F5F5F5', p: 1, borderRadius: '4px 4px 0 0', border: `1px solid ${theme.palette.divider}` }}>
-                <Typography variant="body2" fontWeight={600} sx={{ flex: 2, px: 1 }}>Select Account</Typography>
-                <Typography variant="body2" fontWeight={600} sx={{ flex: 1, px: 1 }}>Cur Balance</Typography>
-                <Typography variant="body2" fontWeight={600} sx={{ flex: 1, px: 1 }}>Account Type</Typography>
-                <Typography variant="body2" fontWeight={600} sx={{ flex: 1, px: 1 }}>Debit</Typography>
-                <Typography variant="body2" fontWeight={600} sx={{ flex: 1, px: 1 }}>Credit</Typography>
-                <Typography variant="body2" fontWeight={600} sx={{ flex: 2, px: 1 }}>Narration</Typography>
+                <Typography variant="body2" fontWeight={600} sx={{ flex: 2, px: 1 }}>{t('accounts.common.selectAccount')}</Typography>
+                <Typography variant="body2" fontWeight={600} sx={{ flex: 1, px: 1 }}>{t('accounts.makeJournalTransaction.curBalance')}</Typography>
+                <Typography variant="body2" fontWeight={600} sx={{ flex: 1, px: 1 }}>{t('accounts.makeJournalTransaction.accountType')}</Typography>
+                <Typography variant="body2" fontWeight={600} sx={{ flex: 1, px: 1 }}>{t('accounts.common.columns.debit')}</Typography>
+                <Typography variant="body2" fontWeight={600} sx={{ flex: 1, px: 1 }}>{t('accounts.common.columns.credit')}</Typography>
+                <Typography variant="body2" fontWeight={600} sx={{ flex: 2, px: 1 }}>{t('accounts.common.columns.narration')}</Typography>
                 <Box sx={{ width: 40 }}></Box>
               </Box>
 
@@ -378,7 +380,7 @@ export default function MakeJournalTransaction() {
                       onChange={(e) => updateAccountRow(row.id, 'selectAccount', e.target.value)}
                       displayEmpty
                     >
-                      <MenuItem value="" disabled>Select account</MenuItem>
+                      <MenuItem value="" disabled>{t('accounts.common.selectAccount')}</MenuItem>
                       {accounts.map((account) => (
                         <MenuItem key={account.id} value={String(account.id)}>
                           {account.account_code} - {account.account_name}
@@ -400,7 +402,7 @@ export default function MakeJournalTransaction() {
                       onChange={(e) => updateAccountRow(row.id, 'accountType', e.target.value)}
                     >
                       {accountTypes.map((type, index) => (
-                        <MenuItem key={index} value={type}>{type}</MenuItem>
+                        <MenuItem key={index} value={type}>{t(`accounts.common.accountTypes.${type}`, type)}</MenuItem>
                       ))}
                     </Select>
                   </FormControl>
@@ -444,10 +446,10 @@ export default function MakeJournalTransaction() {
               {/* Totals */}
               <Box sx={{ display: 'flex', justifyContent: 'space-between', mt: 2, px: 2 }}>
                 <Typography variant="h6" fontWeight={700}>
-                  Total Debit: {totalDebit}
+                  {t('accounts.makeJournalTransaction.totalDebit', { amount: totalDebit })}
                 </Typography>
                 <Typography variant="h6" fontWeight={700}>
-                  Total Credit: {totalCredit}
+                  {t('accounts.makeJournalTransaction.totalCredit', { amount: totalCredit })}
                 </Typography>
                 <Typography 
                   variant="h6" 
@@ -456,14 +458,14 @@ export default function MakeJournalTransaction() {
                     color: totalDebit === totalCredit && totalDebit > 0 ? 'green' : 'red' 
                   }}
                 >
-                  {totalDebit === totalCredit && totalDebit > 0 ? 'BALANCED ✓' : 'UNBALANCED ✗'}
+                  {totalDebit === totalCredit && totalDebit > 0 ? t('accounts.makeJournalTransaction.balanced') : t('accounts.makeJournalTransaction.unbalanced')}
                 </Typography>
               </Box>
             </Box>
 
             {/* Action Buttons - matching AddAnimal screen */}
             <Box sx={{ display: "flex", flexDirection: { xs: "column", sm: "row" }, gap: 2, mt: 4 }}>
-              <Tooltip title={canManageFinance ? '' : 'No permission'}>
+              <Tooltip title={canManageFinance ? '' : t('accounts.common.noPermission')}>
                 <span>
               <Button
                 variant="contained"
@@ -476,7 +478,7 @@ export default function MakeJournalTransaction() {
                   textTransform: 'none'
                 }}
               >
-                💾 Save Changes
+                💾 {t('accounts.common.saveChanges')}
               </Button>
                 </span>
               </Tooltip>
@@ -494,7 +496,7 @@ export default function MakeJournalTransaction() {
                   }
                 }}
               >
-                🔄 Reset
+                🔄 {t('accounts.common.reset')}
               </Button>
             </Box>
           </Box>

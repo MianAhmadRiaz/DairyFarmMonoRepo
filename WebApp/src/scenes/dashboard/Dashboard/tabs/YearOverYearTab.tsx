@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Grid, Box, Typography, CircularProgress, useTheme } from '@mui/material';
+import { useTranslation } from 'react-i18next';
 import GlassCard from '../../../../shared/components/charts/GlassCard';
 import StatTile from '../../../../shared/components/charts/StatTile';
 import TrendLineChart from '../../../../shared/components/charts/TrendLineChart';
@@ -13,6 +14,7 @@ const pctChange = (current: number, prev: number) => {
 
 const YearOverYearTab: React.FC = () => {
   const theme = useTheme();
+  const { t } = useTranslation();
   const [data, setData] = useState<any>(null);
   const [loading, setLoading] = useState(true);
 
@@ -32,7 +34,7 @@ const YearOverYearTab: React.FC = () => {
   }
 
   if (!data) {
-    return <EmptyState title="Unable to load year-over-year comparison" icon="📉" />;
+    return <EmptyState title={t('dashboard.yearOverYear.unableToLoad')} icon="📉" />;
   }
 
   const { currentYear, compareYear, totals, monthlyMilkTrend } = data;
@@ -40,28 +42,28 @@ const YearOverYearTab: React.FC = () => {
   const prev = totals[compareYear];
 
   const metrics = [
-    { label: 'Total Milk', cur: cur.totalMilk, prev: prev.totalMilk, unit: 'L', icon: '🥛' },
-    { label: 'Avg Milk / Cow', cur: cur.avgMilkPerCow, prev: prev.avgMilkPerCow, unit: 'L', icon: '📊' },
-    { label: 'Calvings', cur: cur.calvingCount, prev: prev.calvingCount, unit: '', icon: '🐄' },
-    { label: 'Treatments', cur: cur.treatmentCount, prev: prev.treatmentCount, unit: '', icon: '💊' },
-    { label: 'Treatment Cost', cur: cur.treatmentCost, prev: prev.treatmentCost, unit: 'PKR', icon: '💰' },
-    { label: 'Mortality', cur: cur.mortalityCount, prev: prev.mortalityCount, unit: '', icon: '⚠️' },
+    { key: 'totalMilk', label: t('dashboard.yearOverYear.metrics.totalMilk'), cur: cur.totalMilk, prev: prev.totalMilk, unit: 'L', icon: '🥛' },
+    { key: 'avgMilkPerCow', label: t('dashboard.yearOverYear.metrics.avgMilkPerCow'), cur: cur.avgMilkPerCow, prev: prev.avgMilkPerCow, unit: 'L', icon: '📊' },
+    { key: 'calvings', label: t('dashboard.yearOverYear.metrics.calvings'), cur: cur.calvingCount, prev: prev.calvingCount, unit: '', icon: '🐄' },
+    { key: 'treatments', label: t('dashboard.yearOverYear.metrics.treatments'), cur: cur.treatmentCount, prev: prev.treatmentCount, unit: '', icon: '💊' },
+    { key: 'treatmentCost', label: t('dashboard.yearOverYear.metrics.treatmentCost'), cur: cur.treatmentCost, prev: prev.treatmentCost, unit: 'PKR', icon: '💰' },
+    { key: 'mortality', label: t('dashboard.yearOverYear.metrics.mortality'), cur: cur.mortalityCount, prev: prev.mortalityCount, unit: '', icon: '⚠️' },
   ];
 
   return (
     <Grid container spacing={2.5}>
       {metrics.map((m, idx) => {
         const change = pctChange(m.cur, m.prev);
-        const isGoodDirection = m.label === 'Mortality' || m.label === 'Treatment Cost' ? (change ?? 0) <= 0 : (change ?? 0) >= 0;
+        const isGoodDirection = m.key === 'mortality' || m.key === 'treatmentCost' ? (change ?? 0) <= 0 : (change ?? 0) >= 0;
         return (
-          <Grid item xs={6} sm={4} key={m.label}>
+          <Grid item xs={6} sm={4} key={m.key}>
             <StatTile
               label={m.label}
               value={m.unit === 'PKR' ? `PKR ${m.cur.toLocaleString()}` : `${m.cur.toLocaleString()} ${m.unit}`}
               sublabel={`${compareYear}: ${m.unit === 'PKR' ? 'PKR ' : ''}${m.prev.toLocaleString()} ${m.unit !== 'PKR' ? m.unit : ''}`}
               icon={m.icon}
               delay={idx * 0.04}
-              trend={change !== null ? { direction: change === 0 ? 'flat' : isGoodDirection ? 'up' : 'down', label: `${change > 0 ? '+' : ''}${change}% vs ${compareYear}` } : undefined}
+              trend={change !== null ? { direction: change === 0 ? 'flat' : isGoodDirection ? 'up' : 'down', label: t('dashboard.yearOverYear.vsCompare', { change: `${change > 0 ? '+' : ''}${change}`, year: compareYear }) } : undefined}
             />
           </Grid>
         );
@@ -69,7 +71,7 @@ const YearOverYearTab: React.FC = () => {
 
       <Grid item xs={12}>
         <GlassCard delay={0.3}>
-          <Typography sx={{ fontWeight: 700, mb: 1 }}>Monthly Milk Trend — {currentYear} vs {compareYear}</Typography>
+          <Typography sx={{ fontWeight: 700, mb: 1 }}>{t('dashboard.yearOverYear.monthlyTrendTitle', { currentYear, compareYear })}</Typography>
           {monthlyMilkTrend?.length ? (
             <TrendLineChart
               data={monthlyMilkTrend}
@@ -82,7 +84,7 @@ const YearOverYearTab: React.FC = () => {
               showLegend
             />
           ) : (
-            <EmptyState title="No monthly data to compare" icon="📈" />
+            <EmptyState title={t('dashboard.yearOverYear.noMonthlyData')} icon="📈" />
           )}
         </GlassCard>
       </Grid>

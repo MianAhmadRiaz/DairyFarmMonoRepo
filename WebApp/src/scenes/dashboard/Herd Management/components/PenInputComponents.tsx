@@ -1,8 +1,10 @@
 import { Grid, MenuItem, Modal, TextField } from '@mui/material';
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import AddItemModal from '../../../Item Modal/AddItemModal';
 
 const PenInputComponent = () => {
+  const { t } = useTranslation();
   const [isModalOpen, setModalOpen] = useState(false);
   const [penOptions, setPenOptions] = useState([
     'Close Up Animals',
@@ -24,7 +26,7 @@ const PenInputComponent = () => {
         <TextField
           fullWidth
           select
-          label="Pen ID"
+          label={t('herd.common.penId')}
           variant="outlined"
           value={penID}
           onChange={e => setPenID(e.target.value)}
@@ -52,14 +54,14 @@ const PenInputComponent = () => {
               borderTop: '1px solid #ddd'
             }}
           >
-            Add New Pen ID
+            {t('herd.common.addNewPenId')}
           </MenuItem>
         </TextField>
       </Grid>
       {/* Modal for Adding New Pen ID */}
       <Modal open={isModalOpen} onClose={handleCloseModal}>
         <AddItemModal
-          label="Pen ID"
+          label={t('herd.common.penId')}
           isOpen={isModalOpen}
           onClose={handleCloseModal}
           onAdd={handleAddNewPenID}

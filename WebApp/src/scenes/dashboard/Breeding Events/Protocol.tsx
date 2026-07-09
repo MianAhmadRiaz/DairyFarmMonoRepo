@@ -18,6 +18,7 @@ import {
  
 } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import CustomPagination from '../../../shared/components/Custom Pagination/CustomPagination';
 import {
   fetchProtocolsList,
@@ -35,6 +36,7 @@ import PageContainer from '../../../shared/components/Layout/PageContainer';
  const Protocol = () => {
 
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const [isModalOpen, setIsModalOpen] = useState(false);
   // We track which protocol is selected in the top "Protocols" dropdown
   const [selectedProtocol, setSelectedProtocol] = useState('');
@@ -99,13 +101,13 @@ import PageContainer from '../../../shared/components/Layout/PageContainer';
     if (selectedProtocolData) {
       const newRows = [
         {
-          particular: 'Min DIM',
+          particular: t('breeding.protocol.minDim'),
           hours: selectedProtocolData.min_DIM || '-',
           date: '-',
           time: '-'
         },
         {
-          particular: 'Max DIM',
+          particular: t('breeding.protocol.maxDim'),
           hours: selectedProtocolData.max_DIM || '-',
           date: '-',
           time: '-'
@@ -117,7 +119,7 @@ import PageContainer from '../../../shared/components/Layout/PageContainer';
           time: injection.time || '-'
         })),
         {
-          particular: 'AI Time',
+          particular: t('breeding.protocol.aiTime'),
           hours: selectedProtocolData.ai_time || '-',
           date: '-',
           time: '-'
@@ -135,7 +137,7 @@ import PageContainer from '../../../shared/components/Layout/PageContainer';
   
   const handleSubmit = async () => {
   if (!selectedProtocol || !animalId || !date || !startTime) {
-    const warningMsg = "Please fill all the missing required fields";
+    const warningMsg = t('breeding.common.fillMissingFields');
     if (toastId.current === null || !toast.isActive(toastId.current)) {
       toastId.current = toast.warning(warningMsg);
     }
@@ -154,14 +156,14 @@ import PageContainer from '../../../shared/components/Layout/PageContainer';
 
     await registerProtocolEvent(params);
 
-    toast.success('Protocol added successfully!');
+    toast.success(t('breeding.protocol.addSuccess'));
     setTimeout(() => {
       navigate(-1);
     }, 3000);
   } catch (error:any) {
     console.error('Error Response:', error.response?.data || error.message);
     if (toastId.current === null || !toast.isActive(toastId.current)) {
-      toastId.current = toast.error("Failed to register protocol. Please try again.");
+      toastId.current = toast.error(t('breeding.protocol.registerError'));
     }
   }
     finally {
@@ -169,7 +171,7 @@ import PageContainer from '../../../shared/components/Layout/PageContainer';
   }
 };
   return (
-    <PageContainer title="Protocol / Synchronization">
+    <PageContainer title={t('breeding.protocol.pageTitle')}>
       {/* Back Button */}
 
        <Typography
@@ -186,7 +188,7 @@ import PageContainer from '../../../shared/components/Layout/PageContainer';
         }}
         onClick={() => navigate(-1)}
       >
-        ←  Back
+        ←  {t('breeding.common.back')}
       </Typography>
 <Box
   sx={{
@@ -211,7 +213,7 @@ import PageContainer from '../../../shared/components/Layout/PageContainer';
           <Grid item xs={12} sm={6} md={3.5}>
             <TextField
               fullWidth
-              label="Protocol Date"
+              label={t('breeding.protocol.protocolDate')}
               type="date"
               value={date}
               onChange={e => setDate(e.target.value)}
@@ -221,7 +223,7 @@ import PageContainer from '../../../shared/components/Layout/PageContainer';
           <Grid item xs={12} sm={6} md={3.5}>
             <TextField
               fullWidth
-              label="Tag Id"
+              label={t('breeding.common.tagId')}
               select
               value={animalId}
               onChange={handleTagChange}
@@ -238,7 +240,7 @@ import PageContainer from '../../../shared/components/Layout/PageContainer';
           <Grid item xs={12} sm={6} md={3.5}>
             <TextField
               fullWidth
-              label="Protocols"
+              label={t('breeding.protocol.protocols')}
               select
               value={selectedProtocol}
               onChange={handleProtocolChange}
@@ -266,7 +268,7 @@ import PageContainer from '../../../shared/components/Layout/PageContainer';
       }}
       onClick={() => setIsModalOpen(true)}
     >
-      Add Protocol
+      {t('breeding.protocol.addProtocol')}
     </Button>
   )}
   {isMobile && (
@@ -285,7 +287,7 @@ import PageContainer from '../../../shared/components/Layout/PageContainer';
       }}
       onClick={() => setIsModalOpen(true)}
     >
-      Add Protocol
+      {t('breeding.protocol.addProtocol')}
     </Button>
   </Grid>
 )}
@@ -309,7 +311,7 @@ import PageContainer from '../../../shared/components/Layout/PageContainer';
          
             <TextField
               fullWidth
-              label="Start Time"
+              label={t('breeding.protocol.startTime')}
               type="time"
               value={startTime}
               onChange={e => setStartTime(e.target.value)}
@@ -344,7 +346,7 @@ import PageContainer from '../../../shared/components/Layout/PageContainer';
              {isLoading ? (
              <CircularProgress size={24} sx={{ color: "#0F7C8F" }} />
              ) : (
-            "Register New Protocol Event"
+            t('breeding.protocol.registerNewEvent')
             )}
 
           </Button>
@@ -360,7 +362,7 @@ import PageContainer from '../../../shared/components/Layout/PageContainer';
             }}
             onClick={() => navigate(-1)}
           >
-            Cancel
+            {t('breeding.common.cancel')}
           </Button>
         </Box>
       </Box>
@@ -372,10 +374,10 @@ import PageContainer from '../../../shared/components/Layout/PageContainer';
         <Table>
           <TableHead sx={{backgroundColor: "#F8F9FA"}}>
             <TableRow>
-              <TableCell sx={{ fontWeight: 'bold' }}>PARTICULARS</TableCell>
-              <TableCell sx={{ fontWeight: 'bold' }}>HOURS</TableCell>
-              <TableCell sx={{ fontWeight: 'bold' }}>DATE</TableCell>
-              <TableCell sx={{ fontWeight: 'bold' }}>TIME</TableCell>
+              <TableCell sx={{ fontWeight: 'bold' }}>{t('breeding.protocol.columns.particulars')}</TableCell>
+              <TableCell sx={{ fontWeight: 'bold' }}>{t('breeding.protocol.columns.hours')}</TableCell>
+              <TableCell sx={{ fontWeight: 'bold' }}>{t('breeding.protocol.columns.date')}</TableCell>
+              <TableCell sx={{ fontWeight: 'bold' }}>{t('breeding.protocol.columns.time')}</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -391,8 +393,8 @@ import PageContainer from '../../../shared/components/Layout/PageContainer';
               <TableRow>
                 <TableCell colSpan={4} align="center">
                   {/* <CircularProgress size={50}/> */}
-                  No rows found for <strong>{selectedProtocol}</strong>.
-                  
+                  {t('breeding.protocol.noRowsFoundFor')} <strong>{selectedProtocol}</strong>.
+
                 </TableCell>
               </TableRow>
             )}

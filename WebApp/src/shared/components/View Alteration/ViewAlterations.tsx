@@ -1,5 +1,6 @@
 // src/components/RecipeAlterationsTable.tsx
 import React, { useMemo, useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import {
   Box,
   Button,
@@ -60,6 +61,7 @@ const INGREDIENT_OPTIONS = [
 
 /* ─────────────── component ─────────────── */
 const ViewAlterations: React.FC<Props> = ({ title, rows }) => {
+    const { t } = useTranslation();
     const theme = useTheme();
     const colors = tokens(theme.palette.mode);
     const navigate = useNavigate();  
@@ -97,11 +99,11 @@ const ViewAlterations: React.FC<Props> = ({ title, rows }) => {
       await new Promise((res) => setTimeout(res, 800)); // demo delay
 
       setTableRows((prev) => prev.filter((r) => r.id !== rowToDelete.id));
-      toast.success('Recipe deleted successfully!');
+      toast.success(t('shared.viewAlterations.deleteSuccess'));
       setRowToDelete(null);
       setShowDeleteDone(true);   // keep your success dialog
     } catch (err: any) {
-      toast.error('Failed to delete recipe');
+      toast.error(t('shared.viewAlterations.deleteError'));
     } finally {
       setIsLoading(false);
     }
@@ -157,11 +159,11 @@ interface IngredientRow {
                   ),
                 );
               }
-              toast.success('Recipe updated successfully!');
+              toast.success(t('shared.viewAlterations.updateSuccess'));
               setEditRow(null);
               setShowUpdateDone(true);
             } catch (err: any) {
-              toast.error('Failed to update recipe');
+              toast.error(t('shared.viewAlterations.updateError'));
             } finally {
               setIsLoading(false);
             }
@@ -214,7 +216,7 @@ interface IngredientRow {
         }}
       >
         <TextField
-          placeholder="Search"
+          placeholder={t('common.search')}
           variant="standard"
           fullWidth
           value={query}
@@ -240,7 +242,14 @@ interface IngredientRow {
           <Table>
             <TableHead>
               <TableRow sx={{ backgroundColor: theme.palette.mode === 'dark' ? colors.primary[400] : '#F7FAFC' }}>
-                {['Sr#', 'Recipe Name', 'Weight', 'Creation Date', 'Status', 'Edit'].map(
+                {[
+                  t('shared.viewAlterations.columns.sr'),
+                  t('shared.viewAlterations.columns.recipeName'),
+                  t('shared.viewAlterations.columns.weight'),
+                  t('shared.viewAlterations.columns.creationDate'),
+                  t('shared.viewAlterations.columns.status'),
+                  t('shared.viewAlterations.columns.edit')
+                ].map(
                   (h) => (
                     <TableCell key={h} sx={{ fontWeight: 600, fontSize: 16 }}>
                       {h}
@@ -268,7 +277,9 @@ interface IngredientRow {
                   <TableCell>
                     <Chip
                       label={
-                        row.status === 'active' ? 'Active' : 'In-Active'
+                        row.status === 'active'
+                          ? t('shared.viewAlterations.status.active')
+                          : t('shared.viewAlterations.status.inactive')
                       }
                       size="small"
                       sx={{
@@ -300,7 +311,7 @@ interface IngredientRow {
                       </>
                     ) : (
                       <Chip
-                        label="Recipe Used In Feeding"
+                        label={t('shared.viewAlterations.recipeUsedInFeeding')}
                         size="small"
                         sx={{
                           backgroundColor: '#FCE9E1',
@@ -317,7 +328,7 @@ interface IngredientRow {
               {paged.length === 0 && (
                 <TableRow>
                   <TableCell colSpan={6} align="center" sx={{ fontSize: 15 }}>
-                    No recipes found.
+                    {t('shared.viewAlterations.noRecipesFound')}
                   </TableCell>
                 </TableRow>
               )}
@@ -342,10 +353,10 @@ interface IngredientRow {
       >
         <DialogTitle sx={{ fontWeight: 700, textAlign: 'center' }}>
           <DeleteRoundedIcon fontSize="small" sx={{ mr: 1 }} />
-          Delete Recipe
+          {t('shared.viewAlterations.deleteRecipe')}
         </DialogTitle>
         <DialogContent sx={{ pt: 5, textAlign: 'center' }}>
-          Do you want to delete shed feed recipe?
+          {t('shared.viewAlterations.deleteConfirm')}
         </DialogContent>
         <DialogActions sx={{ pb: 3, justifyContent: 'center' }}>
           <Button
@@ -353,7 +364,7 @@ interface IngredientRow {
             onClick={() => setRowToDelete(null)}
             sx={{ minWidth: 100, bgcolor: '#CECECE' }}
           >
-            Cancel
+            {t('common.cancel')}
           </Button>
           <Button
             variant="contained"
@@ -361,7 +372,7 @@ interface IngredientRow {
             onClick={confirmDelete}
             sx={{ minWidth: 120 }}
           >
-            Delete Recipe
+            {t('shared.viewAlterations.deleteRecipe')}
           </Button>
         </DialogActions>
       </Dialog>
@@ -386,7 +397,7 @@ interface IngredientRow {
             sx={{ fontSize: 64, color: '#ff4d4f', mb: 2 }}
           />
           <Typography variant="h6" fontWeight={700} mb="20px" gutterBottom>
-            Recipe Deleted!
+            {t('shared.viewAlterations.recipeDeleted')}
           </Typography>
           <Button
             variant="contained"
@@ -398,7 +409,7 @@ interface IngredientRow {
               borderRadius: 2,
             }}
           >
-            Close
+            {t('common.close')}
           </Button>
         </DialogContent>
       </Dialog>
@@ -422,14 +433,14 @@ interface IngredientRow {
       sx={{ fontSize: 64, color: '#12B76A', mb: 2 }}
     />
     <Typography variant="h6" fontWeight={700} mb="20px" gutterBottom>
-      Recipe Updated!
+      {t('shared.viewAlterations.recipeUpdated')}
     </Typography>
     <Button
       variant="contained"
       onClick={() => setShowUpdateDone(false)}
       sx={{ bgcolor: '#005f73' }}
     >
-      Close
+      {t('common.close')}
     </Button>
   </DialogContent>
 </Dialog>
@@ -442,7 +453,7 @@ interface IngredientRow {
         fullWidth
       >
         <DialogTitle sx={{ fontWeight: 700, textAlign: 'center' }}>
-          Edit Recipe
+          {t('shared.viewAlterations.editRecipe')}
         </DialogTitle>
         <DialogContent sx={{ p: { xs: 2, md: 4 } }}>
           {/* header row */}
@@ -451,8 +462,10 @@ interface IngredientRow {
             justifyContent="space-between"
             sx={{ fontWeight: 600, mb: 1 ,bgcolor:"#CECECE" }}
           >
-            <Typography>Ingredients</Typography>
-            <Typography sx={{marginRight:{xs:"110px",md:"150px"}}}>Quantity</Typography>
+            <Typography>{t('shared.viewAlterations.ingredients')}</Typography>
+            <Typography sx={{marginRight:{xs:"110px",md:"150px"}}}>
+              {t('shared.common.quantity')}
+            </Typography>
           </Box>
 
           {/* ingredient rows */}
@@ -501,7 +514,7 @@ interface IngredientRow {
                 borderRadius:"5px"
             }}
           >
-            Add
+            {t('common.add')}
           </Button>
             </Box>
           ))}
@@ -518,7 +531,7 @@ interface IngredientRow {
               marginLeft:{xs:0,md:'320px'}
             }}
           >
-            TOTAL: {totalQty} Kg
+            {t('shared.viewAlterations.totalKg', { total: totalQty })}
           </Paper>
 
           <ToastContainer
@@ -539,7 +552,7 @@ interface IngredientRow {
           <Box mt={4} display="flex" justifyContent="center" gap={2}>
             <Button variant="outlined" onClick={() => setEditRow(null)}
                 sx={{bgcolor:"#CECECE"}}>
-              Cancel
+              {t('common.cancel')}
             </Button>
             <Button
               variant="contained"
@@ -547,7 +560,7 @@ interface IngredientRow {
               onClick={saveEditedRecipe}
               sx={{bgcolor:"#005f73"}}
             >
-              Save Recipe
+              {t('shared.viewAlterations.saveRecipe')}
             </Button>
           </Box>
         </DialogContent>

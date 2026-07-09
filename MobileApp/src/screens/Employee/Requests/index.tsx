@@ -1,4 +1,5 @@
 import React, { useCallback, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { useFocusEffect } from '@react-navigation/native'
 import { StyleSheet, TouchableOpacity, View } from 'react-native'
 import Toast from 'react-native-toast-message'
@@ -21,6 +22,7 @@ const statusColor = (s?: string): keyof typeof COLORS => {
 }
 
 const Requests = () => {
+  const { t } = useTranslation()
   const { can } = usePermissions()
   const canManage = can(PERMISSIONS.EMPLOYEE_MANAGE)
   const [requests, setRequests] = useState<any[]>([])
@@ -36,12 +38,12 @@ const Requests = () => {
       const rows = res?.data?.data?.tasks || res?.data?.data?.requests || res?.data?.data || []
       setRequests(Array.isArray(rows) ? rows : [])
     } catch (e) {
-      Toast.show({ type: 'error', text1: 'Error', text2: getNormalizedError(e) })
+      Toast.show({ type: 'error', text1: t('employee.common.error'), text2: getNormalizedError(e) })
     } finally {
       setLoading(false)
       setRefreshing(false)
     }
-  }, [])
+  }, [t])
 
   useFocusEffect(useCallback(() => { load() }, [load]))
 
@@ -49,10 +51,10 @@ const Requests = () => {
     try {
       setRespondingId(item.uuid)
       await respondRequest({ requestId: item.uuid, status, response: status === 'completed' ? 'Approved' : 'Rejected' })
-      Toast.show({ type: 'success', text1: 'Done', text2: `Request ${status}` })
+      Toast.show({ type: 'success', text1: t('employee.common.done'), text2: t('employee.requests.responded', { status: t('employee.requests.status.' + status, status) }) })
       load()
     } catch (e) {
-      Toast.show({ type: 'error', text1: 'Error', text2: getNormalizedError(e) })
+      Toast.show({ type: 'error', text1: t('employee.common.error'), text2: getNormalizedError(e) })
     } finally {
       setRespondingId(null)
     }
@@ -63,10 +65,10 @@ const Requests = () => {
     return (
       <View>
         <InfoCard
-          title={item.title || 'Request'}
+          title={item.title || t('employee.requests.request')}
           subtitle={item.description}
           leftIcon={{ type: Icons.MaterialCommunityIcons, name: 'inbox-arrow-down' }}
-          badge={item.status ? { text: String(item.status).toUpperCase(), color: statusColor(item.status) } : undefined}
+          badge={item.status ? { text: t('employee.requests.status.' + item.status, String(item.status)).toUpperCase(), color: statusColor(item.status) } : undefined}
         />
         {canManage && isPending ? (
           <View style={styles.actionRow}>
@@ -77,7 +79,7 @@ const Requests = () => {
               activeOpacity={0.85}
             >
               <AppText fontSize="caption" medium color="white">
-                Approve
+                {t('employee.requests.approve')}
               </AppText>
             </TouchableOpacity>
             <TouchableOpacity
@@ -87,7 +89,7 @@ const Requests = () => {
               activeOpacity={0.85}
             >
               <AppText fontSize="caption" medium color="white">
-                Reject
+                {t('employee.requests.reject')}
               </AppText>
             </TouchableOpacity>
           </View>
@@ -98,13 +100,13 @@ const Requests = () => {
 
   return (
     <ListScreen
-      title="Requests"
+      title={t('employee.requests.title')}
       data={requests}
       renderItem={renderItem}
       loading={loading}
       refreshing={refreshing}
       onRefresh={() => { setRefreshing(true); load() }}
-      emptyText="No requests found."
+      emptyText={t('employee.requests.noRequests')}
       keyExtractor={(item: any, i) => item.uuid || String(i)}
     />
   )

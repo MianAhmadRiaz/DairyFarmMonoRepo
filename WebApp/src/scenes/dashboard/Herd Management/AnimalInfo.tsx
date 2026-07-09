@@ -18,6 +18,7 @@ import {
   useTheme,
 } from "@mui/material";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
+import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import CustomPagination from "../../../shared/components/Custom Pagination/CustomPagination";
 import PageContainer from '../../../shared/components/Layout/PageContainer';
@@ -44,6 +45,7 @@ const formatDate = (d: string) => {
 };
 
 const AnimalInfo: React.FC = () => {
+  const { t } = useTranslation();
   // -------------------------------------------------------------
   // THEME
   // -------------------------------------------------------------
@@ -161,7 +163,7 @@ const AnimalInfo: React.FC = () => {
   // RENDER
   // -------------------------------------------------------------
   return (
-    <PageContainer title="Animal Information" maxWidth={1200}>
+    <PageContainer title={t("herd.animalInfo.title")} maxWidth={1200}>
     <Box
       sx={{
          position:'relative',
@@ -221,7 +223,7 @@ const AnimalInfo: React.FC = () => {
         <TextField
           fullWidth
           variant="outlined"
-          placeholder="Search by name, pen, tag, breed, dates..."
+          placeholder={t("herd.animalInfo.searchPlaceholder")}
           value={searchTerm}
           disabled={isLoading}
           onChange={(e) => {
@@ -251,7 +253,7 @@ const AnimalInfo: React.FC = () => {
             "&:hover": { backgroundColor: "#007f91" },
           }}
         >
-          Filter
+          {t("herd.animalInfo.filter")}
         </Button>
 
         <Menu 
@@ -269,9 +271,9 @@ const AnimalInfo: React.FC = () => {
             }
           }}
         >
-          <MenuItem onClick={() => { setFilterAnimalType("All"); setAnchorEl(null); }}>All</MenuItem>
-          <MenuItem onClick={() => { setFilterAnimalType("Cattle"); setAnchorEl(null); }}>Cattle</MenuItem>
-          <MenuItem onClick={() => { setFilterAnimalType("Buffalo"); setAnchorEl(null); }}>Buffalo</MenuItem>
+          <MenuItem onClick={() => { setFilterAnimalType("All"); setAnchorEl(null); }}>{t("herd.animalInfo.all")}</MenuItem>
+          <MenuItem onClick={() => { setFilterAnimalType("Cattle"); setAnchorEl(null); }}>{t("herd.animalTypes.Cattle", "Cattle")}</MenuItem>
+          <MenuItem onClick={() => { setFilterAnimalType("Buffalo"); setAnchorEl(null); }}>{t("herd.animalTypes.Buffalo", "Buffalo")}</MenuItem>
         </Menu>
       </Box>
 
@@ -282,24 +284,24 @@ const AnimalInfo: React.FC = () => {
             <TableHead sx={{backgroundColor: theme.palette.mode === 'dark' ? colors.primary[400] : '#F8F9FA'}}>
               <TableRow>
                 <TableCell />
-                <TableCell sx={{ fontWeight: 'bold' }}>Pen Name</TableCell>
-                <TableCell sx={{ fontWeight: 'bold' }}>Tag Name</TableCell>
-                <TableCell sx={{ fontWeight: 'bold' }}>Name</TableCell>
-                <TableCell sx={{ fontWeight: 'bold' }}>Animal Type</TableCell>
-                <TableCell sx={{ fontWeight: 'bold' }}>Breed Type</TableCell>
-                <TableCell sx={{ fontWeight: 'bold' }}>Purchased From</TableCell>
-                <TableCell sx={{ fontWeight: 'bold' }}>Country</TableCell>
-                <TableCell sx={{ fontWeight: 'bold' }}>Gender</TableCell>
-                <TableCell sx={{ fontWeight: 'bold' }}>Type</TableCell>
-                <TableCell sx={{ fontWeight: 'bold' }}>Arrival Date</TableCell>
-                <TableCell sx={{ fontWeight: 'bold' }}>Birthdate</TableCell>
+                <TableCell sx={{ fontWeight: 'bold' }}>{t("herd.animalInfo.penName")}</TableCell>
+                <TableCell sx={{ fontWeight: 'bold' }}>{t("herd.animalInfo.tagName")}</TableCell>
+                <TableCell sx={{ fontWeight: 'bold' }}>{t("herd.animalInfo.name")}</TableCell>
+                <TableCell sx={{ fontWeight: 'bold' }}>{t("herd.animalInfo.animalType")}</TableCell>
+                <TableCell sx={{ fontWeight: 'bold' }}>{t("herd.animalInfo.breedType")}</TableCell>
+                <TableCell sx={{ fontWeight: 'bold' }}>{t("herd.animalInfo.purchasedFrom")}</TableCell>
+                <TableCell sx={{ fontWeight: 'bold' }}>{t("herd.animalInfo.country")}</TableCell>
+                <TableCell sx={{ fontWeight: 'bold' }}>{t("herd.animalInfo.gender")}</TableCell>
+                <TableCell sx={{ fontWeight: 'bold' }}>{t("herd.animalInfo.type")}</TableCell>
+                <TableCell sx={{ fontWeight: 'bold' }}>{t("herd.animalInfo.arrivalDate")}</TableCell>
+                <TableCell sx={{ fontWeight: 'bold' }}>{t("herd.animalInfo.birthdate")}</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
               {paginatedRows.length === 0 && !isLoading ? (
                 <TableRow>
                   <TableCell colSpan={12} align="center">
-                    No animals found
+                    {t("herd.animalInfo.noAnimals")}
                   </TableCell>
                 </TableRow>
               ) : (

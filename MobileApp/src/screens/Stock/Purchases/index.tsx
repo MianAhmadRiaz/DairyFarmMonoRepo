@@ -1,4 +1,5 @@
 import React, { useCallback, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { useFocusEffect, useNavigation } from '@react-navigation/native'
 import InfoCard from 'shared/components/InfoCard'
 import ListScreen from 'shared/components/ListScreen'
@@ -10,6 +11,7 @@ import usePermissions from 'shared/rbac/usePermissions'
 import { PERMISSIONS } from 'shared/rbac/permissions'
 
 const Purchases = () => {
+  const { t } = useTranslation()
   const navigation = useNavigation<any>()
   const { can } = usePermissions()
   const [purchases, setPurchases] = useState<any[]>([])
@@ -23,7 +25,7 @@ const Purchases = () => {
       const d = res?.data?.data
       setPurchases(d?.purchaseItems || d?.purchases || (Array.isArray(d) ? d : []))
     } catch (e) {
-      Toast.show({ type: 'error', text1: 'Error', text2: getNormalizedError(e) })
+      Toast.show({ type: 'error', text1: t('stock.common.error'), text2: getNormalizedError(e) })
     } finally {
       setLoading(false)
       setRefreshing(false)
@@ -34,25 +36,25 @@ const Purchases = () => {
 
   return (
     <ListScreen
-      title="Purchases"
+      title={t('stock.purchases.title')}
       data={purchases}
       loading={loading}
       refreshing={refreshing}
       onRefresh={() => { setRefreshing(true); load() }}
       keyExtractor={(item: any, i) => item.uuid || String(i)}
-      emptyText="No purchases recorded."
+      emptyText={t('stock.purchases.empty')}
       onPressAdd={can(PERMISSIONS.STOCK_PURCHASE) ? () => navigation.navigate('AddPurchase') : undefined}
       renderItem={({ item }: any) => (
         <InfoCard
-          title={item.item_name || 'Item'}
+          title={item.item_name || t('stock.common.item')}
           subtitle={`${item.date} · ${item.supplier_name || ''}`}
           leftIcon={{ type: Icons.MaterialCommunityIcons, name: 'cart' }}
           rows={[
-            { label: 'Quantity', value: item.quantity },
-            { label: 'Cost / unit', value: item.cost_per_unit },
-            { label: 'Total', value: item.total_cost },
-            { label: 'Batch', value: item.batch_number },
-            { label: 'Expiry', value: item.expiry_date }
+            { label: t('stock.common.quantity'), value: item.quantity },
+            { label: t('stock.purchases.costPerUnit'), value: item.cost_per_unit },
+            { label: t('stock.purchases.total'), value: item.total_cost },
+            { label: t('stock.purchases.batch'), value: item.batch_number },
+            { label: t('stock.purchases.expiry'), value: item.expiry_date }
           ]}
         />
       )}

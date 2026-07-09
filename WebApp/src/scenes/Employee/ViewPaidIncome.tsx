@@ -1,4 +1,5 @@
 import React, { useState,useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import {
   Box,
   Typography,
@@ -25,6 +26,7 @@ import 'react-toastify/dist/ReactToastify.css';
 
 export default function ViewEmployee() {
 
+   const { t } = useTranslation();
    const [salaryData, setSalaryData] = useState<SalaryInvoice[]>([]);
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
@@ -59,7 +61,7 @@ export default function ViewEmployee() {
   }, []);
   
     const handleFormatMonthYear = (dateStr: string) => {
-    if (!dateStr) return 'N/A';
+    if (!dateStr) return t('employee.common.na');
     const date = new Date(dateStr);
     const options = { year: 'numeric', month: 'long' } as const;
     return date.toLocaleDateString('en-US', options);
@@ -71,15 +73,15 @@ const handleDeleteInvoice = async (invoiceId: string) => {
   try {
     await deleteSalaryInvoice(invoiceId);
     setSalaryData(prev => prev.filter(inv => inv.uuid !== invoiceId));
-    toast.success('Deleted successfully')
+    toast.success(t('employee.viewPaidIncome.deletedSuccess'))
   } catch (error: any) {
     // const backendMessage = error?.response?.data?.message || 'Failed to delete invoice. Please try again.';
-    toast.error('Failed to delete invoice. Please try again.');
+    toast.error(t('employee.viewPaidIncome.deleteFailed'));
   }
 };
 
   return (
-    <PageContainer title="View Paid Income">
+    <PageContainer title={t('employee.viewPaidIncome.title')}>
       <Box
   sx={{
     backgroundColor: theme.palette.background.paper,
@@ -100,7 +102,7 @@ const handleDeleteInvoice = async (invoiceId: string) => {
         }}
       >
         <TextField
-          placeholder="Search by Name or Salary"
+          placeholder={t('employee.common.searchByNameOrSalary')}
           size="small"
           value={searchQuery}
            onChange={(e) => setSearchQuery(e.target.value)}
@@ -148,14 +150,14 @@ const handleDeleteInvoice = async (invoiceId: string) => {
         >
           <thead>
             <tr>
-              <th>Sr#</th>
-              <th>Employee</th>
-              <th>Salary Month</th>
-              <th>Date</th>
-              <th>Paying Salary</th>
-              <th>Advance Cutting</th>
-              <th>Account</th>
-              <th>Delete</th>
+              <th>{t('employee.common.srNo')}</th>
+              <th>{t('employee.common.employee')}</th>
+              <th>{t('employee.common.salaryMonth')}</th>
+              <th>{t('employee.common.date')}</th>
+              <th>{t('employee.viewPaidIncome.payingSalary')}</th>
+              <th>{t('employee.viewPaidIncome.advanceCutting')}</th>
+              <th>{t('employee.viewPaidIncome.account')}</th>
+              <th>{t('employee.viewPaidIncome.delete')}</th>
             </tr>
           </thead>
 

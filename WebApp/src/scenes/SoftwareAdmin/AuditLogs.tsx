@@ -13,10 +13,12 @@ import {
 } from '@mui/material';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { useTranslation } from 'react-i18next';
 
 import { AuditLog, getAuditLogs } from '../../shared/services/SoftwareAdminAPI/softwareAdmin.service';
 
 const AuditLogs: React.FC = () => {
+  const { t } = useTranslation();
   const [logs, setLogs] = useState<AuditLog[]>([]);
   const [loading, setLoading] = useState(true);
   const [page, setPage] = useState(1);
@@ -29,7 +31,7 @@ const AuditLogs: React.FC = () => {
       setLogs(res.logs);
       setTotalPages(res.totalPages || 1);
     } catch (err: any) {
-      toast.error(err?.response?.data?.message || 'Failed to load audit logs');
+      toast.error(err?.response?.data?.message || t('softwareAdmin.auditLogs.loadFailed'));
     } finally {
       setLoading(false);
     }
@@ -42,7 +44,7 @@ const AuditLogs: React.FC = () => {
   return (
     <Box>
       <Typography variant="h4" fontWeight={700} mb={3}>
-        Admin Audit Log
+        {t('softwareAdmin.auditLogs.title')}
       </Typography>
 
       {loading ? (
@@ -54,17 +56,17 @@ const AuditLogs: React.FC = () => {
           <Table size="small">
             <TableHead>
               <TableRow>
-                <TableCell>When</TableCell>
-                <TableCell>Admin</TableCell>
-                <TableCell>Action</TableCell>
-                <TableCell>Description</TableCell>
-                <TableCell>IP</TableCell>
+                <TableCell>{t('softwareAdmin.auditLogs.columns.when')}</TableCell>
+                <TableCell>{t('softwareAdmin.auditLogs.columns.admin')}</TableCell>
+                <TableCell>{t('softwareAdmin.auditLogs.columns.action')}</TableCell>
+                <TableCell>{t('softwareAdmin.auditLogs.columns.description')}</TableCell>
+                <TableCell>{t('softwareAdmin.auditLogs.columns.ip')}</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
               {logs.length === 0 && (
                 <TableRow>
-                  <TableCell colSpan={5}>No activity recorded yet.</TableCell>
+                  <TableCell colSpan={5}>{t('softwareAdmin.auditLogs.noActivity')}</TableCell>
                 </TableRow>
               )}
               {logs.map(log => (

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Box, Typography, TextField, Button, Modal } from '@mui/material';
+import { useTranslation } from 'react-i18next';
 
 interface AddItemModalProps {
   label:string
@@ -14,6 +15,7 @@ const AddItemModal: React.FC<AddItemModalProps> = ({
   onClose,
   onAdd
 }) => {
+  const { t } = useTranslation();
   const [newItem, setNewItem] = useState('');
 
   const handleAddNewItem = () => {
@@ -41,12 +43,12 @@ const AddItemModal: React.FC<AddItemModalProps> = ({
         }}
       >
         <Typography id="add-pen-modal" variant="h6" fontWeight="bold" mb={2}>
-          Add New {label}
+          {t('itemModal.addNew', { label })}
         </Typography>
 
         <TextField
           fullWidth
-          label={`New ${label}`}
+          label={t('itemModal.newLabel', { label })}
           variant="outlined"
           value={newItem}
           onChange={e => setNewItem(e.target.value)}
@@ -64,7 +66,7 @@ const AddItemModal: React.FC<AddItemModalProps> = ({
               fontWeight: 'bold'
             }}
           >
-            Cancel
+            {t('common.cancel')}
           </Button>
 
           <Button
@@ -80,7 +82,7 @@ const AddItemModal: React.FC<AddItemModalProps> = ({
               '&:hover': { backgroundColor: '#007f91' }
             }}
           >
-            Add
+            {t('common.add')}
           </Button>
         </Box>
       </Box>

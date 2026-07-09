@@ -22,6 +22,7 @@ import { CircularProgress, Backdrop } from '@mui/material';
 import { ToastContainer, toast,Id } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import PageContainer from '../../shared/components/Layout/PageContainer';
+import { useTranslation } from 'react-i18next';
 
 
 
@@ -48,6 +49,7 @@ interface Tag {
 }
 
 const DayWiseMilking: React.FC = () => {
+  const { t } = useTranslation();
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   // State
@@ -69,7 +71,7 @@ const handleSave = async function () {
   const today = todayDate.toISOString().split('T')[0];
 
   if (!tagId || !Milking_Time || milkQuantity <= 0 || !selectedRole) {
-    const msg = "Please fill all the missing required fields";
+    const msg = t('milking.common.fillRequiredFields');
     if (!toast.isActive(toastId.current as Id)) {
       toastId.current = toast.warning(msg);
     }
@@ -101,11 +103,13 @@ const handleSave = async function () {
 
         if (response?.data?.data?.underMilkWithdrawal) {
           toast.warning(
-            `Milk recorded, but this animal is under treatment withdrawal until ${response.data.data.milkWithdrawalUntil}. Its milk must NOT go to the tank — record it as Dumped in Milk Out.`,
+            t('milking.addMilkingSession.withdrawalWarning', {
+              date: response.data.data.milkWithdrawalUntil,
+            }),
             { autoClose: 10000 }
           );
         } else {
-          toast.success("Milk has been added successfully!");
+          toast.success(t('milking.addMilkingSession.milkAddedSuccess'));
         }
         setMilkQuantity(0);
         setMilking_Time("");
@@ -113,11 +117,11 @@ const handleSave = async function () {
         setselectedRole("");
         setRemarks("");
       } else {
-        toast.error("No animal found with matching tag name.");
+        toast.error(t('milking.addMilkingSession.noAnimalFound'));
       }
     }
   } catch (error) {
-    toast.error("Error while adding milk");
+    toast.error(t('milking.addMilkingSession.addMilkError'));
   } finally {
     setSubmitLoading(false);
   }
@@ -160,7 +164,7 @@ const handleSave = async function () {
   
 
   return (
-    <PageContainer title="Add Milking Session" maxWidth={900}>
+    <PageContainer title={t('milking.addMilkingSession.title')} maxWidth={900}>
 
       <Card
          sx={{
@@ -171,7 +175,7 @@ const handleSave = async function () {
         elevation={0}
       >
         <CardHeader
-          title="Add Milking Session"
+          title={t('milking.addMilkingSession.title')}
           titleTypographyProps={{ variant: 'h5', fontWeight: 600 }}
           sx={{
             // borderBottom: '1px solid #ddd',
@@ -197,10 +201,10 @@ const handleSave = async function () {
           >
             {/* Select Cow Tag */}
             <FormControl sx={{ flex: 1 }}>
-              <InputLabel id="milk-product-label">Select Cow</InputLabel>
+              <InputLabel id="milk-product-label">{t('milking.common.selectCow')}</InputLabel>
               <Select
                 labelId="cow-tag"
-                label="Select Cow"
+                label={t('milking.common.selectCow')}
                 value={tagId}
                 onChange={(e) => setTagId(e.target.value as string)}
               >
@@ -214,23 +218,23 @@ const handleSave = async function () {
 
              {/* Milking Time Dropdown */}
              <FormControl sx={{ flex: 1 }}>
-              <InputLabel id="milk-product-label">Select Milking Time</InputLabel>
+              <InputLabel id="milk-product-label">{t('milking.common.selectMilkingTime')}</InputLabel>
               <Select
                 labelId="milking-time"
-                label="Select Milking Time"
+                label={t('milking.common.selectMilkingTime')}
                 value={Milking_Time}
                 onChange={(e) => setMilking_Time(e.target.value as string)}
               >
-                <MenuItem value="">Select</MenuItem>
-                <MenuItem value="morning">Morning</MenuItem>
-                <MenuItem value="afternoon">Afternoon</MenuItem>
-                <MenuItem value="evening">Evening</MenuItem>
+                <MenuItem value="">{t('milking.common.select')}</MenuItem>
+                <MenuItem value="morning">{t('milking.common.milkingTimes.morning')}</MenuItem>
+                <MenuItem value="afternoon">{t('milking.common.milkingTimes.afternoon')}</MenuItem>
+                <MenuItem value="evening">{t('milking.common.milkingTimes.evening')}</MenuItem>
               </Select>
             </FormControl>
           
             {/* Milk Input */}
             <TextField
-              label="Quantity (Liters)"
+              label={t('milking.common.quantityLiters')}
               type="number"
               value={milkQuantity}
               onChange={(e) => setMilkQuantity(Number(e.target.value))}
@@ -249,7 +253,7 @@ const handleSave = async function () {
             }}
           >
             <TextField
-              label="Remarks"
+              label={t('milking.common.remarks')}
               multiline
               rows={4}
               value={remarks}
@@ -263,10 +267,10 @@ const handleSave = async function () {
               flexWrap: 'wrap', width: '32%' }}>
             {/* Report to Dropdown */}
             <FormControl sx={{ flex: 1 }}>
-              <InputLabel id="milk-product-label">Report to</InputLabel>
+              <InputLabel id="milk-product-label">{t('milking.common.reportTo')}</InputLabel>
               <Select
                 labelId="report-to"
-                label="Report to"
+                label={t('milking.common.reportTo')}
                 value={selectedRole}
                 onChange={(e) => setselectedRole(e.target.value as string)}
               >
@@ -301,7 +305,7 @@ const handleSave = async function () {
   {submitLoading ? (
     <CircularProgress size={24} sx={{ color: "#0F7C8F" }} />
   ) : (
-    "Save Changes"
+    t('milking.common.saveChanges')
   )}
 </Button>
 
@@ -314,7 +318,7 @@ const handleSave = async function () {
               color: '#333',
             }}
           >
-            Cancel
+            {t('common.cancel')}
           </Button>
         </CardActions>
           </CardContent>

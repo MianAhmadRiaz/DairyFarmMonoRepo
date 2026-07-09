@@ -39,6 +39,7 @@ import { useLocation } from 'react-router-dom';
 import PageContainer from '../../shared/components/Layout/PageContainer';
 import { usePermissions } from '../../shared/rbac/usePermissions';
 import { PERMISSIONS } from '../../shared/rbac/permissions';
+import { useTranslation } from 'react-i18next';
 
 
 interface MilkingSessionTime {
@@ -59,6 +60,7 @@ interface AnimalMilkingSession {
 
 
 const ListOfMilkingAnimals: React.FC = () => {
+  const { t } = useTranslation();
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
@@ -181,7 +183,7 @@ const ListOfMilkingAnimals: React.FC = () => {
 
     return {
       uuid: session.uuid,
-      tagName: session.tagName || "Unknown",
+      tagName: session.tagName || t('milking.common.unknown'),
       date: session.date,
       milk1: sessionMap["morning"] || 0,
       milk2: sessionMap["afternoon"] || 0,
@@ -196,7 +198,7 @@ const ListOfMilkingAnimals: React.FC = () => {
         sx={{ color: '#6bad44', fontWeight: 500, cursor: 'pointer' }}
         onClick={() => cowId && cowTag && handleAddNewClick(cowId! , cowTag! , date! , milkingTime!)}
       >
-        Add New
+        {t('milking.common.addNew')}
       </Typography>
     ) : (
       String(milkVal).padStart(2, '0')
@@ -217,7 +219,7 @@ const ApprovedMilk = async function () {
   toast.dismiss();
 
   if (!selectedDate) {
-    toast.warn("Please select a date first.");
+    toast.warn(t('milking.approvedMilk.selectDateFirst'));
     return;
   }
 
@@ -237,11 +239,11 @@ const ApprovedMilk = async function () {
 
     const response = await ApproveMilkSession({ sessionsData: cleanData });
 
-    toast.success('Milk sessions approved successfully!');
+    toast.success(t('milking.approvedMilk.approvedSuccess'));
     setSelectedDate("");
   } catch (error: any) {
     // Surface the API reason — e.g. animals blocked by treatment withdrawal
-    toast.error(error?.response?.data?.message || "Error in approving Milk", { autoClose: 8000 });
+    toast.error(error?.response?.data?.message || t('milking.approvedMilk.approveError'), { autoClose: 8000 });
   } finally {
     setButtonLoading(false);
   }
@@ -264,7 +266,7 @@ const ApprovedMilk = async function () {
 
   return (
 
-    <PageContainer title="Approve Milk Sessions" maxWidth="1200px">
+    <PageContainer title={t('milking.approvedMilk.title')} maxWidth="1200px">
   <Box sx={{
     display: 'flex',
     flexDirection: { xs: 'column', sm: 'row' },
@@ -273,7 +275,7 @@ const ApprovedMilk = async function () {
     mb: 2,
     gap: 2
   }}>
-    <Tooltip title={canApprove ? '' : 'No permission'}>
+    <Tooltip title={canApprove ? '' : t('milking.common.noPermission')}>
       <span>
     <Button
       variant="contained"
@@ -290,7 +292,7 @@ const ApprovedMilk = async function () {
       {buttonLoading ? (
     <CircularProgress size={20} sx={{ color: '#0F7C8F' }} />
   ) : (
-    'Approve Milk'
+    t('milking.approvedMilk.approveMilk')
   )}
 
     </Button>
@@ -324,7 +326,7 @@ const ApprovedMilk = async function () {
     }}
   >
     <TextField
-      placeholder="Search"
+      placeholder={t('common.search')}
       size="small"
       value={search}
       onChange={handleSearchChange}
@@ -350,11 +352,11 @@ const ApprovedMilk = async function () {
    
   }}>
         <InputLabel id="pending-approvals-label" shrink>
-          Pending 
+          {t('milking.approvedMilk.pending')}
         </InputLabel>
         <Select
           labelId="pending-approvals-label"
-          label="Pending Approvals"
+          label={t('milking.approvedMilk.pendingApprovals')}
           onChange={(e) => handlePendingApproval(e.target.value as string)}
           displayEmpty
           fullWidth
@@ -382,7 +384,7 @@ const ApprovedMilk = async function () {
       </FormControl>
       <TextField
         type="date"
-        label="Date"
+        label={t('milking.common.date')}
         size="small"
         value={selectedDate}
         onChange={handleDateChange}
@@ -415,11 +417,11 @@ const ApprovedMilk = async function () {
         <Table  sx={{ width: '100%' }}>
           <TableHead sx={{ backgroundColor: theme.palette.mode === 'dark' ? colors.primary[400] : '#F8F9FA' }}>
             <TableRow>
-              <TableCell sx={{ fontWeight: 600 }}>COW ID</TableCell>
-              <TableCell sx={{ fontWeight: 600 }}>MILK 1 (LITERS)</TableCell>
-              <TableCell sx={{ fontWeight: 600 }}>MILK 2 (LITERS)</TableCell>
-              <TableCell sx={{ fontWeight: 600 }}>MILK 3 (LITERS)</TableCell>
-              <TableCell sx={{ fontWeight: 600 }}>TOTAL MILK</TableCell>
+              <TableCell sx={{ fontWeight: 600 }}>{t('milking.approvedMilk.columns.cowId')}</TableCell>
+              <TableCell sx={{ fontWeight: 600 }}>{t('milking.approvedMilk.columns.milk1')}</TableCell>
+              <TableCell sx={{ fontWeight: 600 }}>{t('milking.approvedMilk.columns.milk2')}</TableCell>
+              <TableCell sx={{ fontWeight: 600 }}>{t('milking.approvedMilk.columns.milk3')}</TableCell>
+              <TableCell sx={{ fontWeight: 600 }}>{t('milking.approvedMilk.columns.totalMilk')}</TableCell>
             </TableRow>
           </TableHead>
 
@@ -433,7 +435,7 @@ const ApprovedMilk = async function () {
   ) : filteredData.length === 0 ? (
     <TableRow>
       <TableCell colSpan={5} align="center">
-        No data found.
+        {t('milking.common.noDataFound')}
       </TableCell>
     </TableRow>
   ) : (
@@ -559,6 +561,7 @@ const UpdateMilkingModal: React.FC<UpdateMilkingModalProps> = ({
   onCloseUpdate,
   getListData,
 })=>{
+  const { t } = useTranslation();
   const [Quantity, setQuantity] = useState('0');
 
   const handleCancel = () => {
@@ -577,11 +580,11 @@ const UpdateMilkingModal: React.FC<UpdateMilkingModalProps> = ({
    
     updateMilkSession(milkingSessionPayload)
       .then((response)=>{
-        toast.success("Milk Updated")
+        toast.success(t('milking.approvedMilk.milkUpdated'))
         getListData(date);
       })
       .catch((error)=>{
-        toast.error("Can't Update Milk");
+        toast.error(t('milking.approvedMilk.milkUpdateError'));
       })
     handleCancel();
   };
@@ -595,7 +598,7 @@ const UpdateMilkingModal: React.FC<UpdateMilkingModalProps> = ({
       fullWidth
       fullScreen={fullScreen}
     >
-      <DialogTitle sx={{ fontWeight: 'bold' }}>Update Milk</DialogTitle>
+      <DialogTitle sx={{ fontWeight: 'bold' }}>{t('milking.approvedMilk.updateMilk')}</DialogTitle>
       <DialogContent>
         <Box sx={{ 
           display: 'flex', 
@@ -606,16 +609,16 @@ const UpdateMilkingModal: React.FC<UpdateMilkingModalProps> = ({
         }}>
          <FormControl fullWidth>
             <TextField
-               label="Milking Time"
+               label={t('milking.common.milkingTime')}
                type="text"
-               value={milkingTime}
+               value={t('milking.common.milkingTimes.' + milkingTime, milkingTime)}
                fullWidth
                InputProps={{ readOnly: true }}
             />
 
           </FormControl>
           <TextField
-            label="Amount in Liters"
+            label={t('milking.common.amountInLiters')}
             type="number"
             value={Quantity}
             onChange={(e) => setQuantity(e.target.value)}
@@ -630,7 +633,7 @@ const UpdateMilkingModal: React.FC<UpdateMilkingModalProps> = ({
           variant="outlined"
           sx={{ textTransform: 'none', mr: 2 }}
         >
-          Cancel
+          {t('common.cancel')}
         </Button>
         <Button
           onClick={handleUpdate}
@@ -641,7 +644,7 @@ const UpdateMilkingModal: React.FC<UpdateMilkingModalProps> = ({
             textTransform: 'none',
           }}
         >
-          Update
+          {t('milking.approvedMilk.update')}
         </Button>
       </DialogActions>
        {/* <ToastContainer
@@ -692,6 +695,7 @@ const AddMilkingModal: React.FC<AddMilkingModalProps> = ({
   onClose,
   getListData,
 }) => {
+  const { t } = useTranslation();
   const [liters, setLiters] = useState('0');
   const [remarks, setRemarks] = useState('');
   const [tech, setTech] = useState('');
@@ -707,7 +711,7 @@ const handleSave = async function () {
 
   // Validate required fields
   if (!liters || !remarks || !tech || !Time || !cowUUid || !date) {
-    toast.warn('Please fill all the missing required fields');
+    toast.warn(t('milking.common.fillRequiredFields'));
     return;
   }
 
@@ -723,11 +727,11 @@ const handleSave = async function () {
 
   try {
     await createMilkingSession(milkingSessionPayload);
-    toast.success('Milk Added');
+    toast.success(t('milking.approvedMilk.milkAdded'));
     getListData(date);
     handleCancel();
   } catch (error) {
-    toast.error("Can't Add Milk");
+    toast.error(t('milking.approvedMilk.milkAddError'));
   } finally {
     setAddLoading(false);
   }
@@ -751,7 +755,7 @@ const handleSave = async function () {
   fullWidth
   fullScreen={fullScreen}
 >
-  <DialogTitle sx={{ fontWeight: 'bold' }}>Add New</DialogTitle>
+  <DialogTitle sx={{ fontWeight: 'bold' }}>{t('milking.common.addNew')}</DialogTitle>
   <DialogContent>
     <Box sx={{ 
       display: 'flex', 
@@ -762,15 +766,15 @@ const handleSave = async function () {
     }}>
       <FormControl fullWidth>
         <TextField
-          label="Milking Time"
+          label={t('milking.common.milkingTime')}
           type="text"
-          value={Time}
+          value={t('milking.common.milkingTimes.' + Time, Time)}
           fullWidth
           InputProps={{ readOnly: true }}
         />
       </FormControl>
       <TextField
-        label="Amount in Liters"
+        label={t('milking.common.amountInLiters')}
         type="number"
         value={liters}
         onChange={(e) => setLiters(e.target.value)}
@@ -780,7 +784,7 @@ const handleSave = async function () {
 
     <Box sx={{ mb: 2 }}>
       <TextField
-        label="Remarks"
+        label={t('milking.common.remarks')}
         multiline
         rows={4}
         value={remarks}
@@ -791,10 +795,10 @@ const handleSave = async function () {
 
     <Box sx={{ width: { xs: '100%', sm: '32%' } }}>
       <FormControl fullWidth>
-        <InputLabel id="report-to-label">Report to</InputLabel>
+        <InputLabel id="report-to-label">{t('milking.common.reportTo')}</InputLabel>
         <Select
           labelId="report-to-label"
-          label="Select Tech"
+          label={t('milking.common.selectTech')}
           value={tech}
           onChange={(e) => setTech(e.target.value as string)}
         >
@@ -819,7 +823,7 @@ const handleSave = async function () {
       variant="outlined"
       sx={{ textTransform: 'none', mr: 2 }}
     >
-      Cancel
+      {t('common.cancel')}
     </Button>
     <Button
       onClick={handleSave}
@@ -838,7 +842,7 @@ const handleSave = async function () {
        {addLoading ? (
     <CircularProgress size={20} sx={{ color: '#0F7C8F' }} />
   ) : (
-    'Add'
+    t('common.add')
   )}
     </Button>
   </DialogActions>

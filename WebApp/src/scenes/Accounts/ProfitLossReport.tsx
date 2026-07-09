@@ -28,6 +28,7 @@ import {
   Print as PrintIcon,
   TrendingUp as TrendingUpIcon
 } from '@mui/icons-material';
+import { useTranslation } from 'react-i18next';
 import { tokens } from '../../shared/theme/theme';
 import { fetchProfitLoss } from '../../shared/services/finance.service';
 import PageContainer from '../../shared/components/Layout/PageContainer';
@@ -52,6 +53,7 @@ interface SnackbarState {
 }
 
 const ProfitLossReport: React.FC = () => {
+  const { t } = useTranslation();
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   const pageBg = theme.palette.mode === 'dark' ? colors.primary[500] : '#F5FAF7';
@@ -252,21 +254,21 @@ const ProfitLossReport: React.FC = () => {
       let id = 1;
       const totalRevenue = Number(data.totalRevenue) || 0;
       const totalExpense = Number(data.totalExpense) || 0;
-      entries.push({ id: id++, category: 'Incomes', name: 'Incomes', amount: totalRevenue, percentage: 0, isTotal: true, level: 0 });
+      entries.push({ id: id++, category: 'Incomes', name: t('accounts.profitLossReport.incomes'), amount: totalRevenue, percentage: 0, isTotal: true, level: 0 });
       (data.revenue || []).forEach((r: { account_name: string; amount: number }) => {
         entries.push({
           id: id++, category: 'Incomes', name: r.account_name, amount: Number(r.amount) || 0,
           percentage: totalRevenue ? (Number(r.amount) / totalRevenue) * 100 : 0, level: 1
         });
       });
-      entries.push({ id: id++, category: 'Expenses', name: 'Expenses', amount: totalExpense, percentage: 0, isTotal: true, level: 0 });
+      entries.push({ id: id++, category: 'Expenses', name: t('accounts.profitLossReport.expenses'), amount: totalExpense, percentage: 0, isTotal: true, level: 0 });
       (data.expenses || []).forEach((r: { account_name: string; amount: number }) => {
         entries.push({
           id: id++, category: 'Expenses', name: r.account_name, amount: Number(r.amount) || 0,
           percentage: totalExpense ? (Number(r.amount) / totalExpense) * 100 : 0, level: 1
         });
       });
-      entries.push({ id: id++, category: 'Net', name: 'Net Profit', amount: Number(data.netProfit) || 0, percentage: 0, isTotal: true, level: 0 });
+      entries.push({ id: id++, category: 'Net', name: t('accounts.profitLossReport.netProfit'), amount: Number(data.netProfit) || 0, percentage: 0, isTotal: true, level: 0 });
       setProfitLossData(entries);
       return entries.length;
     } catch (e) {
@@ -283,12 +285,12 @@ const ProfitLossReport: React.FC = () => {
   // Handle GET Result
   const handleGetResult = async () => {
     if (!startDate || !endDate) {
-      setSnackbar({ open: true, message: 'Please select both start and end dates', severity: 'error' });
+      setSnackbar({ open: true, message: t('accounts.common.selectDatesError'), severity: 'error' });
       return;
     }
     await loadProfitLoss();
     setShowData(true);
-    setSnackbar({ open: true, message: 'Profit and Loss report generated successfully!', severity: 'success' });
+    setSnackbar({ open: true, message: t('accounts.profitLossReport.reportSuccess'), severity: 'success' });
   };
 
   // Handle Print
@@ -296,7 +298,7 @@ const ProfitLossReport: React.FC = () => {
     const printContent = `
       <html>
         <head>
-          <title>Profit and Loss Report</title>
+          <title>${t('accounts.profitLossReport.title')}</title>
           <style>
             body { font-family: Arial, sans-serif; padding: 20px; }
             .header { text-align: center; margin-bottom: 30px; border-bottom: 2px solid #005f73; padding-bottom: 10px; }
@@ -313,17 +315,17 @@ const ProfitLossReport: React.FC = () => {
         </head>
         <body>
           <div class="header">
-            <h2>Profit and Loss Report</h2>
+            <h2>${t('accounts.profitLossReport.title')}</h2>
           </div>
           <div class="date-range">
-            <p><strong>Period:</strong> ${startDate} to ${endDate}</p>
+            <p>${t('accounts.common.period', { start: startDate, end: endDate })}</p>
           </div>
           <table>
             <thead>
               <tr>
                 <th>#</th>
-                <th>Category</th>
-                <th>Amounts</th>
+                <th>${t('accounts.profitLossReport.category')}</th>
+                <th>${t('accounts.profitLossReport.amounts')}</th>
                 <th>%</th>
               </tr>
             </thead>
@@ -353,7 +355,7 @@ const ProfitLossReport: React.FC = () => {
   // Handle CSV export
   const handleCsvExport = () => {
     const csvContent = [
-      ['#', 'Category', 'Amounts', '%'],
+      ['#', t('accounts.profitLossReport.category'), t('accounts.profitLossReport.amounts'), '%'],
       ...profitLossData.map((entry: ProfitLossEntry, index) => [
         '',
         entry.name,
@@ -378,7 +380,7 @@ const ProfitLossReport: React.FC = () => {
   // Handle Excel export
   const handleExcelExport = () => {
     const xlsContent = [
-      '#\tCategory\tAmounts\t%',
+      ['#', t('accounts.profitLossReport.category'), t('accounts.profitLossReport.amounts'), '%'].join('\t'),
       ...profitLossData.map((entry: ProfitLossEntry) => 
         `\t${entry.name}\t${entry.amount}\t${entry.percentage > 0 ? entry.percentage.toFixed(2) + ' %' : ''}`
       )
@@ -400,16 +402,16 @@ const ProfitLossReport: React.FC = () => {
   // Handle Copy to clipboard
   const handleCopy = () => {
     const textContent = [
-      '#\tCategory\tAmounts\t%',
+      ['#', t('accounts.profitLossReport.category'), t('accounts.profitLossReport.amounts'), '%'].join('\t'),
       ...profitLossData.map((entry: ProfitLossEntry) => 
         `\t${entry.name}\t${entry.amount}\t${entry.percentage > 0 ? entry.percentage.toFixed(2) + ' %' : ''}`
       )
     ].join('\n');
 
     navigator.clipboard.writeText(textContent).then(() => {
-      setSnackbar({ open: true, message: 'Data copied to clipboard!', severity: 'success' });
+      setSnackbar({ open: true, message: t('accounts.common.copiedToClipboard'), severity: 'success' });
     }).catch(() => {
-      setSnackbar({ open: true, message: 'Failed to copy data', severity: 'error' });
+      setSnackbar({ open: true, message: t('accounts.common.copyFailed'), severity: 'error' });
     });
   };
 
@@ -420,7 +422,7 @@ const ProfitLossReport: React.FC = () => {
       pdfWindow.document.write(`
         <html>
           <head>
-            <title>Profit and Loss Report PDF</title>
+            <title>${t('accounts.profitLossReport.pdfTitle')}</title>
             <style>
               body { font-family: Arial, sans-serif; padding: 10px; }
               table { width: 100%; border-collapse: collapse; margin: 20px 0; font-size: 10px; }
@@ -433,15 +435,15 @@ const ProfitLossReport: React.FC = () => {
           </head>
           <body>
             <div class="header">
-              <h2>Profit and Loss Report</h2>
-              <p>Period: ${startDate} to ${endDate}</p>
+              <h2>${t('accounts.profitLossReport.title')}</h2>
+              <p>${t('accounts.common.period', { start: startDate, end: endDate })}</p>
             </div>
             <table>
               <thead>
                 <tr>
                   <th>#</th>
-                  <th>Category</th>
-                  <th>Amounts</th>
+                  <th>${t('accounts.profitLossReport.category')}</th>
+                  <th>${t('accounts.profitLossReport.amounts')}</th>
                   <th>%</th>
                 </tr>
               </thead>
@@ -466,7 +468,7 @@ const ProfitLossReport: React.FC = () => {
 
   // Handle Column Visibility
   const handleColumnVisibility = () => {
-    setSnackbar({ open: true, message: 'Column visibility options would open here', severity: 'success' });
+    setSnackbar({ open: true, message: t('accounts.common.columnVisibilityInfo'), severity: 'success' });
   };
 
   // Handle export functions
@@ -485,7 +487,7 @@ const ProfitLossReport: React.FC = () => {
         handleCopy();
         break;
       default:
-        setSnackbar({ open: true, message: `Exporting to ${format.toUpperCase()}...`, severity: 'success' });
+        setSnackbar({ open: true, message: t('accounts.common.exportingTo', { format: format.toUpperCase() }), severity: 'success' });
     }
   };
 
@@ -500,7 +502,7 @@ const ProfitLossReport: React.FC = () => {
   };
 
   return (
-    <PageContainer title="Profit and Loss Report">
+    <PageContainer title={t('accounts.profitLossReport.title')}>
         {/* Header Section */}
         <Paper elevation={0} sx={{ p: 3, mb: 2, borderRadius: 2, border: `1px solid ${theme.palette.divider}`, bgcolor: 'background.paper' }}>
           <Stack direction={{ xs: 'column', md: 'row' }} spacing={3} alignItems="center" justifyContent="space-between">
@@ -508,7 +510,7 @@ const ProfitLossReport: React.FC = () => {
             <Stack direction="row" spacing={2} alignItems="center">
               <TrendingUpIcon sx={{ color: '#f57c00', fontSize: 28 }} />
               <Typography variant="h5" fontWeight={600} sx={{ color: '#005f73' }}>
-                Profit and Loss Report
+                {t('accounts.profitLossReport.title')}
               </Typography>
             </Stack>
 
@@ -516,7 +518,7 @@ const ProfitLossReport: React.FC = () => {
             <Stack direction={{ xs: 'column', sm: 'row' }} spacing={3} alignItems="center">
               <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                 <CalendarTodayIcon sx={{ color: '#005f73' }} />
-                <Typography variant="body2" fontWeight={600}>Start Date:</Typography>
+                <Typography variant="body2" fontWeight={600}>{t('accounts.profitLossReport.startDate')}</Typography>
                 <TextField
                   type="date"
                   size="small"
@@ -528,7 +530,7 @@ const ProfitLossReport: React.FC = () => {
               
               <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                 <CalendarTodayIcon sx={{ color: '#005f73' }} />
-                <Typography variant="body2" fontWeight={600}>End Date:</Typography>
+                <Typography variant="body2" fontWeight={600}>{t('accounts.profitLossReport.endDate')}</Typography>
                 <TextField
                   type="date"
                   size="small"
@@ -551,7 +553,7 @@ const ProfitLossReport: React.FC = () => {
                   }
                 }}
               >
-                GET
+                {t('accounts.profitLossReport.get')}
               </Button>
 
               <Button
@@ -568,7 +570,7 @@ const ProfitLossReport: React.FC = () => {
                   }
                 }}
               >
-                Print
+                {t('accounts.profitLossReport.print')}
               </Button>
             </Stack>
           </Stack>
@@ -589,7 +591,7 @@ const ProfitLossReport: React.FC = () => {
                     onClick={handleColumnVisibility}
                     sx={{ textTransform: 'none', fontSize: '0.75rem' }}
                   >
-                    Column visibility
+                    {t('accounts.common.columnVisibility')}
                   </Button>
                   <Button 
                     size="small" 
@@ -598,7 +600,7 @@ const ProfitLossReport: React.FC = () => {
                     onClick={() => handleExport('copy')}
                     sx={{ textTransform: 'none', fontSize: '0.75rem' }}
                   >
-                    Copy
+                    {t('accounts.common.copy')}
                   </Button>
                   <Button 
                     size="small" 
@@ -631,7 +633,7 @@ const ProfitLossReport: React.FC = () => {
                 
                 <TextField
                   size="small"
-                  placeholder="Search:"
+                  placeholder={t('common.search')}
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
                   InputProps={{
@@ -653,7 +655,7 @@ const ProfitLossReport: React.FC = () => {
                   <TableRow>
                     <TableCell sx={{ fontWeight: 600, bgcolor: '#f5f5f5', border: '1px solid #e0e0e0', width: 60 }}>#</TableCell>
                     <TableCell sx={{ fontWeight: 600, bgcolor: '#f5f5f5', border: '1px solid #e0e0e0', width: '50%' }}></TableCell>
-                    <TableCell sx={{ fontWeight: 600, bgcolor: '#f5f5f5', border: '1px solid #e0e0e0', textAlign: 'center' }}>Amounts</TableCell>
+                    <TableCell sx={{ fontWeight: 600, bgcolor: '#f5f5f5', border: '1px solid #e0e0e0', textAlign: 'center' }}>{t('accounts.profitLossReport.amounts')}</TableCell>
                     <TableCell sx={{ fontWeight: 600, bgcolor: '#f5f5f5', border: '1px solid #e0e0e0', textAlign: 'center' }}>%</TableCell>
                   </TableRow>
                 </TableHead>

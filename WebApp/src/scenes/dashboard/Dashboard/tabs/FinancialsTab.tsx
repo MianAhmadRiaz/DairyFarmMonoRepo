@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Grid, Box, Typography, CircularProgress, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, useTheme } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import GlassCard from '../../../../shared/components/charts/GlassCard';
 import EmptyState from '../../../../shared/components/charts/EmptyState';
 import EstimateBadge from '../../../../shared/components/charts/EstimateBadge';
@@ -9,6 +10,7 @@ import { fetchFinancialsEstimate } from '../../../../shared/services/dashboardV2
 const FinancialsTab: React.FC = () => {
   const theme = useTheme();
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const [data, setData] = useState<any>(null);
   const [loading, setLoading] = useState(true);
 
@@ -31,7 +33,7 @@ const FinancialsTab: React.FC = () => {
     <Grid container spacing={2.5}>
       <Grid item xs={12}>
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: -1 }}>
-          <Typography sx={{ fontWeight: 700, fontSize: 15 }}>Cull / Keep Signal — Bottom Performers</Typography>
+          <Typography sx={{ fontWeight: 700, fontSize: 15 }}>{t('dashboard.financials.title')}</Typography>
           {data?.isEstimate && <EstimateBadge notes={data.estimateNotes} />}
         </Box>
       </Grid>
@@ -40,7 +42,7 @@ const FinancialsTab: React.FC = () => {
         <GlassCard delay={0.05}>
           {!data?.hasFeedData && (
             <Typography sx={{ fontSize: 12, color: theme.palette.text.secondary, mb: 1.5, fontStyle: 'italic' }}>
-              Feed cost per litre isn't shown — no feeding schedule data has been logged yet for this farm.
+              {t('dashboard.financials.noFeedData')}
             </Typography>
           )}
           {(data?.bottomPerformers || []).length ? (
@@ -49,11 +51,11 @@ const FinancialsTab: React.FC = () => {
                 <Table size="small">
                   <TableHead>
                     <TableRow>
-                      <TableCell sx={{ fontWeight: 700 }}>Animal</TableCell>
-                      <TableCell sx={{ fontWeight: 700 }}>Total Milk (L)</TableCell>
-                      <TableCell sx={{ fontWeight: 700 }}>Real Cost of Care</TableCell>
-                      <TableCell sx={{ fontWeight: 700 }}>Est. Milk Income</TableCell>
-                      <TableCell sx={{ fontWeight: 700 }}>Est. Net Profit</TableCell>
+                      <TableCell sx={{ fontWeight: 700 }}>{t('dashboard.financials.columns.animal')}</TableCell>
+                      <TableCell sx={{ fontWeight: 700 }}>{t('dashboard.financials.columns.totalMilk')}</TableCell>
+                      <TableCell sx={{ fontWeight: 700 }}>{t('dashboard.financials.columns.realCost')}</TableCell>
+                      <TableCell sx={{ fontWeight: 700 }}>{t('dashboard.financials.columns.estMilkIncome')}</TableCell>
+                      <TableCell sx={{ fontWeight: 700 }}>{t('dashboard.financials.columns.estNetProfit')}</TableCell>
                     </TableRow>
                   </TableHead>
                   <TableBody>
@@ -73,7 +75,7 @@ const FinancialsTab: React.FC = () => {
               </TableContainer>
             </Box>
           ) : (
-            <EmptyState title="Not enough data to estimate profitability yet" icon="📊" />
+            <EmptyState title={t('dashboard.financials.notEnoughData')} icon="📊" />
           )}
         </GlassCard>
       </Grid>

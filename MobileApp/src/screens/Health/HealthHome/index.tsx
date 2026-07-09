@@ -1,5 +1,6 @@
 import { useNavigation } from '@react-navigation/native'
-import React, { useCallback, useState } from 'react'
+import React, { useCallback, useMemo, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { RefreshControl, ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native'
 import { useFocusEffect } from '@react-navigation/native'
 import Toast from 'react-native-toast-message'
@@ -22,28 +23,29 @@ type Action = {
   permission: PermissionName
 }
 
-const ACTIONS: Action[] = [
-  { label: 'Herd Alerts', desc: 'Checks, dry-offs, calvings & heats due', screen: 'HerdAlerts', icon: { type: Icons.MaterialCommunityIcons, name: 'bell-alert' }, permission: PERMISSIONS.HEALTH_VIEW },
-  { label: 'Treatments', desc: 'Vet visits, vaccinations & medicines', screen: 'Treatments', icon: { type: Icons.MaterialCommunityIcons, name: 'medical-bag' }, permission: PERMISSIONS.HEALTH_VIEW },
-  { label: 'Withdrawals', desc: 'Animals whose milk must not be sold', screen: 'Withdrawals', icon: { type: Icons.MaterialCommunityIcons, name: 'cup-off' }, permission: PERMISSIONS.HEALTH_VIEW }
-]
-
 const HealthHome = () => {
+  const { t } = useTranslation()
   const navigation = useNavigation<any>()
   const { can } = usePermissions()
   const [counts, setCounts] = useState<any>(null)
   const [refreshing, setRefreshing] = useState(false)
+
+  const ACTIONS: Action[] = useMemo(() => [
+    { label: t('health.healthHome.herdAlerts'), desc: t('health.healthHome.herdAlertsDesc'), screen: 'HerdAlerts', icon: { type: Icons.MaterialCommunityIcons, name: 'bell-alert' }, permission: PERMISSIONS.HEALTH_VIEW },
+    { label: t('health.healthHome.treatments'), desc: t('health.healthHome.treatmentsDesc'), screen: 'Treatments', icon: { type: Icons.MaterialCommunityIcons, name: 'medical-bag' }, permission: PERMISSIONS.HEALTH_VIEW },
+    { label: t('health.healthHome.withdrawals'), desc: t('health.healthHome.withdrawalsDesc'), screen: 'Withdrawals', icon: { type: Icons.MaterialCommunityIcons, name: 'cup-off' }, permission: PERMISSIONS.HEALTH_VIEW }
+  ], [t])
 
   const load = useCallback(async () => {
     try {
       const res = await getHerdAlerts()
       setCounts(res?.data?.data?.counts)
     } catch (e) {
-      Toast.show({ type: 'error', text1: 'Error', text2: getNormalizedError(e) })
+      Toast.show({ type: 'error', text1: t('health.common.error'), text2: getNormalizedError(e) })
     } finally {
       setRefreshing(false)
     }
-  }, [])
+  }, [t])
 
   useFocusEffect(useCallback(() => { load() }, [load]))
 
@@ -62,19 +64,19 @@ const HealthHome = () => {
 
   return (
     <AppContainer>
-      <AppHeader title="Health & Treatments" showHam onPressHam={() => navigation.openDrawer?.()} />
+      <AppHeader title={t('health.healthHome.title')} showHam onPressHam={() => navigation.openDrawer?.()} />
       <ScrollView
         contentContainerStyle={{ padding: RF(16), paddingBottom: RF(40) }}
         refreshControl={<RefreshControl refreshing={refreshing} onRefresh={() => { setRefreshing(true); load() }} colors={[COLORS.primaryMain]} />}
       >
         <View style={styles.statsRow}>
-          {stat('Pregnancy Checks Due', counts?.pregnancyCheckDue)}
-          {stat('Dry-Offs Due', counts?.dryOffDue)}
-          {stat('Active Withdrawals', counts?.activeMilkWithdrawals)}
+          {stat(t('health.healthHome.pregnancyChecksDue'), counts?.pregnancyCheckDue)}
+          {stat(t('health.healthHome.dryOffsDue'), counts?.dryOffDue)}
+          {stat(t('health.healthHome.activeWithdrawals'), counts?.activeMilkWithdrawals)}
         </View>
 
         <AppText fontSize="h7" semiBold style={{ marginBottom: RF(12) }}>
-          Actions
+          {t('health.healthHome.actions')}
         </AppText>
         {visible.map((a, i) => (
           <TouchableOpacity key={i} style={styles.actionCard} onPress={() => navigation.navigate(a.screen)} activeOpacity={0.85}>

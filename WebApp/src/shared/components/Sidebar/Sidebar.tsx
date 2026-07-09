@@ -10,6 +10,7 @@ import {
   Drawer
 } from '@mui/material';
 import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import 'react-pro-sidebar/dist/css/styles.css';
 
 import HomeOutlinedIcon from '@mui/icons-material/HomeOutlined';
@@ -48,6 +49,7 @@ import ManageAccountsOutlinedIcon from '@mui/icons-material/ManageAccountsOutlin
 import { SIDEBAR_WIDTH_COLLAPSED, SIDEBAR_WIDTH_EXPANDED } from '../Layout/layoutConstants';
 const Sidebar = () => {
   const theme = useTheme();
+  const { t } = useTranslation();
   const colors = tokens(theme.palette.mode);
   const user = useSelector((state: RootState) => state.user.user);
   const selectedModule = useSelector(
@@ -153,7 +155,7 @@ const Sidebar = () => {
                 ml="15px"
               >
                 <Typography variant="h5" color={colors.grey[100]}>
-                  Cattle Care
+                  {t('common.appName')}
                 </Typography>
                 {/* <IconButton onClick={() => setIsCollapsed(!isCollapsed)}> */}
                 <IconButton
@@ -194,11 +196,11 @@ const Sidebar = () => {
                       {user
                         ? `${user.firstname || ''} ${
                             user.lastname || ''
-                          }`.trim() || 'User'
-                        : 'User'}
+                          }`.trim() || t('common.user')
+                        : t('common.user')}
                     </Typography>
                     <Typography variant="h6" color={colors.greenAccent[500]}>
-                      Admin
+                      {t('topbar.admin')}
                     </Typography>
                   </Box>
                 </Box>
@@ -209,14 +211,14 @@ const Sidebar = () => {
                   can(MODULE_VIEW_PERMISSION.feeding) && (
                   <>
                     <SideBarItem
-                      title="Create Recipe"
+                      title={t('nav.createRecipe')}
                       to="/create-recipe"
                       icon={<GrassIcon />}
                       selected={selected}
                       setSelected={setSelected}
                     />
                     <SideBarItem
-                      title="View Recipe"
+                      title={t('nav.viewRecipe')}
                       to="/view-recipe"
                       icon={<VisibilityOutlinedIcon />}
                       selected={selected}
@@ -224,56 +226,56 @@ const Sidebar = () => {
                     />
 
                     <SideBarItem
-                      title="Shed Feed Report"
+                      title={t('nav.shedFeedReport')}
                       to="/shed-feed-report"
                       icon={<VisibilityOutlinedIcon />}
                       selected={selected}
                       setSelected={setSelected}
                     />
                     <SideBarItem
-                      title="Date wise shed feed report"
+                      title={t('nav.dateWiseShedFeedReport')}
                       to="/date-wise-shed-feed-report"
                       icon={<VisibilityOutlinedIcon />}
                       selected={selected}
                       setSelected={setSelected}
                     />
                     <SideBarItem
-                      title="Shed feed stock print"
+                      title={t('nav.shedFeedStockPrint')}
                       to="/shed-feed-stock-print"
                       icon={<VisibilityOutlinedIcon />}
                       selected={selected}
                       setSelected={setSelected}
                     />
                     <SideBarItem
-                      title="Create Feed Formulation"
+                      title={t('nav.createFeedFormulation')}
                       to="/create-feed-formulation"
                       icon={<VisibilityOutlinedIcon />}
                       selected={selected}
                       setSelected={setSelected}
                     />
                     <SideBarItem
-                      title="View Feed Formulation"
+                      title={t('nav.viewFeedFormulation')}
                       to="/view-feed-formulation"
                       icon={<VisibilityOutlinedIcon />}
                       selected={selected}
                       setSelected={setSelected}
                     />
                     <SideBarItem
-                      title="Conducted Vanda Feed Formulation"
+                      title={t('nav.conductedVandaFeedFormulation')}
                       to="/conducted-vanda-feed-formulation"
                       icon={<VisibilityOutlinedIcon />}
                       selected={selected}
                       setSelected={setSelected}
                     />
                     <SideBarItem
-                      title="View conducted Vanda Formulation"
+                      title={t('nav.viewConductedVandaFormulation')}
                       to="/view-conducted-vanda-formulation"
                       icon={<VisibilityOutlinedIcon />}
                       selected={selected}
                       setSelected={setSelected}
                     />
                     <SideBarItem
-                      title="Apply Feed Recipe Shed"
+                      title={t('nav.applyFeedRecipeShed')}
                       to="/apply-feed-recipe-shed"
                       icon={<VisibilityOutlinedIcon />}
                       selected={selected}
@@ -281,7 +283,7 @@ const Sidebar = () => {
                     />
 
                     <SideBarItem
-                      title="Apply Feed Recipe Adjustable Shed"
+                      title={t('nav.applyFeedRecipeAdjustableShed')}
                       to="/apply-feed-recipeA-adjustable-shed"
                       icon={<VisibilityOutlinedIcon />}
                       selected={selected}
@@ -293,7 +295,7 @@ const Sidebar = () => {
                   can(MODULE_VIEW_PERMISSION.employee) && (
                   <>
                     <SideBarItem
-                      title="Dashboard"
+                      title={t('nav.dashboard')}
                       to="/employee/dashboard"
                       icon={<HomeOutlinedIcon />}
                       selected={selected}
@@ -312,7 +314,7 @@ const Sidebar = () => {
                         alignItems="center"
                         width="100%"
                       >
-                        <Typography>Emoployee</Typography>
+                        <Typography>{t('nav.employee')}</Typography>
                         {employeeOpen ? (
                           <KeyboardArrowUpIcon />
                         ) : (
@@ -324,14 +326,14 @@ const Sidebar = () => {
                     {employeeOpen && (
                       <Box sx={{ ml: isCollapsed ? 0 : 2 }}>
                         <SideBarItem
-                          title="Add Employee"
+                          title={t('nav.addEmployee')}
                           to="/employee/new"
                           icon={<PersonAddAltOutlinedIcon />}
                           selected={selected}
                           setSelected={setSelected}
                         />
                         <SideBarItem
-                          title="View Employee"
+                          title={t('nav.viewEmployee')}
                           to="/employee/view/employee"
                           icon={<VisibilityOutlinedIcon />}
                           selected={selected}
@@ -352,7 +354,7 @@ const Sidebar = () => {
                         alignItems="center"
                         width="100%"
                       >
-                        <Typography>Salary</Typography>
+                        <Typography>{t('nav.salary')}</Typography>
                         {generateSalary ? (
                           <KeyboardArrowUpIcon />
                         ) : (
@@ -364,14 +366,14 @@ const Sidebar = () => {
                     {generateSalary && (
                       <Box sx={{ ml: isCollapsed ? 0 : 2 }}>
                         <SideBarItem
-                          title="Generate Salary"
+                          title={t('nav.generateSalary')}
                           to="/employee/generate-salary"
                           icon={<AddCircleOutlineIcon />}
                           selected={selected}
                           setSelected={setSelected}
                         />
                         <SideBarItem
-                          title="View Generate Salary"
+                          title={t('nav.viewGenerateSalary')}
                           to="/employee/view/generate-salary"
                           icon={<VisibilityOutlinedIcon />}
                           selected={selected}
@@ -393,7 +395,7 @@ const Sidebar = () => {
                         alignItems="center"
                         width="100%"
                       >
-                        <Typography>Pay Salary</Typography>
+                        <Typography>{t('nav.paySalary')}</Typography>
                         {paidSalaray ? (
                           <KeyboardArrowUpIcon />
                         ) : (
@@ -405,14 +407,14 @@ const Sidebar = () => {
                     {paidSalaray && (
                       <Box sx={{ ml: isCollapsed ? 0 : 2 }}>
                         <SideBarItem
-                          title="Unpaid Salary"
+                          title={t('nav.unpaidSalary')}
                           to="/employee/unpaid-salary"
                           icon={<AddCircleOutlineOutlinedIcon />}
                           selected={selected}
                           setSelected={setSelected}
                         />
                         <SideBarItem
-                          title="View Paid Income"
+                          title={t('nav.viewPaidIncome')}
                           to="/employee/view/paid-income"
                           icon={<VisibilityOutlinedIcon />}
                           selected={selected}
@@ -434,7 +436,7 @@ const Sidebar = () => {
                         alignItems="center"
                         width="100%"
                       >
-                        <Typography>Advances</Typography>
+                        <Typography>{t('nav.advances')}</Typography>
                         {advances ? (
                           <KeyboardArrowUpIcon />
                         ) : (
@@ -446,28 +448,28 @@ const Sidebar = () => {
                     {advances && (
                       <Box sx={{ ml: isCollapsed ? 0 : 2 }}>
                         <SideBarItem
-                          title="Add Advances"
+                          title={t('nav.addAdvances')}
                           to="/employee/add-advance"
                           icon={<AddCircleOutlineOutlinedIcon />}
                           selected={selected}
                           setSelected={setSelected}
                         />
                         <SideBarItem
-                          title="Edit Advances"
+                          title={t('nav.editAdvances')}
                           to="/employee/edit-advance"
                           icon={<EditOutlinedIcon />}
                           selected={selected}
                           setSelected={setSelected}
                         />
                         <SideBarItem
-                          title="Receive Advances"
+                          title={t('nav.receiveAdvances')}
                           to="/employee/receive-advance"
                           icon={<DownloadOutlinedIcon />}
                           selected={selected}
                           setSelected={setSelected}
                         />
                         <SideBarItem
-                          title="View Advances"
+                          title={t('nav.viewAdvances')}
                           to="/employee/view-advance"
                           icon={<VisibilityOutlinedIcon />}
                           selected={selected}
@@ -489,7 +491,7 @@ const Sidebar = () => {
                         alignItems="center"
                         width="100%"
                       >
-                        <Typography>Attendance</Typography>
+                        <Typography>{t('nav.attendance')}</Typography>
                         {Attendance ? (
                           <KeyboardArrowUpIcon />
                         ) : (
@@ -500,14 +502,14 @@ const Sidebar = () => {
                     {Attendance && (
                       <Box sx={{ ml: isCollapsed ? 0 : 2 }}>
                         <SideBarItem
-                          title="Mark Attendance"
+                          title={t('nav.markAttendance')}
                           to="/employee/attendance"
                           icon={<AddCircleOutlineOutlinedIcon />}
                           selected={selected}
                           setSelected={setSelected}
                         />
                         <SideBarItem
-                          title="View Attendance"
+                          title={t('nav.viewAttendance')}
                           to="/employee/view-attendance-report"
                           icon={<EditOutlinedIcon />}
                           selected={selected}
@@ -531,7 +533,7 @@ const Sidebar = () => {
                         alignItems="center"
                         width="100%"
                       >
-                        <Typography>Other Stock Consumption</Typography>
+                        <Typography>{t('nav.otherStockConsumption')}</Typography>
                         {otherStockConsumptionOpen ? (
                           <KeyboardArrowUpIcon />
                         ) : (
@@ -553,7 +555,7 @@ const Sidebar = () => {
                         alignItems="center"
                         width="100%"
                       >
-                        <Typography>Reports</Typography>
+                        <Typography>{t('nav.reports')}</Typography>
                         {reportsOpen ? (
                           <KeyboardArrowUpIcon />
                         ) : (
@@ -567,28 +569,28 @@ const Sidebar = () => {
                   can(MODULE_VIEW_PERMISSION.herd) && (
                   <>
                     <SideBarItem
-                      title="Herd Dashboard"
+                      title={t('nav.herdDashboard')}
                       to="/herd-dashboard"
                       icon={<HomeOutlinedIcon />}
                       selected={selected}
                       setSelected={setSelected}
                     />
                     <SideBarItem
-                      title="Add Animal"
+                      title={t('nav.addAnimal')}
                       to="/add-animal"
                       icon={<PetsOutlinedIcon />}
                       selected={selected}
                       setSelected={setSelected}
                     />
                     <SideBarItem
-                      title="Animal Information"
+                      title={t('nav.animalInformation')}
                       to="/animal-info"
                       icon={<PetsOutlinedIcon />}
                       selected={selected}
                       setSelected={setSelected}
                     />
                     <SideBarItem
-                      title="Move to Pen"
+                      title={t('nav.moveToPen')}
                       to="/move-to-pen"
                       icon={<SwapHorizOutlinedIcon />}
                       selected={selected}
@@ -596,7 +598,7 @@ const Sidebar = () => {
                     />
                     {can(PERMISSIONS.ANIMAL_REMOVE) && (
                       <SideBarItem
-                        title="Remove Animal"
+                        title={t('nav.removeAnimal')}
                         to="/remove-animal"
                         icon={<DeleteOutlineOutlinedIcon />}
                         selected={selected}
@@ -604,7 +606,7 @@ const Sidebar = () => {
                       />
                     )}
                     <SideBarItem
-                      title="View Calves"
+                      title={t('nav.viewCalves')}
                       to="/view-calves"
                       icon={<VisibilityOutlinedIcon />}
                       selected={selected}
@@ -622,24 +624,24 @@ const Sidebar = () => {
                       color={colors.grey[300]}
                       sx={{ m: '15px 0 5px 20px' }}
                     >
-                      Health
+                      {t('nav.health')}
                     </Typography>
                     <SideBarItem
-                      title="Herd Alerts"
+                      title={t('nav.herdAlerts')}
                       to="/herd-alerts"
                       icon={<AddCircleOutlineOutlinedIcon />}
                       selected={selected}
                       setSelected={setSelected}
                     />
                     <SideBarItem
-                      title="Treatments"
+                      title={t('nav.treatments')}
                       to="/treatments"
                       icon={<AddCircleOutlineOutlinedIcon />}
                       selected={selected}
                       setSelected={setSelected}
                     />
                     <SideBarItem
-                      title="Weight & Health"
+                      title={t('nav.weightHealth')}
                       to="/weight-health"
                       icon={<AddCircleOutlineOutlinedIcon />}
                       selected={selected}
@@ -650,10 +652,10 @@ const Sidebar = () => {
                       color={colors.grey[300]}
                       sx={{ m: '15px 0 5px 20px' }}
                     >
-                      Events
+                      {t('nav.events')}
                     </Typography>
                     <SideBarItem
-                      title="Breeding Events"
+                      title={t('nav.breedingEvents')}
                       to="/breeding-events"
                       icon={<AddCircleOutlineOutlinedIcon />}
                       selected={selected}
@@ -666,7 +668,7 @@ const Sidebar = () => {
                   <>
                     {/* Simple sidebar items */}
                     <SideBarItem
-                      title="Accounts Dashboard"
+                      title={t('nav.accountsDashboard')}
                       to="/accounts/dashboard"
                       icon={<PersonOutlineIcon />}
                       selected={selected}
@@ -684,7 +686,7 @@ const Sidebar = () => {
                         alignItems="center"
                         width="100%"
                       >
-                        <Typography>Corporate Milk Dispatch</Typography>
+                        <Typography>{t('nav.corporateMilkDispatch')}</Typography>
                         {stockOpen ? (
                           <KeyboardArrowUpIcon />
                         ) : (
@@ -695,35 +697,35 @@ const Sidebar = () => {
                     {stockOpen && (
                       <Box sx={{ ml: isCollapsed ? 0 : 2 }}>
                         <SideBarItem
-                          title="Milk Dispatch"
+                          title={t('nav.milkDispatch')}
                           to="/accounts/milk-dispatch"
                           icon={<VisibilityOutlinedIcon />}
                           selected={selected}
                           setSelected={setSelected}
                         />
                         <SideBarItem
-                          title="Milk Dispatch Via Excel"
+                          title={t('nav.milkDispatchViaExcel')}
                           to="/accounts/milk-dispatch-via-excel"
                           icon={<AddCircleOutlineIcon />}
                           selected={selected}
                           setSelected={setSelected}
                         />
                         <SideBarItem
-                          title="Milking Payments"
+                          title={t('nav.milkingPayments')}
                           to="/accounts/milking-payments"
                           icon={<AddCircleOutlineIcon />}
                           selected={selected}
                           setSelected={setSelected}
                         />
                         <SideBarItem
-                          title="View Milk Dispatch"
+                          title={t('nav.viewMilkDispatch')}
                           to="/accounts/view-milk-dispatch"
                           icon={<AddCircleOutlineIcon />}
                           selected={selected}
                           setSelected={setSelected}
                         />
                         <SideBarItem
-                          title="View Milk Payments"
+                          title={t('nav.viewMilkPayments')}
                           to="/accounts/view-milk-payments"
                           icon={<AddCircleOutlineIcon />}
                           selected={selected}
@@ -743,7 +745,7 @@ const Sidebar = () => {
                         alignItems="center"
                         width="100%"
                       >
-                        <Typography>Chart of Accounts</Typography>
+                        <Typography>{t('nav.chartOfAccounts')}</Typography>
                         {stockInventoryOpen ? (
                           <KeyboardArrowUpIcon />
                         ) : (
@@ -754,42 +756,42 @@ const Sidebar = () => {
                     {stockInventoryOpen && (
                       <Box sx={{ ml: isCollapsed ? 0 : 2 }}>
                         <SideBarItem
-                          title="Add Account Head"
+                          title={t('nav.addAccountHead')}
                           to="/accounts/add-account-head"
                           icon={<VisibilityOutlinedIcon />}
                           selected={selected}
                           setSelected={setSelected}
                         />
                         <SideBarItem
-                          title="Chart of Accounts"
+                          title={t('nav.chartOfAccounts')}
                           to="/accounts/chart-of-accounts"
                           icon={<AddCircleOutlineIcon />}
                           selected={selected}
                           setSelected={setSelected}
                         />
                         <SideBarItem
-                          title="Merge/Transfer Accounts"
+                          title={t('nav.mergeTransferAccounts')}
                           to="/accounts/merge-transfer-accounts"
                           icon={<AddCircleOutlineIcon />}
                           selected={selected}
                           setSelected={setSelected}
                         />
                         <SideBarItem
-                          title="Opening Voucher Accounts"
+                          title={t('nav.openingVoucherAccounts')}
                           to="/accounts/opening-voucher-accounts"
                           icon={<AddCircleOutlineIcon />}
                           selected={selected}
                           setSelected={setSelected}
                         />
                         <SideBarItem
-                          title="Charts of Accounts Levels"
+                          title={t('nav.chartsOfAccountsLevels')}
                           to="/accounts/charts-of-accounts-levels"
                           icon={<AddCircleOutlineIcon />}
                           selected={selected}
                           setSelected={setSelected}
                         />
                         <SideBarItem
-                          title="Cash Customers"
+                          title={t('nav.cashCustomers')}
                           to="/accounts/cash-customers"
                           icon={<AddCircleOutlineIcon />}
                           selected={selected}
@@ -810,7 +812,7 @@ const Sidebar = () => {
                         alignItems="center"
                         width="100%"
                       >
-                        <Typography>Transactions</Typography>
+                        <Typography>{t('nav.transactions')}</Typography>
                         {stockIssuanceOpen ? (
                           <KeyboardArrowUpIcon />
                         ) : (
@@ -821,70 +823,70 @@ const Sidebar = () => {
                     {stockIssuanceOpen && (
                       <Box sx={{ ml: isCollapsed ? 0 : 2 }}>
                         <SideBarItem
-                          title="Make Cash Payment Voucher"
+                          title={t('nav.makeCashPaymentVoucher')}
                           to="/accounts/cpv-transaction"
                           icon={<VisibilityOutlinedIcon />}
                           selected={selected}
                           setSelected={setSelected}
                         />
                         <SideBarItem
-                          title="Make Bank Payment Voucher"
+                          title={t('nav.makeBankPaymentVoucher')}
                           to="/accounts/bpv-transaction"
                           icon={<AddCircleOutlineIcon />}
                           selected={selected}
                           setSelected={setSelected}
                         />
                         <SideBarItem
-                          title="Make Cash Receipt Voucher"
+                          title={t('nav.makeCashReceiptVoucher')}
                           to="/accounts/crv-transaction"
                           icon={<AddCircleOutlineIcon />}
                           selected={selected}
                           setSelected={setSelected}
                         />
                         <SideBarItem
-                          title="Make Bank Receipt Voucher"
+                          title={t('nav.makeBankReceiptVoucher')}
                           to="/accounts/brv-transaction"
                           icon={<AddCircleOutlineIcon />}
                           selected={selected}
                           setSelected={setSelected}
                         />
                         <SideBarItem
-                          title="Make Journal Transaction"
+                          title={t('nav.makeJournalTransaction')}
                           to="/accounts/make-journal-transaction"
                           icon={<AddCircleOutlineIcon />}
                           selected={selected}
                           setSelected={setSelected}
                         />
                         <SideBarItem
-                          title="Account Statements"
+                          title={t('nav.accountStatements')}
                           to="/accounts/account-statements"
                           icon={<AddCircleOutlineIcon />}
                           selected={selected}
                           setSelected={setSelected}
                         />
                         <SideBarItem
-                          title="Make Purchase Transaction"
+                          title={t('nav.makePurchaseTransaction')}
                           to="/accounts/make-purchase-transaction"
                           icon={<AddCircleOutlineIcon />}
                           selected={selected}
                           setSelected={setSelected}
                         />
                         <SideBarItem
-                          title="Make Sales Transaction"
+                          title={t('nav.makeSalesTransaction')}
                           to="/accounts/make-sales-transaction"
                           icon={<AddCircleOutlineIcon />}
                           selected={selected}
                           setSelected={setSelected}
                         />
                         <SideBarItem
-                          title="Make Purchase Return"
+                          title={t('nav.makePurchaseReturn')}
                           to="/accounts/make-purchase-return"
                           icon={<AddCircleOutlineIcon />}
                           selected={selected}
                           setSelected={setSelected}
                         />
                         <SideBarItem
-                          title="Make Sales Return"
+                          title={t('nav.makeSalesReturn')}
                           to="/accounts/make-sales-return"
                           icon={<AddCircleOutlineIcon />}
                           selected={selected}
@@ -894,14 +896,14 @@ const Sidebar = () => {
                     )}
 
                     <SideBarItem
-                      title="View Transactions"
+                      title={t('nav.viewTransactions')}
                       to="/accounts/view-transactions"
                       icon={<EditOutlinedIcon />}
                       selected={selected}
                       setSelected={setSelected}
                     />
                     <SideBarItem
-                      title="Customer Milk Sale"
+                      title={t('nav.customerMilkSale')}
                       to="/accounts/customer-milk-sale"
                       icon={<EditOutlinedIcon />}
                       selected={selected}
@@ -920,7 +922,7 @@ const Sidebar = () => {
                         alignItems="center"
                         width="100%"
                       >
-                        <Typography>Reports</Typography>
+                        <Typography>{t('nav.reports')}</Typography>
                         {reportsOpen ? (
                           <KeyboardArrowUpIcon />
                         ) : (
@@ -931,161 +933,161 @@ const Sidebar = () => {
                     {reportsOpen && (
                       <Box sx={{ ml: isCollapsed ? 0 : 2 }}>
                         <SideBarItem
-                          title="General Ledger"
+                          title={t('nav.generalLedger')}
                           to="/accounts/reports/general-ledger"
                           icon={<TimelineOutlinedIcon />}
                           selected={selected}
                           setSelected={setSelected}
                         />
                         <SideBarItem
-                          title="Ledger Report"
+                          title={t('nav.ledgerReport')}
                           to="/accounts/reports/ledger-report"
                           icon={<TimelineOutlinedIcon />}
                           selected={selected}
                           setSelected={setSelected}
                         />
                         <SideBarItem
-                          title="Total Milk Consumption Report"
+                          title={t('nav.totalMilkConsumptionReport')}
                           to="/accounts/reports/total-milk-consumption-report"
                           icon={<TimelineOutlinedIcon />}
                           selected={selected}
                           setSelected={setSelected}
                         />
                         <SideBarItem
-                          title="Profit & Loss Report"
+                          title={t('nav.profitLossReport')}
                           to="/accounts/reports/profit-loss-report"
                           icon={<TimelineOutlinedIcon />}
                           selected={selected}
                           setSelected={setSelected}
                         />
                         <SideBarItem
-                          title="Mini Profit & Loss Report"
+                          title={t('nav.miniProfitLossReport')}
                           to="/accounts/reports/mini-profit-loss-report"
                           icon={<TimelineOutlinedIcon />}
                           selected={selected}
                           setSelected={setSelected}
                         />
                         <SideBarItem
-                          title="Profit & Loss Comparison Report"
+                          title={t('nav.profitLossComparisonReport')}
                           to="/accounts/reports/profit-loss-comparison-report"
                           icon={<TimelineOutlinedIcon />}
                           selected={selected}
                           setSelected={setSelected}
                         />
                         <SideBarItem
-                          title="Trial Balance Report"
+                          title={t('nav.trialBalanceReport')}
                           to="/accounts/reports/trial-balance-report"
                           icon={<TimelineOutlinedIcon />}
                           selected={selected}
                           setSelected={setSelected}
                         />
                         <SideBarItem
-                          title="Balance Sheet"
+                          title={t('nav.balanceSheet')}
                           to="/accounts/reports/balance-sheet"
                           icon={<TimelineOutlinedIcon />}
                           selected={selected}
                           setSelected={setSelected}
                         />
                         <SideBarItem
-                          title="Cash Flow Statement"
+                          title={t('nav.cashFlowStatement')}
                           to="/accounts/reports/cash-flow-statement"
                           icon={<TimelineOutlinedIcon />}
                           selected={selected}
                           setSelected={setSelected}
                         />
                         <SideBarItem
-                          title="Payables Report"
+                          title={t('nav.payablesReport')}
                           to="/accounts/reports/payables-report"
                           icon={<TimelineOutlinedIcon />}
                           selected={selected}
                           setSelected={setSelected}
                         />
                         <SideBarItem
-                          title="Receivables Report"
+                          title={t('nav.receivablesReport')}
                           to="/accounts/reports/receivables-report"
                           icon={<TimelineOutlinedIcon />}
                           selected={selected}
                           setSelected={setSelected}
                         />
                         <SideBarItem
-                          title="Purchase Register"
+                          title={t('nav.purchaseRegister')}
                           to="/accounts/reports/purchase-register"
                           icon={<TimelineOutlinedIcon />}
                           selected={selected}
                           setSelected={setSelected}
                         />
                         <SideBarItem
-                          title="Sales Register"
+                          title={t('nav.salesRegister')}
                           to="/accounts/reports/sales-register"
                           icon={<TimelineOutlinedIcon />}
                           selected={selected}
                           setSelected={setSelected}
                         />
                         <SideBarItem
-                          title="Main Heads Report"
+                          title={t('nav.mainHeadsReport')}
                           to="/accounts/reports/main-heads-report"
                           icon={<TimelineOutlinedIcon />}
                           selected={selected}
                           setSelected={setSelected}
                         />
                         <SideBarItem
-                          title="Day Book Report"
+                          title={t('nav.dayBookReport')}
                           to="/accounts/reports/day-book-report"
                           icon={<TimelineOutlinedIcon />}
                           selected={selected}
                           setSelected={setSelected}
                         />
                         <SideBarItem
-                          title="Cash Book"
+                          title={t('nav.cashBook')}
                           to="/accounts/reports/cash-book"
                           icon={<TimelineOutlinedIcon />}
                           selected={selected}
                           setSelected={setSelected}
                         />
                         <SideBarItem
-                          title="Expense Report"
+                          title={t('nav.expenseReport')}
                           to="/accounts/reports/expense-report"
                           icon={<TimelineOutlinedIcon />}
                           selected={selected}
                           setSelected={setSelected}
                         />
                         <SideBarItem
-                          title="Sales Report"
+                          title={t('nav.salesReport')}
                           to="/accounts/reports/sales-report"
                           icon={<TimelineOutlinedIcon />}
                           selected={selected}
                           setSelected={setSelected}
                         />
                         <SideBarItem
-                          title="Bills Print"
+                          title={t('nav.billsPrint')}
                           to="/accounts/reports/bills-print"
                           icon={<TimelineOutlinedIcon />}
                           selected={selected}
                           setSelected={setSelected}
                         />
                         <SideBarItem
-                          title="Milk Sales Report"
+                          title={t('nav.milkSalesReport')}
                           to="/accounts/reports/milk-sales-report"
                           icon={<TimelineOutlinedIcon />}
                           selected={selected}
                           setSelected={setSelected}
                         />
                         <SideBarItem
-                          title="Corporate Milk Payment"
+                          title={t('nav.corporateMilkPayment')}
                           to="/accounts/reports/corporate-milk-payment"
                           icon={<TimelineOutlinedIcon />}
                           selected={selected}
                           setSelected={setSelected}
                         />
                         <SideBarItem
-                          title="Day-wise Milk Sale Report"
+                          title={t('nav.dayWiseMilkSaleReport')}
                           to="/accounts/reports/day-wise-milk-sale-report"
                           icon={<TimelineOutlinedIcon />}
                           selected={selected}
                           setSelected={setSelected}
                         />
                         <SideBarItem
-                          title="Weekly Milk Sale"
+                          title={t('nav.weeklyMilkSale')}
                           to="/accounts/reports/weekly-milk-sale"
                           icon={<TimelineOutlinedIcon />}
                           selected={selected}
@@ -1111,7 +1113,7 @@ const Sidebar = () => {
                         alignItems="center"
                         width="100%"
                       >
-                        <Typography>Milk Management</Typography>
+                        <Typography>{t('nav.milkManagement')}</Typography>
                         {milkingOpen ? (
                           <KeyboardArrowUpIcon />
                         ) : (
@@ -1123,7 +1125,7 @@ const Sidebar = () => {
                     {milkingOpen && (
                       <Box sx={{ ml: isCollapsed ? 0 : 2 }}>
                         <SideBarItem
-                          title="Milk Dashboard"
+                          title={t('nav.milkDashboard')}
                           to="/milk-dashboard"
                           icon={<TimelineOutlinedIcon />}
                           selected={selected}
@@ -1131,7 +1133,7 @@ const Sidebar = () => {
                           isCollapsed={isCollapsed}
                         />
                         <SideBarItem
-                          title="Add Milking Session"
+                          title={t('nav.addMilkingSession')}
                           to="/add-milking-session"
                           icon={<TimelineOutlinedIcon />}
                           selected={selected}
@@ -1139,7 +1141,7 @@ const Sidebar = () => {
                           isCollapsed={isCollapsed}
                         />
                         <SideBarItem
-                          title="Approve Milk"
+                          title={t('nav.approveMilk')}
                           to="/list-of-milking"
                           icon={<TimelineOutlinedIcon />}
                           selected={selected}
@@ -1147,42 +1149,42 @@ const Sidebar = () => {
                           isCollapsed={isCollapsed}
                         />
                         <SideBarItem
-                          title="Milk Out"
+                          title={t('nav.milkOut')}
                           to="/milk-out"
                           icon={<ArrowOutwardIcon />}
                           selected={selected}
                           setSelected={setSelected}
                         />
                         <SideBarItem
-                          title="Milk In Out Rep."
+                          title={t('nav.milkInOutReport')}
                           to="/milk-in-out"
                           icon={<ArrowOutwardIcon />}
                           selected={selected}
                           setSelected={setSelected}
                         />
                         <SideBarItem
-                          title="Daily Milk Rep."
+                          title={t('nav.dailyMilkReport')}
                           to="/daily-milk-report"
                           icon={<TimelineOutlinedIcon />}
                           selected={selected}
                           setSelected={setSelected}
                         />
                         <SideBarItem
-                          title="Average milk Rep."
+                          title={t('nav.averageMilkReport')}
                           to="/average-milk-report"
                           icon={<TimelineOutlinedIcon />}
                           selected={selected}
                           setSelected={setSelected}
                         />
                         <SideBarItem
-                          title="Milk Difference Rep."
+                          title={t('nav.milkDifferenceReport')}
                           to="/milk-difference-report"
                           icon={<MapOutlinedIcon />}
                           selected={selected}
                           setSelected={setSelected}
                         />
                         <SideBarItem
-                          title="Cow Milking Graph"
+                          title={t('nav.cowMilkingGraph')}
                           to="/cow-milking-report"
                           icon={<MapOutlinedIcon />}
                           selected={selected}
@@ -1196,7 +1198,7 @@ const Sidebar = () => {
                   can(MODULE_VIEW_PERMISSION.stock) && (
                   <>
                     <SideBarItem
-                      title="Stock Dashboard"
+                      title={t('nav.stockDashboard')}
                       to="/stock/dashboard"
                       icon={<HomeOutlinedIcon />}
                       selected={selected}
@@ -1204,7 +1206,7 @@ const Sidebar = () => {
                     />
 
                     <SideBarItem
-                      title="Purchases"
+                      title={t('nav.purchases')}
                       to="/stock/purchases"
                       icon={<Inventory2OutlinedIcon />}
                       selected={selected}
@@ -1212,7 +1214,7 @@ const Sidebar = () => {
                     />
 
                     <SideBarItem
-                      title="Suppliers"
+                      title={t('nav.suppliers')}
                       to="/stock/suppliers"
                       icon={<PersonOutlineIcon />}
                       selected={selected}
@@ -1232,7 +1234,7 @@ const Sidebar = () => {
                         alignItems="center"
                         width="100%"
                       >
-                        <Typography>Stock</Typography>
+                        <Typography>{t('nav.stock')}</Typography>
                         {stockOpen ? (
                           <KeyboardArrowUpIcon />
                         ) : (
@@ -1244,21 +1246,21 @@ const Sidebar = () => {
                     {stockOpen && (
                       <Box sx={{ ml: isCollapsed ? 0 : 2 }}>
                         <SideBarItem
-                          title="Stock Registration"
+                          title={t('nav.stockRegistration')}
                           to="/stock-registration"
                           icon={<AddCircleOutlineOutlinedIcon />}
                           selected={selected}
                           setSelected={setSelected}
                         />
                         <SideBarItem
-                          title="View Registration"
+                          title={t('nav.viewRegistration')}
                           to="/view-registration"
                           icon={<VisibilityOutlinedIcon />}
                           selected={selected}
                           setSelected={setSelected}
                         />
                         <SideBarItem
-                          title="Open Voucher"
+                          title={t('nav.openVoucher')}
                           to="/open-voucher"
                           icon={<ArrowOutwardIcon />}
                           selected={selected}
@@ -1280,7 +1282,7 @@ const Sidebar = () => {
                         alignItems="center"
                         width="100%"
                       >
-                        <Typography>Feeding Consumption</Typography>
+                        <Typography>{t('nav.feedingConsumption')}</Typography>
                         {feedingOpen ? (
                           <KeyboardArrowUpIcon />
                         ) : (
@@ -1292,28 +1294,28 @@ const Sidebar = () => {
                     {feedingOpen && (
                       <Box sx={{ ml: isCollapsed ? 0 : 2 }}>
                         <SideBarItem
-                          title="Add Feeding Consumption"
+                          title={t('nav.addFeedingConsumption')}
                           to="/feeding-consumption/add"
                           icon={<AddCircleOutlineOutlinedIcon />}
                           selected={selected}
                           setSelected={setSelected}
                         />
                         <SideBarItem
-                          title="View Feeding Consumption"
+                          title={t('nav.viewFeedingConsumption')}
                           to="/feeding-consumption/view"
                           icon={<VisibilityOutlinedIcon />}
                           selected={selected}
                           setSelected={setSelected}
                         />
                         <SideBarItem
-                          title="Day-Wise Consume Report"
+                          title={t('nav.dayWiseConsumeReport')}
                           to="/feeding-consumption/day-wise-report"
                           icon={<TimelineOutlinedIcon />}
                           selected={selected}
                           setSelected={setSelected}
                         />
                         <SideBarItem
-                          title="Feed Cost Analysis"
+                          title={t('nav.feedCostAnalysis')}
                           to="/feeding-consumption/cost-analysis"
                           icon={<TimelineOutlinedIcon />}
                           selected={selected}
@@ -1335,7 +1337,7 @@ const Sidebar = () => {
                         alignItems="center"
                         width="100%"
                       >
-                        <Typography>Medicine Consumption</Typography>
+                        <Typography>{t('nav.medicineConsumption')}</Typography>
                         {medicineConsumptionOpen ? (
                           <KeyboardArrowUpIcon />
                         ) : (
@@ -1347,14 +1349,14 @@ const Sidebar = () => {
                     {medicineConsumptionOpen && (
                       <Box sx={{ ml: isCollapsed ? 0 : 2 }}>
                         <SideBarItem
-                          title="Add Medicine Consumption"
+                          title={t('nav.addMedicineConsumption')}
                           to="/medicine-consumption"
                           icon={<AddCircleOutlineOutlinedIcon />}
                           selected={selected}
                           setSelected={setSelected}
                         />
                         <SideBarItem
-                          title="Medicine Consumption Report"
+                          title={t('nav.medicineConsumptionReport')}
                           to="/medicine-consumption-report"
                           icon={<VisibilityOutlinedIcon />}
                           selected={selected}
@@ -1375,7 +1377,7 @@ const Sidebar = () => {
                         alignItems="center"
                         width="100%"
                       >
-                        <Typography>Semen Consumption</Typography>
+                        <Typography>{t('nav.semenConsumption')}</Typography>
                         {semenConsumptionOpen ? (
                           <KeyboardArrowUpIcon />
                         ) : (
@@ -1387,14 +1389,14 @@ const Sidebar = () => {
                     {semenConsumptionOpen && (
                       <Box sx={{ ml: isCollapsed ? 0 : 2 }}>
                         <SideBarItem
-                          title="Add Semen Consumption"
+                          title={t('nav.addSemenConsumption')}
                           to="/add-semen-consumption"
                           icon={<AddCircleOutlineOutlinedIcon />}
                           selected={selected}
                           setSelected={setSelected}
                         />
                         <SideBarItem
-                          title="Semen Consumption Report"
+                          title={t('nav.semenConsumptionReport')}
                           to="/semen-consumption-report"
                           icon={<VisibilityOutlinedIcon />}
                           selected={selected}
@@ -1417,7 +1419,7 @@ const Sidebar = () => {
                         alignItems="center"
                         width="100%"
                       >
-                        <Typography>Other Stock Consumption</Typography>
+                        <Typography>{t('nav.otherStockConsumption')}</Typography>
                         {otherStockConsumptionOpen ? (
                           <KeyboardArrowUpIcon />
                         ) : (
@@ -1429,21 +1431,21 @@ const Sidebar = () => {
                     {otherStockConsumptionOpen && (
                       <Box sx={{ ml: isCollapsed ? 0 : 2 }}>
                         <SideBarItem
-                          title="Add Consumption"
+                          title={t('nav.addConsumption')}
                           to="/add-consumption"
                           icon={<AddCircleOutlineOutlinedIcon />}
                           selected={selected}
                           setSelected={setSelected}
                         />
                         <SideBarItem
-                          title="Consumption Report"
+                          title={t('nav.consumptionReport')}
                           to="/other-stock-consumption-report"
                           icon={<VisibilityOutlinedIcon />}
                           selected={selected}
                           setSelected={setSelected}
                         />
                         <SideBarItem
-                          title="Consumption Expense wise"
+                          title={t('nav.consumptionExpenseWise')}
                           to="/consumption-expense-wise"
                           icon={<TimelineOutlinedIcon />}
                           selected={selected}
@@ -1465,7 +1467,7 @@ const Sidebar = () => {
                         alignItems="center"
                         width="100%"
                       >
-                        <Typography>Stock Inventory </Typography>
+                        <Typography>{t('nav.stockInventory')}</Typography>
                         {stockInventoryOpen ? (
                           <KeyboardArrowUpIcon />
                         ) : (
@@ -1477,28 +1479,28 @@ const Sidebar = () => {
                     {stockInventoryOpen && (
                       <Box sx={{ ml: isCollapsed ? 0 : 2 }}>
                         <SideBarItem
-                          title="Feeding Stock"
+                          title={t('nav.feedingStock')}
                           to="/feeding-stock"
                           icon={<AddCircleOutlineOutlinedIcon />}
                           selected={selected}
                           setSelected={setSelected}
                         />
                         <SideBarItem
-                          title="Medication Stock"
+                          title={t('nav.medicationStock')}
                           to="/medication-stock"
                           icon={<VisibilityOutlinedIcon />}
                           selected={selected}
                           setSelected={setSelected}
                         />
                         <SideBarItem
-                          title="Semens Stock"
+                          title={t('nav.semenStock')}
                           to="/semen-stock"
                           icon={<TimelineOutlinedIcon />}
                           selected={selected}
                           setSelected={setSelected}
                         />
                         <SideBarItem
-                          title="Other Stock"
+                          title={t('nav.otherStock')}
                           to="/other-stock"
                           icon={<TimelineOutlinedIcon />}
                           selected={selected}
@@ -1520,7 +1522,7 @@ const Sidebar = () => {
                         alignItems="center"
                         width="100%"
                       >
-                        <Typography>General Stock Issuance </Typography>
+                        <Typography>{t('nav.generalStockIssuance')}</Typography>
                         {stockIssuanceOpen ? (
                           <KeyboardArrowUpIcon />
                         ) : (
@@ -1532,14 +1534,14 @@ const Sidebar = () => {
                     {stockIssuanceOpen && (
                       <Box sx={{ ml: isCollapsed ? 0 : 2 }}>
                         <SideBarItem
-                          title="Add Stock Issuance"
+                          title={t('nav.addStockIssuance')}
                           to="/issuance/add-stock-issuance"
                           icon={<AddCircleOutlineOutlinedIcon />}
                           selected={selected}
                           setSelected={setSelected}
                         />
                         <SideBarItem
-                          title="View Stock Issuance"
+                          title={t('nav.viewStockIssuance')}
                           to="/issuance/view-stock-issuance"
                           icon={<VisibilityOutlinedIcon />}
                           selected={selected}
@@ -1561,7 +1563,7 @@ const Sidebar = () => {
                         alignItems="center"
                         width="100%"
                       >
-                        <Typography>Reports </Typography>
+                        <Typography>{t('nav.reports')}</Typography>
                         {reportsOpen ? (
                           <KeyboardArrowUpIcon />
                         ) : (
@@ -1573,14 +1575,14 @@ const Sidebar = () => {
                     {reportsOpen && (
                       <Box sx={{ ml: isCollapsed ? 0 : 2 }}>
                         <SideBarItem
-                          title="Stock Ledger"
+                          title={t('nav.stockLedger')}
                           to="/reports/stock-ledger"
                           icon={<AddCircleOutlineOutlinedIcon />}
                           selected={selected}
                           setSelected={setSelected}
                         />
                         <SideBarItem
-                          title="Stock Ledger Amount"
+                          title={t('nav.stockLedgerAmount')}
                           to="/reports/stock-ledger-amount"
                           icon={<VisibilityOutlinedIcon />}
                           selected={selected}
@@ -1594,49 +1596,49 @@ const Sidebar = () => {
                       setSelected={setSelected}
                     /> */}
                         <SideBarItem
-                          title="Feeding Summary"
+                          title={t('nav.feedingSummary')}
                           to="/reports/feeding-summary"
                           icon={<TimelineOutlinedIcon />}
                           selected={selected}
                           setSelected={setSelected}
                         />
                         <SideBarItem
-                          title="Medicine Summary"
+                          title={t('nav.medicineSummary')}
                           to="/reports/medicine-summary"
                           icon={<TimelineOutlinedIcon />}
                           selected={selected}
                           setSelected={setSelected}
                         />{' '}
                         <SideBarItem
-                          title="Semen Summary"
+                          title={t('nav.semenSummary')}
                           to="/reports/semen-summary"
                           icon={<TimelineOutlinedIcon />}
                           selected={selected}
                           setSelected={setSelected}
                         />{' '}
                         <SideBarItem
-                          title="Other Stock Summary"
+                          title={t('nav.otherStockSummary')}
                           to="/reports/other-stock-summary"
                           icon={<TimelineOutlinedIcon />}
                           selected={selected}
                           setSelected={setSelected}
                         />{' '}
                         <SideBarItem
-                          title="Stock Re-Order"
+                          title={t('nav.stockReorder')}
                           to="/reports/stock-reorder"
                           icon={<TimelineOutlinedIcon />}
                           selected={selected}
                           setSelected={setSelected}
                         />
                         <SideBarItem
-                          title="Stock Re-Order(Days)"
+                          title={t('nav.stockReorderDays')}
                           to="/reports/remaining-feeding-stock-days"
                           icon={<TimelineOutlinedIcon />}
                           selected={selected}
                           setSelected={setSelected}
                         />
                         <SideBarItem
-                          title="Animal Wise Stock/Cost"
+                          title={t('nav.animalWiseStockCost')}
                           to="/reports/animal-wise-cost"
                           icon={<TimelineOutlinedIcon />}
                           selected={selected}
@@ -1655,11 +1657,11 @@ const Sidebar = () => {
                       color={colors.grey[300]}
                       sx={{ m: '15px 0 5px 20px' }}
                     >
-                      Administration
+                      {t('nav.administration')}
                     </Typography>
                     {can([PERMISSIONS.USER_VIEW, PERMISSIONS.USER_MANAGE]) && (
                       <SideBarItem
-                        title="User Management"
+                        title={t('nav.userManagement')}
                         to="/employee/user-management"
                         icon={<ManageAccountsOutlinedIcon />}
                         selected={selected}
@@ -1668,7 +1670,7 @@ const Sidebar = () => {
                     )}
                     {can(PERMISSIONS.ROLE_MANAGE) && (
                       <SideBarItem
-                        title="Role Management"
+                        title={t('nav.roleManagement')}
                         to="/employee/role-management"
                         icon={<AdminPanelSettingsOutlinedIcon />}
                         selected={selected}
@@ -1680,7 +1682,7 @@ const Sidebar = () => {
 
                 <SideBarItem
                   onPress={onLogout}
-                  title="Logout"
+                  title={t('topbar.logout')}
                   to="/login"
                   icon={<LogoutOutlinedIcon />}
                   selected={selected}

@@ -1,5 +1,6 @@
 import React from 'react';
 import { Box, Pagination, Typography } from '@mui/material';
+import { useTranslation } from 'react-i18next';
 
 interface CustomPaginationProps {
   totalItems: number; // Total number of items
@@ -14,6 +15,7 @@ const CustomPagination: React.FC<CustomPaginationProps> = ({
   currentPage,
   onPageChange
 }) => {
+  const { t } = useTranslation();
   const totalPages = Math.ceil(totalItems / itemsPerPage);
 
   return (
@@ -26,7 +28,7 @@ const CustomPagination: React.FC<CustomPaginationProps> = ({
       }}
     >
       <Typography variant="body2" color="textSecondary" marginLeft={2}>
-        Rows per page: {itemsPerPage}
+        {t('shared.customPagination.rowsPerPage', { count: itemsPerPage })}
       </Typography>
       <Pagination
         count={totalPages}

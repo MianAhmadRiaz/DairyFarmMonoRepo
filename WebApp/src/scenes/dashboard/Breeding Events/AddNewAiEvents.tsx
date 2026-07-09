@@ -15,6 +15,7 @@ import {
 } from '@mui/material';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { fetchAnimals } from '../../../shared/services/animalinfo.service';
 import { addAiBreedingEvent } from '../../../shared/services/breeds.services';
 import { fetchProtocolsList } from '../../../shared/services/breeds.services';
@@ -31,6 +32,7 @@ interface DropdownObject {
 
 const AddNewAiEvent: React.FC = () => {
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
   // ----------------------------
   // State
@@ -65,7 +67,7 @@ useEffect(() => {
       setProtocols(protocolsData);
     } catch (error) {
       
-      toast.error('Failed to load initial data');
+      toast.error(t('breeding.aiEventAdd.loadError'));
       console.error('Failed to load data:', error);    }
   };
 
@@ -114,7 +116,7 @@ useEffect(() => {
       !comments
     ) {
       if (toastId.current === null || !toast.isActive(toastId.current)) {
-        toastId.current = toast.warn('Please fill all the missing required fields');
+        toastId.current = toast.warn(t('breeding.common.fillMissingFields'));
       }
       return;
     }
@@ -139,12 +141,12 @@ useEffect(() => {
       await addAiBreedingEvent(newData);
 
       toast.dismiss(); // Remove previous error toast
-      toast.success('New AI Breeding Event Added Successfully!', {
+      toast.success(t('breeding.aiEventAdd.addSuccess'), {
         onClose: () => window.location.reload()
       });
     } catch (error) {
        if (toastId.current === null || !toast.isActive(toastId.current)) {
-          toastId.current = toast.error("Failed to remove animal. Please try again.");
+          toastId.current = toast.error(t('breeding.aiEventAdd.addError'));
         }
       // toast.error('Failed to Add New AI Breeding Event!');
       console.error('Add AI error:', error);
@@ -161,7 +163,7 @@ useEffect(() => {
     setAnimalId(event.target.value);
   };
   return (
-    <PageContainer title="AI Breeding / Add New Event">
+    <PageContainer title={t('breeding.aiEventAdd.pageTitle')}>
       {/* Back Button */}
            <Button
         variant="text"
@@ -176,7 +178,7 @@ useEffect(() => {
           fontWeight: 'bold'
         }}
       >
-        Back
+        {t('breeding.common.back')}
       </Button>
         <CardContent>
           <Box
@@ -193,7 +195,7 @@ useEffect(() => {
             <Grid item xs={12} sm={6} md={4}>
               <TextField
                 fullWidth
-                label="Tag Id"
+                label={t('breeding.common.tagId')}
                 select
                 value={animalId}
                 onChange={handleTagChange}
@@ -209,10 +211,10 @@ useEffect(() => {
             {/* AI Type */}
             <Grid item xs={12} md={4}>
              <FormControl fullWidth>
-  <InputLabel id="aiType-label">AI Type</InputLabel>
+  <InputLabel id="aiType-label">{t('breeding.aiEventAdd.aiType')}</InputLabel>
   <Select
     labelId="aiType-label"
-    label="AI Type"
+    label={t('breeding.aiEventAdd.aiType')}
     value={aiType}
     onChange={(e) => setAiType(e.target.value as string)}
   >
@@ -230,7 +232,7 @@ useEffect(() => {
             {/* Date */}
             <Grid item xs={12} md={4}>
               <TextField
-                label="Date"
+                label={t('breeding.common.date')}
                 type="date"
                 value={date}
                 onChange={(e) => setDate(e.target.value)}
@@ -245,7 +247,7 @@ useEffect(() => {
                 <TextField
                 fullWidth
                   select
-                  label="Semen"
+                  label={t('breeding.aiEventAdd.semen')}
                   name="Semen"
                   value={semen}
                   onChange={(e) => setSemen(e.target.value as string)}
@@ -257,8 +259,8 @@ useEffect(() => {
             {/* Dose */}
             <Grid item xs={12} md={4}>
               <TextField
-                label="Dose"
-                placeholder="Enter a Number"
+                label={t('breeding.aiEventAdd.dose')}
+                placeholder={t('breeding.common.enterNumber')}
                 value={dose}
                 onChange={(e) => setDose(e.target.value)}
                 fullWidth
@@ -268,8 +270,8 @@ useEffect(() => {
             {/* Cost */}
             <Grid item xs={12} md={4}>
               <TextField
-                label="Cost"
-                placeholder="Enter a Number"
+                label={t('breeding.common.cost')}
+                placeholder={t('breeding.common.enterNumber')}
                 value={cost}
                 onChange={(e) => setCost(e.target.value)}
                 fullWidth
@@ -279,7 +281,7 @@ useEffect(() => {
             {/* Time */}
             <Grid item xs={12} md={4}>
               <TextField
-                label="Time"
+                label={t('breeding.aiEventAdd.time')}
                 type="time"
                 value={time}
                 onChange={(e) => setTime(e.target.value)}
@@ -291,8 +293,8 @@ useEffect(() => {
             {/* Weight */}
             <Grid item xs={12} md={4}>
               <TextField
-                label="Weight"
-                placeholder="Enter a Number"
+                label={t('breeding.common.weight')}
+                placeholder={t('breeding.common.enterNumber')}
                 value={weight}
                 onChange={(e) => setWeight(e.target.value)}
                 fullWidth
@@ -302,10 +304,10 @@ useEffect(() => {
             {/* Tech */}
             <Grid item xs={12} md={4}>
               <FormControl fullWidth>
-                <InputLabel id="tech-label">Tech</InputLabel>
+                <InputLabel id="tech-label">{t('breeding.aiEventAdd.tech')}</InputLabel>
                 <Select
                   labelId="tech-label"
-                  label="Tech"
+                  label={t('breeding.aiEventAdd.tech')}
                   value={tech}
                   onChange={(e) => setTech(e.target.value as string)}
                 >
@@ -319,16 +321,16 @@ useEffect(() => {
             {/* Double Dose */}
             <Grid item xs={12} md={4}>
               <FormControl fullWidth>
-                <InputLabel id="doubleDose-label">Double Dose</InputLabel>
+                <InputLabel id="doubleDose-label">{t('breeding.common.doubleDose')}</InputLabel>
                 <Select
                   labelId="doubleDose-label"
-                  label="Double Dose"
+                  label={t('breeding.common.doubleDose')}
                   value={doubleDose}
                   onChange={(e) => setDoubleDose(e.target.value as string)}
                 >
-              
-                  <MenuItem value="Yes">Yes</MenuItem>
-                  <MenuItem value="No">No</MenuItem>
+
+                  <MenuItem value="Yes">{t('breeding.common.yes')}</MenuItem>
+                  <MenuItem value="No">{t('breeding.common.no')}</MenuItem>
                 </Select>
               </FormControl>
             </Grid>
@@ -339,7 +341,7 @@ useEffect(() => {
               <ReactQuill value={comments} onChange={setComments} />
               */}
               <TextField
-                label="Enter your comments"
+                label={t('breeding.common.enterComments')}
                 multiline
                 rows={4}
                 value={comments}
@@ -365,7 +367,7 @@ useEffect(() => {
   {isLoading ? (
     <CircularProgress size={24} sx={{ color: 'white' }} />
   ) : (
-    'Add New'
+    t('breeding.common.addNew')
   )}
 </Button>
             <Button variant="outlined"  sx={{
@@ -375,7 +377,7 @@ useEffect(() => {
                 padding: '5px 20px',
                 border: '1px solid #d6d6d6'
               }} onClick={handleCancel}>
-              Cancel
+              {t('breeding.common.cancel')}
             </Button>
          
           </Box>

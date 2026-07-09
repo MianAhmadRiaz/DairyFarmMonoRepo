@@ -9,6 +9,7 @@ import {
   Autocomplete,
   useTheme
 } from '@mui/material';
+import { useTranslation } from 'react-i18next';
 import PageContainer from '../../shared/components/Layout/PageContainer';
 import { AdvanceSalaryService, AddAdvancePayload, Employee } from '../../shared/services/EmployeeAPI/advanceSalary.service';
 import { tokens } from '../../shared/theme/theme';
@@ -19,6 +20,7 @@ import { tokens } from '../../shared/theme/theme';
 export default function EmployeeDashboard() {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
+  const { t } = useTranslation();
   const [employees, setEmployees] = useState<Employee[]>([]);
 const [selectedEmployee, setSelectedEmployee] = useState<Employee | null>(null);
 const [account, setAccount] = useState('');
@@ -54,7 +56,7 @@ const handleFieldChange = (fieldLabel: string, value: any) => {
 
 const handleSave = async () => {
   if (!selectedEmployee) {
-    alert('Please select an employee');
+    alert(t('employee.common.pleaseSelectEmployee'));
     return;
   }
 
@@ -69,7 +71,7 @@ const handleSave = async () => {
   try {
     const response = await AdvanceSalaryService.addAdvanceSalary(payload);
     console.log('Advance saved:', response);
-    alert('Advance Salary saved successfully');
+    alert(t('employee.addAdvance.savedSuccess'));
 
     // Optionally, reset form
     setSelectedEmployee(null);
@@ -80,22 +82,22 @@ const handleSave = async () => {
 
   } catch (error) {
     console.error('Failed to save advance:', error);
-    alert('Failed to save advance');
+    alert(t('employee.addAdvance.saveFailed'));
   }
 };
 
 const fieldsArray = [
-  { label: 'Date', placeholder: 'Select', type: 'date' },
-  { label: 'Employee', placeholder: 'Employee', type: 'text' },
-  { label: 'Account', placeholder: 'Account', type: 'text' },
-  { label: 'Advance Amount', placeholder: 'Amount', type: 'number' },
-  { label: 'Narration', placeholder: 'Narration', type: 'text' }
+  { label: 'Date', displayLabel: t('employee.common.date'), placeholder: t('employee.common.select'), type: 'date' },
+  { label: 'Employee', displayLabel: t('employee.common.employee'), placeholder: t('employee.common.employee'), type: 'text' },
+  { label: 'Account', displayLabel: t('employee.common.account'), placeholder: t('employee.common.account'), type: 'text' },
+  { label: 'Advance Amount', displayLabel: t('employee.common.advanceAmount'), placeholder: t('employee.common.amount'), type: 'number' },
+  { label: 'Narration', displayLabel: t('employee.common.narration'), placeholder: t('employee.common.narration'), type: 'text' }
 ];
 
 
 
   return (
-    <PageContainer title="Advance Salary">
+    <PageContainer title={t('employee.addAdvance.title')}>
       <Card
         sx={{
           mb: 3,
@@ -118,7 +120,7 @@ const fieldsArray = [
          
           {[...fieldsArray].map((field, index) => (
   <Box key={index} sx={{ width: { xs: '126px', md: 'calc(33.33% - 16px)' }, display: 'flex', flexDirection: 'column' }}>
-    <label style={{ marginBottom: '4px', fontWeight: 'bold' }}>{field.label}</label>
+    <label style={{ marginBottom: '4px', fontWeight: 'bold' }}>{field.displayLabel}</label>
 
     {field.label === 'Employee' ? (
       <Autocomplete
@@ -127,8 +129,8 @@ const fieldsArray = [
         value={selectedEmployee}
         onChange={(_, value) => handleFieldChange('Employee', value)} // call handler
         renderInput={(params) => (
-          <TextField {...params}  size="small" 
-          placeholder="Select Employee" 
+          <TextField {...params}  size="small"
+          placeholder={t('employee.common.selectEmployee')}
           />
         )}
       />
@@ -177,7 +179,7 @@ const fieldsArray = [
                 }
               }}
             >
-              Save Advance Salary
+              {t('employee.addAdvance.saveButton')}
             </Button>
           </Box>
         </CardContent>

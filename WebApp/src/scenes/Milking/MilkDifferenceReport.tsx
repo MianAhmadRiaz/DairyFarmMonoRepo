@@ -24,6 +24,7 @@ import { useEffect } from 'react';
 import { getTagBasedOnTagId } from '../../shared/services/getTagid.service';
 import { CircularProgress, Backdrop } from '@mui/material';
 import { ToastContainer, toast,Id } from 'react-toastify';
+import { useTranslation } from 'react-i18next';
 import 'react-toastify/dist/ReactToastify.css';
 import PageContainer from '../../shared/components/Layout/PageContainer';
 
@@ -31,6 +32,7 @@ import PageContainer from '../../shared/components/Layout/PageContainer';
 const MilkDifferenceReport = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
+  const { t } = useTranslation();
 
   interface MilkData {
     animalId: string;
@@ -76,7 +78,7 @@ const MilkDifferenceReport = () => {
     const fetchData = async () => {
       if (!startDate || !endDate) return;
       else if (new Date(startDate) >= new Date(endDate)) {
-         toast.warning("Start date must be before end date");
+         toast.warning(t('milking.common.startBeforeEnd'));
           setLoading(false);
          return
       }
@@ -114,7 +116,7 @@ const MilkDifferenceReport = () => {
             return {
               srNo: index + 1,
               tagId: milk.tagName,
-              shed: `${milk.penName} [Pen]`,
+              shed: t('milking.milkDifferenceReport.penLabel', { name: milk.penName }),
               lac: milk.lactation,
               type: milk.animalType,
               status: milk.pregnancyStatus || "N/A",
@@ -129,13 +131,13 @@ const MilkDifferenceReport = () => {
           setTableData(formattedData);
         } else {
           console.error('Unexpected response structure:', response);
-         toast.error('Unexpected response structure:', response);
+         toast.error(t('milking.milkDifferenceReport.unexpectedResponse'), response);
         }
       setLoading(false);  
       } catch (error) {
          setLoading(false);
       toast.dismiss();
-        toast.error('Error fetching milk difference report: ' );
+        toast.error(t('milking.milkDifferenceReport.fetchError'));
       }
     };
     fetchData();
@@ -174,7 +176,7 @@ const MilkDifferenceReport = () => {
   
 
   return (
-<PageContainer title="Milk Difference Report" maxWidth="1200px">
+<PageContainer title={t('milking.milkDifferenceReport.title')} maxWidth="1200px">
   <Box sx={{
     display: 'flex', 
     flexDirection: { xs: 'column', sm: 'row' },
@@ -184,7 +186,7 @@ const MilkDifferenceReport = () => {
       ml: {xs:0,md:5},
   }}>
     <TextField
-      label="Start Date"
+      label={t('milking.common.startDate')}
       type="date"
       sx={{ width: { xs: '100%', sm: 200 } }} 
       InputLabelProps={{ shrink: true }}
@@ -192,7 +194,7 @@ const MilkDifferenceReport = () => {
       onChange={e => setStartDate(e.target.value)}
     />
     <TextField
-      label="End Date"
+      label={t('milking.common.endDate')}
       type="date"
       sx={{ width: { xs: '100%', sm: 200 } }}
       InputLabelProps={{ shrink: true }}
@@ -219,21 +221,21 @@ const MilkDifferenceReport = () => {
     <StatCard
       icon={<PeopleIcon />}
       color="#004f5e"
-      label={`Total Milk ${startDate}`}
+      label={t('milking.milkDifferenceReport.totalMilkOn', { date: startDate })}
       value={milkonStart}
     />
 
     <StatCard
       icon={<LocalShippingIcon />}
       color="#fa6400"
-      label={`Total Milk ${endDate}`}
+      label={t('milking.milkDifferenceReport.totalMilkOn', { date: endDate })}
       value={milkonEnd}
     />
 
     <StatCard
       icon={<RemoveShoppingCartIcon />}
       color="#ff5c8a"
-      label="Difference"
+      label={t('milking.milkDifferenceReport.difference')}
       value={diff}
       sx={{ gridColumn: { xs: '1', sm: 'span 2', md: 'auto' } }} 
     />
@@ -261,7 +263,7 @@ const MilkDifferenceReport = () => {
     }}
   >
     <TextField
-      placeholder="Search"
+      placeholder={t('common.search')}
       size="small"
       sx={{ 
         flexGrow: 1,
@@ -277,11 +279,11 @@ const MilkDifferenceReport = () => {
     mr:{md:3},
       px: { xs: 1.5, sm: 0 }
    }}>
-      <InputLabel>Filter</InputLabel>
-      <Select label="Filter" value={filter} onChange={handleFilterChange}>
-        <MenuItem value="All">All</MenuItem>
-        <MenuItem value="FRESH CALVER">Fresh Calver</MenuItem>
-        <MenuItem value="INSEMINATED">Inseminated</MenuItem>
+      <InputLabel>{t('milking.common.filter')}</InputLabel>
+      <Select label={t('milking.common.filter')} value={filter} onChange={handleFilterChange}>
+        <MenuItem value="All">{t('milking.milkDifferenceReport.all')}</MenuItem>
+        <MenuItem value="FRESH CALVER">{t('milking.milkDifferenceReport.filterOptions.freshCalver')}</MenuItem>
+        <MenuItem value="INSEMINATED">{t('milking.milkDifferenceReport.filterOptions.inseminated')}</MenuItem>
       </Select>
     </FormControl>
   </Box>
@@ -324,16 +326,16 @@ const MilkDifferenceReport = () => {
       {/* Table Header */}
       <Box component="thead">
         <Box component="tr">
-          <Box component="th">SR#</Box>
-          <Box component="th">TAG ID</Box>
-          <Box component="th">SHED</Box>
-          <Box component="th">LAC #</Box>
-          <Box component="th">TYPE</Box>
-          <Box component="th">STATUS</Box>
-          <Box component="th">DAYS</Box>
+          <Box component="th">{t('milking.common.columns.srNo')}</Box>
+          <Box component="th">{t('milking.common.columns.tagId')}</Box>
+          <Box component="th">{t('milking.milkDifferenceReport.columns.shed')}</Box>
+          <Box component="th">{t('milking.milkDifferenceReport.columns.lac')}</Box>
+          <Box component="th">{t('milking.milkDifferenceReport.columns.type')}</Box>
+          <Box component="th">{t('milking.milkDifferenceReport.columns.status')}</Box>
+          <Box component="th">{t('milking.milkDifferenceReport.columns.days')}</Box>
           <Box component="th">{startDate}</Box>
           <Box component="th">{endDate}</Box>
-          <Box component="th">DIFF</Box>
+          <Box component="th">{t('milking.milkDifferenceReport.columns.diff')}</Box>
         </Box>
       </Box>
 
@@ -359,7 +361,7 @@ const MilkDifferenceReport = () => {
         <Box component="td">
           {row.status ? (
             <Chip
-              label={row.status}
+              label={t('milking.milkDifferenceReport.statusValues.' + row.status, row.status)}
               sx={{
                 backgroundColor: '#e6f9f0',
                 color: '#0f5132',
@@ -370,7 +372,7 @@ const MilkDifferenceReport = () => {
             />
           ) : (
             <Chip
-              label="Not Found"
+              label={t('milking.milkDifferenceReport.notFound')}
               sx={{
                 backgroundColor: '#fcebea',
                 color: '#842029',

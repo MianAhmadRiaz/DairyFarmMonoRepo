@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import {
   Box,
   Typography,
@@ -23,6 +24,7 @@ import { getAttendanceSummary } from '../../shared/services/EmployeeAPI/attendan
 
 
 export default function ViewEmployee() {
+  const { t } = useTranslation();
   const [salaryRecords, setSalaryRecords] = useState<SalaryRecord[]>([]);
 
   const fetchSalaryRecords = async () => {
@@ -75,7 +77,7 @@ export default function ViewEmployee() {
   
 
   return (
-    <PageContainer title="Generate Salary">
+    <PageContainer title={t('employee.generateSalary.title')}>
       <Box sx={{
         backgroundColor: theme.palette.background.paper,
         borderRadius: 2,
@@ -90,12 +92,12 @@ export default function ViewEmployee() {
         }}>
           <Box sx={{ display: 'flex', flexDirection: 'column' }}>
             <label style={{ marginBottom: '4px', fontWeight: 'bold' }}>
-              Salary Month
+              {t('employee.generateSalary.salaryMonth')}
             </label>
             <TextField
               size="small"
               type="text"
-              placeholder="Select"
+              placeholder={t('employee.common.select')}
               InputProps={{
                 endAdornment: (
                   <InputAdornment position="end">
@@ -108,12 +110,12 @@ export default function ViewEmployee() {
 
           <Box sx={{ display: 'flex', flexDirection: 'column' }}>
             <label style={{ marginBottom: '4px', fontWeight: 'bold' }}>
-              Date
+              {t('employee.common.date')}
             </label>
             <TextField
               size="small"
               type="text"
-              placeholder="Select"
+              placeholder={t('employee.common.select')}
               InputProps={{
                 endAdornment: (
                   <InputAdornment position="end">
@@ -126,7 +128,7 @@ export default function ViewEmployee() {
 
           <Box sx={{ display: 'flex', flexDirection: 'column' }}>
             <label style={{ marginBottom: '4px', fontWeight: 'bold' }}>
-              Expense Head
+              {t('employee.generateSalary.expenseHead')}
             </label>
             <TextField
               select
@@ -134,16 +136,16 @@ export default function ViewEmployee() {
               defaultValue=""
               sx={{ width: '200px' }}
             >
-              <MenuItem value="Salary">Salary</MenuItem>
-              <MenuItem value="Bonus">Bonus</MenuItem>
-              <MenuItem value="Overtime">Overtime</MenuItem>
-              <MenuItem value="Misc">Misc</MenuItem>
+              <MenuItem value="Salary">{t('employee.generateSalary.expenseHeads.salary')}</MenuItem>
+              <MenuItem value="Bonus">{t('employee.generateSalary.expenseHeads.bonus')}</MenuItem>
+              <MenuItem value="Overtime">{t('employee.generateSalary.expenseHeads.overtime')}</MenuItem>
+              <MenuItem value="Misc">{t('employee.generateSalary.expenseHeads.misc')}</MenuItem>
             </TextField>
           </Box>
 
           <Box sx={{ display: 'flex', flexDirection: 'column' }}>
             <label style={{ marginBottom: '4px', fontWeight: 'bold' }}>
-              Working Days
+              {t('employee.generateSalary.workingDays')}
             </label>
             <TextField size="small" type="number" />
           </Box>
@@ -165,7 +167,7 @@ export default function ViewEmployee() {
               }}
               onClick={() => setisEditModalOpen(true)}
             >
-              Generate Salary
+              {t('employee.generateSalary.generateSalary')}
             </Button>
           </Box>
         </Box>
@@ -202,19 +204,19 @@ export default function ViewEmployee() {
           >
             <thead>
               <tr>
-                <th>Sr#</th>
-                <th>Employee</th>
-                <th>Salary</th>
-                <th>Days</th>
-                <th>Present</th>
-                <th>Absence</th>
-                <th>Leave Allow</th>
-                <th>Salary Day</th>
-                <th>Deduction</th>
-                <th>Over Time</th>
-                <th>Bonus</th>
-                <th>Gross Salary</th>
-                <th>Edit</th>
+                <th>{t('employee.common.srNo')}</th>
+                <th>{t('employee.common.employee')}</th>
+                <th>{t('employee.common.salary')}</th>
+                <th>{t('employee.generateSalary.columns.days')}</th>
+                <th>{t('employee.common.present')}</th>
+                <th>{t('employee.generateSalary.columns.absence')}</th>
+                <th>{t('employee.generateSalary.columns.leaveAllow')}</th>
+                <th>{t('employee.generateSalary.columns.salaryDay')}</th>
+                <th>{t('employee.common.deduction')}</th>
+                <th>{t('employee.generateSalary.columns.overTime')}</th>
+                <th>{t('employee.common.bonus')}</th>
+                <th>{t('employee.common.grossSalary')}</th>
+                <th>{t('employee.common.edit')}</th>
               </tr>
             </thead>
 
@@ -222,7 +224,7 @@ export default function ViewEmployee() {
               {paginatedSalary.length === 0 ? (
                 <tr>
                   <td colSpan={13} style={{ textAlign: 'center', padding: 24 }}>
-                    No salary records found.
+                    {t('employee.generateSalary.noRecords')}
                   </td>
                 </tr>
               ) : (
@@ -287,6 +289,7 @@ const EditEmployeeModal: React.FC<EditDetails> = ({
   onCloseUpdate,
   userId,
 }) => {
+  const { t } = useTranslation();
   const [formData, setFormData] = useState({
     employee: null as GetEmployeeResponse | null,
     date:"",
@@ -386,7 +389,7 @@ const handleChange = (field: keyof typeof formData, value: string | GetEmployeeR
 
   const handleSubmit = async () => {
     if (!formData.employee) {
-      alert("Please select an employee");
+      alert(t('employee.generateSalary.selectEmployeeAlert'));
       return;
     }
 
@@ -413,11 +416,11 @@ const handleChange = (field: keyof typeof formData, value: string | GetEmployeeR
 
     try {
       await generateSalaryRecord(payload);
-      alert("Salary generated successfully!");
+      alert(t('employee.generateSalary.generatedSuccess'));
       onCloseUpdate();
     } catch (error) {
       console.error("Error generating salary", error);
-      alert("Failed to generate salary");
+      alert(t('employee.generateSalary.generateFailed'));
     }
   };
 
@@ -481,13 +484,13 @@ const handleChange = (field: keyof typeof formData, value: string | GetEmployeeR
       }}
     >
       <DialogTitle sx={{ fontWeight: 'bold', textAlign: 'center' }}>
-      Generate Salary
+      {t('employee.generateSalary.title')}
       </DialogTitle>
 
       <Box sx={{ display: 'flex', gap: 3, flexWrap: 'wrap', mb: 2, px: 3 }}>
         <Box sx={{ display: 'flex', flexDirection: 'column' }}>
           <label style={{ marginBottom: 4, fontWeight: 'bold' }}>
-            Salary Month
+            {t('employee.generateSalary.salaryMonth')}
           </label>
           <TextField
             size="small"
@@ -503,7 +506,7 @@ const handleChange = (field: keyof typeof formData, value: string | GetEmployeeR
 
               <Box sx={{ display: 'flex', flexDirection: 'column' }}>
           <label style={{ marginBottom: 4, fontWeight: 'bold' }}>
-            Salary Date
+            {t('employee.generateSalary.salaryDate')}
           </label>
           <TextField
             size="small"
@@ -519,7 +522,7 @@ const handleChange = (field: keyof typeof formData, value: string | GetEmployeeR
 
         <Box sx={{ display: 'flex', flexDirection: 'column' }}>
           <label style={{ marginBottom: 4, fontWeight: 'bold' }}>
-            Expense Head
+            {t('employee.generateSalary.expenseHead')}
           </label>
           <TextField
             size="small"
@@ -528,17 +531,17 @@ const handleChange = (field: keyof typeof formData, value: string | GetEmployeeR
             onChange={(e) => handleChange('expense_head', e.target.value)}
             sx={{ width: 200 }}
           >
-            <MenuItem value="salary exp">salary exp</MenuItem>
-            <MenuItem value="Bonus">Bonus</MenuItem>
-            <MenuItem value="Overtime">Overtime</MenuItem>
-            <MenuItem value="Misc">Misc</MenuItem>
+            <MenuItem value="salary exp">{t('employee.generateSalary.expenseHeads.salaryExp')}</MenuItem>
+            <MenuItem value="Bonus">{t('employee.generateSalary.expenseHeads.bonus')}</MenuItem>
+            <MenuItem value="Overtime">{t('employee.generateSalary.expenseHeads.overtime')}</MenuItem>
+            <MenuItem value="Misc">{t('employee.generateSalary.expenseHeads.misc')}</MenuItem>
           </TextField>
         </Box>
 
-      
+
         <Box sx={{ display: 'flex', flexDirection: 'column' }}>
           <label style={{ marginBottom: 4, fontWeight: 'bold' }}>
-            Working Days
+            {t('employee.generateSalary.workingDays')}
           </label>
           <TextField
             size="small"
@@ -582,16 +585,16 @@ const handleChange = (field: keyof typeof formData, value: string | GetEmployeeR
         >
           <thead>
             <tr>
-              <th>Employee</th>
-              <th>Salary</th>
-              <th>Present</th>
-              <th>Absent</th>
-              <th>Leave Allowance</th>
-              <th>Salary Days</th>
-              <th>Deduction</th>
-              <th>Overtime</th>
-              <th>Bonus</th>
-              <th>Gross Salary</th>
+              <th>{t('employee.common.employee')}</th>
+              <th>{t('employee.common.salary')}</th>
+              <th>{t('employee.common.present')}</th>
+              <th>{t('employee.common.absent')}</th>
+              <th>{t('employee.generateSalary.columns.leaveAllowance')}</th>
+              <th>{t('employee.generateSalary.columns.salaryDays')}</th>
+              <th>{t('employee.common.deduction')}</th>
+              <th>{t('employee.generateSalary.expenseHeads.overtime')}</th>
+              <th>{t('employee.common.bonus')}</th>
+              <th>{t('employee.common.grossSalary')}</th>
             </tr>
           </thead>
           <tbody>
@@ -720,7 +723,7 @@ const handleChange = (field: keyof typeof formData, value: string | GetEmployeeR
           }}
           onClick={handleCancel}
         >
-          Cancel
+          {t('employee.common.cancel')}
         </Button>
 
         <Button
@@ -738,7 +741,7 @@ const handleChange = (field: keyof typeof formData, value: string | GetEmployeeR
           }}
           onClick={handleSubmit}
         >
-          Save
+          {t('employee.common.save')}
         </Button>
       </Box>
     </Dialog>

@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { FlatList, StyleSheet, View } from 'react-native';
 import AnyIcon, { Icons } from 'shared/components/AnyIcon';
 import AppText from 'shared/components/AppText/AppText';
@@ -8,6 +9,7 @@ import GLOBAL_STYLE from 'shared/theme/global';
 import { RF } from 'shared/theme/responsive';
 
 const UpcomingTasks = () => {
+  const { t } = useTranslation();
   const productionStats = [
     { id: '1', label: 'Dry Off', description: '2 cows', timeStamp: new Date() },
     { id: '2', label: 'Dry Off', description: '2 cows', timeStamp: new Date() },
@@ -58,13 +60,13 @@ const UpcomingTasks = () => {
           </AppText>
         </View>
       </View>
-      <StatusCard status={'TOMORROW'} />
+      <StatusCard status={t('main.upcomingTasks.tomorrow')} />
     </View>
   );
   return (
     <View style={styles.container}>
       <AppText semiBold fontSize="h7" style={styles.header}>
-        Upcoming Tasks
+        {t('main.upcomingTasks.title')}
       </AppText>
 
       <FlatList

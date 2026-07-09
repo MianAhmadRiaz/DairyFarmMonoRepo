@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { Dimensions, StyleSheet, View } from 'react-native';
 
 import { LineChart } from 'react-native-chart-kit';
@@ -7,6 +8,7 @@ import { COLORS, THEME } from 'shared/theme';
 import { RF } from 'shared/theme/responsive';
 
 const LineChartView = () => {
+  const { t } = useTranslation();
   const chartData = {
     labels: [
       'Jan',
@@ -35,7 +37,7 @@ const LineChartView = () => {
   return (
     <View style={styles.chartContainer}>
       <AppText fontSize="subtitle" semiBold style={styles.chartHeader}>
-        Milk Production Trend (December 2024)
+        {t('main.milkTrend.title', { period: 'December 2024' })}
       </AppText>
       <AppText
         fontSize="caption"
@@ -43,7 +45,7 @@ const LineChartView = () => {
         medium
         style={styles.yAxisLabel}
       >
-        Milk in Liters
+        {t('main.milkTrend.yAxis')}
       </AppText>
       <View>
         <LineChart
@@ -91,7 +93,7 @@ const LineChartView = () => {
           medium
           style={styles.xAxisLabel}
         >
-          Months
+          {t('main.milkTrend.xAxis')}
         </AppText>
       </View>
     </View>

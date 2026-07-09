@@ -31,6 +31,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import AddIcon from '@mui/icons-material/Add';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { useTranslation } from 'react-i18next';
 
 import {
   SubscriptionPlan,
@@ -61,6 +62,7 @@ const emptyForm = {
 };
 
 const Plans: React.FC = () => {
+  const { t } = useTranslation();
   const [plans, setPlans] = useState<SubscriptionPlan[]>([]);
   const [open, setOpen] = useState(false);
   const [editing, setEditing] = useState<SubscriptionPlan | null>(null);
@@ -71,7 +73,7 @@ const Plans: React.FC = () => {
     try {
       setPlans(await getPlans());
     } catch (err: any) {
-      toast.error(err?.response?.data?.message || 'Failed to load plans');
+      toast.error(err?.response?.data?.message || t('softwareAdmin.plans.loadFailed'));
     }
   };
 
@@ -117,17 +119,17 @@ const Plans: React.FC = () => {
 
   const handleSave = async () => {
     if (!form.name.trim()) {
-      toast.error('Plan name is required');
+      toast.error(t('softwareAdmin.plans.nameRequired'));
       return;
     }
     const isPerAnimal = form.pricing_model === 'per_animal';
     if (isPerAnimal) {
       if (form.per_animal_rate === '' || isNaN(Number(form.per_animal_rate))) {
-        toast.error('A valid per-animal rate is required');
+        toast.error(t('softwareAdmin.plans.perAnimalRateRequired'));
         return;
       }
     } else if (form.price === '' || isNaN(Number(form.price))) {
-      toast.error('A valid price is required');
+      toast.error(t('softwareAdmin.plans.priceRequired'));
       return;
     }
     setSaving(true);
@@ -150,28 +152,28 @@ const Plans: React.FC = () => {
     try {
       if (editing) {
         await updatePlan(editing.uuid, payload);
-        toast.success('Plan updated');
+        toast.success(t('softwareAdmin.plans.toast.updated'));
       } else {
         await createPlan(payload);
-        toast.success('Plan created');
+        toast.success(t('softwareAdmin.plans.toast.created'));
       }
       setOpen(false);
       load();
     } catch (err: any) {
-      toast.error(err?.response?.data?.message || 'Failed to save plan');
+      toast.error(err?.response?.data?.message || t('softwareAdmin.plans.failedSave'));
     } finally {
       setSaving(false);
     }
   };
 
   const handleDelete = async (plan: SubscriptionPlan) => {
-    if (!window.confirm(`Delete plan "${plan.name}"?`)) return;
+    if (!window.confirm(t('softwareAdmin.plans.confirmDelete', { name: plan.name }))) return;
     try {
       await deletePlan(plan.uuid);
-      toast.success('Plan deleted');
+      toast.success(t('softwareAdmin.plans.toast.deleted'));
       load();
     } catch (err: any) {
-      toast.error(err?.response?.data?.message || 'Failed to delete plan');
+      toast.error(err?.response?.data?.message || t('softwareAdmin.plans.failedDelete'));
     }
   };
 
@@ -179,10 +181,10 @@ const Plans: React.FC = () => {
     <Box>
       <Box display="flex" justifyContent="space-between" alignItems="center" mb={3}>
         <Typography variant="h4" fontWeight={700}>
-          Subscription Plans
+          {t('softwareAdmin.plans.title')}
         </Typography>
         <Button variant="contained" startIcon={<AddIcon />} onClick={openCreate}>
-          New Plan
+          {t('softwareAdmin.plans.newPlan')}
         </Button>
       </Box>
 
@@ -190,19 +192,19 @@ const Plans: React.FC = () => {
         <Table>
           <TableHead>
             <TableRow>
-              <TableCell>Name</TableCell>
-              <TableCell>Pricing</TableCell>
-              <TableCell>Cycle</TableCell>
-              <TableCell>Limits</TableCell>
-              <TableCell>Trial</TableCell>
-              <TableCell>Status</TableCell>
-              <TableCell align="right">Actions</TableCell>
+              <TableCell>{t('softwareAdmin.plans.columns.name')}</TableCell>
+              <TableCell>{t('softwareAdmin.plans.columns.pricing')}</TableCell>
+              <TableCell>{t('softwareAdmin.plans.columns.cycle')}</TableCell>
+              <TableCell>{t('softwareAdmin.plans.columns.limits')}</TableCell>
+              <TableCell>{t('softwareAdmin.plans.columns.trial')}</TableCell>
+              <TableCell>{t('softwareAdmin.plans.columns.status')}</TableCell>
+              <TableCell align="right">{t('softwareAdmin.plans.columns.actions')}</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             {plans.length === 0 && (
               <TableRow>
-                <TableCell colSpan={7}>No plans yet. Create your first plan.</TableCell>
+                <TableCell colSpan={7}>{t('softwareAdmin.plans.noPlans')}</TableCell>
               </TableRow>
             )}
             {plans.map(plan => (
@@ -213,35 +215,35 @@ const Plans: React.FC = () => {
                     {plan.description}
                   </Typography>
                   {plan.is_trial_plan && (
-                    <Chip size="small" label="Trial Plan" color="info" sx={{ ml: 0.5 }} />
+                    <Chip size="small" label={t('softwareAdmin.plans.trialPlanChip')} color="info" sx={{ ml: 0.5 }} />
                   )}
                 </TableCell>
                 <TableCell>
                   {plan.pricing_model === 'per_animal' ? (
                     <>
-                      <Chip size="small" label="Per-Animal" color="secondary" sx={{ mb: 0.5 }} />
+                      <Chip size="small" label={t('softwareAdmin.plans.perAnimalChip')} color="secondary" sx={{ mb: 0.5 }} />
                       <Typography variant="body2">
-                        {plan.per_animal_rate} {plan.currency}/animal
+                        {t('softwareAdmin.plans.perAnimalRateDisplay', { rate: plan.per_animal_rate, currency: plan.currency })}
                       </Typography>
                     </>
                   ) : (
                     <>
-                      <Chip size="small" label="Flat" sx={{ mb: 0.5 }} />
+                      <Chip size="small" label={t('softwareAdmin.plans.flatChip')} sx={{ mb: 0.5 }} />
                       <Typography variant="body2">
                         {plan.price} {plan.currency}
                       </Typography>
                     </>
                   )}
                 </TableCell>
-                <TableCell>{plan.billing_cycle}</TableCell>
+                <TableCell>{t('softwareAdmin.plans.cycles.' + plan.billing_cycle, plan.billing_cycle)}</TableCell>
                 <TableCell>
-                  {plan.max_animals ?? '∞'} animals / {plan.max_employees ?? '∞'} staff
+                  {t('softwareAdmin.plans.limitsDisplay', { animals: plan.max_animals ?? '∞', staff: plan.max_employees ?? '∞' })}
                 </TableCell>
-                <TableCell>{plan.trial_days} d</TableCell>
+                <TableCell>{t('softwareAdmin.plans.trialDaysDisplay', { count: plan.trial_days })}</TableCell>
                 <TableCell>
                   <Chip
                     size="small"
-                    label={plan.is_active ? 'Active' : 'Inactive'}
+                    label={plan.is_active ? t('softwareAdmin.plans.active') : t('softwareAdmin.plans.inactive')}
                     color={plan.is_active ? 'success' : 'default'}
                   />
                 </TableCell>
@@ -260,31 +262,31 @@ const Plans: React.FC = () => {
       </Paper>
 
       <Dialog open={open} onClose={() => setOpen(false)} fullWidth maxWidth="sm">
-        <DialogTitle>{editing ? 'Edit Plan' : 'New Plan'}</DialogTitle>
+        <DialogTitle>{editing ? t('softwareAdmin.plans.editPlan') : t('softwareAdmin.plans.newPlan')}</DialogTitle>
         <DialogContent>
           <TextField
             fullWidth
             margin="normal"
-            label="Name"
+            label={t('softwareAdmin.plans.form.name')}
             value={form.name}
             onChange={e => setForm({ ...form, name: e.target.value })}
           />
           <TextField
             fullWidth
             margin="normal"
-            label="Description"
+            label={t('softwareAdmin.plans.form.description')}
             value={form.description}
             onChange={e => setForm({ ...form, description: e.target.value })}
           />
           <FormControl sx={{ mt: 2 }}>
-            <FormLabel>Pricing Model</FormLabel>
+            <FormLabel>{t('softwareAdmin.plans.form.pricingModel')}</FormLabel>
             <RadioGroup
               row
               value={form.pricing_model}
               onChange={e => setForm({ ...form, pricing_model: e.target.value })}
             >
-              <FormControlLabel value="flat" control={<Radio />} label="Flat" />
-              <FormControlLabel value="per_animal" control={<Radio />} label="Per-Animal" />
+              <FormControlLabel value="flat" control={<Radio />} label={t('softwareAdmin.plans.flatChip')} />
+              <FormControlLabel value="per_animal" control={<Radio />} label={t('softwareAdmin.plans.perAnimalChip')} />
             </RadioGroup>
           </FormControl>
           <Box display="flex" gap={2}>
@@ -292,7 +294,7 @@ const Plans: React.FC = () => {
               <TextField
                 fullWidth
                 margin="normal"
-                label="Per-Animal Rate"
+                label={t('softwareAdmin.plans.form.perAnimalRate')}
                 type="number"
                 value={form.per_animal_rate}
                 onChange={e => setForm({ ...form, per_animal_rate: e.target.value })}
@@ -301,7 +303,7 @@ const Plans: React.FC = () => {
               <TextField
                 fullWidth
                 margin="normal"
-                label="Price"
+                label={t('softwareAdmin.plans.form.price')}
                 type="number"
                 value={form.price}
                 onChange={e => setForm({ ...form, price: e.target.value })}
@@ -310,7 +312,7 @@ const Plans: React.FC = () => {
             <TextField
               fullWidth
               margin="normal"
-              label="Currency"
+              label={t('softwareAdmin.plans.form.currency')}
               value={form.currency}
               onChange={e => setForm({ ...form, currency: e.target.value })}
             />
@@ -320,20 +322,20 @@ const Plans: React.FC = () => {
               select
               fullWidth
               margin="normal"
-              label="Billing Cycle"
+              label={t('softwareAdmin.plans.form.billingCycle')}
               value={form.billing_cycle}
               onChange={e => setForm({ ...form, billing_cycle: e.target.value })}
             >
               {cycles.map(c => (
                 <MenuItem key={c} value={c}>
-                  {c}
+                  {t('softwareAdmin.plans.cycles.' + c, c)}
                 </MenuItem>
               ))}
             </TextField>
             <TextField
               fullWidth
               margin="normal"
-              label="Trial Days"
+              label={t('softwareAdmin.plans.form.trialDays')}
               type="number"
               value={form.trial_days}
               onChange={e => setForm({ ...form, trial_days: e.target.value })}
@@ -343,7 +345,7 @@ const Plans: React.FC = () => {
             <TextField
               fullWidth
               margin="normal"
-              label="Max Animals (blank = unlimited)"
+              label={t('softwareAdmin.plans.form.maxAnimals')}
               type="number"
               value={form.max_animals}
               onChange={e => setForm({ ...form, max_animals: e.target.value })}
@@ -351,14 +353,14 @@ const Plans: React.FC = () => {
             <TextField
               fullWidth
               margin="normal"
-              label="Max Employees (blank = unlimited)"
+              label={t('softwareAdmin.plans.form.maxEmployees')}
               type="number"
               value={form.max_employees}
               onChange={e => setForm({ ...form, max_employees: e.target.value })}
             />
           </Box>
           <Divider sx={{ my: 2 }} />
-          <FormLabel>Features / Modules</FormLabel>
+          <FormLabel>{t('softwareAdmin.plans.form.featuresModules')}</FormLabel>
           <Box display="flex" flexWrap="wrap">
             {MODULE_KEYS.map(key => (
               <FormControlLabel
@@ -370,7 +372,7 @@ const Plans: React.FC = () => {
                     onChange={() => toggleFeature(key)}
                   />
                 }
-                label={key}
+                label={t('softwareAdmin.plans.modules.' + key, key)}
               />
             ))}
           </Box>
@@ -382,7 +384,7 @@ const Plans: React.FC = () => {
                 onChange={e => setForm({ ...form, is_trial_plan: e.target.checked })}
               />
             }
-            label="Trial Plan"
+            label={t('softwareAdmin.plans.trialPlanChip')}
           />
           <FormControlLabel
             control={
@@ -391,13 +393,13 @@ const Plans: React.FC = () => {
                 onChange={e => setForm({ ...form, is_active: e.target.checked })}
               />
             }
-            label="Active"
+            label={t('softwareAdmin.plans.active')}
           />
         </DialogContent>
         <DialogActions>
-          <Button onClick={() => setOpen(false)}>Cancel</Button>
+          <Button onClick={() => setOpen(false)}>{t('common.cancel')}</Button>
           <Button variant="contained" onClick={handleSave} disabled={saving}>
-            {saving ? 'Saving…' : 'Save'}
+            {saving ? t('softwareAdmin.plans.saving') : t('common.save')}
           </Button>
         </DialogActions>
       </Dialog>

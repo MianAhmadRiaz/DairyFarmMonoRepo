@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import {
   View,
   TouchableOpacity,
@@ -31,7 +32,7 @@ interface DropDownProps {
 const DropDown: React.FC<DropDownProps> = ({
   label,
   labelStyle,
-  placeholder = 'Select',
+  placeholder,
   options,
   value,
   onChange,
@@ -39,6 +40,7 @@ const DropDown: React.FC<DropDownProps> = ({
   style,
   placeholderStyle,
 }) => {
+  const { t } = useTranslation()
   const [visible, setVisible] = useState(false)
   const [searchText, setSearchText] = useState('')
 
@@ -63,7 +65,7 @@ const DropDown: React.FC<DropDownProps> = ({
               { color: value ? COLORS.darkestGrey : COLORS.placeholder }
             ]}
           >
-            {value || placeholder}
+            {value || placeholder || t('shared.dropdown.select')}
           </Text>
           <AnyIcon
             disabled
@@ -92,7 +94,7 @@ const DropDown: React.FC<DropDownProps> = ({
           />
           <TextInput
             style={styles.searchInput}
-            placeholder="Search..."
+            placeholder={t('shared.common.searchPlaceholder')}
             placeholderTextColor={COLORS.placeholder}
             value={searchText}
             onChangeText={setSearchText}
@@ -102,7 +104,7 @@ const DropDown: React.FC<DropDownProps> = ({
           <FlatList
             data={filteredOptions}
             keyExtractor={item => item}
-            ListEmptyComponent={<Text style={styles.noResults}>No results found</Text>}
+            ListEmptyComponent={<Text style={styles.noResults}>{t('shared.dropdown.noResults')}</Text>}
             renderItem={({ item }) => (
               <TouchableOpacity
                 style={styles.option}

@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Box, Tabs, Tab, Typography, CircularProgress, Button, Chip, useTheme, useMediaQuery } from '@mui/material';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
@@ -16,23 +17,27 @@ import FinancialsTab from './tabs/FinancialsTab';
 import MovementTaggingTab from './tabs/MovementTaggingTab';
 import OffspringTab from './tabs/OffspringTab';
 
-const TABS = [
-  { label: 'Overview', component: OverviewTab },
-  { label: 'Lactation & Production', component: LactationProductionTab },
-  { label: 'Reproduction', component: ReproductionTab },
-  { label: 'Health & Disease', component: HealthDiseaseTab },
-  { label: 'Growth', component: GrowthTab },
-  { label: 'Financials', component: FinancialsTab },
-  { label: 'Movement & Tagging', component: MovementTaggingTab },
-  { label: 'Offspring', component: OffspringTab },
-];
-
 const CowProfile: React.FC = () => {
+  const { t } = useTranslation();
   const { animalId } = useParams<{ animalId: string }>();
   const navigate = useNavigate();
   const theme = useTheme();
   const { isMobile } = useLayoutShift();
   useScrollToTopOnMount();
+
+  const TABS = useMemo(
+    () => [
+      { label: t('herd.cowProfile.tabs.overview'), component: OverviewTab },
+      { label: t('herd.cowProfile.tabs.lactationProduction'), component: LactationProductionTab },
+      { label: t('herd.cowProfile.tabs.reproduction'), component: ReproductionTab },
+      { label: t('herd.cowProfile.tabs.healthDisease'), component: HealthDiseaseTab },
+      { label: t('herd.cowProfile.tabs.growth'), component: GrowthTab },
+      { label: t('herd.cowProfile.tabs.financials'), component: FinancialsTab },
+      { label: t('herd.cowProfile.tabs.movementTagging'), component: MovementTaggingTab },
+      { label: t('herd.cowProfile.tabs.offspring'), component: OffspringTab },
+    ],
+    [t]
+  );
 
   const [profile, setProfile] = useState<any>(null);
   const [loading, setLoading] = useState(true);
@@ -48,7 +53,7 @@ const CowProfile: React.FC = () => {
       setProfile(data);
     } catch (err: any) {
       console.error('Error fetching animal profile:', err);
-      setError('Failed to load this animal’s profile. Please try again.');
+      setError(t('herd.cowProfile.loadError'));
     } finally {
       setLoading(false);
     }
@@ -63,11 +68,11 @@ const CowProfile: React.FC = () => {
 
   return (
     <PageContainer
-      title={profile?.identity?.name ? `${profile.identity.name}` : 'Cow Profile'}
+      title={profile?.identity?.name ? `${profile.identity.name}` : t('herd.cowProfile.title')}
       subtitle={
         profile?.identity
           ? `${profile.identity.tagName || profile.identity.electronicId || ''} · ${profile.identity.breedType || ''}`
-          : 'Complete history for this animal'
+          : t('herd.cowProfile.subtitle')
       }
       maxWidth={1250}
     >
@@ -78,7 +83,7 @@ const CowProfile: React.FC = () => {
           size="small"
           sx={{ textTransform: 'none', color: theme.palette.text.secondary }}
         >
-          Back to Herd
+          {t('herd.cowProfile.backToHerd')}
         </Button>
       </Box>
 
@@ -91,9 +96,9 @@ const CowProfile: React.FC = () => {
             color={profile.identity.healthStatus === 'sick' ? 'error' : 'default'}
             sx={{ textTransform: 'capitalize' }}
           />
-          {profile.identity.ispregnant && <Chip size="small" label="Pregnant" color="success" />}
+          {profile.identity.ispregnant && <Chip size="small" label={t('herd.cowProfile.pregnant')} color="success" />}
           {profile.status?.DIM !== null && profile.status?.DIM !== undefined && (
-            <Chip size="small" label={`DIM: ${profile.status.DIM}`} />
+            <Chip size="small" label={t('herd.cowProfile.dimChip', { count: profile.status.DIM })} />
           )}
         </Box>
       )}
@@ -105,7 +110,7 @@ const CowProfile: React.FC = () => {
       ) : error ? (
         <Box display="flex" flexDirection="column" alignItems="center" justifyContent="center" height="40vh" gap={2}>
           <Typography color="error">{error}</Typography>
-          <Button variant="contained" onClick={load}>Retry</Button>
+          <Button variant="contained" onClick={load}>{t('herd.cowProfile.retry')}</Button>
         </Box>
       ) : (
         <>

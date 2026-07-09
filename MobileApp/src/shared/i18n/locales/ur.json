@@ -1,0 +1,1014 @@
+{
+  "common": {
+    "appName": "کیٹل کیئر",
+    "loading": "لوڈ ہو رہا ہے…",
+    "save": "محفوظ کریں",
+    "cancel": "منسوخ کریں",
+    "delete": "حذف کریں",
+    "edit": "ترمیم کریں",
+    "add": "شامل کریں",
+    "search": "تلاش کریں",
+    "submit": "جمع کروائیں",
+    "close": "بند کریں",
+    "yes": "ہاں",
+    "no": "نہیں"
+  },
+  "language": {
+    "label": "زبان",
+    "english": "English",
+    "urdu": "اردو",
+    "restartTitle": "دوبارہ شروع کرنا ضروری ہے",
+    "restartMessage": "نئی ترتیب کی سمت لاگو کرنے کے لیے ایپ کو دوبارہ لوڈ کرنے کی ضرورت ہے۔"
+  },
+  "auth": {
+    "brand": "کیٹل کیئر",
+    "tagline": "سمارٹ ریوڑ اور فارم کا انتظام",
+    "welcomeBack": "خوش آمدید 👋",
+    "signInSubtitle": "اپنے فارم کا انتظام کرنے کے لیے سائن ان کریں",
+    "email": "ای میل",
+    "emailPlaceholder": "you@example.com",
+    "password": "پاس ورڈ",
+    "passwordPlaceholder": "آپ کا پاس ورڈ",
+    "forgotPassword": {
+      "title": "پاس ورڈ بھول گئے",
+      "invalidEmail": "غلط ای میل",
+      "otpSent": "او ٹی پی کوڈ آپ کی ای میل پر بھیج دیا گیا ہے",
+      "errorSendingCode": "کوڈ بھیجنے میں خرابی",
+      "email": "ای میل",
+      "emailPlaceholder": "ای میل درج کریں",
+      "send": "بھیجیں",
+      "back": "واپس"
+    },
+    "signIn": "سائن ان کریں",
+    "emailInvalid": "درست ای میل ایڈریس درج کریں",
+    "emailRequired": "ای میل ضروری ہے",
+    "passwordRequired": "پاس ورڈ ضروری ہے",
+    "welcomeToastTitle": "خوش آمدید!",
+    "welcomeToastMessage": "کامیابی سے سائن ان ہو گئے",
+    "signInFailedTitle": "سائن ان ناکام",
+    "signInFailedMessage": "براہ کرم اپنی تفصیلات چیک کریں اور دوبارہ کوشش کریں",
+    "common": {
+      "error": "خرابی",
+      "success": "کامیاب"
+    },
+    "setPassword": {
+      "title": "اپنا پاس ورڈ سیٹ کریں",
+      "subtitle": "آپ کا اکاؤنٹ عارضی پاس ورڈ استعمال کر رہا ہے۔ جاری رکھنے کے لیے نیا پاس ورڈ سیٹ کریں۔",
+      "validation": "توثیق",
+      "fillAllFields": "تمام خانے پُر کریں",
+      "passwordsDoNotMatch": "پاس ورڈ آپس میں مطابقت نہیں رکھتے",
+      "passwordUpdated": "پاس ورڈ اپ ڈیٹ ہو گیا",
+      "temporaryPassword": "عارضی پاس ورڈ",
+      "temporaryPasswordPlaceholder": "عارضی پاس ورڈ درج کریں",
+      "newPassword": "نیا پاس ورڈ",
+      "newPasswordPlaceholder": "کم از کم 8 حروف، بڑے/چھوٹے/نمبر/خصوصی",
+      "confirmNewPassword": "نئے پاس ورڈ کی تصدیق کریں",
+      "confirmNewPasswordPlaceholder": "نیا پاس ورڈ دوبارہ درج کریں",
+      "setPassword": "پاس ورڈ سیٹ کریں"
+    }
+  },
+  "nav": {
+    "home": "ہوم",
+    "breedingEvents": "افزائش نسل کے واقعات",
+    "milking": "دودھ دوہنا",
+    "feeding": "خوراک",
+    "stock": "اسٹاک",
+    "finance": "مالیات",
+    "health": "صحت",
+    "employee": "ملازم",
+    "settings": "ترتیبات",
+    "animalsInfo": "جانوروں کی معلومات",
+    "healthTreatments": "صحت اور علاج",
+    "milk": "دودھ",
+    "stockInventory": "اسٹاک اور انوینٹری",
+    "employees": "ملازمین"
+  },
+  "main": {
+    "common": {
+      "select": "منتخب کریں"
+    },
+    "addAnimal": {
+      "headerTitle": "جانوروں کا انتظام",
+      "penId": "پین آئی ڈی",
+      "tagId": "ٹیگ آئی ڈی",
+      "tagIdPlaceholder": "ٹیگ آئی ڈی درج کریں",
+      "electronicId": "الیکٹرانک آئی ڈی",
+      "electronicIdPlaceholder": "الیکٹرانک آئی ڈی درج کریں",
+      "animalName": "جانور کا نام",
+      "animalNamePlaceholder": "جانور کا نام درج کریں",
+      "animalType": "جانور کی قسم",
+      "breedType": "نسل کی قسم",
+      "purchasedFrom": "کہاں سے خریدا",
+      "purchasedFromPlaceholder": "خریداری کی جگہ درج کریں",
+      "country": "ملک",
+      "countryPlaceholder": "ملک منتخب کریں",
+      "gender": "جنس",
+      "genderPlaceholder": "جنس منتخب کریں",
+      "conditionType": "حالت کی قسم",
+      "conditionTypePlaceholder": "قسم منتخب کریں",
+      "pgDays": "حمل کے دن (PG)",
+      "pgDaysPlaceholder": "دن درج کریں",
+      "lactations": "لیکٹیشن کی تعداد",
+      "lactationsPlaceholder": "لیکٹیشن نمبر درج کریں",
+      "lastCalvingDate": "آخری بیانت کی تاریخ",
+      "aiDate": "اے آئی کی تاریخ",
+      "arrivalDate": "آمد کی تاریخ",
+      "birthDate": "تاریخ پیدائش",
+      "price": "قیمت",
+      "pricePlaceholder": "قیمت درج کریں",
+      "weight": "وزن",
+      "weightPlaceholder": "کلوگرام میں درج کریں",
+      "weightDate": "وزن کی تاریخ",
+      "subcategory": "جانور کی ذیلی قسم",
+      "subcategoryPlaceholder": "قسم منتخب کریں",
+      "pedigreeInfo": "نسب کی معلومات",
+      "sireTagId": "باپ (سائر) کا ٹیگ آئی ڈی",
+      "damTagId": "ماں (ڈیم) کا ٹیگ آئی ڈی",
+      "idPlaceholder": "آئی ڈی درج کریں"
+    },
+    "animalInfo": {
+      "headerTitle": "جانوروں کی معلومات",
+      "searchPlaceholder": "ٹیگ آئی ڈی سے تلاش کریں",
+      "filterAnimals": "جانور فلٹر کریں",
+      "filterBy": {
+        "type": "قسم کے لحاظ سے فلٹر کریں",
+        "gender": "جنس کے لحاظ سے فلٹر کریں",
+        "breed": "نسل کے لحاظ سے فلٹر کریں",
+        "status": "حیثیت کے لحاظ سے فلٹر کریں"
+      },
+      "applyFilters": "فلٹر لاگو کریں"
+    },
+    "dashboard": {
+      "common": {
+        "animals": "جانور",
+        "pregnant": "گابھن",
+        "herdComposition": "ریوڑ کی ترکیب",
+        "milkSeries": "دودھ (لیٹر)",
+        "todaysMilk": "آج کا دودھ",
+        "avgPerCow": "اوسط فی گائے",
+        "pregnancyRate": "حمل کی شرح",
+        "treatmentCost": "علاج کی لاگت",
+        "heatWatch": "ہیٹ واچ",
+        "dryOffDue": "خشک کرنے کا وقت"
+      },
+      "alertsCard": {
+        "title": "آج کے الرٹس",
+        "needAttention_one": "{{count}} جانور کو توجہ کی ضرورت ہے",
+        "needAttention_other": "{{count}} جانوروں کو توجہ کی ضرورت ہے",
+        "viewAll": "سب دیکھیں",
+        "allClear": "سب ٹھیک ہے — آج کوئی الرٹ نہیں",
+        "unknown": "نامعلوم",
+        "pregnancyCheck": "حمل کی جانچ",
+        "calvingExpected": "بیانت متوقع"
+      },
+      "alertsTab": {
+        "pregnancyChecksDue": "حمل کی جانچ واجب",
+        "calvingsExpected": "متوقع بیانتیں (14 دن)",
+        "inseminated30": "30+ دن پہلے اے آئی ہوئی",
+        "due": "واجب: {{date}}",
+        "expected": "متوقع: {{date}}",
+        "empty": "فی الحال یہاں کچھ نہیں",
+        "unnamed": "بے نام"
+      },
+      "herdComposition": {
+        "milking": "دودھ دینے والی",
+        "dry": "خشک",
+        "heifers": "بچھیاں"
+      },
+      "milkTrend": {
+        "title": "30 دن کا دودھ کا رجحان",
+        "subtitle": "کل لیٹر فی دن",
+        "empty": "ابھی تک دودھ کا کوئی ریکارڈ نہیں"
+      },
+      "compositionTab": {
+        "pregnancyStatus": "حمل کی صورتحال",
+        "pregnantLower": "گابھن",
+        "open": "خالی",
+        "categories": {
+          "milk": "دودھ والی",
+          "dry": "خشک",
+          "heifers": "بچھیاں",
+          "calves": "بچھڑے"
+        },
+        "noAnimals": "ابھی تک کوئی جانور درج نہیں",
+        "noPregnancyData": "ابھی تک حمل کا کوئی ڈیٹا نہیں"
+      },
+      "financialsTab": {
+        "title": "نکالنے / رکھنے کا اشارہ",
+        "subtitle": "کم کارکردگی والے جانور",
+        "subtitleEstimate": "کم کارکردگی والے جانور • تخمینہ",
+        "noFeedData": "چارے کی لاگت فی لیٹر نہیں دکھائی جا رہی — اس فارم کے لیے ابھی تک خوراک کے شیڈول کا کوئی ڈیٹا درج نہیں ہوا۔",
+        "milk": "دودھ",
+        "costOfCare": "دیکھ بھال کی لاگت",
+        "milkIncome": "دودھ کی آمدنی",
+        "empty": "منافع کا تخمینہ لگانے کے لیے ابھی کافی ڈیٹا نہیں"
+      },
+      "healthTab": {
+        "sickAnimals": "بیمار جانور",
+        "activeWithdrawals": "جاری دودھ بندش",
+        "topDiagnosis": "سب سے عام تشخیص",
+        "cases_one": "{{count}} کیس",
+        "cases_other": "{{count}} کیسز",
+        "treatmentsByType": "علاج بلحاظ قسم",
+        "noTreatments": "ابھی تک کوئی علاج درج نہیں",
+        "topDiagnoses": "عام تشخیصات",
+        "noDiagnoses": "ابھی تک کوئی تشخیص درج نہیں",
+        "activeMilkWithdrawals": "جاری دودھ بندش",
+        "meatUntil": "گوشت {{date}} تک بند",
+        "milkUntil": "دودھ {{date}} تک بند",
+        "noWithdrawals": "اس وقت کوئی جانور دودھ بندش میں نہیں",
+        "vaccinationTitle": "آخری ٹیکے / ڈی وارمنگ کے بعد کے دن",
+        "daysShort": "{{count}} دن",
+        "noVaccinations": "ابھی تک ٹیکے/ڈی وارمنگ کا کوئی ریکارڈ نہیں"
+      },
+      "overviewTab": {
+        "serverError": "سرور سے رابطہ نہیں ہو سکا",
+        "checkConnection": "اپنا کنکشن چیک کریں اور دوبارہ کوشش کریں",
+        "retry": "دوبارہ کوشش کریں",
+        "totalAnimals": "کل جانور",
+        "milkingCows": "دودھ دینے والی گائیں",
+        "pregnantCount": "{{value}} گابھن",
+        "yesterdayValue": "گزشتہ روز {{value}}",
+        "calvingInterval": "بیانت کا وقفہ"
+      },
+      "productionTab": {
+        "yesterday": "گزشتہ روز",
+        "rangeTotal": "منتخب مدت کا کل",
+        "trendTitle": "دودھ کی پیداوار کا رجحان",
+        "filters": {
+          "week": "ہفتہ",
+          "month": "مہینہ",
+          "year": "سال"
+        },
+        "empty": "اس مدت میں دودھ کا کوئی ریکارڈ نہیں"
+      },
+      "reproductionTab": {
+        "avgCalvingInterval": "اوسط بیانت کا وقفہ",
+        "days": "دن",
+        "avgDaysOpen": "اوسط خالی دن",
+        "servicesPerConception": "سروسز فی حمل",
+        "breedingFunnel": "بریڈنگ فنل",
+        "stages": {
+          "heat": "ہیٹ",
+          "aiBull": "اے آئی/سانڈ",
+          "pregnant": "گابھن",
+          "calved": "بیائی ہوئی"
+        },
+        "empty": "ابھی تک افزائشِ نسل کا کوئی واقعہ درج نہیں"
+      },
+      "yearOverYearTab": {
+        "unableToLoad": "سال بہ سال موازنہ لوڈ نہیں ہو سکا",
+        "notEnoughData": "سالوں کا موازنہ کرنے کے لیے ابھی کافی ڈیٹا نہیں",
+        "totalMilk": "کل دودھ",
+        "avgMilkPerCow": "اوسط دودھ فی گائے",
+        "calvings": "بیانتیں",
+        "treatments": "علاج",
+        "mortality": "اموات",
+        "vsYear": "{{change}}% بمقابلہ {{year}}",
+        "monthlyMilkTitle": "ماہانہ دودھ — {{current}} بمقابلہ {{compare}}",
+        "noMonthlyData": "موازنے کے لیے کوئی ماہانہ ڈیٹا نہیں"
+      }
+    },
+    "cowMonitoring": {
+      "headerTitle": "گائے کی نگرانی"
+    },
+    "deliveryManagement": {
+      "headerTitle": "ڈیلیوری مینجمنٹ"
+    },
+    "financialManagement": {
+      "headerTitle": "مالیاتی مینجمنٹ"
+    },
+    "profileScreen": {
+      "headerTitle": "مدد"
+    },
+    "home": {
+      "title": "ریوڑ ڈیش بورڈ",
+      "subtitle": "آپ کے فارم کی ایک نظر میں جھلک — پیداوار، صحت، افزائش اور بہت کچھ",
+      "tabs": {
+        "overview": "جائزہ",
+        "production": "پیداوار",
+        "reproduction": "افزائشِ نسل",
+        "health": "صحت اور بیماری",
+        "composition": "ترکیب",
+        "financials": "مالیات",
+        "yearOverYear": "سال بہ سال",
+        "alerts": "الرٹس اور کام"
+      }
+    },
+    "healthAlerts": {
+      "title": "صحت کے الرٹس",
+      "cases_one": "{{count}} کیس",
+      "cases_other": "{{count}} کیس",
+      "status": {
+        "TREATED": "علاج شدہ",
+        "UNTREATED": "غیر علاج شدہ"
+      }
+    },
+    "herdInfo": {
+      "title": "ریوڑ کی معلومات",
+      "currentAnimals": "موجودہ جانور",
+      "pregnantAnimals": "حاملہ جانور",
+      "nonPregnantAnimals": "غیر حاملہ جانور",
+      "unjoinedHeifers": "غیر ملاپ شدہ بچھیاں",
+      "milkingCows": "دودھ دینے والی گائیں",
+      "dryCows": "خشک گائیں"
+    },
+    "herdPieChart": {
+      "open": "{{percent}}% کھلی",
+      "pregnant": "{{percent}}% حاملہ"
+    },
+    "homeHeader": {
+      "userLabel": "صارف:"
+    },
+    "inventory": {
+      "title": "انوینٹری اور سامان",
+      "feedStock": "چارے کا ذخیرہ",
+      "feedRemaining": "{{percent}}% ({{amount}} کلوگرام باقی)"
+    },
+    "milkTrend": {
+      "title": "دودھ کی پیداوار کا رجحان ({{period}})",
+      "yAxis": "دودھ لیٹر میں",
+      "xAxis": "مہینے"
+    },
+    "productionStats": {
+      "title": "پیداوار کے اعداد و شمار",
+      "todaysMilk": "آج کا دودھ (لیٹر)",
+      "yesterdaysMilk": "کل کا دودھ (لیٹر)",
+      "avgPerCow": "اوسط فی گائے (لیٹر)",
+      "trend": "رجحان"
+    },
+    "additionalKpis": {
+      "title": "اضافی کے پی آئیز",
+      "conceptionRate": "حمل کی شرح",
+      "ageAtFirstCalving": "پہلے بچے کی پیدائش پر عمر",
+      "mortalityRate": "شرحِ اموات",
+      "abortionRatio": "اسقاطِ حمل کی شرح",
+      "costPerLiter": "لاگت فی لیٹر"
+    },
+    "upcomingTasks": {
+      "title": "آنے والے کام",
+      "cardTitle": "آنے والے کام/ اضافی کے پی آئیز",
+      "tomorrow": "کل"
+    }
+  },
+  "breeding": {
+    "common": {
+      "tagId": "ٹیگ آئی ڈی",
+      "tagIdPlaceholder": "ٹیگ آئی ڈی",
+      "select": "منتخب کریں",
+      "date": "تاریخ",
+      "aiType": "AI کی قسم",
+      "semen": "منی",
+      "dose": "خوراک",
+      "cost": "لاگت",
+      "time": "وقت",
+      "weight": "وزن",
+      "addNew": "نیا شامل کریں",
+      "recentEntries": "حالیہ اندراجات",
+      "loadMore": "مزید دیکھیں",
+      "search": "تلاش کریں",
+      "breedType": "نسل کی قسم",
+      "sex": "جنس",
+      "shed": "شیڈ",
+      "reason": "وجہ",
+      "success": "کامیاب",
+      "failed": "ناکام",
+      "recordedSuccessfully": "کامیابی سے ریکارڈ ہو گیا",
+      "cols": {
+        "srNo": "نمبر شمار",
+        "aiDate": "AI کی تاریخ",
+        "tagId": "ٹیگ آئی ڈی",
+        "price": "قیمت"
+      }
+    },
+    "aiBreeding": {
+      "headerTitle": "AI افزائش نسل",
+      "cancel": "منسوخ کریں",
+      "addError": "نئی AI افزائش نسل شامل کرنے میں خرابی"
+    },
+    "bullBreeding": {
+      "headerTitle": "بیل سے افزائش نسل",
+      "cancel": "منسوخ کریں"
+    },
+    "entriesBullBreeding": {
+      "headerTitle": "بیل سے افزائش نسل"
+    },
+    "heatDetection": {
+      "headerTitle": "ہیٹ کی شناخت"
+    },
+    "tagIdHeatDetection": {
+      "aiDate": "AI کی تاریخ",
+      "sireName": "نر کا نام",
+      "straw": "سٹرا",
+      "price": "قیمت ($)",
+      "comments": "تبصرے",
+      "delete": "حذف کریں",
+      "edit": "ترمیم کریں"
+    },
+    "addHeatDetection": {
+      "headerTitle": "ہیٹ کی شناخت",
+      "commentsLabel": "تبصرے",
+      "chooseReason": "وجہ منتخب کریں",
+      "cancel": "منسوخ کریں",
+      "saveChanges": "تبدیلیاں محفوظ کریں",
+      "missingFieldsTitle": "نامکمل خانے",
+      "missingFieldsMessage": "براہ کرم تمام مطلوبہ خانے پُر کریں۔",
+      "recordedSuccessfully": "ہیٹ کی شناخت کا واقعہ کامیابی سے ریکارڈ ہو گیا"
+    },
+    "pregnancyTestDate": {
+      "headerTitle": "حمل کی جانچ کی تاریخ",
+      "cols": {
+        "pregnancyTestDate": "حمل کی جانچ کی تاریخ",
+        "status": "حالت"
+      }
+    },
+    "abortion": {
+      "headerTitle": "اسقاط حمل",
+      "cancel": "منسوخ کریں"
+    },
+    "calving": {
+      "headerTitle": "بچھڑا پیدائش",
+      "child": "بچہ",
+      "addNewChild": "نیا بچہ شامل کریں",
+      "addChild": "بچہ شامل کریں",
+      "aliveChild": "زندہ بچہ",
+      "delete": "حذف کریں",
+      "cancel": "منسوخ کریں"
+    },
+    "dryOff": {
+      "headerTitle": "خشک کرنا",
+      "company": "کمپنی",
+      "add": "شامل کریں",
+      "cancel": "منسوخ کریں"
+    },
+    "protocol": {
+      "headerTitle": "پروٹوکول",
+      "protocolDate": "پروٹوکول کی تاریخ",
+      "protocols": "پروٹوکول",
+      "startTime": "شروع کا وقت",
+      "addProtocol": "پروٹوکول شامل کریں",
+      "cancel": "منسوخ کریں",
+      "cols": {
+        "particulars": "تفصیلات",
+        "hours": "گھنٹے",
+        "date": "تاریخ",
+        "time": "وقت"
+      }
+    },
+    "reasonModal": {
+      "title": "وجہ شامل کریں",
+      "reasonLabel": "وجہ",
+      "reasonPlaceholder": "وجہ یہاں لکھیں",
+      "cancel": "منسوخ کریں",
+      "add": "شامل کریں"
+    },
+    "mainScreen": {
+      "headerTitle": "افزائش نسل کے واقعات",
+      "viewDetails": "تفصیلات دیکھیں",
+      "events": {
+        "1": {
+          "title": "پروٹوکول",
+          "description": "AI افزائش نسل سے پہلے گایوں کے انجکشن کا شیڈول طے کرنا۔"
+        },
+        "2": {
+          "title": "AI افزائش نسل",
+          "description": "انجکشن کے ذریعے گایوں کی مصنوعی نسل کشی۔"
+        },
+        "3": {
+          "title": "بیل سے افزائش نسل",
+          "description": "بیل کے ذریعے گائے کی قدرتی افزائش نسل۔"
+        },
+        "4": {
+          "title": "ہیٹ کی شناخت",
+          "description": "نسل کشی کے لیے جانوروں کی ہیٹ کی شناخت کریں۔"
+        },
+        "5": {
+          "title": "حمل کی جانچ",
+          "description": "افزائش نسل کے بعد گائے کے حمل کی جانچ کریں۔"
+        },
+        "6": {
+          "title": "اسقاط حمل",
+          "description": "مویشیوں کا اسقاط حمل۔"
+        },
+        "7": {
+          "title": "بچھڑا پیدائش",
+          "description": "270 دنوں کے بعد، بچھڑا پیدائش کا وقت آ جاتا ہے۔"
+        },
+        "8": {
+          "title": "خشک کرنا",
+          "description": "گائے کو دودھ دوہنے سے ہٹا دیں۔"
+        }
+      }
+    }
+  },
+  "employee": {
+    "common": {
+      "validation": "توثیق",
+      "success": "کامیابی",
+      "error": "خرابی",
+      "saved": "محفوظ ہو گیا",
+      "done": "مکمل",
+      "employee": "ملازم",
+      "description": "تفصیل",
+      "phone": "فون",
+      "noEmployees": "کوئی ملازم نہیں ملا۔"
+    },
+    "addTask": {
+      "title": "ٹاسک شامل کریں",
+      "taskLabel": "ٹاسک",
+      "taskPlaceholder": "ٹاسک کا عنوان",
+      "descriptionPlaceholder": "اختیاری تفصیلات",
+      "priorityLabel": "ترجیح",
+      "deadlineLabel": "آخری تاریخ (YYYY-MM-DD)",
+      "assignDateLabel": "تفویض کی تاریخ (YYYY-MM-DD)",
+      "saveTask": "ٹاسک محفوظ کریں",
+      "enterTaskTitle": "ٹاسک کا عنوان درج کریں",
+      "taskAdded": "ٹاسک شامل کر دیا گیا"
+    },
+    "attendance": {
+      "title": "حاضری",
+      "attendanceFor": "حاضری برائے",
+      "saveAttendance": "حاضری محفوظ کریں",
+      "recorded": "حاضری درج کر دی گئی",
+      "noPermission": "آپ کو حاضری لگانے کی اجازت نہیں ہے۔",
+      "status": {
+        "present": "حاضر",
+        "absent": "غیر حاضر",
+        "leave": "چھٹی"
+      }
+    },
+    "employeeHome": {
+      "title": "ملازمین اور ایچ آر",
+      "actions": "اعمال",
+      "employeesLabel": "ملازمین",
+      "employeesDesc": "عملے کی فہرست دیکھیں",
+      "attendanceLabel": "حاضری",
+      "attendanceDesc": "روزانہ حاضری لگائیں",
+      "tasksLabel": "ٹاسک",
+      "tasksDesc": "ٹاسک تفویض اور نگرانی کریں",
+      "requestsLabel": "درخواستیں",
+      "requestsDesc": "عملے کی درخواستیں منظور کریں",
+      "salariesLabel": "تنخواہیں",
+      "salariesDesc": "تنخواہ کی رسیدیں اور ادائیگیاں"
+    },
+    "employees": {
+      "title": "ملازمین"
+    },
+    "requests": {
+      "title": "درخواستیں",
+      "request": "درخواست",
+      "noRequests": "کوئی درخواست نہیں ملی۔",
+      "approve": "منظور کریں",
+      "reject": "مسترد کریں",
+      "responded": "درخواست {{status}}",
+      "status": {
+        "pending": "زیر التوا",
+        "review": "زیر جائزہ",
+        "hold": "روکی گئی",
+        "completed": "مکمل",
+        "rejected": "مسترد"
+      }
+    },
+    "salaries": {
+      "title": "تنخواہیں",
+      "paid": "ادا شدہ",
+      "invoiceMarkedPaid": "رسید ادا شدہ کے طور پر نشان زد",
+      "unpaid": "غیر ادا شدہ",
+      "paidBadge": "ادا شدہ",
+      "grossSalary": "مجموعی تنخواہ",
+      "markPaid": "ادا شدہ نشان زد کریں",
+      "noPermission": "آپ کو تنخواہیں دیکھنے کی اجازت نہیں ہے۔",
+      "noInvoices": "کوئی تنخواہ رسید نہیں ملی۔"
+    },
+    "tasks": {
+      "title": "ٹاسک",
+      "task": "ٹاسک",
+      "noTasks": "کوئی ٹاسک نہیں ملا۔",
+      "deadline": "آخری تاریخ",
+      "assigned": "تفویض کردہ",
+      "priority": {
+        "low": "کم",
+        "medium": "درمیانہ",
+        "high": "زیادہ"
+      }
+    }
+  },
+  "feeding": {
+    "common": {
+      "validation": "تصدیق",
+      "success": "کامیابی",
+      "error": "خرابی"
+    },
+    "status": {
+      "completed": "مکمل",
+      "pending": "زیرِ التوا"
+    },
+    "addRecipe": {
+      "title": "ترکیب شامل کریں",
+      "noPermission": "آپ کو ترکیب بنانے کی اجازت نہیں ہے۔",
+      "nameRequired": "ترکیب کا نام درکار ہے",
+      "ingredientRequired": "کم از کم ایک جزو شامل کریں",
+      "recipeCreated": "ترکیب بن گئی",
+      "recipeName": "ترکیب کا نام",
+      "recipeNamePlaceholder": "مثلاً دودھ دینے والی TMR",
+      "description": "تفصیل",
+      "descriptionPlaceholder": "اختیاری",
+      "recipeGroup": "ترکیب گروپ",
+      "ingredients": "اجزاء",
+      "ingredientN": "جزو {{count}}",
+      "quantityKg": "مقدار (کلوگرام)",
+      "addIngredient": "جزو شامل کریں",
+      "createRecipe": "ترکیب بنائیں"
+    },
+    "applyFeed": {
+      "title": "خوراک لاگو کریں",
+      "headerTitle": "شیڈ پر خوراک لاگو کریں",
+      "noPermission": "آپ کو خوراک لاگو کرنے کی اجازت نہیں ہے۔",
+      "selectShedRecipe": "شیڈ اور ترکیب منتخب کریں",
+      "feedApplied": "خوراک لاگو ہو گئی",
+      "appliedSummary": "کل {{total}} کلوگرام، لاگت {{cost}}",
+      "applied": "لاگو ہو گئی",
+      "shed": "شیڈ",
+      "recipe": "ترکیب",
+      "mealTime": "کھانے کا وقت",
+      "quantityPerAnimal": "فی جانور مقدار (کلوگرام)",
+      "quantityPerAnimalPlaceholder": "خودکار (طے شدہ 5)",
+      "applyFeedBtn": "خوراک لاگو کریں"
+    },
+    "feedReport": {
+      "title": "خوراک رپورٹ",
+      "empty": "ابھی تک کوئی خوراک شیڈول نہیں ہے۔",
+      "feedingFallback": "خوراک",
+      "shed": "شیڈ",
+      "pen": "پین",
+      "animals": "جانور",
+      "scheduledKg": "طے شدہ (کلوگرام)",
+      "actualKg": "اصل (کلوگرام)"
+    },
+    "feedingHome": {
+      "title": "خوراک",
+      "actions": "اعمال",
+      "recipes": "ترکیبیں",
+      "recipesDesc": "خوراک کے فارمولے اور اجزاء",
+      "applyFeed": "شیڈ پر خوراک لاگو کریں",
+      "applyFeedDesc": "شیڈ کے لیے خوراک شیڈول کریں",
+      "feedReport": "خوراک رپورٹ",
+      "feedReportDesc": "خوراک کے شیڈول اور تاریخ"
+    },
+    "recipes": {
+      "title": "ترکیبیں",
+      "empty": "کوئی ترکیب نہیں ملی۔",
+      "recipeFallback": "ترکیب",
+      "ingredients": "اجزاء",
+      "costPerKg": "لاگت / کلوگرام"
+    }
+  },
+  "finance": {
+    "common": {
+      "error": "خرابی",
+      "noPermission": "آپ کو مالیات دیکھنے کی اجازت نہیں ہے۔",
+      "income": "آمدنی",
+      "expenses": "خرچ",
+      "netProfit": "خالص منافع",
+      "total": "کل"
+    },
+    "type": {
+      "income": "آمدنی",
+      "expense": "خرچ"
+    },
+    "financeHome": {
+      "title": "مالیات",
+      "actions": "اعمال",
+      "cash": "نقدی",
+      "transactions": "لین دین",
+      "transactionsDesc": "آمدنی و خرچ کے اندراجات",
+      "profitLoss": "نفع و نقصان",
+      "profitLossDesc": "آمدنی بمقابلہ اخراجات"
+    },
+    "profitLoss": {
+      "title": "نفع و نقصان",
+      "revenue": "آمدنی",
+      "noRecords": "کوئی ریکارڈ نہیں۔",
+      "noData": "نفع و نقصان کا کوئی ڈیٹا دستیاب نہیں ہے۔",
+      "account": "اکاؤنٹ"
+    },
+    "transactions": {
+      "title": "لین دین",
+      "transaction": "لین دین",
+      "amount": "رقم",
+      "empty": "کوئی لین دین نہیں ملا۔",
+      "noPermission": "آپ کو لین دین دیکھنے کی اجازت نہیں ہے۔"
+    }
+  },
+  "health": {
+    "common": {
+      "error": "خرابی",
+      "success": "کامیابی",
+      "validation": "تصدیق",
+      "animal": "جانور",
+      "unnamed": "بے نام",
+      "noTag": "کوئی ٹیگ نہیں",
+      "medicine": "دوا",
+      "milkWithdrawalUntil": "دودھ کی روک تک",
+      "activeWithdrawals": "فعال روک"
+    },
+    "addTreatment": {
+      "title": "علاج شامل کریں",
+      "noPermission": "آپ کو علاج ریکارڈ کرنے کی اجازت نہیں ہے۔",
+      "selectAnimal": "ایک جانور منتخب کریں",
+      "selectTreatmentType": "علاج کی قسم منتخب کریں",
+      "treatmentRecorded": "علاج ریکارڈ ہو گیا",
+      "animal": "جانور",
+      "treatmentType": "علاج کی قسم",
+      "diagnosis": "تشخیص",
+      "diagnosisPlaceholder": "مثلاً میسٹائٹس",
+      "medicineName": "دوا کا نام",
+      "medicineNamePlaceholder": "استعمال شدہ دوا",
+      "dosage": "خوراک",
+      "dosagePlaceholder": "مثلاً 10ml",
+      "vetName": "ڈاکٹر کا نام",
+      "vetNamePlaceholder": "حاضر ڈاکٹر",
+      "cost": "لاگت",
+      "milkWithdrawalDays": "دودھ کی روک (دن)",
+      "meatWithdrawalDays": "گوشت کی روک (دن)",
+      "deductStockLabel": "اسٹاک سے دوا منہا کریں (اختیاری)",
+      "medicineFromStock": "اسٹاک سے دوا",
+      "quantityUsed": "استعمال شدہ مقدار",
+      "comments": "تبصرے",
+      "commentsPlaceholder": "اضافی نوٹس",
+      "markSick": "اس جانور کو بیمار کے طور پر نشان زد کریں",
+      "saveTreatment": "علاج محفوظ کریں"
+    },
+    "healthHome": {
+      "title": "صحت اور علاج",
+      "herdAlerts": "ریوڑ کے انتباہ",
+      "herdAlertsDesc": "چیک، دودھ بند کرنا، بچے کی پیدائش اور مستی کی مقررہ تاریخیں",
+      "treatments": "علاج",
+      "treatmentsDesc": "ڈاکٹر کے دورے، ویکسینیشن اور دوائیں",
+      "withdrawals": "روک",
+      "withdrawalsDesc": "وہ جانور جن کا دودھ فروخت نہیں کیا جا سکتا",
+      "pregnancyChecksDue": "حمل کے مقررہ چیک",
+      "dryOffsDue": "مقررہ دودھ بند کرنا",
+      "activeWithdrawals": "فعال روک",
+      "actions": "اعمال"
+    },
+    "herdAlerts": {
+      "title": "ریوڑ کے انتباہ",
+      "pregnancyCheckDue": "حمل کا چیک مقررہ",
+      "category": "قسم",
+      "inseminated": "مصنوعی حمل",
+      "dryOffDue": "دودھ بند کرنا مقررہ",
+      "dryOffDueLabel": "دودھ بند کرنا مقررہ",
+      "expectedCalving": "متوقع پیدائش",
+      "calvingExpected": "متوقع پیدائش",
+      "heatWatch": "مستی کی نگرانی",
+      "reason": "وجہ",
+      "nothingDue": "کچھ مقررہ نہیں۔"
+    },
+    "treatments": {
+      "title": "علاج",
+      "deleteTreatment": "علاج حذف کریں",
+      "deleteConfirm": "کیا آپ واقعی یہ علاج ریکارڈ حذف کرنا چاہتے ہیں؟",
+      "treatmentDeleted": "علاج حذف ہو گیا",
+      "type": "قسم",
+      "diagnosis": "تشخیص",
+      "vet": "ڈاکٹر",
+      "withdrawalUntil": "روک {{date}} تک",
+      "emptyText": "ابھی تک کوئی علاج ریکارڈ نہیں ہوا۔"
+    },
+    "withdrawals": {
+      "meatWithdrawalUntil": "گوشت کی روک تک",
+      "until": "{{date}} تک",
+      "emptyText": "فی الحال کوئی جانور روک کے تحت نہیں ہے۔"
+    }
+  },
+  "milk": {
+    "common": {
+      "validation": "تصدیق",
+      "success": "کامیابی",
+      "error": "خرابی",
+      "animal": "جانور",
+      "sessions": "سیشن",
+      "morning": "صبح",
+      "afternoon": "دوپہر",
+      "evening": "شام",
+      "optional": "اختیاری"
+    },
+    "addMilkSession": {
+      "title": "دودھ کا سیشن شامل کریں",
+      "animal": "جانور",
+      "milkingTime": "دودھ دوہنے کا وقت",
+      "milkL": "دودھ (لیٹر)",
+      "saveSession": "سیشن محفوظ کریں",
+      "unnamed": "بے نام",
+      "noTag": "کوئی ٹیگ نہیں",
+      "selectAnimal": "ایک جانور منتخب کریں",
+      "enterMilkQuantity": "دودھ کی مقدار درج کریں",
+      "withdrawalWarningTitle": "ریکارڈ ہو گیا — اخراج کی وارننگ",
+      "withdrawalWarningBody": "یہ جانور {{date}} تک اخراج کے تحت ہے۔ اس کا دودھ ٹینک میں نہ ڈالیں۔",
+      "sessionRecorded": "سیشن ریکارڈ ہو گیا"
+    },
+    "milkApproval": {
+      "title": "دودھ کی منظوری",
+      "pendingDates": "منظوری کے زیر التوا تواریخ",
+      "noDatesPending": "منظوری کے لیے کوئی تاریخ زیر التوا نہیں۔",
+      "noSessionsToApprove": "منظوری کے لیے کوئی سیشن نہیں۔",
+      "approveIntoTank": "ٹینک میں منظور کریں",
+      "noPermission": "آپ کو دودھ منظور کرنے کی اجازت نہیں ہے۔",
+      "approvedTitle": "منظور ہو گیا",
+      "approvedBody": "دودھ ٹینک میں منظور ہو گیا"
+    },
+    "milkHome": {
+      "title": "دودھ",
+      "todaysMilk": "آج کا دودھ (لیٹر)",
+      "dispatched": "روانہ کیا گیا (لیٹر)",
+      "inTank": "ٹینک میں (لیٹر)",
+      "actionsHeading": "اعمال",
+      "actions": {
+        "milkingSessions": {
+          "label": "دودھ کے سیشن",
+          "desc": "صبح/دوپہر/شام کا دودھ ریکارڈ کریں"
+        },
+        "approveMilk": {
+          "label": "دودھ کی منظوری",
+          "desc": "سیشن کو ٹینک میں منظور کریں"
+        },
+        "milkOut": {
+          "label": "دودھ کا اخراج / روانگی",
+          "desc": "دودھ فروخت یا روانہ کریں"
+        }
+      }
+    },
+    "milkOut": {
+      "title": "دودھ کا اخراج / روانگی",
+      "shortTitle": "دودھ کا اخراج",
+      "noPermission": "آپ کو دودھ روانہ کرنے کی اجازت نہیں ہے۔",
+      "remainingInTank": "ٹینک میں باقی",
+      "outType": "اخراج کی قسم",
+      "company": "کمپنی",
+      "pricePerLitre": "قیمت / لیٹر",
+      "fat": "چکنائی %",
+      "snf": "ایس این ایف %",
+      "volume": "حجم (لیٹر)",
+      "recordMilkOut": "دودھ کا اخراج ریکارڈ کریں",
+      "enterVolume": "0 سے زیادہ حجم درج کریں",
+      "priceRequired": "فروخت کے لیے فی لیٹر قیمت درکار ہے",
+      "milkOutRecorded": "دودھ کا اخراج ریکارڈ ہو گیا",
+      "outTypes": {
+        "sell": "کمپنی (فروخت)",
+        "suckler": "دودھ پیتے بچھڑے",
+        "employee": "ملازم",
+        "dumped": "ضائع / روکا گیا",
+        "other": "دیگر"
+      }
+    },
+    "milkSessions": {
+      "title": "دودھ کے سیشن",
+      "emptyText": "{{date}} کے لیے کوئی دودھ کا سیشن نہیں۔",
+      "showingSessionsFor": "اس تاریخ کے سیشن دکھائے جا رہے ہیں"
+    }
+  },
+  "stock": {
+    "common": {
+      "validation": "توثیق",
+      "success": "کامیاب",
+      "error": "خرابی",
+      "supplier": "سپلائر",
+      "item": "آئٹم",
+      "quantity": "مقدار",
+      "note": "نوٹ",
+      "optional": "اختیاری",
+      "reorderLevel": "دوبارہ آرڈر کی سطح"
+    },
+    "addPurchase": {
+      "title": "خریداری شامل کریں",
+      "noPermission": "آپ کو خریداری درج کرنے کی اجازت نہیں ہے۔",
+      "selectSupplierItem": "سپلائر اور آئٹم منتخب کریں",
+      "invalidQuantityCost": "درست مقدار اور قیمت درج کریں",
+      "purchaseRecorded": "خریداری درج ہو گئی",
+      "costPerUnit": "فی یونٹ قیمت",
+      "batchNumber": "بیچ نمبر",
+      "expiryDateLabel": "میعاد ختم ہونے کی تاریخ (YYYY-MM-DD)",
+      "recordPurchase": "خریداری درج کریں"
+    },
+    "consumption": {
+      "title": "استعمال",
+      "headerTitle": "اسٹاک استعمال",
+      "noPermission": "آپ کو اسٹاک جاری کرنے کی اجازت نہیں ہے۔",
+      "selectItem": "ایک آئٹم منتخب کریں",
+      "enterQuantity": "مقدار درج کریں",
+      "consumptionRecorded": "استعمال درج ہو گیا",
+      "quantityUsed": "استعمال شدہ مقدار",
+      "recordConsumption": "استعمال درج کریں"
+    },
+    "purchases": {
+      "title": "خریداری",
+      "empty": "کوئی خریداری درج نہیں ہے۔",
+      "costPerUnit": "فی یونٹ قیمت",
+      "total": "کل",
+      "batch": "بیچ",
+      "expiry": "میعاد"
+    },
+    "stockHome": {
+      "title": "اسٹاک اور انوینٹری",
+      "actions": "اقدامات",
+      "totalItems": "کل آئٹمز",
+      "lowStock": "کم اسٹاک",
+      "expiring": "میعاد ختم ہو رہی",
+      "stockItems": "اسٹاک آئٹمز",
+      "stockItemsDesc": "انوینٹری اور سطحیں دیکھیں",
+      "purchases": "خریداری",
+      "purchasesDesc": "خریداری درج اور دیکھیں",
+      "consumption": "استعمال",
+      "consumptionDesc": "اسٹاک استعمال جاری کریں",
+      "suppliers": "سپلائرز",
+      "suppliersDesc": "سپلائرز کا انتظام کریں",
+      "reports": "رپورٹس",
+      "reportsDesc": "دوبارہ آرڈر اور میعاد الرٹس"
+    },
+    "stockItems": {
+      "title": "اسٹاک آئٹمز",
+      "empty": "کوئی اسٹاک آئٹم نہیں۔",
+      "low": "کم"
+    },
+    "stockReports": {
+      "title": "اسٹاک رپورٹس",
+      "reorderNeeded": "دوبارہ آرڈر درکار",
+      "nothingToReorder": "دوبارہ آرڈر کرنے کے لیے کچھ نہیں۔",
+      "reorder": "دوبارہ آرڈر",
+      "expired": "میعاد ختم",
+      "expiringSoon": "جلد میعاد ختم",
+      "batch": "بیچ {{value}}",
+      "expiredOn": "میعاد ختم {{value}}",
+      "until": "تک {{value}}"
+    },
+    "suppliers": {
+      "title": "سپلائرز",
+      "empty": "ابھی تک کوئی سپلائر نہیں۔",
+      "nameRequired": "سپلائر کا نام درکار ہے",
+      "supplierAdded": "سپلائر شامل ہو گیا",
+      "address": "پتہ",
+      "addSupplier": "سپلائر شامل کریں",
+      "name": "نام",
+      "namePlaceholder": "سپلائر کا نام",
+      "contact": "رابطہ",
+      "contactPlaceholder": "فون / ای میل"
+    }
+  },
+  "shared": {
+    "status": {
+      "active": "فعال",
+      "inactive": "غیر فعال"
+    },
+    "drawer": {
+      "logout": "لاگ آؤٹ",
+      "loggedOut": "لاگ آؤٹ ہو گیا",
+      "version": "ورژن: {{version}}"
+    },
+    "common": {
+      "searchPlaceholder": "تلاش کریں..."
+    },
+    "dropdown": {
+      "select": "منتخب کریں",
+      "noResults": "کوئی نتیجہ نہیں ملا"
+    },
+    "timePicker": {
+      "select": "وقت منتخب کریں"
+    },
+    "datePicker": {
+      "select": "تاریخ منتخب کریں"
+    },
+    "listScreen": {
+      "empty": "کوئی ریکارڈ نہیں ملا۔"
+    },
+    "listEmpty": {
+      "message": "کوئی نتیجہ نہیں ملا"
+    },
+    "tagsDropdown": {
+      "label": "ٹیگ آئی ڈی منتخب کریں",
+      "placeholder": "ٹیگ منتخب کریں"
+    }
+  },
+  "services": {
+    "toast": {
+      "successTitle": "کامیابی",
+      "errorTitle": "خرابی",
+      "validationTitle": "تصدیق کی خرابی",
+      "unexpectedError": "ایک غیر متوقع خرابی پیش آ گئی",
+      "copiedSuccess": "کامیابی سے کاپی ہو گیا"
+    },
+    "validation": {
+      "nameRequired": "نام درکار ہے",
+      "emailRequired": "ای میل درکار ہے",
+      "passwordRequired": "پاس ورڈ درکار ہے",
+      "passwordsMismatch": "پاس ورڈ آپس میں مماثل نہیں ہیں"
+    },
+    "registration": {
+      "success": "آپ کا اکاؤنٹ کامیابی سے رجسٹر ہو گیا!",
+      "error": "اکاؤنٹ بنانے میں خرابی"
+    },
+    "error": {
+      "requestFailed": "درخواست ناکام ہو گئی!"
+    }
+  }
+}

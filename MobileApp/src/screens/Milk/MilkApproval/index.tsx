@@ -1,4 +1,5 @@
 import React, { useCallback, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { useFocusEffect, useNavigation } from '@react-navigation/native'
 import { StyleSheet, View } from 'react-native'
 import Toast from 'react-native-toast-message'
@@ -21,6 +22,7 @@ import { COLORS } from 'shared/theme'
 import { RF } from 'shared/theme/responsive'
 
 const MilkApproval = () => {
+  const { t } = useTranslation()
   const navigation = useNavigation<any>()
   const { can } = usePermissions()
   const canApprove = can(PERMISSIONS.MILK_APPROVE)
@@ -36,9 +38,9 @@ const MilkApproval = () => {
       const dates = res?.data?.data?.pendingMilkApprovalDates || res?.data?.data || []
       setPendingDates(Array.isArray(dates) ? dates : [])
     } catch (e) {
-      Toast.show({ type: 'error', text1: 'Error', text2: getNormalizedError(e) })
+      Toast.show({ type: 'error', text1: t('milk.common.error'), text2: getNormalizedError(e) })
     }
-  }, [])
+  }, [t])
 
   useFocusEffect(useCallback(() => { loadDates() }, [loadDates]))
 
@@ -50,7 +52,7 @@ const MilkApproval = () => {
       const rows = res?.data?.data?.milkingSessions || []
       setSessions(Array.isArray(rows) ? rows : [])
     } catch (e) {
-      Toast.show({ type: 'error', text1: 'Error', text2: getNormalizedError(e) })
+      Toast.show({ type: 'error', text1: t('milk.common.error'), text2: getNormalizedError(e) })
     } finally {
       setLoading(false)
     }
@@ -63,12 +65,12 @@ const MilkApproval = () => {
         .filter((i: any) => i.uuid && i.penId && i.tagId && i.date && i.lactation)
         .map(({ tagName, ...rest }: any) => rest)
       await approveMilk({ sessionsData: cleanData })
-      Toast.show({ type: 'success', text1: 'Approved', text2: 'Milk approved into the tank' })
+      Toast.show({ type: 'success', text1: t('milk.milkApproval.approvedTitle'), text2: t('milk.milkApproval.approvedBody') })
       setSessions([])
       setSelectedDate('')
       loadDates()
     } catch (e) {
-      Toast.show({ type: 'error', text1: 'Error', text2: getNormalizedError(e), visibilityTime: 5000 })
+      Toast.show({ type: 'error', text1: t('milk.common.error'), text2: getNormalizedError(e), visibilityTime: 5000 })
     } finally {
       setApproving(false)
     }
@@ -76,14 +78,14 @@ const MilkApproval = () => {
 
   return (
     <AppContainer>
-      <AppHeader title="Approve Milk" showBack />
+      <AppHeader title={t('milk.milkApproval.title')} showBack />
       <View style={{ flex: 1, padding: RF(16) }}>
         <AppText fontSize="caption" color="descriptionColor" style={{ marginBottom: RF(8) }}>
-          Pending approval dates
+          {t('milk.milkApproval.pendingDates')}
         </AppText>
         <View style={styles.chipRow}>
           {pendingDates.length === 0 ? (
-            <AppText color="descriptionColor">No dates pending approval.</AppText>
+            <AppText color="descriptionColor">{t('milk.milkApproval.noDatesPending')}</AppText>
           ) : (
             pendingDates.map((d, i) => (
               <View
@@ -105,16 +107,16 @@ const MilkApproval = () => {
           contentContainerStyle={{ paddingVertical: RF(12) }}
           renderItem={({ item }: any) => (
             <InfoCard
-              title={item.tagName || 'Animal'}
+              title={item.tagName || t('milk.common.animal')}
               subtitle={item.date}
               leftIcon={{ type: Icons.MaterialCommunityIcons, name: 'cow' }}
-              rows={[{ label: 'Sessions', value: (item.sessions || []).length }]}
+              rows={[{ label: t('milk.common.sessions'), value: (item.sessions || []).length }]}
             />
           )}
           ListEmptyComponent={
             selectedDate && !loading ? (
               <AppText color="descriptionColor" style={{ textAlign: 'center', marginTop: RF(20) }}>
-                No sessions to approve.
+                {t('milk.milkApproval.noSessionsToApprove')}
               </AppText>
             ) : null
           }
@@ -122,7 +124,7 @@ const MilkApproval = () => {
 
         {canApprove && sessions.length > 0 ? (
           <PrimaryButton
-            title="Approve into Tank"
+            title={t('milk.milkApproval.approveIntoTank')}
             loading={approving}
             loaderColor={COLORS.white}
             onPress={onApprove}
@@ -132,7 +134,7 @@ const MilkApproval = () => {
         {!canApprove ? (
           <View style={styles.noPerm}>
             <AppText fontSize="caption" color="error">
-              You do not have permission to approve milk.
+              {t('milk.milkApproval.noPermission')}
             </AppText>
           </View>
         ) : null}

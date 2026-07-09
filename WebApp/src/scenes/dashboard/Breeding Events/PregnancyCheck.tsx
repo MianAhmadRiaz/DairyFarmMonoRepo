@@ -24,6 +24,7 @@ import {
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { fetchPregnanacyTests } from '../../../shared/services/breeds.services';
 import useLayoutShift from '../../../shared/components/Hooks/useLayoutShift';
 import PageContainer from '../../../shared/components/Layout/PageContainer';
@@ -45,6 +46,7 @@ interface PregnancyTestRow {
 
 const PregnancyTest: React.FC = () => {
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
   // ----------------------------
   // State
@@ -166,7 +168,7 @@ const PregnancyTest: React.FC = () => {
   // Render
   // ----------------------------
   return (
-    <PageContainer title="Pregnancy Test">
+    <PageContainer title={t('breeding.pregnancyTestList.pageTitle')}>
       {/* Back Button */}
       <Button
         variant="text"
@@ -179,7 +181,7 @@ const PregnancyTest: React.FC = () => {
           mb: 2,
         }}
       >
-        Back
+        {t('breeding.common.back')}
       </Button>
 
       {/* Header (Add New button) */}
@@ -194,7 +196,7 @@ const PregnancyTest: React.FC = () => {
           }}
           onClick={handleAddNew}
         >
-          Add New
+          {t('breeding.common.addNew')}
         </Button>
       </Box>
 
@@ -210,7 +212,7 @@ const PregnancyTest: React.FC = () => {
       >
         <Box sx={{ p: { xs: 2, sm: 3, md: 3 } }}>
           <Typography variant="subtitle1" sx={{ mb: 2, fontWeight: "bold" }}>
-            Recent Entries ({rows.length})
+            {t('breeding.common.recentEntries', { count: rows.length })}
           </Typography>
 
           {/* Loader */}
@@ -232,17 +234,17 @@ const PregnancyTest: React.FC = () => {
                 <TextField
                   variant="outlined"
                   fullWidth
-                  placeholder="Search"
+                  placeholder={t('breeding.common.search')}
                   value={search}
                   onChange={handleSearchChange}
                 />
                 <FormControl sx={{ width: "150px" }}>
-                  <InputLabel>Sort</InputLabel>
-                  <Select label="Sort" value={sort} onChange={handleSortChange}>
-                    <MenuItem value="">None</MenuItem>
-                    <MenuItem value="srNo">By SR #</MenuItem>
-                    <MenuItem value="date">By Date</MenuItem>
-                    <MenuItem value="tagId">By Tag ID</MenuItem>
+                  <InputLabel>{t('breeding.common.sort')}</InputLabel>
+                  <Select label={t('breeding.common.sort')} value={sort} onChange={handleSortChange}>
+                    <MenuItem value="">{t('breeding.common.none')}</MenuItem>
+                    <MenuItem value="srNo">{t('breeding.common.bySrNo')}</MenuItem>
+                    <MenuItem value="date">{t('breeding.common.byDate')}</MenuItem>
+                    <MenuItem value="tagId">{t('breeding.common.byTagId')}</MenuItem>
                   </Select>
                 </FormControl>
               </Box>
@@ -274,13 +276,13 @@ const PregnancyTest: React.FC = () => {
                           onChange={(e) => handleSelectAll(e.target.checked)}
                         />
                       </TableCell>
-                      <TableCell sx={{ fontWeight: "bold",backgroundColor: "#F8F9FA" }}>SR #</TableCell>
-                      <TableCell sx={{ fontWeight: "bold",backgroundColor: "#F8F9FA" }}>PREGNANCY TEST DATE</TableCell>
-                      <TableCell sx={{ fontWeight: "bold",backgroundColor: "#F8F9FA" }}>TAG ID</TableCell>
-                      <TableCell sx={{ fontWeight: "bold",backgroundColor: "#F8F9FA" }}>AI/BB DATE</TableCell>
-                      <TableCell sx={{ fontWeight: "bold",backgroundColor: "#F8F9FA"}}>TYPE</TableCell>
-                      <TableCell sx={{ fontWeight: "bold" ,backgroundColor: "#F8F9FA"}}>STATUS</TableCell>
-                      <TableCell sx={{ fontWeight: "bold" ,backgroundColor: "#F8F9FA"}}>PRICE</TableCell>
+                      <TableCell sx={{ fontWeight: "bold",backgroundColor: "#F8F9FA" }}>{t('breeding.common.srNo')}</TableCell>
+                      <TableCell sx={{ fontWeight: "bold",backgroundColor: "#F8F9FA" }}>{t('breeding.pregnancyTestList.columns.pregnancyTestDate')}</TableCell>
+                      <TableCell sx={{ fontWeight: "bold",backgroundColor: "#F8F9FA" }}>{t('breeding.pregnancyTestList.columns.tagId')}</TableCell>
+                      <TableCell sx={{ fontWeight: "bold",backgroundColor: "#F8F9FA" }}>{t('breeding.pregnancyTestList.columns.aiBbDate')}</TableCell>
+                      <TableCell sx={{ fontWeight: "bold",backgroundColor: "#F8F9FA"}}>{t('breeding.pregnancyTestList.columns.type')}</TableCell>
+                      <TableCell sx={{ fontWeight: "bold" ,backgroundColor: "#F8F9FA"}}>{t('breeding.pregnancyTestList.columns.status')}</TableCell>
+                      <TableCell sx={{ fontWeight: "bold" ,backgroundColor: "#F8F9FA"}}>{t('breeding.pregnancyTestList.columns.price')}</TableCell>
                       <TableCell align="center">
                         <MoreVertIcon sx={{ opacity: 0 }} />
                       </TableCell>
@@ -308,7 +310,7 @@ const PregnancyTest: React.FC = () => {
                           <TableCell>{row.type}</TableCell>
                           <TableCell>
                             <Chip
-                              label={row.status}
+                              label={t('breeding.pregnancyTestList.status.' + row.status, row.status)}
                               sx={{
                                 fontWeight: "bold",
                                 backgroundColor:
@@ -335,7 +337,7 @@ const PregnancyTest: React.FC = () => {
                     {currentRows.length === 0 && (
                       <TableRow>
                         <TableCell colSpan={9} align="center">
-                          No data found.
+                          {t('breeding.common.noDataFound')}
                         </TableCell>
                       </TableRow>
                     )}
@@ -354,7 +356,7 @@ const PregnancyTest: React.FC = () => {
                 }}
               >
                 <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-                  <Typography variant="body2">Rows per page:</Typography>
+                  <Typography variant="body2">{t('breeding.common.rowsPerPage')}</Typography>
                   <Select size="small" value={rowsPerPage} onChange={handleRowsPerPageChange}>
                     <MenuItem value={5}>5</MenuItem>
                     <MenuItem value={10}>10</MenuItem>

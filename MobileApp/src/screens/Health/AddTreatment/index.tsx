@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { useNavigation } from '@react-navigation/native'
 import { ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native'
 import CheckBox from '@react-native-community/checkbox'
@@ -21,6 +22,7 @@ const TREATMENT_TYPES = ['treatment', 'vaccination', 'deworming', 'hoof trimming
 const today = new Date().toISOString().split('T')[0]
 
 const AddTreatment = () => {
+  const { t } = useTranslation()
   const navigation = useNavigation<any>()
   const { can } = usePermissions()
   const allowed = can(PERMISSIONS.HEALTH_MANAGE)
@@ -52,15 +54,15 @@ const AddTreatment = () => {
       .catch(() => {})
   }, [allowed])
 
-  const animalOptionLabel = (a: any) => `${a.name || 'Unnamed'} (${a.tagName || 'No Tag'})`
+  const animalOptionLabel = (a: any) => `${a.name || t('health.common.unnamed')} (${a.tagName || t('health.common.noTag')})`
   const stockOptionLabel = (s: any) => `${s.name}`
 
   if (!allowed) {
     return (
       <AppContainer>
-        <AppHeader title="Add Treatment" showBack />
+        <AppHeader title={t('health.addTreatment.title')} showBack />
         <View style={styles.noPerm}>
-          <AppText color="descriptionColor">You do not have permission to record treatments.</AppText>
+          <AppText color="descriptionColor">{t('health.addTreatment.noPermission')}</AppText>
         </View>
       </AppContainer>
     )
@@ -69,11 +71,11 @@ const AddTreatment = () => {
   const onSubmit = async () => {
     const animal = animals.find(a => animalOptionLabel(a) === animalLabel)
     if (!animal) {
-      Toast.show({ type: 'error', text1: 'Validation', text2: 'Select an animal' })
+      Toast.show({ type: 'error', text1: t('health.common.validation'), text2: t('health.addTreatment.selectAnimal') })
       return
     }
     if (!treatmentType) {
-      Toast.show({ type: 'error', text1: 'Validation', text2: 'Select a treatment type' })
+      Toast.show({ type: 'error', text1: t('health.common.validation'), text2: t('health.addTreatment.selectTreatmentType') })
       return
     }
     const stockItem = stockItems.find(s => stockOptionLabel(s) === medicineStockLabel)
@@ -98,10 +100,10 @@ const AddTreatment = () => {
         payload.quantityUsed = Number(quantityUsed)
       }
       await addTreatment(payload)
-      Toast.show({ type: 'success', text1: 'Success', text2: 'Treatment recorded' })
+      Toast.show({ type: 'success', text1: t('health.common.success'), text2: t('health.addTreatment.treatmentRecorded') })
       navigation.goBack()
     } catch (e) {
-      Toast.show({ type: 'error', text1: 'Error', text2: getNormalizedError(e) })
+      Toast.show({ type: 'error', text1: t('health.common.error'), text2: getNormalizedError(e) })
     } finally {
       setLoading(false)
     }
@@ -109,25 +111,25 @@ const AddTreatment = () => {
 
   return (
     <AppContainer>
-      <AppHeader title="Add Treatment" showBack />
+      <AppHeader title={t('health.addTreatment.title')} showBack />
       <ScrollView contentContainerStyle={{ padding: RF(16), paddingBottom: RF(40) }}>
-        <Dropdown label="Animal" options={animals.map(animalOptionLabel)} value={animalLabel} onChange={setAnimalLabel} />
-        <Dropdown label="Treatment Type" options={TREATMENT_TYPES} value={treatmentType} onChange={setTreatmentType} />
-        <AppInput label="Diagnosis" value={diagnosis} onChangeText={setDiagnosis} placeholder="e.g. mastitis" error={undefined} style={undefined} />
-        <AppInput label="Medicine Name" value={medicineName} onChangeText={setMedicineName} placeholder="Medicine used" error={undefined} style={undefined} />
-        <AppInput label="Dosage" value={dosage} onChangeText={setDosage} placeholder="e.g. 10ml" error={undefined} style={undefined} />
-        <AppInput label="Vet Name" value={vetName} onChangeText={setVetName} placeholder="Attending vet" error={undefined} style={undefined} />
-        <AppInput label="Cost" value={cost} onChangeText={setCost} keyboardType="numeric" placeholder="0" error={undefined} style={undefined} />
-        <AppInput label="Milk Withdrawal (days)" value={milkWithdrawalDays} onChangeText={setMilkWithdrawalDays} keyboardType="numeric" placeholder="0" error={undefined} style={undefined} />
-        <AppInput label="Meat Withdrawal (days)" value={meatWithdrawalDays} onChangeText={setMeatWithdrawalDays} keyboardType="numeric" placeholder="0" error={undefined} style={undefined} />
+        <Dropdown label={t('health.addTreatment.animal')} options={animals.map(animalOptionLabel)} value={animalLabel} onChange={setAnimalLabel} />
+        <Dropdown label={t('health.addTreatment.treatmentType')} options={TREATMENT_TYPES} value={treatmentType} onChange={setTreatmentType} />
+        <AppInput label={t('health.addTreatment.diagnosis')} value={diagnosis} onChangeText={setDiagnosis} placeholder={t('health.addTreatment.diagnosisPlaceholder')} error={undefined} style={undefined} />
+        <AppInput label={t('health.addTreatment.medicineName')} value={medicineName} onChangeText={setMedicineName} placeholder={t('health.addTreatment.medicineNamePlaceholder')} error={undefined} style={undefined} />
+        <AppInput label={t('health.addTreatment.dosage')} value={dosage} onChangeText={setDosage} placeholder={t('health.addTreatment.dosagePlaceholder')} error={undefined} style={undefined} />
+        <AppInput label={t('health.addTreatment.vetName')} value={vetName} onChangeText={setVetName} placeholder={t('health.addTreatment.vetNamePlaceholder')} error={undefined} style={undefined} />
+        <AppInput label={t('health.addTreatment.cost')} value={cost} onChangeText={setCost} keyboardType="numeric" placeholder="0" error={undefined} style={undefined} />
+        <AppInput label={t('health.addTreatment.milkWithdrawalDays')} value={milkWithdrawalDays} onChangeText={setMilkWithdrawalDays} keyboardType="numeric" placeholder="0" error={undefined} style={undefined} />
+        <AppInput label={t('health.addTreatment.meatWithdrawalDays')} value={meatWithdrawalDays} onChangeText={setMeatWithdrawalDays} keyboardType="numeric" placeholder="0" error={undefined} style={undefined} />
 
         <AppText fontSize="caption" color="descriptionColor" style={styles.sectionLabel}>
-          Deduct medicine from stock (optional)
+          {t('health.addTreatment.deductStockLabel')}
         </AppText>
-        <Dropdown label="Medicine from Stock" options={stockItems.map(stockOptionLabel)} value={medicineStockLabel} onChange={setMedicineStockLabel} />
-        <AppInput label="Quantity Used" value={quantityUsed} onChangeText={setQuantityUsed} keyboardType="numeric" placeholder="0" error={undefined} style={undefined} />
+        <Dropdown label={t('health.addTreatment.medicineFromStock')} options={stockItems.map(stockOptionLabel)} value={medicineStockLabel} onChange={setMedicineStockLabel} />
+        <AppInput label={t('health.addTreatment.quantityUsed')} value={quantityUsed} onChangeText={setQuantityUsed} keyboardType="numeric" placeholder="0" error={undefined} style={undefined} />
 
-        <AppInput label="Comments" value={comments} onChangeText={setComments} placeholder="Additional notes" error={undefined} style={undefined} />
+        <AppInput label={t('health.addTreatment.comments')} value={comments} onChangeText={setComments} placeholder={t('health.addTreatment.commentsPlaceholder')} error={undefined} style={undefined} />
 
         <TouchableOpacity style={styles.checkRow} activeOpacity={0.8} onPress={() => setMarkSick(!markSick)}>
           <CheckBox
@@ -135,10 +137,10 @@ const AddTreatment = () => {
             onValueChange={setMarkSick}
             tintColors={{ true: COLORS.primaryMain, false: COLORS.labelGrey }}
           />
-          <AppText style={{ marginLeft: RF(6) }}>Mark this animal as sick</AppText>
+          <AppText style={{ marginLeft: RF(6) }}>{t('health.addTreatment.markSick')}</AppText>
         </TouchableOpacity>
 
-        <PrimaryButton title="Save Treatment" loading={loading} loaderColor={COLORS.white} onPress={onSubmit} buttonStyle={{ marginTop: RF(16) }} />
+        <PrimaryButton title={t('health.addTreatment.saveTreatment')} loading={loading} loaderColor={COLORS.white} onPress={onSubmit} buttonStyle={{ marginTop: RF(16) }} />
       </ScrollView>
     </AppContainer>
   )

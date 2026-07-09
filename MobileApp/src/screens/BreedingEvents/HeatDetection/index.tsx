@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { FlatList, Text, TouchableOpacity, View } from 'react-native'
 import NavRoutes from 'routes/NavRoutes'
 import AppHeader from 'shared/components/AppHeader'
@@ -11,6 +12,7 @@ import styles from './style'
 
 interface Props extends GenericNavigation {}
 const HeatDetection = (props: Props) => {
+  const { t } = useTranslation()
   const [detections, setDetections] = useState([])
   const data = new Array(10).fill({
     sr: '01',
@@ -38,15 +40,15 @@ const HeatDetection = (props: Props) => {
   return (
     <>
       <View style={styles.container}>
-        <AppHeader title="Heat Detection" showHam />
+        <AppHeader title={t('breeding.heatDetection.headerTitle')} showHam />
 
         <View style={styles.recentEntriesContainer}>
           <AppText fontSize="h6" bold color={'darkestGrey'}>
-            Recent Entries
+            {t('breeding.common.recentEntries')}
           </AppText>
           <View style={{ flexShrink: 1 }}>
             <PrimaryButton
-              title="Add New"
+              title={t('breeding.common.addNew')}
               buttonStyle={styles.button}
               textStyle={styles.buttonText}
               onPress={navigateToAdd}
@@ -55,10 +57,10 @@ const HeatDetection = (props: Props) => {
         </View>
 
         <View style={styles.tableHeader}>
-          <Text style={styles.headerText}>SR #</Text>
-          <Text style={styles.headerText}>AI DATE</Text>
-          <Text style={styles.headerText}>TAG ID</Text>
-          <Text style={styles.headerText}>PRICE</Text>
+          <Text style={styles.headerText}>{t('breeding.common.cols.srNo')}</Text>
+          <Text style={styles.headerText}>{t('breeding.common.cols.aiDate')}</Text>
+          <Text style={styles.headerText}>{t('breeding.common.cols.tagId')}</Text>
+          <Text style={styles.headerText}>{t('breeding.common.cols.price')}</Text>
         </View>
 
         <FlatList
@@ -79,7 +81,7 @@ const HeatDetection = (props: Props) => {
             detections?.length > 0 ? (
               <TouchableOpacity style={styles.loadMore}>
                 <AppText fontSize="subtitle" bold color={'darkestGrey'}>
-                  Load More
+                  {t('breeding.common.loadMore')}
                 </AppText>
               </TouchableOpacity>
             ) : null

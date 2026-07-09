@@ -17,6 +17,7 @@ import {
 } from '@mui/material';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import {
   fetchPenList
 } from '../../../shared/services/herdinfo.services';
@@ -37,6 +38,7 @@ const AddAbortionEvent: React.FC<AddAbortionEventProps> = ({
   onCancel
 }) => {
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
   // Form states
   const [tagId, setTagId] = useState('');
@@ -73,7 +75,7 @@ const AddAbortionEvent: React.FC<AddAbortionEventProps> = ({
         const handleSave = async () => {
   if (!tagId || !penId || !abortionDate || !milkable || !cost || !comments) {
     if (toastId.current === null || !toast.isActive(toastId.current)) {
-      toastId.current = toast.warn('Please fill all the missing required fields');
+      toastId.current = toast.warn(t('breeding.common.fillMissingFields'));
     }
     return;
   }
@@ -90,14 +92,14 @@ const AddAbortionEvent: React.FC<AddAbortionEventProps> = ({
     };
 
     await addAbortionEvent(formData);
-    toast.dismiss(); 
-    toast.success('New Event Added Successfully!', {
+    toast.dismiss();
+    toast.success(t('breeding.abortionAdd.addSuccess'), {
       autoClose: 3000,
       onClose: () => window.location.reload()
     });
   } catch (error) {
      if (toastId.current === null || !toast.isActive(toastId.current)) {
-        toastId.current = toast.error("Failed to remove animal. Please try again.");
+        toastId.current = toast.error(t('breeding.abortionAdd.addError'));
       }
     // toast.error('Failed to Add Event!');
     console.error('Add Abortion Event error:', error);
@@ -124,7 +126,7 @@ const AddAbortionEvent: React.FC<AddAbortionEventProps> = ({
   };
 
   return (
-    <PageContainer title="Abortion / Add New Event">
+    <PageContainer title={t('breeding.abortionAdd.pageTitle')}>
       {/* Back Button */}
       <Button
         variant="text"
@@ -140,7 +142,7 @@ const AddAbortionEvent: React.FC<AddAbortionEventProps> = ({
           ml:1,
         }}
       >
-        Back
+        {t('breeding.common.back')}
       </Button>
 
         <CardContent sx={{pt:1.5}}>
@@ -157,7 +159,7 @@ const AddAbortionEvent: React.FC<AddAbortionEventProps> = ({
             <Grid item xs={12} sm={6} md={3.5}>
               <TextField
                 fullWidth
-                label="Tag Id"
+                label={t('breeding.common.tagId')}
                 select
                 value={tagId}
                 onChange={e => setTagId(e.target.value)}
@@ -174,7 +176,7 @@ const AddAbortionEvent: React.FC<AddAbortionEventProps> = ({
             <Grid item xs={12} md={4}>
               <TextField
                 fullWidth
-                label="Pen Id"
+                label={t('breeding.common.penId')}
                 select
                 value={penId}
                 onChange={e => setPenId(e.target.value)}
@@ -190,7 +192,7 @@ const AddAbortionEvent: React.FC<AddAbortionEventProps> = ({
 
             <Grid item xs={12} md={4}>
               <TextField
-                label="Abortion Date"
+                label={t('breeding.abortionAdd.abortionDate')}
                 type="date"
                 value={abortionDate}
                 onChange={e => setAbortionDate(e.target.value)}
@@ -201,23 +203,23 @@ const AddAbortionEvent: React.FC<AddAbortionEventProps> = ({
 
             <Grid item xs={12} md={4}>
               <FormControl fullWidth>
-                <InputLabel id="milkable-label">Milkable</InputLabel>
+                <InputLabel id="milkable-label">{t('breeding.abortionAdd.milkable')}</InputLabel>
                 <Select
                   labelId="milkable-label"
-                  label="Milkable"
+                  label={t('breeding.abortionAdd.milkable')}
                   value={milkable}
                   onChange={e => setMilkable(e.target.value)}
                 >
-                  <MenuItem value="Yes">Yes</MenuItem>
-                  <MenuItem value="No">No</MenuItem>
+                  <MenuItem value="Yes">{t('breeding.common.yes')}</MenuItem>
+                  <MenuItem value="No">{t('breeding.common.no')}</MenuItem>
                 </Select>
               </FormControl>
             </Grid>
 
             <Grid item xs={12} md={4}>
               <TextField
-                label="Cost"
-                placeholder="Enter Cost"
+                label={t('breeding.common.cost')}
+                placeholder={t('breeding.abortionAdd.enterCost')}
                 value={cost}
                 onChange={e => setCost(e.target.value)}
                 fullWidth
@@ -226,7 +228,7 @@ const AddAbortionEvent: React.FC<AddAbortionEventProps> = ({
 
             <Grid item xs={12}>
               <TextField
-                label="Enter your comments"
+                label={t('breeding.common.enterComments')}
                 multiline
                 rows={4}
                 value={comments}
@@ -260,7 +262,7 @@ const AddAbortionEvent: React.FC<AddAbortionEventProps> = ({
              {isSubmitting ? (
     <CircularProgress size={24} sx={{ color: '#0F7C8F' }} />
   ) : (
-    'Add New'
+    t('breeding.common.addNew')
   )}
             </Button>
             <Button
@@ -276,7 +278,7 @@ const AddAbortionEvent: React.FC<AddAbortionEventProps> = ({
               disabled={isSubmitting}
               onClick={handleCancel}
             >
-              Cancel
+              {t('breeding.common.cancel')}
             </Button>
           </Box>
           </Box>

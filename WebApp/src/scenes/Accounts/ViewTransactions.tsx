@@ -26,6 +26,7 @@ import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined
 import PrintOutlinedIcon from '@mui/icons-material/PrintOutlined';
 import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined';
 import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
+import { useTranslation } from 'react-i18next';
 import { tokens } from '../../shared/theme/theme';
 import {
   fetchTransactions,
@@ -69,6 +70,7 @@ const TRANSACTION_TYPES = [
 ];
 
 export default function ViewTransactions() {
+  const { t } = useTranslation();
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   const pageBg = theme.palette.mode === 'dark' ? colors.primary[500] : '#F5FAF7';
@@ -174,7 +176,7 @@ export default function ViewTransactions() {
         prev.map(t => t.id === editFormData.id ? editFormData : t)
       );
       setEditModalOpen(false);
-      setSnackbar({ open: true, message: 'Transaction updated successfully!', severity: 'success' });
+      setSnackbar({ open: true, message: t('accounts.viewTransactions.updateSuccess'), severity: 'success' });
     }
   };
 
@@ -183,7 +185,7 @@ export default function ViewTransactions() {
     const printContent = `
       <html>
         <head>
-          <title>Transaction Details</title>
+          <title>${t('accounts.viewTransactions.transactionDetails')}</title>
           <style>
             body { font-family: Arial, sans-serif; padding: 20px; }
             .header { text-align: center; margin-bottom: 30px; border-bottom: 2px solid #005f73; padding-bottom: 10px; }
@@ -195,16 +197,16 @@ export default function ViewTransactions() {
         </head>
         <body>
           <div class="header">
-            <h2>Transaction Details</h2>
-            <p>Generated on ${new Date().toLocaleDateString()}</p>
+            <h2>${t('accounts.viewTransactions.transactionDetails')}</h2>
+            <p>${t('accounts.common.generatedOn', { date: new Date().toLocaleDateString() })}</p>
           </div>
           <div class="details">
-            <div class="row"><span class="label">Transaction ID:</span><span class="value">${transaction.id}</span></div>
-            <div class="row"><span class="label">Date:</span><span class="value">${transaction.date}</span></div>
-            <div class="row"><span class="label">CPV:</span><span class="value">${transaction.cpv}</span></div>
-            <div class="row"><span class="label">Amount:</span><span class="value">${transaction.amount.toLocaleString()}</span></div>
-            <div class="row"><span class="label">User Name:</span><span class="value">${transaction.userName}</span></div>
-            <div class="row"><span class="label">Entry Date:</span><span class="value">${transaction.entryDate}</span></div>
+            <div class="row"><span class="label">${t('accounts.viewTransactions.transactionId')}:</span><span class="value">${transaction.id}</span></div>
+            <div class="row"><span class="label">${t('accounts.common.columns.date')}:</span><span class="value">${transaction.date}</span></div>
+            <div class="row"><span class="label">${t('accounts.viewTransactions.columns.cpv')}:</span><span class="value">${transaction.cpv}</span></div>
+            <div class="row"><span class="label">${t('accounts.common.amount')}:</span><span class="value">${transaction.amount.toLocaleString()}</span></div>
+            <div class="row"><span class="label">${t('accounts.viewTransactions.columns.userName')}:</span><span class="value">${transaction.userName}</span></div>
+            <div class="row"><span class="label">${t('accounts.viewTransactions.columns.entryDate')}:</span><span class="value">${transaction.entryDate}</span></div>
           </div>
         </body>
       </html>
@@ -229,11 +231,11 @@ export default function ViewTransactions() {
         await cancelTransaction(selectedTransaction.id);
         await loadTransactions();
         setDeleteDialogOpen(false);
-        setSnackbar({ open: true, message: 'Transaction cancelled successfully!', severity: 'success' });
+        setSnackbar({ open: true, message: t('accounts.viewTransactions.cancelSuccess'), severity: 'success' });
       } catch (e) {
         console.error('Failed to cancel transaction', e);
         setDeleteDialogOpen(false);
-        setSnackbar({ open: true, message: 'Failed to cancel transaction.', severity: 'error' });
+        setSnackbar({ open: true, message: t('accounts.viewTransactions.cancelError'), severity: 'error' });
       }
     }
   };
@@ -249,19 +251,19 @@ export default function ViewTransactions() {
     });
     setSnackbar({
       open: true,
-      message: `Found ${count} transactions for the selected criteria`,
+      message: t('accounts.viewTransactions.foundTransactions', { count }),
       severity: 'success'
     });
   };
 
   return (
-    <PageContainer title="View Transactions">
+    <PageContainer title={t('accounts.viewTransactions.title')}>
         {/* Filter Section matching screenshot */}
         <Paper elevation={0} sx={{ p: 2.5, mb: 2, borderRadius: 2, border: `1px solid ${theme.palette.divider}`, bgcolor: 'background.paper' }}>
           <Stack direction={{ xs: 'column', md: 'row' }} spacing={3} alignItems="center">
             <Stack direction="row" spacing={2} alignItems="center">
               <Typography variant="body2" fontWeight={600} sx={{ color: '#005f73', minWidth: '80px' }}>
-                Select Type:
+                {t('accounts.viewTransactions.selectTypeLabel')}
               </Typography>
               <TextField
                 select
@@ -276,14 +278,14 @@ export default function ViewTransactions() {
                 }}
               >
                 {TRANSACTION_TYPES.map(type => (
-                  <MenuItem key={type} value={type}>{type}</MenuItem>
+                  <MenuItem key={type} value={type}>{t(`accounts.viewTransactions.transactionTypes.${type}`, type)}</MenuItem>
                 ))}
               </TextField>
             </Stack>
 
             <Stack direction="row" spacing={2} alignItems="center">
               <Typography variant="body2" fontWeight={600} sx={{ color: '#005f73', minWidth: '90px' }}>
-                Starting Date:
+                {t('accounts.common.startingDate')}
               </Typography>
               <TextField
                 size="small"
@@ -307,7 +309,7 @@ export default function ViewTransactions() {
 
             <Stack direction="row" spacing={2} alignItems="center">
               <Typography variant="body2" fontWeight={600} sx={{ color: '#005f73', minWidth: '85px' }}>
-                Ending Date:
+                {t('accounts.common.endingDate')}
               </Typography>
               <TextField
                 size="small"
@@ -344,7 +346,7 @@ export default function ViewTransactions() {
                 }
               }}
             >
-              GET Result
+              {t('accounts.common.getResult')}
             </Button>
           </Stack>
         </Paper>
@@ -355,7 +357,7 @@ export default function ViewTransactions() {
           {/* Controls Section */}
           <Box sx={{ p: 2.5, display: 'flex', justifyContent: 'space-between', alignItems: 'center', bgcolor: theme.palette.mode === 'dark' ? colors.primary[400] : '#f8f9fa', borderBottom: `1px solid ${theme.palette.divider}` }}>
             <Stack direction="row" spacing={1} alignItems="center">
-              <Typography variant="body2">Show</Typography>
+              <Typography variant="body2">{t('accounts.common.show')}</Typography>
               <TextField
                 select
                 size="small"
@@ -370,11 +372,11 @@ export default function ViewTransactions() {
                   <MenuItem key={option} value={option}>{option}</MenuItem>
                 ))}
               </TextField>
-              <Typography variant="body2">entries</Typography>
+              <Typography variant="body2">{t('accounts.common.entries')}</Typography>
             </Stack>
 
             <Stack direction="row" spacing={2} alignItems="center">
-              <Typography variant="body2">Search:</Typography>
+              <Typography variant="body2">{t('accounts.common.searchLabel')}</Typography>
               <TextField
                 size="small"
                 value={search}
@@ -390,12 +392,12 @@ export default function ViewTransactions() {
               <thead>
                 <tr>
                   <th style={th}>#</th>
-                  <th style={{ ...th, minWidth: 120 }}>Date</th>
-                  <th style={{ ...th, minWidth: 150 }}>CPV</th>
-                  <th style={{ ...th, minWidth: 100 }}>Amount</th>
-                  <th style={{ ...th, minWidth: 120 }}>User Name</th>
-                  <th style={{ ...th, minWidth: 120 }}>Entry Date</th>
-                  <th style={{ ...th, minWidth: 180 }}>Actions</th>
+                  <th style={{ ...th, minWidth: 120 }}>{t('accounts.common.columns.date')}</th>
+                  <th style={{ ...th, minWidth: 150 }}>{t('accounts.viewTransactions.columns.cpv')}</th>
+                  <th style={{ ...th, minWidth: 100 }}>{t('accounts.common.amount')}</th>
+                  <th style={{ ...th, minWidth: 120 }}>{t('accounts.viewTransactions.columns.userName')}</th>
+                  <th style={{ ...th, minWidth: 120 }}>{t('accounts.viewTransactions.columns.entryDate')}</th>
+                  <th style={{ ...th, minWidth: 180 }}>{t('accounts.common.actions')}</th>
                 </tr>
               </thead>
 
@@ -403,7 +405,7 @@ export default function ViewTransactions() {
                 {paginatedData.length === 0 ? (
                   <tr>
                     <td style={{ ...td, textAlign: 'center', padding: '60px 12px', color: '#666' }} colSpan={7}>
-                      No data available in table
+                      {t('accounts.common.noDataInTable')}
                     </td>
                   </tr>
                 ) : (
@@ -417,22 +419,22 @@ export default function ViewTransactions() {
                       <td style={td}>{transaction.entryDate}</td>
                       <td style={td}>
                         <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                          <Tooltip title="View">
+                          <Tooltip title={t('shared.common.view')}>
                             <IconButton size="small" sx={actionButtonStyle('#4CAF50')} onClick={() => handleView(transaction)}>
                               <VisibilityOutlinedIcon fontSize="small" />
                             </IconButton>
                           </Tooltip>
-                          <Tooltip title="Edit">
+                          <Tooltip title={t('common.edit')}>
                             <IconButton size="small" sx={actionButtonStyle('#2196F3')} onClick={() => handleEdit(transaction)}>
                               <EditOutlinedIcon fontSize="small" />
                             </IconButton>
                           </Tooltip>
-                          <Tooltip title="Print">
+                          <Tooltip title={t('shared.common.print')}>
                             <IconButton size="small" sx={actionButtonStyle('#FF9800')} onClick={() => handlePrint(transaction)}>
                               <PrintOutlinedIcon fontSize="small" />
                             </IconButton>
                           </Tooltip>
-                          <Tooltip title="Delete">
+                          <Tooltip title={t('common.delete')}>
                             <IconButton size="small" sx={actionButtonStyle('#F44336')} onClick={() => handleDelete(transaction)}>
                               <DeleteOutlineOutlinedIcon fontSize="small" />
                             </IconButton>
@@ -449,7 +451,7 @@ export default function ViewTransactions() {
           {/* Footer with pagination */}
           <Box sx={{ p: 2.5, display: 'flex', justifyContent: 'space-between', alignItems: 'center', bgcolor: theme.palette.mode === 'dark' ? colors.primary[400] : '#f8f9fa', borderTop: `1px solid ${theme.palette.divider}` }}>
             <Typography variant="body2" color="text.secondary">
-              Showing {showingStart} to {showingEnd} of {filtered.length} entries
+              {t('accounts.common.showingEntriesRange', { start: showingStart, end: showingEnd, total: filtered.length })}
             </Typography>
             
             <Stack direction="row" spacing={1} alignItems="center">
@@ -463,7 +465,7 @@ export default function ViewTransactions() {
                   color: '#6a757d',
                 }}
               >
-                Previous
+                {t('accounts.common.previous')}
               </Button>
               
               <Button
@@ -476,7 +478,7 @@ export default function ViewTransactions() {
                   color: '#6a757d',
                 }}
               >
-                Next
+                {t('common.next')}
               </Button>
             </Stack>
           </Box>
@@ -485,35 +487,35 @@ export default function ViewTransactions() {
         {/* View Transaction Detail Modal */}
         <Dialog open={viewModalOpen} onClose={() => setViewModalOpen(false)} maxWidth="md" fullWidth>
           <DialogTitle sx={{ bgcolor: '#005f73', color: '#fff', fontWeight: 600 }}>
-            Transaction Details
+            {t('accounts.viewTransactions.transactionDetails')}
           </DialogTitle>
           <DialogContent sx={{ p: 3 }}>
             {selectedTransaction && (
               <Grid container spacing={2} sx={{ mt: 1 }}>
                 <Grid item xs={12} md={6}>
-                  <Typography variant="body2" color="textSecondary">Transaction ID</Typography>
+                  <Typography variant="body2" color="textSecondary">{t('accounts.viewTransactions.transactionId')}</Typography>
                   <Typography variant="h6" sx={{ mb: 2 }}>{selectedTransaction.id}</Typography>
                 </Grid>
                 <Grid item xs={12} md={6}>
-                  <Typography variant="body2" color="textSecondary">Date</Typography>
+                  <Typography variant="body2" color="textSecondary">{t('accounts.common.columns.date')}</Typography>
                   <Typography variant="h6" sx={{ mb: 2 }}>{selectedTransaction.date}</Typography>
                 </Grid>
                 <Grid item xs={12}>
-                  <Typography variant="body2" color="textSecondary">CPV</Typography>
+                  <Typography variant="body2" color="textSecondary">{t('accounts.viewTransactions.columns.cpv')}</Typography>
                   <Typography variant="h6" sx={{ mb: 2 }}>{selectedTransaction.cpv}</Typography>
                 </Grid>
                 <Grid item xs={12} md={6}>
-                  <Typography variant="body2" color="textSecondary">Amount</Typography>
+                  <Typography variant="body2" color="textSecondary">{t('accounts.common.amount')}</Typography>
                   <Typography variant="h6" sx={{ mb: 2, color: '#4CAF50', fontWeight: 700 }}>
                     ${selectedTransaction.amount.toLocaleString()}
                   </Typography>
                 </Grid>
                 <Grid item xs={12} md={6}>
-                  <Typography variant="body2" color="textSecondary">User Name</Typography>
+                  <Typography variant="body2" color="textSecondary">{t('accounts.viewTransactions.columns.userName')}</Typography>
                   <Typography variant="h6" sx={{ mb: 2 }}>{selectedTransaction.userName}</Typography>
                 </Grid>
                 <Grid item xs={12}>
-                  <Typography variant="body2" color="textSecondary">Entry Date</Typography>
+                  <Typography variant="body2" color="textSecondary">{t('accounts.viewTransactions.columns.entryDate')}</Typography>
                   <Typography variant="h6" sx={{ mb: 2 }}>{selectedTransaction.entryDate}</Typography>
                 </Grid>
               </Grid>
@@ -521,7 +523,7 @@ export default function ViewTransactions() {
           </DialogContent>
           <DialogActions sx={{ p: 2 }}>
             <Button onClick={() => setViewModalOpen(false)} sx={{ color: '#005f73' }}>
-              Close
+              {t('common.close')}
             </Button>
           </DialogActions>
         </Dialog>
@@ -529,7 +531,7 @@ export default function ViewTransactions() {
         {/* Edit Transaction Modal */}
         <Dialog open={editModalOpen} onClose={() => setEditModalOpen(false)} maxWidth="md" fullWidth>
           <DialogTitle sx={{ bgcolor: '#2196F3', color: '#fff', fontWeight: 600 }}>
-            Edit Transaction
+            {t('accounts.viewTransactions.editTransaction')}
           </DialogTitle>
           <DialogContent sx={{ p: 3 }}>
             {editFormData && (
@@ -537,7 +539,7 @@ export default function ViewTransactions() {
                 <Grid item xs={12} md={6}>
                   <TextField
                     fullWidth
-                    label="Date"
+                    label={t('accounts.common.columns.date')}
                     type="date"
                     value={editFormData.date}
                     onChange={(e) => setEditFormData({ ...editFormData, date: e.target.value })}
@@ -548,7 +550,7 @@ export default function ViewTransactions() {
                 <Grid item xs={12} md={6}>
                   <TextField
                     fullWidth
-                    label="Amount"
+                    label={t('accounts.common.amount')}
                     type="number"
                     value={editFormData.amount}
                     onChange={(e) => setEditFormData({ ...editFormData, amount: Number(e.target.value) })}
@@ -558,7 +560,7 @@ export default function ViewTransactions() {
                 <Grid item xs={12}>
                   <TextField
                     fullWidth
-                    label="CPV"
+                    label={t('accounts.viewTransactions.columns.cpv')}
                     value={editFormData.cpv}
                     onChange={(e) => setEditFormData({ ...editFormData, cpv: e.target.value })}
                     size="small"
@@ -567,7 +569,7 @@ export default function ViewTransactions() {
                 <Grid item xs={12} md={6}>
                   <TextField
                     fullWidth
-                    label="User Name"
+                    label={t('accounts.viewTransactions.columns.userName')}
                     value={editFormData.userName}
                     onChange={(e) => setEditFormData({ ...editFormData, userName: e.target.value })}
                     size="small"
@@ -576,7 +578,7 @@ export default function ViewTransactions() {
                 <Grid item xs={12} md={6}>
                   <TextField
                     fullWidth
-                    label="Entry Date"
+                    label={t('accounts.viewTransactions.columns.entryDate')}
                     type="date"
                     value={editFormData.entryDate}
                     onChange={(e) => setEditFormData({ ...editFormData, entryDate: e.target.value })}
@@ -589,14 +591,14 @@ export default function ViewTransactions() {
           </DialogContent>
           <DialogActions sx={{ p: 2 }}>
             <Button onClick={() => setEditModalOpen(false)} sx={{ color: '#666' }}>
-              Cancel
+              {t('common.cancel')}
             </Button>
             <Button 
               onClick={handleSaveEdit} 
               variant="contained" 
               sx={{ bgcolor: '#2196F3', '&:hover': { bgcolor: '#1976D2' } }}
             >
-              Save Changes
+              {t('accounts.common.saveChanges')}
             </Button>
           </DialogActions>
         </Dialog>
@@ -604,30 +606,30 @@ export default function ViewTransactions() {
         {/* Delete Confirmation Dialog */}
         <Dialog open={deleteDialogOpen} onClose={() => setDeleteDialogOpen(false)}>
           <DialogTitle sx={{ color: '#F44336', fontWeight: 600 }}>
-            Delete Transaction
+            {t('accounts.viewTransactions.deleteTransaction')}
           </DialogTitle>
           <DialogContent>
             <Typography>
-              Are you sure you want to delete this transaction? This action cannot be undone.
+              {t('accounts.viewTransactions.deleteConfirm')}
             </Typography>
             {selectedTransaction && (
               <Box sx={{ mt: 2, p: 2, bgcolor: '#FFF3E0', borderRadius: 1 }}>
-                <Typography variant="body2"><strong>ID:</strong> {selectedTransaction.id}</Typography>
-                <Typography variant="body2"><strong>Amount:</strong> {selectedTransaction.amount.toLocaleString()}</Typography>
-                <Typography variant="body2"><strong>User:</strong> {selectedTransaction.userName}</Typography>
+                <Typography variant="body2"><strong>{t('accounts.viewTransactions.idLabel')}</strong> {selectedTransaction.id}</Typography>
+                <Typography variant="body2"><strong>{t('accounts.viewTransactions.amountLabel')}</strong> {selectedTransaction.amount.toLocaleString()}</Typography>
+                <Typography variant="body2"><strong>{t('accounts.viewTransactions.userLabel')}</strong> {selectedTransaction.userName}</Typography>
               </Box>
             )}
           </DialogContent>
           <DialogActions sx={{ p: 2 }}>
             <Button onClick={() => setDeleteDialogOpen(false)} sx={{ color: '#666' }}>
-              Cancel
+              {t('common.cancel')}
             </Button>
-            <Button 
-              onClick={confirmDelete} 
-              variant="contained" 
+            <Button
+              onClick={confirmDelete}
+              variant="contained"
               sx={{ bgcolor: '#F44336', '&:hover': { bgcolor: '#D32F2F' } }}
             >
-              Delete
+              {t('common.delete')}
             </Button>
           </DialogActions>
         </Dialog>

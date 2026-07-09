@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import {
   Box,
   Typography,
@@ -14,6 +15,7 @@ import { usePermissions } from '../../shared/rbac/usePermissions';
 import { PERMISSIONS } from '../../shared/rbac/permissions';
 
 export default function ViewEmployee() {
+  const { t } = useTranslation();
   const [salaryData, setSalaryData] = useState<SalaryInvoice[]>([]);
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
@@ -106,7 +108,7 @@ const handlePaySalary = async (invoiceId: string) => {
   );
 
   return (
-    <PageContainer title="Employee Pending Salary">
+    <PageContainer title={t('employee.unpaidSalary.title')}>
       <Box sx={{
         pb: { xs: 2, sm: 3, md: 3 },
         backgroundColor: theme.palette.background.paper,
@@ -145,28 +147,28 @@ const handlePaySalary = async (invoiceId: string) => {
           >
        <thead>
   <tr>
-    <th>Sr#</th>
-    <th>Name</th>
-    <th>Designation</th>
-    <th>Department</th>
-    <th>Pending Amount</th>
-    <th>Salary Month</th>
-    
-    <th>Pay</th>
+    <th>{t('employee.common.srNo')}</th>
+    <th>{t('employee.common.name')}</th>
+    <th>{t('employee.common.designation')}</th>
+    <th>{t('employee.common.department')}</th>
+    <th>{t('employee.unpaidSalary.pendingAmount')}</th>
+    <th>{t('employee.common.salaryMonth')}</th>
+
+    <th>{t('employee.unpaidSalary.pay')}</th>
   </tr>
 </thead>
 <tbody>
   {paginatedSalary.map((sal, index) => (
     <tr key={sal.invoiceId || sal.uuid || index}>
       <td>{(page - 1) * ITEMS_PER_PAGE + index + 1}</td>
-      <td>{sal.employee?.name || 'N/A'}</td>
-      <td>{sal.employee?.designation || 'N/A'}</td>
-      <td>{sal.employee?.department || 'N/A'}</td>
+      <td>{sal.employee?.name || t('employee.common.na')}</td>
+      <td>{sal.employee?.designation || t('employee.common.na')}</td>
+      <td>{sal.employee?.department || t('employee.common.na')}</td>
       <td>{sal.pendingAmount}</td>
       <td>{sal.salaryMonth}</td>
     
       <td>
-        <Tooltip title={canPay ? '' : 'No permission'}>
+        <Tooltip title={canPay ? '' : t('employee.common.noPermission')}>
           <span>
         <Button
           variant="contained"
@@ -184,7 +186,7 @@ const handlePaySalary = async (invoiceId: string) => {
           }}
           onClick={() => handlePaySalary(sal.invoiceId)}
         >
-          Pay Salary
+          {t('employee.unpaidSalary.paySalary')}
         </Button>
           </span>
         </Tooltip>
@@ -216,7 +218,7 @@ const handlePaySalary = async (invoiceId: string) => {
               letterSpacing: '4px',
             }}
           >
-            TOTAL: {salaryData.reduce((sum, item) => sum + item.pendingAmount, 0)}
+            {t('employee.unpaidSalary.total', { amount: salaryData.reduce((sum, item) => sum + item.pendingAmount, 0) })}
           </Button>
         </Box>
 

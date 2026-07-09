@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import {
   Box,
   Button,
@@ -40,6 +41,7 @@ const TableControls: React.FC<TableControlsProps> = ({
   onPDF,
   onPrint
 }) => {
+  const { t } = useTranslation();
   const [anchorEl, setAnchorEl] = useState(null);
 
   const handleMenuClick = (event: React.MouseEvent<HTMLElement>) => {
@@ -71,7 +73,7 @@ const TableControls: React.FC<TableControlsProps> = ({
           flex: { xs: 1, sm: 'none' }
         }}
       >
-        Column visibility
+        {t('shared.common.columnVisibility')}
       </Button>
       <Menu
         anchorEl={anchorEl}

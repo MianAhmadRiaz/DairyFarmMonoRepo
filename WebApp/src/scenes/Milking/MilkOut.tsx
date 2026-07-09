@@ -29,6 +29,7 @@ import { tokens } from '../../shared/theme/theme';
 import { usePermissions } from '../../shared/rbac/usePermissions';
 import { PERMISSIONS } from '../../shared/rbac/permissions';
 import { ToastContainer, toast,Id } from 'react-toastify';
+import { useTranslation } from 'react-i18next';
 import 'react-toastify/dist/ReactToastify.css';
 
 import {Avatar, Paper } from '@mui/material';
@@ -101,6 +102,7 @@ interface MilkTransaction {
 const DayWiseMilking: React.FC = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
+  const { t } = useTranslation();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
   const { can } = usePermissions();
   const canDispatch = can(PERMISSIONS.MILK_DISPATCH);
@@ -126,9 +128,9 @@ const DayWiseMilking: React.FC = () => {
   const [snf, setSnf] = useState<string>("");
 
   const [milkData, setMilkData] = useState([
-    { value: 0, label: 'Total Milk (Liters)', icon: '🥛' },
-    { value: 0, label: 'Total Milk Out (Liters)', icon: '⛔' },
-    { value: 0, label: 'Remaining Milk (Liters)', icon: '⌛' },
+    { value: 0, key: 'totalMilk', icon: '🥛' },
+    { value: 0, key: 'totalMilkOut', icon: '⛔' },
+    { value: 0, key: 'remainingMilk', icon: '⌛' },
   ]);
 
   const [loading, setLoading] = useState(false);
@@ -182,7 +184,7 @@ const DayWiseMilking: React.FC = () => {
     (selectedRole !== "Others" || OthersConsumption);
 
   if (!isFormValid) {
-    const errorMessage = "Please fill all the missing required fields";
+    const errorMessage = t('milking.common.fillRequiredFields');
     if (toastId.current === null || !toast.isActive(toastId.current)) {
       toastId.current = toast.warning(errorMessage);
     }
@@ -191,7 +193,7 @@ const DayWiseMilking: React.FC = () => {
 
   if (isSale && !(Number(pricePerLitre) > 0)) {
     if (toastId.current === null || !toast.isActive(toastId.current)) {
-      toastId.current = toast.warning("Please enter the price per litre for a milk sale");
+      toastId.current = toast.warning(t('milking.milkOut.enterPricePerLitre'));
     }
     return;
   }
@@ -200,11 +202,11 @@ const DayWiseMilking: React.FC = () => {
     setLoading(true);
     toast.dismiss(); // dismiss previous error if any
 
-    const remainingMilkEntry = milkData.find(item => item.label === 'Remaining Milk (Liters)');
+    const remainingMilkEntry = milkData.find(item => item.key === 'remainingMilk');
     const remainingMilk = remainingMilkEntry?.value ?? 0;
 
     if (quantity !== undefined && quantity > remainingMilk) {
-      toast.warning("Milk should be less than or equal to remaining milk!");
+      toast.warning(t('milking.milkOut.milkExceedsRemaining'));
       return;
     }
 
@@ -222,13 +224,13 @@ const DayWiseMilking: React.FC = () => {
     if (isSale) {
       uuid = companies.find(c => c.name === SelectedCompany)?.uuid;
       if (!uuid) {
-        toast.error("Selected company not found.");
+        toast.error(t('milking.milkOut.companyNotFound'));
         return;
       }
     } else if (selectedRole === "Others") {
       uuid = InternalConsumptions.find(c => c.name === OthersConsumption)?.uuid;
       if (!uuid) {
-        toast.error("Selected consumption category not found.");
+        toast.error(t('milking.milkOut.categoryNotFound'));
         return;
       }
     }
@@ -246,7 +248,7 @@ const DayWiseMilking: React.FC = () => {
 
     const response = await MilkConsumption(ConsumptionPayload);
     if (response?.status >= 200 && response?.status < 300) {
-      toast.success("Consumption Added Successfully!");
+      toast.success(t('milking.milkOut.consumptionAdded'));
       fetchMilkData();
       setSelectedCompany("");
       setOthersConsumption("");
@@ -256,10 +258,10 @@ const DayWiseMilking: React.FC = () => {
       setSnf("");
       setselectedRole("");
     } else {
-      toast.error("Something went wrong while adding consumption.");
+      toast.error(t('milking.milkOut.addConsumptionFailed'));
     }
   } catch (error: any) {
-    toast.error(error?.response?.data?.message || "Can't add consumption!");
+    toast.error(error?.response?.data?.message || t('milking.milkOut.cantAddConsumption'));
     console.log(error?.response?.data?.message);
   } finally {
     setLoading(false);
@@ -313,9 +315,9 @@ const DayWiseMilking: React.FC = () => {
       const data: MilkByDate = milkResponse?.data?.data;
   
       setMilkData([
-        { value: data.total_milk ?? 0, label: 'Total Milk (Liters)', icon: '🥛' },
-        { value: data.totalMilkOut ?? 0, label: 'Total Milk Out (Liters)', icon: '⛔' },
-        { value: data.totalRemainingMilk ?? 0, label: 'Remaining Milk (Liters)', icon: '⌛' },
+        { value: data.total_milk ?? 0, key: 'totalMilk', icon: '🥛' },
+        { value: data.totalMilkOut ?? 0, key: 'totalMilkOut', icon: '⛔' },
+        { value: data.totalRemainingMilk ?? 0, key: 'remainingMilk', icon: '⌛' },
       ]);
   
       //Get Transactions Data
@@ -324,7 +326,7 @@ const DayWiseMilking: React.FC = () => {
       setfilteredData(transactions);
   
     } catch (error: any) {
-      toast.error("Can't Fetched Data");
+      toast.error(t('milking.milkOut.cantFetchData'));
     } finally {
       setLoading(false);
     }
@@ -337,7 +339,7 @@ const DayWiseMilking: React.FC = () => {
   }, [selectedDate]);
   
 return (
-  <PageContainer title="Milk Out" maxWidth="900px">
+  <PageContainer title={t('milking.milkOut.title')} maxWidth="900px">
     <Card
      
         sx={{
@@ -347,7 +349,7 @@ return (
   elevation={0}
     >
       <CardHeader
-        title="Milk Out"
+        title={t('milking.milkOut.title')}
         titleTypographyProps={{ variant: 'h5', fontWeight: 600 }}
         sx={{
           pb:{ xs:1,md:2},
@@ -366,7 +368,7 @@ return (
      }}>
 
       <TextField
-        label="Select Date"
+        label={t('milking.common.selectDate')}
         type="date"
         value={selectedDate}
         onChange={(e) => setselectedDate(e.target.value as string)}
@@ -410,7 +412,7 @@ return (
                       {milk.value}
                     </Typography>
                     <Typography variant="body2" color="text.secondary">
-                      {milk.label}
+                      {t('milking.milkOut.stats.' + milk.key)}
                     </Typography>
                   </Box>
                 </Paper>
@@ -423,19 +425,19 @@ return (
         <Grid container spacing={2}>
           <Grid item xs={12} md={4}>
             <FormControl fullWidth>
-              <InputLabel id="milk-product-label">Select</InputLabel>
+              <InputLabel id="milk-product-label">{t('milking.common.select')}</InputLabel>
               <Select
                 labelId="report-to"
-                label="Report to"
+                label={t('milking.common.reportTo')}
                 value={selectedRole}
                 onChange={(e) => setselectedRole(e.target.value as string)}
                 required
               >
-                <MenuItem value="Company">Company (Sale)</MenuItem>
-                <MenuItem value="Suckler (Calves)">Suckler (Calves)</MenuItem>
-                <MenuItem value="Employee">Employee</MenuItem>
-                <MenuItem value="Dumped">Dumped / Withheld</MenuItem>
-                <MenuItem value="Others">Others</MenuItem>
+                <MenuItem value="Company">{t('milking.milkOut.roles.companySale')}</MenuItem>
+                <MenuItem value="Suckler (Calves)">{t('milking.milkOut.roles.sucklerCalves')}</MenuItem>
+                <MenuItem value="Employee">{t('milking.milkOut.roles.employee')}</MenuItem>
+                <MenuItem value="Dumped">{t('milking.milkOut.roles.dumpedWithheld')}</MenuItem>
+                <MenuItem value="Others">{t('milking.milkOut.roles.others')}</MenuItem>
               </Select>
             </FormControl>
           </Grid>
@@ -444,10 +446,10 @@ return (
             <>
               <Grid item xs={12} md={4}>
                 <FormControl fullWidth>
-                  <InputLabel id="company-label">Company</InputLabel>
+                  <InputLabel id="company-label">{t('milking.milkOut.company')}</InputLabel>
                   <Select
                     labelId="company-label"
-                    label="Company"
+                    label={t('milking.milkOut.company')}
                     value={SelectedCompany}
                     onChange={(e) => setSelectedCompany(e.target.value as string)}
                     required
@@ -462,7 +464,7 @@ return (
                       onClick={AddNewCompany}
                       sx={{ fontWeight: "bold", color: "primary.main" }}
                     >
-                      ➕ Add Company
+                      ➕ {t('milking.milkOut.addCompany')}
                     </MenuItem>
                   </Select>
                 </FormControl>
@@ -471,7 +473,7 @@ return (
               <Grid item xs={12} md={4}>
                 <TextField
                   type="number"
-                  label="Quantity"
+                  label={t('milking.milkOut.quantity')}
                   inputProps={{ min: 0 }}
                   fullWidth
                   value={quantity}
@@ -482,7 +484,7 @@ return (
               <Grid item xs={12} md={4}>
                 <TextField
                   type="number"
-                  label="Price / Litre"
+                  label={t('milking.milkOut.pricePerLitre')}
                   inputProps={{ min: 0, step: "0.01" }}
                   fullWidth
                   required
@@ -494,7 +496,7 @@ return (
               <Grid item xs={12} md={4}>
                 <TextField
                   type="number"
-                  label="Fat %"
+                  label={t('milking.milkOut.fatPercent')}
                   inputProps={{ min: 0, step: "0.1" }}
                   fullWidth
                   value={fat}
@@ -505,7 +507,7 @@ return (
               <Grid item xs={12} md={4}>
                 <TextField
                   type="number"
-                  label="SNF %"
+                  label={t('milking.milkOut.snfPercent')}
                   inputProps={{ min: 0, step: "0.1" }}
                   fullWidth
                   value={snf}
@@ -519,7 +521,7 @@ return (
             <Grid item xs={12} md={4}>
               <TextField
                 type="number"
-                label="Quantity"
+                label={t('milking.milkOut.quantity')}
                 inputProps={{ min: 0 }}
                 fullWidth
                 value={quantity}
@@ -532,10 +534,10 @@ return (
             <>
               <Grid item xs={12} md={4}>
                 <FormControl fullWidth>
-                  <InputLabel id="other-label">Internal</InputLabel>
+                  <InputLabel id="other-label">{t('milking.milkOut.internal')}</InputLabel>
                   <Select
                     labelId="other-label"
-                    label="Others"
+                    label={t('milking.milkOut.roles.others')}
                     value={OthersConsumption}
                     onChange={(e) => setOthersConsumption(e.target.value as string)}
                     required
@@ -550,7 +552,7 @@ return (
                       onClick={() => setOtherConsumptionModal(true)}
                       sx={{ fontWeight: "bold", color: "primary.main" }}
                     >
-                      ➕ Add Internal Consumptions
+                      ➕ {t('milking.milkOut.addInternalConsumptions')}
                     </MenuItem>
                   </Select>
                 </FormControl>
@@ -559,7 +561,7 @@ return (
               <Grid item xs={12} md={4}>
                 <TextField
                   type="number"
-                  label="Quantity"
+                  label={t('milking.milkOut.quantity')}
                   inputProps={{ min: 0 }}
                   fullWidth
                   value={quantity}
@@ -573,7 +575,7 @@ return (
       </CardContent>
 
       <CardActions sx={{ p: 3 }}>
-        <Tooltip title={canDispatch ? '' : 'No permission'}>
+        <Tooltip title={canDispatch ? '' : t('milking.common.noPermission')}>
           <span>
         <Button
           variant="contained"
@@ -591,7 +593,7 @@ return (
           {loading ? (
     <CircularProgress size={24} sx={{ color: "#0F7C8F" }} />
   ) : (
-    "Save"
+    t('common.save')
   )}
         </Button>
           </span>
@@ -606,7 +608,7 @@ return (
             width: 120
           }}
         >
-          Cancel
+          {t('common.cancel')}
         </Button>
       </CardActions>
       
@@ -624,7 +626,7 @@ return (
             width: 180,
           }}
         >
-          See Previous Transactions
+          {t('milking.milkOut.seePreviousTransactions')}
         </Button>
       </CardActions>
       )}
@@ -641,19 +643,19 @@ return (
           }}
         >
           <Typography variant="subtitle1" sx={{ mb: 2, fontWeight: 'bold' }}>
-            Previous Transactions
+            {t('milking.milkOut.previousTransactions')}
           </Typography>
 
           <TableContainer component={Paper} sx={{ borderRadius: '12px', overflowX: 'auto' }}>
             <Table sx={{ minWidth: 700 }}>
               <TableHead>
                 <TableRow>
-                  <TableCell>SR#</TableCell>
-                  <TableCell>Date</TableCell>
-                  <TableCell>Volume</TableCell>
-                  <TableCell>Created By</TableCell>
-                  <TableCell>Consumption Type</TableCell>
-                  <TableCell>Consumption Name</TableCell>
+                  <TableCell>{t('milking.common.columns.srNo')}</TableCell>
+                  <TableCell>{t('milking.common.date')}</TableCell>
+                  <TableCell>{t('milking.milkOut.columns.volume')}</TableCell>
+                  <TableCell>{t('milking.milkOut.columns.createdBy')}</TableCell>
+                  <TableCell>{t('milking.milkOut.columns.consumptionType')}</TableCell>
+                  <TableCell>{t('milking.milkOut.consumptionName')}</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -664,7 +666,7 @@ return (
                       <TableCell>{row.date}</TableCell>
                       <TableCell>{row.volume}</TableCell>
                       <TableCell>{row.approved.firstname + " " + row.approved.lastname}</TableCell>
-                      <TableCell>{row.outType}</TableCell>
+                      <TableCell>{t('milking.common.outTypes.' + row.outType, row.outType)}</TableCell>
                       <TableCell>
                         {row.companies?.name ? row.companies.name : row.category?.name}
                       </TableCell>
@@ -673,7 +675,7 @@ return (
                 ) : (
                   <TableRow>
                     <TableCell colSpan={5} align="center" sx={{ py: 2, color: '#7d7d7d' }}>
-                      No data available for selected date.
+                      {t('milking.milkOut.noDataForSelectedDate')}
                     </TableCell>
                   </TableRow>
                 )}
@@ -691,7 +693,7 @@ return (
             }}
           >
             <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-              <Typography variant="body2">Rows per page:</Typography>
+              <Typography variant="body2">{t('milking.milkOut.rowsPerPage')}</Typography>
               <Select size="small" value={rowsPerPage} onChange={handleRowsPerPageChange}>
                 <MenuItem value={5}>5</MenuItem>
                 <MenuItem value={10}>10</MenuItem>
@@ -723,7 +725,7 @@ return (
                 width: 180,
               }}
             >
-              Hide Transactions
+              {t('milking.milkOut.hideTransactions')}
             </Button>
         </CardActions>
       )}
@@ -768,6 +770,7 @@ const AddCompanyModal: React.FC<AddCompanyModalProps> = ({
   onCloseUpdate,
   LoadCompaniesandOthers,
 })=>{
+  const { t } = useTranslation();
   const [companyName, setcompanyName] = useState("");
 
   const handleCancel = () => {
@@ -777,7 +780,7 @@ const AddCompanyModal: React.FC<AddCompanyModalProps> = ({
   };
 
   const handleAddCompany = async function(){
-    if(!companyName){toast.warning("Enter Company Name!"); return;}
+    if(!companyName){toast.warning(t('milking.milkOut.enterCompanyName')); return;}
 
     const CompanyPayload = {
         name: companyName,
@@ -787,7 +790,7 @@ const AddCompanyModal: React.FC<AddCompanyModalProps> = ({
    
     addNewCompany(CompanyPayload)
       .then((response)=>{
-        toast.success("New Company has been added!");
+        toast.success(t('milking.milkOut.companyAdded'));
       })
       .catch((error)=>{
         toast.error(error.response.data.message);
@@ -797,13 +800,13 @@ const AddCompanyModal: React.FC<AddCompanyModalProps> = ({
 
   return(
     <Dialog open={openCompany} onClose={(_, __) => handleCancel()} maxWidth="md" fullWidth>
-      <DialogTitle sx={{ fontWeight: 'bold' }}>Add Company</DialogTitle>
+      <DialogTitle sx={{ fontWeight: 'bold' }}>{t('milking.milkOut.addCompany')}</DialogTitle>
 
       <DialogContent>
         <Box sx={{ display: 'flex', gap: 2, mb: 2 , mt: 2}}>
           <FormControl fullWidth>
             <TextField
-               label="Comapny Name"
+               label={t('milking.milkOut.companyName')}
                type="text"
                value={companyName}
                onChange={(e) => setcompanyName(e.target.value as string)}
@@ -811,9 +814,9 @@ const AddCompanyModal: React.FC<AddCompanyModalProps> = ({
             />
           </FormControl>
           <TextField
-            label="Country"
+            label={t('milking.milkOut.country')}
             type="text"
-            value="Pakistan"
+            value={t('milking.milkOut.pakistan')}
             InputProps={{readOnly: true}}
             fullWidth
           />
@@ -826,7 +829,7 @@ const AddCompanyModal: React.FC<AddCompanyModalProps> = ({
           variant="outlined"
           sx={{ textTransform: 'none', mr: 2 }}
         >
-          Cancel
+          {t('common.cancel')}
         </Button>
         <Button
           onClick={handleAddCompany}
@@ -837,7 +840,7 @@ const AddCompanyModal: React.FC<AddCompanyModalProps> = ({
             textTransform: 'none',
           }}
         >
-          Add
+          {t('common.add')}
         </Button>
       </DialogActions>
       <ToastContainer
@@ -866,7 +869,7 @@ const AddOtherConsumptionsModal: React.FC<AddOtherConsumptionModalProps>=({
   onCloseUpdate,
   LoadCompaniesandOthers
 })=>{
-
+  const { t } = useTranslation();
   const [OthersName, setOthersName] = useState("");
 
   const handleCancel = () => {
@@ -877,16 +880,16 @@ const AddOtherConsumptionsModal: React.FC<AddOtherConsumptionModalProps>=({
 
   const handleAddOthersConsumption = async function(){
     try {
-      if(!OthersName){toast.warning("Consumption name must be valid!")}
+      if(!OthersName){toast.warning(t('milking.milkOut.consumptionNameInvalid'))}
       const OthersPayload = {
         name: OthersName,
       } 
       createInternalConsumptions(OthersPayload)
         .then((response)=>{
-          toast.success("Internal Consumptions has been added successfully!");
+          toast.success(t('milking.milkOut.internalConsumptionAdded'));
         })
         .catch((error)=>{
-          toast.error("Can't add other consumptions!")
+          toast.error(t('milking.milkOut.cantAddOtherConsumptions'))
         })
         handleCancel();
     } catch (error: any) {
@@ -895,13 +898,13 @@ const AddOtherConsumptionsModal: React.FC<AddOtherConsumptionModalProps>=({
   }
  return(
     <Dialog open={openOthersConsumption} onClose={(_, __) => handleCancel()} maxWidth="md" fullWidth>
-      <DialogTitle sx={{ fontWeight: 'bold' }}>Add Consumption</DialogTitle>
+      <DialogTitle sx={{ fontWeight: 'bold' }}>{t('milking.milkOut.addConsumption')}</DialogTitle>
 
       <DialogContent>
         <Box sx={{ display: 'flex', gap: 2, mb: 2 , mt: 2}}>
           <FormControl fullWidth>
             <TextField
-               label="Consumption Name"
+               label={t('milking.milkOut.consumptionName')}
                type="text"
                value={OthersName}
                onChange={(e) => setOthersName(e.target.value as string)}
@@ -917,7 +920,7 @@ const AddOtherConsumptionsModal: React.FC<AddOtherConsumptionModalProps>=({
           variant="outlined"
           sx={{ textTransform: 'none', mr: 2 }}
         >
-          Cancel
+          {t('common.cancel')}
         </Button>
         <Button
           onClick={handleAddOthersConsumption}
@@ -928,7 +931,7 @@ const AddOtherConsumptionsModal: React.FC<AddOtherConsumptionModalProps>=({
             textTransform: 'none',
           }}
         >
-          Add
+          {t('common.add')}
         </Button>
       </DialogActions>
       <ToastContainer

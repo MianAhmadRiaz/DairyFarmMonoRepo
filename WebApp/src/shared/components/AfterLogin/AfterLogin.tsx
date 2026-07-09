@@ -2,64 +2,67 @@ import React from 'react';
 import { Box, Grid, Typography, keyframes } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
+import { useTranslation } from 'react-i18next';
 import { setSelectedModule } from '../../store/userSlice';
 import { usePermissions } from '../../rbac/usePermissions';
 import { MODULE_VIEW_PERMISSION, PermissionName } from '../../rbac/permissions';
 import { RootState } from '../../store';
 
 // `perm` is the view-permission required to see the tile; undefined = always shown.
+// `title` is an internal identifier used by `routeFor` — display text comes from
+// the translation key `auth.afterLogin.modules.<key>.title/blurb`.
 const modules: {
+  key: string;
   title: string;
-  blurb: string;
   icon: string;
   accent: string;
   perm?: PermissionName;
 }[] = [
   {
+    key: 'herdManagement',
     title: 'Herd Management',
-    blurb: 'Track animals across every lifecycle stage',
     icon: '/assets/herd.png',
     accent: '#4cceac',
     perm: MODULE_VIEW_PERMISSION.herd
   },
   {
+    key: 'milkManagement',
     title: 'Milk Management',
-    blurb: 'Live yields, quality grades & trends',
     icon: '/assets/milking.png',
     accent: '#6870fa',
     perm: MODULE_VIEW_PERMISSION.milking
   },
   {
+    key: 'stockManagement',
     title: 'Stock Management',
-    blurb: 'Feed, medicine & supply inventory',
     icon: '/assets/stock.png',
     accent: '#e2a23b',
     perm: MODULE_VIEW_PERMISSION.stock
   },
   {
+    key: 'employeePayroll',
     title: 'Employee Payroll',
-    blurb: 'Attendance, salaries & advances',
     icon: '/assets/employee.png',
     accent: '#e2726e',
     perm: MODULE_VIEW_PERMISSION.employee
   },
   {
+    key: 'feeding',
     title: 'Feeding',
-    blurb: 'Formulations & feeding schedules',
     icon: '/assets/feeding.png',
     accent: '#4cceac',
     perm: MODULE_VIEW_PERMISSION.feeding
   },
   {
+    key: 'accountsManagement',
     title: 'Accounts Management',
-    blurb: 'Ledgers, budgets & financial health',
     icon: '/assets/accounts.png',
     accent: '#6870fa',
     perm: MODULE_VIEW_PERMISSION.accounts
   },
   {
+    key: 'admin',
     title: 'Admin',
-    blurb: 'Users, roles & farm configuration',
     icon: '/assets/admin.png',
     accent: '#94e2cd',
     perm: MODULE_VIEW_PERMISSION.admin
@@ -99,14 +102,20 @@ const AfterLogin: React.FC = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { can } = usePermissions();
+  const { t } = useTranslation();
   const { user } = useSelector((state: RootState) => state.user);
 
   const allowedModules = modules.filter(m => !m.perm || can(m.perm));
 
-  const greetingName = user?.firstname || 'there';
+  const greetingName = user?.firstname || t('auth.afterLogin.defaultName');
   const farmName = (user as any)?.['farm.name'] || (user as any)?.farm?.name || '';
   const hour = new Date().getHours();
-  const timeGreeting = hour < 12 ? 'Good morning' : hour < 18 ? 'Good afternoon' : 'Good evening';
+  const timeGreeting =
+    hour < 12
+      ? t('auth.afterLogin.goodMorning')
+      : hour < 18
+      ? t('auth.afterLogin.goodAfternoon')
+      : t('auth.afterLogin.goodEvening');
 
   const handleModuleClick = (title: string) => {
     const { module, path } = routeFor(title);
@@ -179,11 +188,11 @@ const AfterLogin: React.FC = () => {
               mb: 0.5
             }}
           >
-            Welcome back, {greetingName} 👋
+            {t('auth.afterLogin.welcomeBack', { name: greetingName })}
           </Typography>
           {farmName && (
             <Typography sx={{ color: 'rgba(255,255,255,0.55)', fontSize: 14.5 }}>
-              {farmName} · choose a module to get started
+              {t('auth.afterLogin.chooseModule', { farmName })}
             </Typography>
           )}
         </Box>
@@ -245,7 +254,7 @@ const AfterLogin: React.FC = () => {
                       flexShrink: 0
                     }}
                   >
-                    <Box component="img" src={mod.icon} alt={mod.title} sx={{ width: 34, height: 34, objectFit: 'contain' }} />
+                    <Box component="img" src={mod.icon} alt={t(`auth.afterLogin.modules.${mod.key}.title`)} sx={{ width: 34, height: 34, objectFit: 'contain' }} />
                   </Box>
                   <Box
                     sx={{
@@ -261,10 +270,10 @@ const AfterLogin: React.FC = () => {
 
                 <Box sx={{ position: 'relative' }}>
                   <Typography sx={{ color: '#fff', fontWeight: 700, fontSize: 16.5, mb: 0.4 }}>
-                    {mod.title}
+                    {t(`auth.afterLogin.modules.${mod.key}.title`)}
                   </Typography>
                   <Typography sx={{ color: 'rgba(255,255,255,0.55)', fontSize: 12.5, lineHeight: 1.4 }}>
-                    {mod.blurb}
+                    {t(`auth.afterLogin.modules.${mod.key}.blurb`)}
                   </Typography>
                 </Box>
               </Box>

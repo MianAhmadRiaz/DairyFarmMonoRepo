@@ -29,8 +29,10 @@ import {
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import PageContainer from '../../../shared/components/Layout/PageContainer';
+import { useTranslation } from 'react-i18next';
 
 const Suppliers: React.FC = () => {
+  const { t } = useTranslation();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
 
@@ -50,11 +52,11 @@ const Suppliers: React.FC = () => {
       setSuppliers(data.suppliers || []);
       setTotalCount(data.totalCount || 0);
     } catch (error: any) {
-      toast.error(error?.response?.data?.message || 'Failed to fetch suppliers.');
+      toast.error(error?.response?.data?.message || t('stock.suppliers.fetchError'));
     } finally {
       setLoading(false);
     }
-  }, [page, rowsPerPage]);
+  }, [page, rowsPerPage, t]);
 
   useEffect(() => {
     loadSuppliers();
@@ -62,7 +64,7 @@ const Suppliers: React.FC = () => {
 
   const handleAddSupplier = async () => {
     if (!form.name.trim()) {
-      toast.warning('Please enter a supplier name.');
+      toast.warning(t('stock.common.supplierNameWarning'));
       return;
     }
     setIsSubmitting(true);
@@ -72,11 +74,11 @@ const Suppliers: React.FC = () => {
         contact: form.contact || undefined,
         address: form.address || undefined
       });
-      toast.success('Supplier added successfully!');
+      toast.success(t('stock.common.supplierAddedSuccess'));
       setForm({ name: '', contact: '', address: '' });
       loadSuppliers();
     } catch (error: any) {
-      toast.error(error?.response?.data?.message || 'Failed to add supplier.');
+      toast.error(error?.response?.data?.message || t('stock.common.addSupplierError'));
     } finally {
       setIsSubmitting(false);
     }
@@ -86,17 +88,17 @@ const Suppliers: React.FC = () => {
     setDeletingId(supplierId);
     try {
       await deleteSupplier(supplierId);
-      toast.success('Supplier removed successfully!');
+      toast.success(t('stock.suppliers.removeSuccess'));
       loadSuppliers();
     } catch (error: any) {
-      toast.error(error?.response?.data?.message || 'Failed to remove supplier.');
+      toast.error(error?.response?.data?.message || t('stock.suppliers.removeError'));
     } finally {
       setDeletingId(null);
     }
   };
 
   return (
-    <PageContainer title="Suppliers" subtitle="Manage your stock suppliers">
+    <PageContainer title={t('stock.suppliers.title')} subtitle={t('stock.suppliers.subtitle')}>
       <Container maxWidth="lg" sx={{ px: isMobile ? '11px' : undefined }}>
         <Paper
           elevation={3}
@@ -112,37 +114,37 @@ const Suppliers: React.FC = () => {
           }}
         >
           <Typography variant="h6" sx={{ mb: 2, fontWeight: 'bold' }}>
-            Add Supplier
+            {t('stock.suppliers.addSupplier')}
           </Typography>
           <Grid container spacing={2} alignItems="center">
             <Grid item xs={12} md={3}>
               <TextField
-                label="Supplier Name"
+                label={t('stock.common.supplierName')}
                 value={form.name}
                 onChange={e => setForm(prev => ({ ...prev, name: e.target.value }))}
                 fullWidth
                 size="small"
-                placeholder="Enter supplier name"
+                placeholder={t('stock.common.enterSupplierName')}
               />
             </Grid>
             <Grid item xs={12} md={3}>
               <TextField
-                label="Contact"
+                label={t('stock.common.contact')}
                 value={form.contact}
                 onChange={e => setForm(prev => ({ ...prev, contact: e.target.value }))}
                 fullWidth
                 size="small"
-                placeholder="Enter contact number"
+                placeholder={t('stock.common.enterContactNumber')}
               />
             </Grid>
             <Grid item xs={12} md={4}>
               <TextField
-                label="Address"
+                label={t('stock.common.address')}
                 value={form.address}
                 onChange={e => setForm(prev => ({ ...prev, address: e.target.value }))}
                 fullWidth
                 size="small"
-                placeholder="Enter address"
+                placeholder={t('stock.common.enterAddress')}
               />
             </Grid>
             <Grid item xs={12} md={2}>
@@ -167,7 +169,7 @@ const Suppliers: React.FC = () => {
                   }
                 }}
               >
-                Add
+                {t('common.add')}
               </Button>
             </Grid>
           </Grid>
@@ -188,7 +190,7 @@ const Suppliers: React.FC = () => {
         >
           <Box sx={{ p: 2, display: 'flex', alignItems: 'center', gap: 2 }}>
             <Typography variant="h6" sx={{ fontWeight: 'bold' }}>
-              Supplier List
+              {t('stock.suppliers.supplierList')}
             </Typography>
             {loading && <CircularProgress size={18} />}
           </Box>
@@ -196,12 +198,12 @@ const Suppliers: React.FC = () => {
             <Table size={isMobile ? 'small' : 'medium'}>
               <TableHead>
                 <TableRow sx={{ backgroundColor: '#f8f9fA' }}>
-                  <TableCell sx={{ fontWeight: 'bold' }}>Name</TableCell>
-                  <TableCell sx={{ fontWeight: 'bold' }}>Contact</TableCell>
-                  <TableCell sx={{ fontWeight: 'bold' }}>Address</TableCell>
-                  <TableCell sx={{ fontWeight: 'bold' }}>Added On</TableCell>
+                  <TableCell sx={{ fontWeight: 'bold' }}>{t('stock.common.name')}</TableCell>
+                  <TableCell sx={{ fontWeight: 'bold' }}>{t('stock.common.contact')}</TableCell>
+                  <TableCell sx={{ fontWeight: 'bold' }}>{t('stock.common.address')}</TableCell>
+                  <TableCell sx={{ fontWeight: 'bold' }}>{t('stock.suppliers.addedOn')}</TableCell>
                   <TableCell sx={{ fontWeight: 'bold' }} align="center">
-                    Actions
+                    {t('stock.common.actions')}
                   </TableCell>
                 </TableRow>
               </TableHead>
@@ -209,7 +211,7 @@ const Suppliers: React.FC = () => {
                 {suppliers.length === 0 && !loading ? (
                   <TableRow>
                     <TableCell colSpan={5} align="center">
-                      No suppliers found.
+                      {t('stock.suppliers.noSuppliers')}
                     </TableCell>
                   </TableRow>
                 ) : (

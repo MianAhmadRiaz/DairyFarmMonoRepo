@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import {
   Box,
   Typography,
@@ -24,6 +25,7 @@ interface AdvanceRow {
 }
 
 export default function ViewEmployee() {
+  const { t } = useTranslation();
   const [advances, setAdvances] = useState<AdvanceRow[]>([]);
   const [loading, setLoading] = useState(false);
   const [search, setSearch] = useState('');
@@ -65,7 +67,7 @@ export default function ViewEmployee() {
   );
 
   return (
-    <PageContainer title="View Employees">
+    <PageContainer title={t('employee.viewAdvance.title')}>
       <Box
         sx={{
           backgroundColor: theme.palette.background.paper,
@@ -87,7 +89,7 @@ export default function ViewEmployee() {
           }}
         >
           <TextField
-            placeholder="Search by Name"
+            placeholder={t('employee.common.searchByName')}
             size="small"
             value={search}
             onChange={(e) => {
@@ -142,12 +144,12 @@ export default function ViewEmployee() {
           >
             <thead>
               <tr>
-                <th>Sr#</th>
-                <th>Name</th>
-                <th>Date</th>
-                <th>Type</th>
-                <th>Amount</th>
-                <th>Status</th>
+                <th>{t('employee.common.srNo')}</th>
+                <th>{t('employee.common.name')}</th>
+                <th>{t('employee.common.date')}</th>
+                <th>{t('employee.viewAdvance.type')}</th>
+                <th>{t('employee.common.amount')}</th>
+                <th>{t('employee.common.status')}</th>
               </tr>
             </thead>
             <tbody>
@@ -160,7 +162,7 @@ export default function ViewEmployee() {
               ) : paginatedEmployees.length === 0 ? (
                 <tr>
                   <td colSpan={6} style={{ textAlign: 'center', padding: 24 }}>
-                    No advance transactions found.
+                    {t('employee.viewAdvance.noTransactions')}
                   </td>
                 </tr>
               ) : (
@@ -176,7 +178,7 @@ export default function ViewEmployee() {
                     <td>
                       <Chip
                         size="small"
-                        label={emp.transactionType}
+                        label={t('employee.viewAdvance.transactionType.' + emp.transactionType, emp.transactionType)}
                         color={
                           emp.transactionType === 'given'
                             ? 'warning'
@@ -189,7 +191,7 @@ export default function ViewEmployee() {
                       <Chip
                         size="small"
                         variant="outlined"
-                        label={emp.status || 'active'}
+                        label={t('employee.viewAdvance.status.' + (emp.status || 'active'), emp.status || 'active')}
                       />
                     </td>
                   </tr>

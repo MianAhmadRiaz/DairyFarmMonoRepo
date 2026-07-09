@@ -1,4 +1,5 @@
 import React, { useCallback, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { useFocusEffect } from '@react-navigation/native'
 import { RefreshControl, ScrollView, StyleSheet, View } from 'react-native'
 import Toast from 'react-native-toast-message'
@@ -15,6 +16,7 @@ import { RF } from 'shared/theme/responsive'
 const money = (v: any) => (v === undefined || v === null ? '0' : Number(v).toLocaleString())
 
 const ProfitLoss = () => {
+  const { t } = useTranslation()
   const { can } = usePermissions()
   const canView = can(PERMISSIONS.FINANCE_VIEW)
   const [data, setData] = useState<any>(null)
@@ -25,7 +27,7 @@ const ProfitLoss = () => {
       const res = await getProfitLoss()
       setData(res?.data?.data || null)
     } catch (e) {
-      Toast.show({ type: 'error', text1: 'Error', text2: getNormalizedError(e) })
+      Toast.show({ type: 'error', text1: t('finance.common.error'), text2: getNormalizedError(e) })
     } finally {
       setRefreshing(false)
     }
@@ -43,13 +45,13 @@ const ProfitLoss = () => {
       </AppText>
       {rows.length === 0 ? (
         <AppText fontSize="caption" color="descriptionColor">
-          No records.
+          {t('finance.profitLoss.noRecords')}
         </AppText>
       ) : (
         rows.map((r, i) => (
           <View key={i} style={styles.row}>
             <AppText fontSize="caption" color="labelGrey" numberOfLines={1} style={{ flex: 1, marginRight: RF(8) }}>
-              {r.name || r.account_name || r.label || 'Account'}
+              {r.name || r.account_name || r.label || t('finance.profitLoss.account')}
             </AppText>
             <AppText fontSize="caption" medium color="grey">
               {money(r.amount)}
@@ -59,7 +61,7 @@ const ProfitLoss = () => {
       )}
       <View style={[styles.row, styles.totalRow]}>
         <AppText fontSize="caption" semiBold color="darkestGrey">
-          Total
+          {t('finance.common.total')}
         </AppText>
         <AppText fontSize="caption" semiBold color={totalColor}>
           {money(total)}
@@ -71,9 +73,9 @@ const ProfitLoss = () => {
   if (!canView) {
     return (
       <AppContainer>
-        <AppHeader title="Profit & Loss" showBack />
+        <AppHeader title={t('finance.profitLoss.title')} showBack />
         <View style={styles.center}>
-          <AppText color="error">You do not have permission to view finance.</AppText>
+          <AppText color="error">{t('finance.common.noPermission')}</AppText>
         </View>
       </AppContainer>
     )
@@ -88,15 +90,15 @@ const ProfitLoss = () => {
       >
         {!data ? (
           <AppText color="descriptionColor" style={{ textAlign: 'center', marginTop: RF(40) }}>
-            No profit & loss data available.
+            {t('finance.profitLoss.noData')}
           </AppText>
         ) : (
           <>
-            {section('Revenue', revenue, data.totalRevenue, 'success')}
-            {section('Expenses', expenses, data.totalExpense, 'error')}
+            {section(t('finance.profitLoss.revenue'), revenue, data.totalRevenue, 'success')}
+            {section(t('finance.common.expenses'), expenses, data.totalExpense, 'error')}
             <View style={styles.netCard}>
               <AppText fontSize="h7" semiBold color="white">
-                Net Profit
+                {t('finance.common.netProfit')}
               </AppText>
               <AppText fontSize="h6" bold color="white">
                 {money(data.netProfit)}

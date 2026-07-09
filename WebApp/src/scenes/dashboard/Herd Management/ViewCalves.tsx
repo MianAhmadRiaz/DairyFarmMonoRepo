@@ -17,6 +17,7 @@ import {
   useTheme
 } from '@mui/material';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
+import { useTranslation } from 'react-i18next';
 import { fetchAnimals } from '../../../shared/services/herdinfo.services';
 import { AnimalInfoRow } from '../../../shared/services/herdinfo.services';
 import CustomPagination from '../../../shared/components/Custom Pagination/CustomPagination';
@@ -26,7 +27,7 @@ import PageContainer from '../../../shared/components/Layout/PageContainer';
 
 
 function ViewCalves() {
-     
+  const { t } = useTranslation();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [searchTerm, setSearchTerm] = useState('');
   const [calves, setCalves] = useState<AnimalInfoRow[]>([]);
@@ -75,7 +76,7 @@ function ViewCalves() {
   );
 
   return (
-    <PageContainer title="View Calves" maxWidth={1200}>
+    <PageContainer title={t('herd.viewCalves.title')} maxWidth={1200}>
       <Box
   sx={{
 
@@ -91,7 +92,7 @@ function ViewCalves() {
       <Box className="flex flex-col md:flex-row justify-between items-stretch md:items-center gap-4 mb-2">
         <TextField
           variant="outlined"
-          placeholder="Search by Calf ID"
+          placeholder={t('herd.viewCalves.searchByCalfId')}
           fullWidth
           value={searchTerm}
           onChange={e => setSearchTerm(e.target.value)}
@@ -119,7 +120,7 @@ function ViewCalves() {
     },
   }}
 >
-  Download
+  {t('herd.viewCalves.download')}
 </Button>
 </Box>
 
@@ -129,8 +130,8 @@ function ViewCalves() {
           onClose={handleMenuClose}
           PaperProps={{ style: { maxHeight: 48 * 4.5, width: '200px' } }}
         >
-          <MenuItem onClick={handleMenuClose}>Download as PDF</MenuItem>
-          <MenuItem onClick={handleMenuClose}>Download as CSV</MenuItem>
+          <MenuItem onClick={handleMenuClose}>{t('herd.viewCalves.downloadPdf')}</MenuItem>
+          <MenuItem onClick={handleMenuClose}>{t('herd.viewCalves.downloadCsv')}</MenuItem>
         </Menu>
       </Box>
 
@@ -140,16 +141,16 @@ function ViewCalves() {
           <Table>
             <TableHead sx={{backgroundColor: theme.palette.mode === 'dark' ? colors.primary[400] : '#F8F9FA'}}>
               <TableRow>
-                <TableCell sx={{ fontWeight: 'bold' }}>SR #</TableCell>
-                <TableCell sx={{ fontWeight: 'bold' }}>MOTHER ID</TableCell>
-                <TableCell sx={{ fontWeight: 'bold' }}>FATHER ID</TableCell>
-                <TableCell sx={{ fontWeight: 'bold' }}>CALF SEX</TableCell>
-                <TableCell sx={{ fontWeight: 'bold' }}>CALF ID</TableCell>
-                <TableCell sx={{ fontWeight: 'bold' }}>CALF BIRTH DATE</TableCell>
-                <TableCell sx={{ fontWeight: 'bold' }}>CALF BIRTH WEIGHT</TableCell>
-                <TableCell sx={{ fontWeight: 'bold' }}>CLICK TO ASSIGN TAG</TableCell>
-                <TableCell sx={{ fontWeight: 'bold' }}>REMOVE</TableCell>
-                <TableCell sx={{ fontWeight: 'bold' }}>SOLD</TableCell>
+                <TableCell sx={{ fontWeight: 'bold' }}>{t('herd.viewCalves.srNo')}</TableCell>
+                <TableCell sx={{ fontWeight: 'bold' }}>{t('herd.viewCalves.motherId')}</TableCell>
+                <TableCell sx={{ fontWeight: 'bold' }}>{t('herd.viewCalves.fatherId')}</TableCell>
+                <TableCell sx={{ fontWeight: 'bold' }}>{t('herd.viewCalves.calfSex')}</TableCell>
+                <TableCell sx={{ fontWeight: 'bold' }}>{t('herd.viewCalves.calfId')}</TableCell>
+                <TableCell sx={{ fontWeight: 'bold' }}>{t('herd.viewCalves.calfBirthDate')}</TableCell>
+                <TableCell sx={{ fontWeight: 'bold' }}>{t('herd.viewCalves.calfBirthWeight')}</TableCell>
+                <TableCell sx={{ fontWeight: 'bold' }}>{t('herd.viewCalves.clickToAssignTag')}</TableCell>
+                <TableCell sx={{ fontWeight: 'bold' }}>{t('herd.viewCalves.remove')}</TableCell>
+                <TableCell sx={{ fontWeight: 'bold' }}>{t('herd.viewCalves.sold')}</TableCell>
               </TableRow>
               
             </TableHead>
@@ -167,30 +168,30 @@ function ViewCalves() {
   ) : filteredCalves.length === 0 ? (
     <TableRow>
       <TableCell colSpan={10} align="center">
-        No calves found
+        {t('herd.viewCalves.noCalves')}
       </TableCell>
     </TableRow>
   ) : (
     filteredCalves.map((calf, index) => (
       <TableRow key={calf.uuid}>
         <TableCell>{startIndex + index + 1}</TableCell>
-        <TableCell>{calf.mother?.tag?.name || calf.mother?.name || 'N/A'}</TableCell>
-        <TableCell>{calf.father?.tag?.name || calf.father?.name || 'N/A'}</TableCell>
+        <TableCell>{calf.mother?.tag?.name || calf.mother?.name || t('herd.viewCalves.na')}</TableCell>
+        <TableCell>{calf.father?.tag?.name || calf.father?.name || t('herd.viewCalves.na')}</TableCell>
         <TableCell>{calf.gender}</TableCell>
         <TableCell>{calf.tagName}</TableCell>
-        <TableCell>{calf.birthdate ? calf.birthdate.split('T')[0] : 'N/A'}</TableCell>
-        <TableCell>{calf.animalWeight || 'N/A'}</TableCell>
+        <TableCell>{calf.birthdate ? calf.birthdate.split('T')[0] : t('herd.viewCalves.na')}</TableCell>
+        <TableCell>{calf.animalWeight || t('herd.viewCalves.na')}</TableCell>
         <TableCell>
           <Button variant="outlined" size="small" disabled={isLoading}>
-            Assign Tag
+            {t('herd.viewCalves.assignTag')}
           </Button>
         </TableCell>
         <TableCell>
           <Button variant="outlined" color="error" size="small" disabled={isLoading}>
-            Remove
+            {t('herd.viewCalves.remove')}
           </Button>
         </TableCell>
-        <TableCell>{calf.isDeleted ? 'Yes' : 'No'}</TableCell>
+        <TableCell>{calf.isDeleted ? t('common.yes') : t('common.no')}</TableCell>
       </TableRow>
     ))
   )}

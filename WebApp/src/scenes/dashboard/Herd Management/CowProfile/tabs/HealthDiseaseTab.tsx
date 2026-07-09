@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { Box, Grid, Typography, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Chip, useTheme } from '@mui/material';
 import GlassCard from '../../../../../shared/components/charts/GlassCard';
 import StatTile from '../../../../../shared/components/charts/StatTile';
@@ -8,6 +9,7 @@ import EmptyState from '../../../../../shared/components/charts/EmptyState';
 const formatDate = (d?: string) => (d ? new Date(d).toLocaleDateString() : '—');
 
 const HealthDiseaseTab: React.FC<{ profile: any }> = ({ profile }) => {
+  const { t } = useTranslation();
   const theme = useTheme();
   const { health } = profile;
   const breakdown = (health?.treatmentTypeBreakdown || []).map((t: any) => ({ type: t.treatmentType, count: Number(t.count || 0) }));
@@ -15,14 +17,14 @@ const HealthDiseaseTab: React.FC<{ profile: any }> = ({ profile }) => {
   return (
     <Grid container spacing={2.5}>
       <Grid item xs={6} sm={3}>
-        <StatTile label="Total Treatments" value={health?.totalTreatments ?? 0} icon="💊" delay={0} />
+        <StatTile label={t('herd.cowProfile.health.totalTreatments')} value={health?.totalTreatments ?? 0} icon="💊" delay={0} />
       </Grid>
       <Grid item xs={6} sm={3}>
-        <StatTile label="Total Vet Cost" value={`PKR ${Number(health?.totalCost || 0).toLocaleString()}`} icon="💰" delay={0.05} />
+        <StatTile label={t('herd.cowProfile.health.totalVetCost')} value={`PKR ${Number(health?.totalCost || 0).toLocaleString()}`} icon="💰" delay={0.05} />
       </Grid>
       <Grid item xs={6} sm={3}>
         <StatTile
-          label="Since Last Vaccination"
+          label={t('herd.cowProfile.health.sinceLastVaccination')}
           value={health?.daysSinceLastVaccination !== null && health?.daysSinceLastVaccination !== undefined ? `${health.daysSinceLastVaccination}d` : '—'}
           icon="💉"
           delay={0.1}
@@ -31,7 +33,7 @@ const HealthDiseaseTab: React.FC<{ profile: any }> = ({ profile }) => {
       </Grid>
       <Grid item xs={6} sm={3}>
         <StatTile
-          label="Since Last Deworming"
+          label={t('herd.cowProfile.health.sinceLastDeworming')}
           value={health?.daysSinceLastDeworming !== null && health?.daysSinceLastDeworming !== undefined ? `${health.daysSinceLastDeworming}d` : '—'}
           icon="🪱"
           delay={0.15}
@@ -41,18 +43,18 @@ const HealthDiseaseTab: React.FC<{ profile: any }> = ({ profile }) => {
 
       <Grid item xs={12} md={5}>
         <GlassCard delay={0.2}>
-          <Typography sx={{ fontWeight: 700, mb: 1 }}>Treatment Type Breakdown</Typography>
+          <Typography sx={{ fontWeight: 700, mb: 1 }}>{t('herd.cowProfile.health.treatmentTypeBreakdown')}</Typography>
           {breakdown.length ? (
-            <TrendBarChart data={breakdown} xKey="type" series={[{ dataKey: 'count', color: '#6870fa', name: 'Count' }]} height={220} />
+            <TrendBarChart data={breakdown} xKey="type" series={[{ dataKey: 'count', color: '#6870fa', name: t('herd.cowProfile.health.count') }]} height={220} />
           ) : (
-            <EmptyState title="No treatments recorded yet" icon="🩺" />
+            <EmptyState title={t('herd.cowProfile.health.noTreatmentsRecorded')} icon="🩺" />
           )}
         </GlassCard>
       </Grid>
 
       <Grid item xs={12} md={7}>
         <GlassCard delay={0.25}>
-          <Typography sx={{ fontWeight: 700, mb: 1.5 }}>Health Status Timeline</Typography>
+          <Typography sx={{ fontWeight: 700, mb: 1.5 }}>{t('herd.cowProfile.health.healthStatusTimeline')}</Typography>
           {(health?.healthStatusHistory || []).length ? (
             <Box>
               {health.healthStatusHistory.map((h: any, idx: number) => (
@@ -68,28 +70,28 @@ const HealthDiseaseTab: React.FC<{ profile: any }> = ({ profile }) => {
               ))}
             </Box>
           ) : (
-            <EmptyState title="No health status changes recorded" icon="📋" />
+            <EmptyState title={t('herd.cowProfile.health.noHealthStatusChanges')} icon="📋" />
           )}
         </GlassCard>
       </Grid>
 
       <Grid item xs={12}>
         <GlassCard delay={0.3}>
-          <Typography sx={{ fontWeight: 700, mb: 1.5 }}>Treatment & Disease History</Typography>
+          <Typography sx={{ fontWeight: 700, mb: 1.5 }}>{t('herd.cowProfile.health.treatmentDiseaseHistory')}</Typography>
           {(health?.recentTreatments || []).length ? (
             <Box sx={{ overflowX: 'auto' }}>
               <TableContainer>
                 <Table size="small">
                   <TableHead>
                     <TableRow>
-                      <TableCell sx={{ fontWeight: 700 }}>Date</TableCell>
-                      <TableCell sx={{ fontWeight: 700 }}>Type</TableCell>
-                      <TableCell sx={{ fontWeight: 700 }}>Diagnosis</TableCell>
-                      <TableCell sx={{ fontWeight: 700 }}>Medicine</TableCell>
-                      <TableCell sx={{ fontWeight: 700 }}>Dosage</TableCell>
-                      <TableCell sx={{ fontWeight: 700 }}>Vet</TableCell>
-                      <TableCell sx={{ fontWeight: 700 }}>Cost</TableCell>
-                      <TableCell sx={{ fontWeight: 700 }}>Milk Withdrawal Until</TableCell>
+                      <TableCell sx={{ fontWeight: 700 }}>{t('herd.cowProfile.health.date')}</TableCell>
+                      <TableCell sx={{ fontWeight: 700 }}>{t('herd.cowProfile.health.type')}</TableCell>
+                      <TableCell sx={{ fontWeight: 700 }}>{t('herd.cowProfile.health.diagnosis')}</TableCell>
+                      <TableCell sx={{ fontWeight: 700 }}>{t('herd.cowProfile.health.medicine')}</TableCell>
+                      <TableCell sx={{ fontWeight: 700 }}>{t('herd.cowProfile.health.dosage')}</TableCell>
+                      <TableCell sx={{ fontWeight: 700 }}>{t('herd.cowProfile.health.vet')}</TableCell>
+                      <TableCell sx={{ fontWeight: 700 }}>{t('herd.cowProfile.health.cost')}</TableCell>
+                      <TableCell sx={{ fontWeight: 700 }}>{t('herd.cowProfile.health.milkWithdrawalUntil')}</TableCell>
                     </TableRow>
                   </TableHead>
                   <TableBody>
@@ -116,7 +118,7 @@ const HealthDiseaseTab: React.FC<{ profile: any }> = ({ profile }) => {
               </TableContainer>
             </Box>
           ) : (
-            <EmptyState title="No treatment history yet" subtitle="Disease and treatment records will appear here." icon="💊" />
+            <EmptyState title={t('herd.cowProfile.health.noTreatmentHistory')} subtitle={t('herd.cowProfile.health.noTreatmentHistorySub')} icon="💊" />
           )}
         </GlassCard>
       </Grid>

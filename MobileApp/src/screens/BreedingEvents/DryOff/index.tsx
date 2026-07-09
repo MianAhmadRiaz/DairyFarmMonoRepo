@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { TouchableOpacity, View } from 'react-native'
 import AnyIcon, { Icons } from 'shared/components/AnyIcon';
 import AppText from 'shared/components/AppText/AppText';
@@ -12,6 +13,7 @@ import AppInput from 'shared/components/AppInput';
 
 interface Props extends GenericNavigation {}
 const DryOff = (props: Props) => {
+    const { t } = useTranslation()
     return(
         <>
   <GestureHandlerRootView style={{ flex: 1 }}>        
@@ -31,7 +33,7 @@ const DryOff = (props: Props) => {
                   bold
                   color={'erieBlack'}
                 >
-                  Dry Off
+                  {t('breeding.dryOff.headerTitle')}
              </AppText>
 
              <TouchableOpacity style={styles.languageButton}>
@@ -57,9 +59,9 @@ const DryOff = (props: Props) => {
                 showsVerticalScrollIndicator={false}>
 
                  <DropDown
-                    label="Company"
+                    label={t('breeding.dryOff.company')}
                     labelStyle={styles.label}
-                    placeholder='Select' 
+                    placeholder={t('breeding.common.select')}
                     placeholderStyle={styles.placeholder}
                     style={styles.customContainer}
                     options={[]} value={''} onChange={function (value: string): void {
@@ -74,50 +76,50 @@ const DryOff = (props: Props) => {
                         color={Colors.darkestGrey}
                         style={styles.text}
                         >
-                        Add
+                        {t('breeding.dryOff.add')}
                       </AppText>
                        <AppInput
-                        label=" Shed"
+                        label={t('breeding.common.shed')}
                         textInputStyle={styles.placeholder}
                         labelStyle={styles.label}
-                        placeholder='Select' 
+                        placeholder={t('breeding.common.select')}
                         style={styles.customContainer}
-                        error={undefined}                 
+                        error={undefined}
                      />
                     <AppInput
-                        label="Tag ID"
+                        label={t('breeding.common.tagId')}
                         textInputStyle={styles.placeholder}
                         labelStyle={styles.label}
-                        placeholder='Select' 
+                        placeholder={t('breeding.common.select')}
                         style={styles.customContainer}
-                        error={undefined}                 
+                        error={undefined}
                     />
                     <AppInput
-                        label="Breed Type"
+                        label={t('breeding.common.breedType')}
                         textInputStyle={styles.placeholder}
                         labelStyle={styles.label}
-                        placeholder='Select' 
+                        placeholder={t('breeding.common.select')}
                         style={styles.customContainer}
-                        error={undefined}                 
+                        error={undefined}
                     />
                     <AppInput
-                        label="Sex"
+                        label={t('breeding.common.sex')}
                         textInputStyle={styles.placeholder}
                         labelStyle={styles.label}
-                        placeholder='Select' 
+                        placeholder={t('breeding.common.select')}
                         style={styles.customContainer}
-                        error={undefined}                 
+                        error={undefined}
                     />
                  </View>
                 
                  <View style={styles.buttonContainer}>
                 <PrimaryButton
-                    title="Cancel"
+                    title={t('breeding.dryOff.cancel')}
                     buttonStyle={styles.button2}
                     textStyle={styles.buttonText2}
                 />
                 <PrimaryButton
-                    title="Add New"
+                    title={t('breeding.common.addNew')}
                     buttonStyle={styles.button1}
                     textStyle={styles.buttonText1}
                 />

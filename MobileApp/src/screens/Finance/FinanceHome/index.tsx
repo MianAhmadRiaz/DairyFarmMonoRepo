@@ -1,5 +1,6 @@
 import { useNavigation, useFocusEffect } from '@react-navigation/native'
-import React, { useCallback, useState } from 'react'
+import React, { useCallback, useMemo, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { RefreshControl, ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native'
 import Toast from 'react-native-toast-message'
 import AppContainer from 'shared/components/AppContainer'
@@ -21,23 +22,24 @@ type Action = {
   permission: PermissionName
 }
 
-const ACTIONS: Action[] = [
-  { label: 'Transactions', desc: 'Income & expense entries', screen: 'Transactions', icon: { type: Icons.MaterialCommunityIcons, name: 'swap-horizontal' }, permission: PERMISSIONS.FINANCE_VIEW },
-  { label: 'Profit & Loss', desc: 'Revenue vs expenses', screen: 'ProfitLoss', icon: { type: Icons.MaterialCommunityIcons, name: 'chart-line' }, permission: PERMISSIONS.FINANCE_VIEW }
-]
-
 const FinanceHome = () => {
+  const { t } = useTranslation()
   const navigation = useNavigation<any>()
   const { can } = usePermissions()
   const [summary, setSummary] = useState<any>(null)
   const [refreshing, setRefreshing] = useState(false)
+
+  const ACTIONS: Action[] = useMemo(() => [
+    { label: t('finance.financeHome.transactions'), desc: t('finance.financeHome.transactionsDesc'), screen: 'Transactions', icon: { type: Icons.MaterialCommunityIcons, name: 'swap-horizontal' }, permission: PERMISSIONS.FINANCE_VIEW },
+    { label: t('finance.financeHome.profitLoss'), desc: t('finance.financeHome.profitLossDesc'), screen: 'ProfitLoss', icon: { type: Icons.MaterialCommunityIcons, name: 'chart-line' }, permission: PERMISSIONS.FINANCE_VIEW }
+  ], [t])
 
   const load = useCallback(async () => {
     try {
       const res = await getFinanceDashboard()
       setSummary(res?.data?.data?.summary || res?.data?.data)
     } catch (e) {
-      Toast.show({ type: 'error', text1: 'Error', text2: getNormalizedError(e) })
+      Toast.show({ type: 'error', text1: t('finance.common.error'), text2: getNormalizedError(e) })
     } finally {
       setRefreshing(false)
     }
@@ -63,9 +65,9 @@ const FinanceHome = () => {
   if (!can(PERMISSIONS.FINANCE_VIEW)) {
     return (
       <AppContainer>
-        <AppHeader title="Finance" showHam onPressHam={() => navigation.openDrawer?.()} />
+        <AppHeader title={t('finance.financeHome.title')} showHam onPressHam={() => navigation.openDrawer?.()} />
         <View style={styles.center}>
-          <AppText color="error">You do not have permission to view finance.</AppText>
+          <AppText color="error">{t('finance.common.noPermission')}</AppText>
         </View>
       </AppContainer>
     )
@@ -73,22 +75,22 @@ const FinanceHome = () => {
 
   return (
     <AppContainer>
-      <AppHeader title="Finance" showHam onPressHam={() => navigation.openDrawer?.()} />
+      <AppHeader title={t('finance.financeHome.title')} showHam onPressHam={() => navigation.openDrawer?.()} />
       <ScrollView
         contentContainerStyle={{ padding: RF(16), paddingBottom: RF(40) }}
         refreshControl={<RefreshControl refreshing={refreshing} onRefresh={() => { setRefreshing(true); load() }} colors={[COLORS.primaryMain]} />}
       >
         <View style={styles.statsRow}>
-          {stat('Income', money(summary?.totalIncome), 'success')}
-          {stat('Expenses', money(summary?.totalExpense), 'error')}
+          {stat(t('finance.common.income'), money(summary?.totalIncome), 'success')}
+          {stat(t('finance.common.expenses'), money(summary?.totalExpense), 'error')}
         </View>
         <View style={styles.statsRow}>
-          {stat('Net Profit', money(summary?.netProfit), 'primaryMain')}
-          {stat('Cash', money(summary?.cashOnHand), 'primaryDark')}
+          {stat(t('finance.common.netProfit'), money(summary?.netProfit), 'primaryMain')}
+          {stat(t('finance.financeHome.cash'), money(summary?.cashOnHand), 'primaryDark')}
         </View>
 
         <AppText fontSize="h7" semiBold style={{ marginBottom: RF(12), marginTop: RF(8) }}>
-          Actions
+          {t('finance.financeHome.actions')}
         </AppText>
         {visible.map((a, i) => (
           <TouchableOpacity key={i} style={styles.actionCard} onPress={() => navigation.navigate(a.screen)} activeOpacity={0.85}>

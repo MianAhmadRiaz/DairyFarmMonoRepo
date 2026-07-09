@@ -1,6 +1,7 @@
 import React from 'react';
 import { Box, Typography, Button } from '@mui/material';
 import { Dashboard, Refresh } from '@mui/icons-material';
+import { useTranslation } from 'react-i18next';
 import ErrorBoundary from './ErrorBoundary';
 
 interface Props {
@@ -8,6 +9,7 @@ interface Props {
 }
 
 const DashboardErrorBoundary: React.FC<Props> = ({ children }) => {
+  const { t } = useTranslation();
   const handleError = (error: Error, errorInfo: React.ErrorInfo) => {
     // Log specific dashboard errors
     console.error('Dashboard Error:', error);
@@ -22,18 +24,17 @@ const DashboardErrorBoundary: React.FC<Props> = ({ children }) => {
         sx={{ fontSize: 48, color: 'text.secondary', marginBottom: 2 }}
       />
       <Typography variant="h6" gutterBottom>
-        Dashboard Temporarily Unavailable
+        {t('shared.dashboardErrorBoundary.title')}
       </Typography>
       <Typography variant="body2" color="text.secondary" paragraph>
-        We're having trouble loading your dashboard data. Please try again in a
-        moment.
+        {t('shared.dashboardErrorBoundary.message')}
       </Typography>
       <Button
         variant="contained"
         startIcon={<Refresh />}
         onClick={() => window.location.reload()}
       >
-        Refresh Dashboard
+        {t('shared.dashboardErrorBoundary.refresh')}
       </Button>
     </Box>
   );

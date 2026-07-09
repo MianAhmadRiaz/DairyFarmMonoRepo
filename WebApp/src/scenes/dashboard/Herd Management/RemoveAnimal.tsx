@@ -1,5 +1,6 @@
 import React, { useEffect, useState,useRef } from "react";
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import {
   Box,
   Grid,
@@ -27,6 +28,7 @@ interface DropdownObject {
 }
 
 const RemoveAnimal: React.FC = () => {
+  const { t } = useTranslation();
   const [animalOptions, setAnimalOptions] = useState<DropdownObject[]>([]);
   const [animals, setAnimals] = useState<AnimalInfoRow[]>([]);
   const [removalCategories] = useState<DropdownObject[]>([
@@ -65,14 +67,14 @@ const toastId = useRef<Id | null>(null);
       
       const options = animals.map(animal => ({
         uuid: animal.uuid,
-        name: `${animal.name || 'Unnamed'} (${animal.tag?.name || animal.tagId || 'No Tag'})`
+        name: `${animal.name || t('herd.removeAnimal.unnamed')} (${animal.tag?.name || animal.tagId || t('herd.removeAnimal.noTag')})`
       }));
       
       setAnimalOptions(options);
       setAnimals(animals);
     } catch (error) {
       console.error("Error fetching animals:", error);
-      toast.error("Failed to load animals. Please try again.", {
+      toast.error(t("herd.removeAnimal.loadAnimalsError"), {
         position: "top-right",
         autoClose: 5000,
       });
@@ -86,7 +88,7 @@ const handleRemoveAnimal = async () => {
   const isFormValid = selectedAnimal && selectedDate && selectedCategory && comments.trim();
 
   if (!isFormValid) {
-    const warningMessage = "Please fill all the missing required fields";
+    const warningMessage = t("herd.removeAnimal.warnRequired");
     if (toastId.current === null || !toast.isActive(toastId.current)) {
       toastId.current = toast.warning(warningMessage);
     }
@@ -95,14 +97,14 @@ const handleRemoveAnimal = async () => {
 
   if (isSold && !(Number(salePrice) > 0)) {
     if (toastId.current === null || !toast.isActive(toastId.current)) {
-      toastId.current = toast.warning("Please enter a sale price greater than 0 for a sold animal");
+      toastId.current = toast.warning(t("herd.removeAnimal.warnSalePrice"));
     }
     return;
   }
 
   const animal = animals.find((a) => a.uuid === selectedAnimal);
   if (!animal) {
-    toast.error("No animal found with the selected entry");
+    toast.error(t("herd.removeAnimal.noAnimalFound"));
     return;
   }
 
@@ -120,7 +122,7 @@ const handleRemoveAnimal = async () => {
     });
 
     await loadAnimals();
-    toast.success("Animal removed successfully!");
+    toast.success(t("herd.removeAnimal.removeSuccess"));
 
     // Reset fields
     setSelectedAnimal("");
@@ -134,7 +136,7 @@ const handleRemoveAnimal = async () => {
   console.error("RemoveAnimal => error in handleRemoveAnimal =>", error);
 
   if (toastId.current === null || !toast.isActive(toastId.current)) {
-    toastId.current = toast.error("Failed to remove animal. Please try again.");
+    toastId.current = toast.error(t("herd.removeAnimal.removeError"));
   }
 }
     
@@ -153,7 +155,7 @@ const handleRemoveAnimal = async () => {
   };
 
   return (
-    <PageContainer title="Remove Animal" maxWidth={900}>
+    <PageContainer title={t("herd.removeAnimal.title")} maxWidth={900}>
       <Box sx={{
       backgroundColor: theme.palette.background.paper,
        borderRadius: "12px",
@@ -166,7 +168,7 @@ const handleRemoveAnimal = async () => {
           <TextField
             fullWidth
             select
-            label="Animal"
+            label={t("herd.removeAnimal.animal")}
             value={selectedAnimal}
             onChange={(e) => setSelectedAnimal(e.target.value)}
             variant="outlined"
@@ -174,9 +176,9 @@ const handleRemoveAnimal = async () => {
             SelectProps={{
               onOpen: loadAnimals,
               renderValue: (selected) => {
-                if (dropdownLoading) return "Loading animals...";
+                if (dropdownLoading) return t("herd.removeAnimal.loadingAnimals");
                 const selectedOption = animalOptions.find(opt => opt.uuid === selected);
-                return selectedOption?.name || "Select an animal";
+                return selectedOption?.name || t("herd.removeAnimal.selectAnimal");
               }
             }}
           >
@@ -201,7 +203,7 @@ const handleRemoveAnimal = async () => {
           <TextField
             fullWidth
             type="date"
-            label="Date"
+            label={t("herd.removeAnimal.date")}
             InputLabelProps={{ shrink: true }}
             value={selectedDate}
             onChange={(e) => setSelectedDate(e.target.value)}
@@ -218,7 +220,7 @@ const handleRemoveAnimal = async () => {
           <TextField
             fullWidth
             select
-            label="Removal Category"
+            label={t("herd.removeAnimal.removalCategory")}
             value={selectedCategory}
             onChange={(e) => setSelectedCategory(e.target.value)}
             variant="outlined"
@@ -226,7 +228,7 @@ const handleRemoveAnimal = async () => {
           >
             {removalCategories.map((cat) => (
               <MenuItem key={cat.uuid} value={cat.name}>
-                {cat.name}
+                {t("herd.removeAnimal.categories." + cat.name, cat.name)}
               </MenuItem>
             ))}
           </TextField>
@@ -237,7 +239,7 @@ const handleRemoveAnimal = async () => {
           <TextField
             fullWidth
             select
-            label="Removal Reason"
+            label={t("herd.removeAnimal.removalReason")}
             value={selectedReason}
             onChange={(e) => setSelectedReason(e.target.value)}
             variant="outlined"
@@ -245,7 +247,7 @@ const handleRemoveAnimal = async () => {
           >
             {removalReasons.map((reason) => (
               <MenuItem key={reason} value={reason}>
-                {reason}
+                {t("herd.removeAnimal.reasons." + reason, reason)}
               </MenuItem>
             ))}
           </TextField>
@@ -257,7 +259,7 @@ const handleRemoveAnimal = async () => {
             <TextField
               fullWidth
               type="number"
-              label="Sale Price"
+              label={t("herd.removeAnimal.salePrice")}
               value={salePrice}
               onChange={(e) => setSalePrice(e.target.value)}
               variant="outlined"
@@ -271,7 +273,7 @@ const handleRemoveAnimal = async () => {
         <Grid item xs={12}>
           <TextField
             fullWidth
-            label="Comments"
+            label={t("herd.removeAnimal.comments")}
             multiline
             rows={4}
             value={comments}
@@ -285,7 +287,7 @@ const handleRemoveAnimal = async () => {
 
       {/* Action Buttons */}
       <Box sx={{ mt: 4, display: "flex", gap: 2 }}>
-        <Tooltip title={canRemove ? '' : 'No permission'}>
+        <Tooltip title={canRemove ? '' : t("herd.removeAnimal.noPermission")}>
           <span>
         <Button
           variant="contained"
@@ -301,7 +303,7 @@ const handleRemoveAnimal = async () => {
             padding: "8px 50px",
           }}
         >
-          {isLoading ? <CircularProgress size={24} sx={{color:"#0F7C8F"}} /> : "Remove"}
+          {isLoading ? <CircularProgress size={24} sx={{color:"#0F7C8F"}} /> : t("herd.removeAnimal.remove")}
         </Button>
           </span>
         </Tooltip>
@@ -327,7 +329,7 @@ const handleRemoveAnimal = async () => {
             setComments("");
           }}
         >
-          Cancel
+          {t("common.cancel")}
         </Button>
         </Box>
       </Box>

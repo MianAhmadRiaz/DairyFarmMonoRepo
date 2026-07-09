@@ -9,46 +9,48 @@ import {
   IconButton
 } from '@mui/material';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import { useTranslation } from 'react-i18next';
 import { forgotPassword, login } from '../../services/auth.services';
 
 const ForgotPassword = () => {
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const [email, setEmail] = useState('');
   const [error, setError] = useState('');
 
    const handleSubmit = async () => {
      // Clear previous errors
      setError('');
-     
+
      // Validate email
      if (!email.trim()) {
-       setError('Please enter your email address');
+       setError(t('auth.forgotPasswordScreen.errorEmailRequired'));
        return;
      }
-     
+
      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-       setError('Please enter a valid email address');
+       setError(t('auth.forgotPasswordScreen.errorEmailInvalid'));
        return;
      }
-     
+
      try {
        const params = {
          email,
        };
        const response = await forgotPassword(params);
        console.log('response forgot', response);
-       
+
        // Navigate to OTP screen with success message and email
-       navigate('/verify-code', { 
-         state: { 
+       navigate('/verify-code', {
+         state: {
            email: email,
-           message: 'OTP has been sent to your email address. Please check your inbox.',
+           message: t('auth.forgotPasswordScreen.otpSent'),
            from: 'forgot-password'
-         } 
+         }
        });
      } catch (e:any) {
        console.log('forgot error', { e });
-       setError(e.response?.data?.message || 'An error occurred. Please try again.');
+       setError(e.response?.data?.message || t('auth.forgotPasswordScreen.errorGeneric'));
      }
    };
 
@@ -116,7 +118,7 @@ const ForgotPassword = () => {
           <Box
             component="img"
             src="/assets/Logo.png"
-            alt="Logo"
+            alt={t('auth.common.logoAlt')}
             sx={{
               width: { xs: '220px', md: '280px' },
               height: { xs: '230px', md: '270px' },
@@ -136,7 +138,7 @@ const ForgotPassword = () => {
             color: '#333'
           }}
         >
-          Forgot Password?
+          {t('auth.forgotPasswordScreen.title')}
         </Typography>
         <Typography
           variant="body2"
@@ -148,7 +150,7 @@ const ForgotPassword = () => {
             maxWidth: '280px'
           }}
         >
-          Please enter your email to recover password
+          {t('auth.forgotPasswordScreen.subtitle')}
         </Typography>
 
         {/* Forgot Password Form */}
@@ -163,7 +165,7 @@ const ForgotPassword = () => {
           <TextField
             fullWidth
             variant="outlined"
-            placeholder="Enter email"
+            placeholder={t('auth.forgotPasswordScreen.emailPlaceholder')}
             type="email"
             value={email}
             onChange={e => setEmail(e.target.value)}
@@ -208,7 +210,7 @@ const ForgotPassword = () => {
             }}
             onClick={handleSubmit}
           >
-            Next
+            {t('common.next')}
           </Button>
         </Box>
       </Box>

@@ -1,5 +1,6 @@
 import React from 'react';
 import { Box, Typography, keyframes } from '@mui/material';
+import { useTranslation } from 'react-i18next';
 
 // A fully custom, code-drawn "smart dairy farm" scene: animated gradient sky,
 // glowing sensor-tagged herd silhouettes, a live milk-yield graph, and floating
@@ -92,6 +93,7 @@ const SensorNode: React.FC<{ cx: number; cy: number; delay: number }> = ({ cx, c
 );
 
 const SmartFarmScene: React.FC = () => {
+  const { t } = useTranslation();
   return (
     <Box
       sx={{
@@ -153,7 +155,7 @@ const SmartFarmScene: React.FC = () => {
             animation: `${fadeUp} 0.6s ease both`
           }}
         >
-          CattleCare · Precision Farm Intelligence
+          {t('auth.smartFarmScene.brandLine')}
         </Typography>
         <Typography
           sx={{
@@ -166,7 +168,7 @@ const SmartFarmScene: React.FC = () => {
             animationDelay: '0.1s'
           }}
         >
-          Your herd, monitored{' '}
+          {t('auth.smartFarmScene.headlinePlain')}{' '}
           <Box
             component="span"
             sx={{
@@ -177,7 +179,7 @@ const SmartFarmScene: React.FC = () => {
               animation: `${shimmer} 3.5s linear infinite`
             }}
           >
-            in real time.
+            {t('auth.smartFarmScene.headlineHighlight')}
           </Box>
         </Typography>
         <Typography
@@ -190,8 +192,7 @@ const SmartFarmScene: React.FC = () => {
             animationDelay: '0.2s'
           }}
         >
-          Live milk yields, health telemetry, and breeding cycles — one connected
-          dashboard for the modern dairy operation.
+          {t('auth.smartFarmScene.subheadline')}
         </Typography>
       </Box>
 
@@ -237,9 +238,9 @@ const SmartFarmScene: React.FC = () => {
       </Box>
 
       {/* floating telemetry chips */}
-      <TelemetryChip label="Milk Yield Today" value="612 L" top="18%" right="8%" delay={0.3} />
-      <TelemetryChip label="Herd Health" value="98.4%" top="34%" right="18%" delay={0.55} />
-      <TelemetryChip label="Active Sensors" value="25 / 25" top="50%" right="6%" delay={0.8} />
+      <TelemetryChip label={t('auth.smartFarmScene.milkYieldToday')} value="612 L" top="18%" right="8%" delay={0.3} />
+      <TelemetryChip label={t('auth.smartFarmScene.herdHealth')} value="98.4%" top="34%" right="18%" delay={0.55} />
+      <TelemetryChip label={t('auth.smartFarmScene.activeSensors')} value="25 / 25" top="50%" right="6%" delay={0.8} />
 
       {/* live production graph card */}
       <Box
@@ -260,7 +261,7 @@ const SmartFarmScene: React.FC = () => {
       >
         <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1 }}>
           <Typography sx={{ color: '#fff', fontSize: 13, fontWeight: 600 }}>
-            Production Trend
+            {t('auth.smartFarmScene.productionTrend')}
           </Typography>
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.6 }}>
             <Box
@@ -272,7 +273,7 @@ const SmartFarmScene: React.FC = () => {
                 animation: `${pulse} 2s ease-out infinite`
               }}
             />
-            <Typography sx={{ color: 'rgba(255,255,255,0.55)', fontSize: 11 }}>Live</Typography>
+            <Typography sx={{ color: 'rgba(255,255,255,0.55)', fontSize: 11 }}>{t('auth.smartFarmScene.live')}</Typography>
           </Box>
         </Box>
         <svg width="100%" height="64" viewBox="0 0 300 64" preserveAspectRatio="none">
@@ -298,7 +299,7 @@ const SmartFarmScene: React.FC = () => {
           />
         </svg>
         <Box sx={{ display: 'flex', justifyContent: 'space-between', mt: 1 }}>
-          <Typography sx={{ color: 'rgba(255,255,255,0.5)', fontSize: 10 }}>2 years of history</Typography>
+          <Typography sx={{ color: 'rgba(255,255,255,0.5)', fontSize: 10 }}>{t('auth.smartFarmScene.historyYears')}</Typography>
           <Typography sx={{ color: '#94e2cd', fontSize: 11, fontWeight: 600 }}>▲ 12.4%</Typography>
         </Box>
       </Box>

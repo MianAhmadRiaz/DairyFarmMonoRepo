@@ -22,6 +22,7 @@ import {
 } from '@mui/material';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { useTranslation } from 'react-i18next';
 
 import {
   FarmSubscription,
@@ -45,6 +46,7 @@ const statusColor: Record<string, any> = {
 const statusFilters = ['', 'active', 'trialing', 'past_due', 'suspended', 'cancelled'];
 
 const Subscriptions: React.FC = () => {
+  const { t } = useTranslation();
   const [subscriptions, setSubscriptions] = useState<FarmSubscription[]>([]);
   const [loading, setLoading] = useState(true);
   const [status, setStatus] = useState('');
@@ -66,7 +68,7 @@ const Subscriptions: React.FC = () => {
       const res = await getSubscriptions(1, 100, status || undefined);
       setSubscriptions(res.subscriptions);
     } catch (err: any) {
-      toast.error(err?.response?.data?.message || 'Failed to load subscriptions');
+      toast.error(err?.response?.data?.message || t('softwareAdmin.subscriptions.loadFailed'));
     } finally {
       setLoading(false);
     }
@@ -83,7 +85,7 @@ const Subscriptions: React.FC = () => {
       toast.success(msg);
       load();
     } catch (err: any) {
-      toast.error(err?.response?.data?.message || 'Action failed');
+      toast.error(err?.response?.data?.message || t('softwareAdmin.subscriptions.actionFailed'));
     }
   };
 
@@ -97,17 +99,17 @@ const Subscriptions: React.FC = () => {
     if (!extendSub) return;
     const days = Number(extendDays);
     if (!days || isNaN(days) || days <= 0) {
-      toast.error('Enter a valid number of days');
+      toast.error(t('softwareAdmin.subscriptions.enterValidDays'));
       return;
     }
     setSaving(true);
     try {
       await extendSubscription(extendSub.uuid, { days });
-      toast.success('Due date extended');
+      toast.success(t('softwareAdmin.subscriptions.toast.dueDateExtended'));
       setExtendOpen(false);
       load();
     } catch (err: any) {
-      toast.error(err?.response?.data?.message || 'Failed to extend');
+      toast.error(err?.response?.data?.message || t('softwareAdmin.subscriptions.failedExtend'));
     } finally {
       setSaving(false);
     }
@@ -121,7 +123,7 @@ const Subscriptions: React.FC = () => {
       setTrueUpOpen(true);
       load();
     } catch (err: any) {
-      toast.error(err?.response?.data?.message || 'True-up failed');
+      toast.error(err?.response?.data?.message || t('softwareAdmin.subscriptions.trueUpFailed'));
     } finally {
       setTrueUpBusy(null);
     }
@@ -131,19 +133,19 @@ const Subscriptions: React.FC = () => {
     <Box>
       <Box display="flex" justifyContent="space-between" alignItems="center" mb={3}>
         <Typography variant="h4" fontWeight={700}>
-          Subscriptions
+          {t('softwareAdmin.subscriptions.title')}
         </Typography>
         <TextField
           select
           size="small"
-          label="Status"
+          label={t('softwareAdmin.subscriptions.statusFilter')}
           value={status}
           onChange={e => setStatus(e.target.value)}
           sx={{ minWidth: 180 }}
         >
           {statusFilters.map(s => (
             <MenuItem key={s || 'all'} value={s}>
-              {s === '' ? 'All' : s}
+              {s === '' ? t('softwareAdmin.subscriptions.all') : t('softwareAdmin.subscriptions.status.' + s, s)}
             </MenuItem>
           ))}
         </TextField>
@@ -158,20 +160,20 @@ const Subscriptions: React.FC = () => {
           <Table>
             <TableHead>
               <TableRow>
-                <TableCell>Farm</TableCell>
-                <TableCell>Plan</TableCell>
-                <TableCell>Pricing</TableCell>
-                <TableCell>Amount</TableCell>
-                <TableCell>Discount</TableCell>
-                <TableCell>Next Due</TableCell>
-                <TableCell>Status</TableCell>
-                <TableCell align="right">Actions</TableCell>
+                <TableCell>{t('softwareAdmin.subscriptions.columns.farm')}</TableCell>
+                <TableCell>{t('softwareAdmin.subscriptions.columns.plan')}</TableCell>
+                <TableCell>{t('softwareAdmin.subscriptions.columns.pricing')}</TableCell>
+                <TableCell>{t('softwareAdmin.subscriptions.columns.amount')}</TableCell>
+                <TableCell>{t('softwareAdmin.subscriptions.columns.discount')}</TableCell>
+                <TableCell>{t('softwareAdmin.subscriptions.columns.nextDue')}</TableCell>
+                <TableCell>{t('softwareAdmin.subscriptions.columns.status')}</TableCell>
+                <TableCell align="right">{t('softwareAdmin.subscriptions.columns.actions')}</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
               {subscriptions.length === 0 && (
                 <TableRow>
-                  <TableCell colSpan={8}>No subscriptions found.</TableCell>
+                  <TableCell colSpan={8}>{t('softwareAdmin.subscriptions.noSubscriptions')}</TableCell>
                 </TableRow>
               )}
               {subscriptions.map(sub => (
@@ -181,20 +183,20 @@ const Subscriptions: React.FC = () => {
                   <TableCell>
                     {sub.pricing_model === 'per_animal' ? (
                       <>
-                        <Chip size="small" label="Per-Animal" color="secondary" />
+                        <Chip size="small" label={t('softwareAdmin.subscriptions.perAnimalChip')} color="secondary" />
                         <Typography variant="caption" display="block" color="text.secondary">
-                          {sub.billed_animal_count ?? 0} billed @ {sub.per_animal_rate}
+                          {t('softwareAdmin.subscriptions.billedAt', { count: sub.billed_animal_count ?? 0, rate: sub.per_animal_rate })}
                         </Typography>
                       </>
                     ) : (
-                      <Chip size="small" label="Flat" />
+                      <Chip size="small" label={t('softwareAdmin.subscriptions.flatChip')} />
                     )}
                   </TableCell>
                   <TableCell>
-                    {sub.amount} {sub.currency}/{sub.billing_cycle}
+                    {sub.amount} {sub.currency}/{t('softwareAdmin.plans.cycles.' + sub.billing_cycle, sub.billing_cycle)}
                     {sub.gross_amount != null && sub.gross_amount !== sub.amount && (
                       <Typography variant="caption" display="block" color="text.secondary">
-                        gross {sub.gross_amount}
+                        {t('softwareAdmin.subscriptions.gross', { amount: sub.gross_amount })}
                       </Typography>
                     )}
                   </TableCell>
@@ -211,12 +213,12 @@ const Subscriptions: React.FC = () => {
                   </TableCell>
                   <TableCell>{sub.next_due_date}</TableCell>
                   <TableCell>
-                    <Chip size="small" label={sub.status} color={statusColor[sub.status]} />
+                    <Chip size="small" label={t('softwareAdmin.subscriptions.status.' + sub.status, sub.status)} color={statusColor[sub.status]} />
                   </TableCell>
                   <TableCell align="right">
                     <Stack direction="row" spacing={1} justifyContent="flex-end" flexWrap="wrap" useFlexGap>
                       <Button size="small" variant="outlined" onClick={() => openExtend(sub)}>
-                        Extend
+                        {t('softwareAdmin.subscriptions.actions.extend')}
                       </Button>
                       {sub.pricing_model === 'per_animal' && (
                         <Button
@@ -226,7 +228,7 @@ const Subscriptions: React.FC = () => {
                           disabled={trueUpBusy === sub.uuid}
                           onClick={() => handleTrueUp(sub)}
                         >
-                          {trueUpBusy === sub.uuid ? 'True-Up…' : 'True-Up'}
+                          {trueUpBusy === sub.uuid ? t('softwareAdmin.subscriptions.actions.trueUpBusy') : t('softwareAdmin.subscriptions.actions.trueUp')}
                         </Button>
                       )}
                       {sub.status !== 'suspended' && sub.status !== 'cancelled' && (
@@ -234,9 +236,9 @@ const Subscriptions: React.FC = () => {
                           size="small"
                           color="warning"
                           variant="outlined"
-                          onClick={() => act(suspendSubscription, sub, 'Subscription suspended')}
+                          onClick={() => act(suspendSubscription, sub, t('softwareAdmin.subscriptions.toast.suspended'))}
                         >
-                          Suspend
+                          {t('softwareAdmin.subscriptions.actions.suspend')}
                         </Button>
                       )}
                       {(sub.status === 'suspended' || sub.status === 'past_due') && (
@@ -244,9 +246,9 @@ const Subscriptions: React.FC = () => {
                           size="small"
                           color="success"
                           variant="outlined"
-                          onClick={() => act(reactivateSubscription, sub, 'Subscription reactivated')}
+                          onClick={() => act(reactivateSubscription, sub, t('softwareAdmin.subscriptions.toast.reactivated'))}
                         >
-                          Reactivate
+                          {t('softwareAdmin.subscriptions.actions.reactivate')}
                         </Button>
                       )}
                       {sub.status !== 'cancelled' && (
@@ -254,9 +256,9 @@ const Subscriptions: React.FC = () => {
                           size="small"
                           color="error"
                           variant="outlined"
-                          onClick={() => act(cancelSubscription, sub, 'Subscription cancelled')}
+                          onClick={() => act(cancelSubscription, sub, t('softwareAdmin.subscriptions.toast.cancelled'))}
                         >
-                          Cancel
+                          {t('softwareAdmin.subscriptions.actions.cancel')}
                         </Button>
                       )}
                     </Stack>
@@ -270,49 +272,49 @@ const Subscriptions: React.FC = () => {
 
       {/* Extend dialog */}
       <Dialog open={extendOpen} onClose={() => setExtendOpen(false)} fullWidth maxWidth="xs">
-        <DialogTitle>Extend Due Date — {extendSub?.farm?.name || extendSub?.farmId}</DialogTitle>
+        <DialogTitle>{t('softwareAdmin.subscriptions.extendDialog.title', { name: extendSub?.farm?.name || extendSub?.farmId })}</DialogTitle>
         <DialogContent>
           <DialogContentText sx={{ mb: 1 }}>
-            Current due date: {extendSub?.next_due_date}
+            {t('softwareAdmin.subscriptions.extendDialog.currentDueDate', { date: extendSub?.next_due_date })}
           </DialogContentText>
           <TextField
             fullWidth
             margin="normal"
-            label="Extend by (days)"
+            label={t('softwareAdmin.subscriptions.extendDialog.extendByDays')}
             type="number"
             value={extendDays}
             onChange={e => setExtendDays(e.target.value)}
           />
         </DialogContent>
         <DialogActions>
-          <Button onClick={() => setExtendOpen(false)}>Cancel</Button>
+          <Button onClick={() => setExtendOpen(false)}>{t('common.cancel')}</Button>
           <Button variant="contained" onClick={handleExtend} disabled={saving}>
-            {saving ? 'Extending…' : 'Extend'}
+            {saving ? t('softwareAdmin.subscriptions.extendDialog.extending') : t('softwareAdmin.subscriptions.actions.extend')}
           </Button>
         </DialogActions>
       </Dialog>
 
       {/* True-up result dialog */}
       <Dialog open={trueUpOpen} onClose={() => setTrueUpOpen(false)} fullWidth maxWidth="xs">
-        <DialogTitle>True-Up Result</DialogTitle>
+        <DialogTitle>{t('softwareAdmin.subscriptions.trueUpDialog.title')}</DialogTitle>
         <DialogContent>
           {trueUpResult ? (
             <Stack spacing={1} sx={{ mt: 1 }}>
               <Typography variant="h5" fontWeight={700} color="primary">
-                Prorated charge: {trueUpResult.proratedCharge} {trueUpResult.currency}
+                {t('softwareAdmin.subscriptions.trueUpDialog.proratedCharge', { charge: trueUpResult.proratedCharge, currency: trueUpResult.currency })}
               </Typography>
-              <Typography variant="body2">Added animals: {trueUpResult.addedAnimals}</Typography>
-              <Typography variant="body2">Current count: {trueUpResult.currentCount}</Typography>
-              <Typography variant="body2">Billed count: {trueUpResult.billedCount}</Typography>
-              <Typography variant="body2">Remaining days: {trueUpResult.remainingDays}</Typography>
+              <Typography variant="body2">{t('softwareAdmin.subscriptions.trueUpDialog.addedAnimals', { count: trueUpResult.addedAnimals })}</Typography>
+              <Typography variant="body2">{t('softwareAdmin.subscriptions.trueUpDialog.currentCount', { count: trueUpResult.currentCount })}</Typography>
+              <Typography variant="body2">{t('softwareAdmin.subscriptions.trueUpDialog.billedCount', { count: trueUpResult.billedCount })}</Typography>
+              <Typography variant="body2">{t('softwareAdmin.subscriptions.trueUpDialog.remainingDays', { count: trueUpResult.remainingDays })}</Typography>
             </Stack>
           ) : (
-            <Typography>No result.</Typography>
+            <Typography>{t('softwareAdmin.subscriptions.trueUpDialog.noResult')}</Typography>
           )}
         </DialogContent>
         <DialogActions>
           <Button variant="contained" onClick={() => setTrueUpOpen(false)}>
-            Close
+            {t('common.close')}
           </Button>
         </DialogActions>
       </Dialog>

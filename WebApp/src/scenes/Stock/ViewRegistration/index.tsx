@@ -61,9 +61,11 @@ import {
 import { StockCategory } from '../StockRegistration/types';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { useTranslation } from 'react-i18next';
 
 
 const ViewRegistration: React.FC = () => {
+  const { t } = useTranslation();
   const [stockItems, setStockItems] = useState<StockItemResponse[]>([]);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
@@ -175,11 +177,11 @@ const ViewRegistration: React.FC = () => {
       const data = response.data as PaginatedResponse;
       setStockItems(data.items);
 
-      toast.success('Stock item updated successfully');
+      toast.success(t('stock.viewRegistration.updateSuccess'));
       handleCloseEditModal();
     } catch (err: any) {
       console.error('Error updating stock item:', err);
-      toast.error(err.response?.data?.message || 'Failed to update stock item')
+      toast.error(err.response?.data?.message || t('stock.viewRegistration.updateError'))
     }
   };
 
@@ -195,10 +197,10 @@ const ViewRegistration: React.FC = () => {
       await deleteStockItem(itemToDelete.uuid);
       setStockItems(prevItems => prevItems.filter(item => item.uuid !== itemToDelete.uuid));
   
-      toast.success('Stock item deleted successfully');
+      toast.success(t('stock.viewRegistration.deleteSuccess'));
     } catch (err) {
    
-      toast.error('Failed to delete stock item')
+      toast.error(t('stock.viewRegistration.deleteError'))
     } finally {
       setDeleteDialogOpen(false);
       setItemToDelete(null);
@@ -298,7 +300,7 @@ const ViewRegistration: React.FC = () => {
           fontWeight: 600,
           color: '#005f73'
         }}>
-          Filter Options
+          {t('stock.viewRegistration.filterOptions')}
         </Typography>
         <IconButton 
           size="small" 
@@ -321,7 +323,7 @@ const ViewRegistration: React.FC = () => {
             color: '#333',
             fontWeight: 500
           }}>
-            Category
+            {t('stock.common.category')}
           </Typography>
           <FormControl fullWidth size="small">
             <Select
@@ -367,7 +369,7 @@ const ViewRegistration: React.FC = () => {
             color: '#333',
             fontWeight: 500
           }}>
-            Unit of Measure
+            {t('stock.viewRegistration.unitOfMeasure')}
           </Typography>
           <FormControl fullWidth size="small">
             <Select
@@ -434,7 +436,7 @@ const ViewRegistration: React.FC = () => {
               }
             }}
           >
-            Clear All
+            {t('stock.viewRegistration.clearAll')}
           </Button>
           <Button
             variant="contained"
@@ -451,7 +453,7 @@ const ViewRegistration: React.FC = () => {
               }
              }}
           >
-            Apply Filters
+            {t('stock.viewRegistration.applyFilters')}
           </Button>
         </Box>
       </Stack>
@@ -510,7 +512,7 @@ const ViewRegistration: React.FC = () => {
 
 
   return (
-    <PageContainer title="Stock View" subtitle="View and manage stock items">
+    <PageContainer title={t('stock.viewRegistration.title')} subtitle={t('stock.viewRegistration.subtitle')}>
   <Container maxWidth="lg"  sx={{
     px: isMobile ? '11px' : undefined,
   }}>
@@ -704,7 +706,7 @@ const ViewRegistration: React.FC = () => {
                 <Grid item xs={12} md={6}>
                   <GlobalTextField
                     name="name"
-                    label="Product Name"
+                    label={t('stock.viewRegistration.productName')}
                     value={selectedItem.name}
                     onChange={(e) => setSelectedItem({ ...selectedItem, name: e.target.value })}
                     fullWidth
@@ -731,7 +733,7 @@ const ViewRegistration: React.FC = () => {
                 <Grid item xs={12} md={6}>
                   <GlobalTextField
                     name="unit_of_measure"
-                    label="Unit of Measure"
+                    label={t('stock.viewRegistration.unitOfMeasure')}
                     value={selectedItem.unit_of_measure}
                     onChange={(e) => setSelectedItem({ ...selectedItem, unit_of_measure: e.target.value })}
                     fullWidth
@@ -741,7 +743,7 @@ const ViewRegistration: React.FC = () => {
                 <Grid item xs={12} md={6}>
                   <GlobalTextField
                     name="reorder_level"
-                    label="Reorder Level"
+                    label={t('stock.viewRegistration.reorderLevel')}
                     type="number"
                     value={selectedItem.reorder_level}
                     onChange={(e) => setSelectedItem({ ...selectedItem, reorder_level: Number(e.target.value) })}
@@ -762,7 +764,7 @@ const ViewRegistration: React.FC = () => {
                 <Grid item xs={12} md={6}>
                   <GlobalTextField
                     name="currentStockRate"
-                    label="Current Rate"
+                    label={t('stock.viewRegistration.currentRate')}
                     type="number"
                     value={selectedItem.currentStockRate || ''}
                     onChange={(e) => setSelectedItem({ ...selectedItem, currentStockRate: Number(e.target.value) })}

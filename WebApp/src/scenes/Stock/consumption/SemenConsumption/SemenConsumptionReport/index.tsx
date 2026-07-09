@@ -30,9 +30,11 @@ import { fetchFeedCostAnalysis } from '../../../../../shared/services/feeding.se
 import { fetchStockCategories } from '../../../../../shared/services/stock.services';
 import * as XLSX from 'xlsx';
 import { FeedCostItem } from '../../types';
+import { useTranslation } from 'react-i18next';
 
 
 const SemenConsumptionReport: React.FC = () => {
+  const { t } = useTranslation();
   const [startDate, setStartDate] = useState<string>('');
   const [endDate, setEndDate] = useState<string>('');
   const [loading, setLoading] = useState(false);
@@ -67,7 +69,7 @@ const SemenConsumptionReport: React.FC = () => {
       const medicineCategory = categories?.find(item => item.name.toLowerCase() === "semen");
       
       if (!medicineCategory?.uuid) {
-        throw new Error('Medicine category not found');
+        throw new Error(t('stock.addSemenConsumption.categoryNotFound'));
       }
 
 
@@ -85,14 +87,14 @@ const SemenConsumptionReport: React.FC = () => {
 
       setSnackbar({
         open: true,
-        message: "Feed Cost Analysis Report fetched successfully.",
+        message: t('stock.feedCostAnalysis.fetchSuccess'),
         severity: 'success'
       });
     } catch (error) {
       console.error('Error fetching report:', error);
       setSnackbar({
         open: true,
-        message: 'Failed to fetch feed cost analysis data',
+        message: t('stock.feedCostAnalysis.fetchError'),
         severity: 'error'
       });
     } finally {
@@ -147,27 +149,27 @@ const SemenConsumptionReport: React.FC = () => {
 
      
       const wb = XLSX.utils.book_new();
-      XLSX.utils.book_append_sheet(wb, ws, "Medicine Consumption Report");
+      XLSX.utils.book_append_sheet(wb, ws, t('stock.semenConsumptionReport.sheetName'));
 
       XLSX.writeFile(wb, `Medicine_Consumption_Report_${startDate}_to_${endDate}.xlsx`);
 
       setSnackbar({
         open: true,
-        message: "Excel file downloaded successfully",
+        message: t('stock.common.excelDownloadSuccess'),
         severity: 'success'
       });
     } catch (error) {
       console.error('Error exporting to Excel:', error);
       setSnackbar({
         open: true,
-        message: "Failed to export Excel file",
+        message: t('stock.common.excelDownloadError'),
         severity: 'error'
       });
     }
   };
 
   return (
-    <PageContainer title="Semen Consumption Report" subtitle="View semen consumption analysis report">
+    <PageContainer title={t('stock.semenConsumptionReport.title')} subtitle={t('stock.semenConsumptionReport.subtitle')}>
       <Container maxWidth="lg"   sx={{
     px: isMobile ? '11px' : undefined,
   }}>
@@ -192,7 +194,7 @@ const SemenConsumptionReport: React.FC = () => {
                 <Grid item xs={12} md={4}>
                   <TextField
                     type="date"
-                    label="Start Date"
+                    label={t('stock.common.startDate')}
                     size="small"
                     fullWidth
                     value={startDate}
@@ -203,7 +205,7 @@ const SemenConsumptionReport: React.FC = () => {
                 <Grid item xs={12} md={4}>
                   <TextField
                     type="date"
-                    label="End Date"
+                    label={t('stock.common.endDate')}
                     size="small"
                     fullWidth
                     value={endDate}
@@ -224,7 +226,7 @@ const SemenConsumptionReport: React.FC = () => {
                       flex: 1
                     }}
                   >
-                    Go!
+                    {t('stock.common.go')}
                   </Button>
                   <IconButton 
                     onClick={handleCopy}
@@ -263,10 +265,10 @@ const SemenConsumptionReport: React.FC = () => {
                 <TableHead>
                   <TableRow sx={{ backgroundColor: '#f8f9fA' }}>
                     <TableCell sx={{ fontWeight: 'bold' }}>#</TableCell>
-                    <TableCell sx={{ fontWeight: 'bold' }}>Product</TableCell>
-                    <TableCell align="right" sx={{ fontWeight: 'bold' }}>Quantity</TableCell>
-                    <TableCell align="right" sx={{ fontWeight: 'bold' }}>Cost</TableCell>
-                    <TableCell align="right" sx={{ fontWeight: 'bold' }}>Total Cost</TableCell>
+                    <TableCell sx={{ fontWeight: 'bold' }}>{t('stock.common.product')}</TableCell>
+                    <TableCell align="right" sx={{ fontWeight: 'bold' }}>{t('stock.common.quantity')}</TableCell>
+                    <TableCell align="right" sx={{ fontWeight: 'bold' }}>{t('stock.common.cost')}</TableCell>
+                    <TableCell align="right" sx={{ fontWeight: 'bold' }}>{t('stock.common.totalCost')}</TableCell>
 
                   </TableRow>
                 </TableHead>
@@ -284,7 +286,7 @@ const SemenConsumptionReport: React.FC = () => {
                   ) : data.items.length === 0 ? (
                     <TableRow>
                       <TableCell colSpan={5} align="center">
-                        No data available
+                        {t('stock.common.noDataAvailable')}
                       </TableCell>
                     </TableRow>
                   ) : (
@@ -316,7 +318,7 @@ const SemenConsumptionReport: React.FC = () => {
                         <TableCell colSpan={4} align="right" sx={{ fontWeight: 'bold' }}>
                         </TableCell>
                         <TableCell align="right" sx={{ fontWeight: 'bold' }}>
-                     <span style={{marginRight:'6px'}}>Total Amount </span>:    {data.totalAmount}
+                     <span style={{marginRight:'6px'}}>{t('stock.common.totalAmount')} </span>:    {data.totalAmount}
                         </TableCell>
                       </TableRow>
                     </>

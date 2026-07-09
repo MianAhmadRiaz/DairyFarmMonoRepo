@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import {
   Box,
   Button,
@@ -55,7 +56,6 @@ interface StockInventoryTableProps {
 
 interface Column {
   id: string;
-  label: string;
   visible: boolean;
   align?: 'left' | 'right' | 'center';
 }
@@ -65,6 +65,7 @@ const StockInventoryTable: React.FC<StockInventoryTableProps> = ({
   data,
   onEdit
 }) => {
+  const { t } = useTranslation();
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   const [searchTerm, setSearchTerm] = useState('');
@@ -72,15 +73,18 @@ const StockInventoryTable: React.FC<StockInventoryTableProps> = ({
   const [selectedItem, setSelectedItem] = useState<StockItem | null>(null);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [columns, setColumns] = useState<Column[]>([
-    { id: 'itemName', label: 'Item Name', visible: true, align: 'left' },
-    { id: 'unit', label: 'Unit', visible: true, align: 'right' },
-    { id: 'purchaseRate', label: 'Purchase Rate', visible: true, align: 'right' },
-    { id: 'unitPrice', label: 'Unit Price', visible: true, align: 'right' },
-    { id: 'quantity', label: 'Quantity', visible: true, align: 'right' },
-    { id: 'reorderLevel', label: 'Reorder Level', visible: true, align: 'right' },
-    { id: 'amount', label: 'Amount', visible: true, align: 'right' },
-    { id: 'actions', label: 'Actions', visible: true, align: 'center' }
+    { id: 'itemName', visible: true, align: 'left' },
+    { id: 'unit', visible: true, align: 'right' },
+    { id: 'purchaseRate', visible: true, align: 'right' },
+    { id: 'unitPrice', visible: true, align: 'right' },
+    { id: 'quantity', visible: true, align: 'right' },
+    { id: 'reorderLevel', visible: true, align: 'right' },
+    { id: 'amount', visible: true, align: 'right' },
+    { id: 'actions', visible: true, align: 'center' }
   ]);
+
+  const getColumnLabel = (columnId: string) =>
+    t(`shared.stockInventoryTable.columns.${columnId}`);
 
   const filteredData = data.filter(item =>
     item.itemName.toLowerCase().includes(searchTerm.toLowerCase())
@@ -110,7 +114,7 @@ const StockInventoryTable: React.FC<StockInventoryTableProps> = ({
       const row: any = {};
       columns.forEach(column => {
         if (column.visible && column.id !== 'actions') {
-          row[column.label] = item[column.id as keyof StockItem];
+          row[getColumnLabel(column.id)] = item[column.id as keyof StockItem];
         }
       });
       return row;
@@ -161,7 +165,7 @@ const StockInventoryTable: React.FC<StockInventoryTableProps> = ({
             }
           }}
         >
-          Column visibility
+          {t('shared.common.columnVisibility')}
         </Button>
         <Menu
           anchorEl={anchorEl}
@@ -174,7 +178,7 @@ const StockInventoryTable: React.FC<StockInventoryTableProps> = ({
                 checked={column.visible}
                 onChange={() => handleColumnVisibilityChange(column.id)}
               />
-              {column.label}
+              {getColumnLabel(column.id)}
             </MenuItem>
           ))}
         </Menu>
@@ -233,7 +237,7 @@ const StockInventoryTable: React.FC<StockInventoryTableProps> = ({
         <Box sx={{ flexGrow: 1 }} />
         <TextField
           size="small"
-          placeholder="Search..."
+          placeholder={t('shared.common.searchPlaceholder')}
           value={searchTerm}
           onChange={e => setSearchTerm(e.target.value)}
           sx={{
@@ -272,7 +276,7 @@ const StockInventoryTable: React.FC<StockInventoryTableProps> = ({
                         py: 1.5
                       }}
                     >
-                      {column.label}
+                      {getColumnLabel(column.id)}
                     </TableCell>
                   )
                 ))}
@@ -325,7 +329,7 @@ const StockInventoryTable: React.FC<StockInventoryTableProps> = ({
         fullWidth
       >
         <DialogTitle sx={{ borderBottom: '1px solid #e0e0e0', pb: 2 }}>
-          Edit Stock Item
+          {t('shared.stockInventoryTable.editStockItem')}
         </DialogTitle>
         <DialogContent sx={{ pt: 3 }}>
           {selectedItem && (
@@ -336,14 +340,14 @@ const StockInventoryTable: React.FC<StockInventoryTableProps> = ({
                   fontWeight="bold"
                   color="primary"
                 >
-                  Basic Information
+                  {t('shared.stockInventoryTable.basicInformation')}
                 </Typography>
               </Grid>
 
               <Grid item xs={12} md={6}>
                 <GlobalTextField
                   name="name"
-                  label="Item Name"
+                  label={t('shared.common.itemName')}
                   value={selectedItem?.itemName || ''}
                   onChange={e =>
                     setSelectedItem(prev =>
@@ -357,7 +361,7 @@ const StockInventoryTable: React.FC<StockInventoryTableProps> = ({
               <Grid item xs={12} md={6}>
                 <GlobalTextField
                   name="reorder_level"
-                  label="Reorder Level"
+                  label={t('shared.common.reorderLevel')}
                   type="number"
                   value={selectedItem?.reorderLevel || ''}
                   onChange={e =>
@@ -372,7 +376,7 @@ const StockInventoryTable: React.FC<StockInventoryTableProps> = ({
               <Grid item xs={12} md={6}>
                 <GlobalTextField
                   name="quantity"
-                  label="Quantity"
+                  label={t('shared.common.quantity')}
                   type="number"
                   value={selectedItem?.quantity || ''}
                   onChange={e =>
@@ -394,14 +398,14 @@ const StockInventoryTable: React.FC<StockInventoryTableProps> = ({
                   fontWeight="bold"
                   color="primary"
                 >
-                  Stock Details
+                  {t('shared.stockInventoryTable.stockDetails')}
                 </Typography>
               </Grid>
 
               <Grid item xs={12} md={6}>
                 <GlobalTextField
                   name="amount"
-                  label="Amount"
+                  label={t('shared.common.amount')}
                   type="number"
                   value={selectedItem?.amount || ''}
                   onChange={e =>
@@ -421,7 +425,7 @@ const StockInventoryTable: React.FC<StockInventoryTableProps> = ({
             variant="outlined"
             color="inherit"
           >
-            Cancel
+            {t('common.cancel')}
           </Button>
           <Button
             // onClick={handleSaveEdit}
@@ -437,7 +441,7 @@ const StockInventoryTable: React.FC<StockInventoryTableProps> = ({
               }
             }}
           >
-            Save Changes
+            {t('shared.common.saveChanges')}
           </Button>
         </DialogActions>
       </Dialog>

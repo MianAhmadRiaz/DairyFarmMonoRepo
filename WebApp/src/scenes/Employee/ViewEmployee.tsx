@@ -1,4 +1,5 @@
 import React, { useState,useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useScrollToTopOnMount } from '../../shared/components/Hooks/useScrollToTop';
 import {
   Box,
@@ -33,6 +34,7 @@ import { getAllEmployees , GetEmployeeResponse,deleteEmployee,updateEmployee} fr
 export default function ViewEmployees() {
   // Ensure page starts from top when component mounts
   useScrollToTopOnMount();
+  const { t } = useTranslation();
   const navigate = useNavigate();
 
 const [employees, setEmployees] = useState<GetEmployeeResponse[]>([]);
@@ -158,7 +160,7 @@ const paginatedEmployees = filteredEmployees.slice(
 }, []);
 
   return (
-    <PageContainer title="View Employees">
+    <PageContainer title={t('employee.viewEmployee.title')}>
       <Box sx={{backgroundColor: theme.palette.background.paper,
        
           borderRadius: 2,
@@ -178,7 +180,7 @@ const paginatedEmployees = filteredEmployees.slice(
         }}
       >
         <TextField
-          placeholder="Search by Name , Phone Number or Salary"
+          placeholder={t('employee.viewEmployee.searchPlaceholder')}
           size="small"
            value={searchQuery}
            onChange={(e) => setSearchQuery(e.target.value)}
@@ -226,15 +228,15 @@ const paginatedEmployees = filteredEmployees.slice(
         >
           <thead>
             <tr>
-              <th>Sr#</th>
-              <th>Name</th>
-              <th>Father Name</th>
-              <th>Hire Date</th>
-              <th>Phone Number</th>
-              <th>Designation</th>
-              <th>Department</th>
-              <th>Salary</th>
-              <th>Edit</th>
+              <th>{t('employee.common.srNo')}</th>
+              <th>{t('employee.common.name')}</th>
+              <th>{t('employee.viewEmployee.fatherName')}</th>
+              <th>{t('employee.viewEmployee.hireDate')}</th>
+              <th>{t('employee.viewEmployee.phoneNumber')}</th>
+              <th>{t('employee.common.designation')}</th>
+              <th>{t('employee.common.department')}</th>
+              <th>{t('employee.common.salary')}</th>
+              <th>{t('employee.common.edit')}</th>
             </tr>
           </thead>
           <tbody>
@@ -311,7 +313,7 @@ const paginatedEmployees = filteredEmployees.slice(
    }}
 >
   <DialogTitle sx={{ fontWeight: 'bold' , textAlign: 'center' ,mt:0.5}}>
-    Edit Employee
+    {t('employee.viewEmployee.editEmployee')}
   </DialogTitle>
 
   <DialogContent>
@@ -349,14 +351,14 @@ const paginatedEmployees = filteredEmployees.slice(
       >
         <thead>
           <tr>
-            <th>Sr#</th>
-            <th>Name</th>
-            <th>Father Name</th>
-            <th>Hire Date</th>
-            <th>Phone</th>
-            <th>Designation</th>
-            <th>Department</th>
-            <th>Salary</th>
+            <th>{t('employee.common.srNo')}</th>
+            <th>{t('employee.common.name')}</th>
+            <th>{t('employee.viewEmployee.fatherName')}</th>
+            <th>{t('employee.viewEmployee.hireDate')}</th>
+            <th>{t('employee.viewEmployee.phone')}</th>
+            <th>{t('employee.common.designation')}</th>
+            <th>{t('employee.common.department')}</th>
+            <th>{t('employee.common.salary')}</th>
             {/* <th>Status</th> */}
           </tr>
         </thead>
@@ -461,8 +463,8 @@ const paginatedEmployees = filteredEmployees.slice(
                   
                    }}
   >
-    <MenuItem value="Manager">Manager</MenuItem>
-    <MenuItem value="Supervisor">Supervisor</MenuItem>
+    <MenuItem value="Manager">{t('employee.viewEmployee.designations.manager')}</MenuItem>
+    <MenuItem value="Supervisor">{t('employee.viewEmployee.designations.supervisor')}</MenuItem>
   </Select>
 </FormControl>
 
@@ -487,8 +489,8 @@ const paginatedEmployees = filteredEmployees.slice(
                   borderRadius: '6px',
       }}
   >
-    <MenuItem value="HR">HR</MenuItem>
-    <MenuItem value="Finance">Finance</MenuItem>
+    <MenuItem value="HR">{t('employee.viewEmployee.departments.hr')}</MenuItem>
+    <MenuItem value="Finance">{t('employee.viewEmployee.departments.finance')}</MenuItem>
   </Select>
 </FormControl>
 
@@ -544,10 +546,10 @@ const paginatedEmployees = filteredEmployees.slice(
               boxShadow: 1,
               borderRadius: 1
             }}
-            
-          
+
+
           >
-            Cancel
+            {t('employee.common.cancel')}
           </Button>
         
           <Button
@@ -569,10 +571,10 @@ const paginatedEmployees = filteredEmployees.slice(
           >
            {/* Update */}
             {isSubmitting ? (
-                 <CircularProgress size={24} sx={{ color: "#0F7C8F" }} /> 
-               ) : ( 
-                 "Update"
-                )} 
+                 <CircularProgress size={24} sx={{ color: "#0F7C8F" }} />
+               ) : (
+                 t('employee.common.update')
+                )}
           </Button>
         </Box>
 </Dialog>

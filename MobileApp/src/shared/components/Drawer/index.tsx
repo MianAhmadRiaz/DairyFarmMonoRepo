@@ -1,6 +1,7 @@
 import { useNavigation } from '@react-navigation/native'
 import { ICONS } from 'assets/icons'
 import React, { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { StyleSheet, TouchableOpacity, View } from 'react-native'
 import FastImage from 'react-native-fast-image'
 import Toast from 'react-native-toast-message'
@@ -25,26 +26,28 @@ import { PERMISSIONS, PermissionName } from 'shared/rbac/permissions'
 // The module registry: each drawer item declares the permission that makes it
 // visible. Only items the user (or Owner) can access are rendered.
 type DrawerModule = {
-  name: string
+  // i18n key for the visible drawer label (route NAME stays in `screen`).
+  labelKey: string
   screen: string
   permission: PermissionName
   icon: { type: any; name: string }
 }
 
 const MODULES: DrawerModule[] = [
-  { name: 'Home', screen: 'Home', permission: PERMISSIONS.DASHBOARD_VIEW, icon: { type: Icons.Entypo, name: 'home' } },
-  { name: 'Animals Info', screen: 'AnimalsInfo', permission: PERMISSIONS.HERD_VIEW, icon: { type: Icons.MaterialCommunityIcons, name: 'cow' } },
-  { name: 'Breeding Events', screen: 'BreedingEventsStack', permission: PERMISSIONS.BREEDING_VIEW, icon: { type: Icons.MaterialCommunityIcons, name: 'heart-pulse' } },
-  { name: 'Health & Treatments', screen: 'HealthStack', permission: PERMISSIONS.HEALTH_VIEW, icon: { type: Icons.FontAwesome5, name: 'syringe' } },
-  { name: 'Milk', screen: 'MilkStack', permission: PERMISSIONS.MILK_VIEW, icon: { type: Icons.MaterialCommunityIcons, name: 'cup-water' } },
-  { name: 'Feeding', screen: 'FeedingStack', permission: PERMISSIONS.FEED_VIEW, icon: { type: Icons.MaterialCommunityIcons, name: 'grain' } },
-  { name: 'Stock & Inventory', screen: 'StockStack', permission: PERMISSIONS.STOCK_VIEW, icon: { type: Icons.MaterialCommunityIcons, name: 'warehouse' } },
-  { name: 'Employees', screen: 'EmployeeStack', permission: PERMISSIONS.EMPLOYEE_VIEW, icon: { type: Icons.Ionicons, name: 'people' } },
-  { name: 'Finance', screen: 'FinanceStack', permission: PERMISSIONS.FINANCE_VIEW, icon: { type: Icons.MaterialCommunityIcons, name: 'cash-multiple' } }
+  { labelKey: 'nav.home', screen: 'Home', permission: PERMISSIONS.DASHBOARD_VIEW, icon: { type: Icons.Entypo, name: 'home' } },
+  { labelKey: 'nav.animalsInfo', screen: 'AnimalsInfo', permission: PERMISSIONS.HERD_VIEW, icon: { type: Icons.MaterialCommunityIcons, name: 'cow' } },
+  { labelKey: 'nav.breedingEvents', screen: 'BreedingEventsStack', permission: PERMISSIONS.BREEDING_VIEW, icon: { type: Icons.MaterialCommunityIcons, name: 'heart-pulse' } },
+  { labelKey: 'nav.healthTreatments', screen: 'HealthStack', permission: PERMISSIONS.HEALTH_VIEW, icon: { type: Icons.FontAwesome5, name: 'syringe' } },
+  { labelKey: 'nav.milk', screen: 'MilkStack', permission: PERMISSIONS.MILK_VIEW, icon: { type: Icons.MaterialCommunityIcons, name: 'cup-water' } },
+  { labelKey: 'nav.feeding', screen: 'FeedingStack', permission: PERMISSIONS.FEED_VIEW, icon: { type: Icons.MaterialCommunityIcons, name: 'grain' } },
+  { labelKey: 'nav.stockInventory', screen: 'StockStack', permission: PERMISSIONS.STOCK_VIEW, icon: { type: Icons.MaterialCommunityIcons, name: 'warehouse' } },
+  { labelKey: 'nav.employees', screen: 'EmployeeStack', permission: PERMISSIONS.EMPLOYEE_VIEW, icon: { type: Icons.Ionicons, name: 'people' } },
+  { labelKey: 'nav.finance', screen: 'FinanceStack', permission: PERMISSIONS.FINANCE_VIEW, icon: { type: Icons.MaterialCommunityIcons, name: 'cash-multiple' } }
 ]
 
 function Drawer(props: any) {
   const dispatch = useDispatch()
+  const { t } = useTranslation()
   const user = useSelector((state: RootState) => state.user.user)
   const navigation = useNavigation()
   const { can } = usePermissions()
@@ -60,7 +63,11 @@ function Drawer(props: any) {
       setHandleLoading(true)
       dispatch(resetAuthState())
       dispatch(resetUserState())
-      Toast.show({ text1: 'Success', text2: 'Logged out', type: 'success' })
+      Toast.show({
+        text1: t('services.toast.successTitle'),
+        text2: t('shared.drawer.loggedOut'),
+        type: 'success'
+      })
     } finally {
       setHandleLoading(false)
     }
@@ -88,7 +95,7 @@ function Drawer(props: any) {
         style={{ marginRight: RF(14) }}
       />
       <AppText fontSize="h6" semiBold color="primaryDark">
-        {item.name}
+        {t(item.labelKey)}
       </AppText>
     </TouchableOpacity>
   )
@@ -116,7 +123,7 @@ function Drawer(props: any) {
       />
 
       <PrimaryButton
-        title="Logout"
+        title={t('shared.drawer.logout')}
         loading={handleLoading}
         loaderColor={COLORS.white}
         buttonStyle={styles.buttonStyle}
@@ -136,7 +143,7 @@ function Drawer(props: any) {
           </AppText>
         </View>
         <AppText color="primaryDark" medium>
-          Version: 0.1
+          {t('shared.drawer.version', { version: '0.1' })}
         </AppText>
       </View>
     </View>

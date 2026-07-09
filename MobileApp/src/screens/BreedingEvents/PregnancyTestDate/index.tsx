@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { FlatList, Text, TextInput, TouchableOpacity, View } from 'react-native'
 import AnyIcon, { Icons } from 'shared/components/AnyIcon';
 import AppText from 'shared/components/AppText/AppText';
@@ -10,6 +11,7 @@ import { COLORS } from 'shared/theme';
 
 interface Props extends GenericNavigation {}
 const PregnancyTestDate = (props: Props) => {
+  const { t } = useTranslation()
 
   const tableData = new Array(10).fill({
     sr: '01',
@@ -37,7 +39,7 @@ const PregnancyTestDate = (props: Props) => {
                   bold
                   color={'erieBlack'}
                 >
-                  Pregnancy Test Date
+                  {t('breeding.pregnancyTestDate.headerTitle')}
              </AppText>
 
              <TouchableOpacity style={styles.languageButton}>
@@ -62,11 +64,11 @@ const PregnancyTestDate = (props: Props) => {
             fontSize="h6"
             bold
             color={'darkestGrey'}>
-                Recent Entries
+                {t('breeding.common.recentEntries')}
         </AppText>
         <View style={{ flexShrink: 1 }}>
           <PrimaryButton
-            title='Add New'
+            title={t('breeding.common.addNew')}
             buttonStyle={styles.button}
             textStyle={styles.buttonText}
             />
@@ -84,16 +86,16 @@ const PregnancyTestDate = (props: Props) => {
           />
           <TextInput
             style={styles.searchInput}
-            placeholder="Search"
+            placeholder={t('breeding.common.search')}
             placeholderTextColor={COLORS.darkestGrey}
           />
         </View>
 
       <View style={styles.tableHeader}>
-        <Text style={styles.headerText}>SR #</Text>
-        <Text style={styles.headerText}>PREGNANCY TEST DATE</Text>
-        <Text style={styles.headerText}>TAG ID</Text>
-        <Text style={styles.headerText}>STATUS</Text>
+        <Text style={styles.headerText}>{t('breeding.common.cols.srNo')}</Text>
+        <Text style={styles.headerText}>{t('breeding.pregnancyTestDate.cols.pregnancyTestDate')}</Text>
+        <Text style={styles.headerText}>{t('breeding.common.cols.tagId')}</Text>
+        <Text style={styles.headerText}>{t('breeding.pregnancyTestDate.cols.status')}</Text>
       </View>
 
 <ScrollView contentContainerStyle={{ flexGrow: 1 }} style={styles.tableContainer} showsVerticalScrollIndicator={false}>
@@ -116,8 +118,8 @@ const PregnancyTestDate = (props: Props) => {
             fontSize="subtitle"
             bold
             color={'darkestGrey'}>
-                Load More 
-        </AppText> 
+                {t('breeding.common.loadMore')}
+        </AppText>
       </TouchableOpacity>
     </ScrollView>
     

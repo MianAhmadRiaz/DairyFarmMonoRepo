@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import AnimalWiseCostTable from '../../../../shared/components/AnimalWiseCostTable';
 import { Box, Alert } from '@mui/material';
+import { useTranslation } from 'react-i18next';
 
 const AnimalWiseCost: React.FC = () => {
+  const { t } = useTranslation();
   const [startDate, setStartDate] = useState('2025-04-14');
   const [endDate, setEndDate] = useState('2025-04-14');
 
@@ -65,7 +67,7 @@ const AnimalWiseCost: React.FC = () => {
       }}
     >
       <Alert severity="warning" sx={{ mb: 2 }}>
-        This report is not yet connected to live data.
+        {t('stock.common.reportNotConnected')}
       </Alert>
       <AnimalWiseCostTable
         data={animalCostData}

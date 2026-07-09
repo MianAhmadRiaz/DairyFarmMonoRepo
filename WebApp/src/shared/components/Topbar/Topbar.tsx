@@ -14,6 +14,8 @@ import {
 } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
+import { useTranslation } from 'react-i18next';
+import LanguageSwitcher from '../../../i18n/LanguageSwitcher';
 import { ColorModeContext, tokens } from '../../theme/theme';
 import LightModeOutlinedIcon from '@mui/icons-material/LightModeOutlined';
 import DarkModeOutlinedIcon from '@mui/icons-material/DarkModeOutlined';
@@ -29,6 +31,7 @@ import useLayoutShift from '../Hooks/useLayoutShift';
 import { getSidebarOffset, TOPBAR_HEIGHT } from '../Layout/layoutConstants';
 
 const Topbar: React.FC = () => {
+  const { t } = useTranslation();
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   const colorMode = useContext(ColorModeContext);
@@ -76,7 +79,7 @@ const Topbar: React.FC = () => {
     if (user?.firstname) {
       return user.firstname;
     }
-    return 'User';
+    return t('common.user');
   };
 
   return (
@@ -98,18 +101,20 @@ const Topbar: React.FC = () => {
           <IconButton
             onClick={() => dispatch(setSidebarCollapsed(false))}
             sx={{ display: { xs: 'flex', md: 'none' } }}
-            aria-label="Open sidebar menu"
+            aria-label={t('topbar.openSidebar')}
           >
             <MenuOutlinedIcon />
           </IconButton>
         </Box>
 
         <Box sx={{ display: 'flex', alignItems: 'center', gap: { xs: 0.25, sm: 1 } }}>
-          <IconButton onClick={() => navigate('/after-login')} aria-label="Home">
+          <LanguageSwitcher />
+
+          <IconButton onClick={() => navigate('/after-login')} aria-label={t('topbar.home')}>
             <HomeOutlinedIcon />
           </IconButton>
 
-          <IconButton onClick={colorMode.toggleColorMode} aria-label="Toggle color mode">
+          <IconButton onClick={colorMode.toggleColorMode} aria-label={t('topbar.toggleColorMode')}>
             {theme.palette.mode === 'dark' ? <LightModeOutlinedIcon /> : <DarkModeOutlinedIcon />}
           </IconButton>
 
@@ -181,7 +186,7 @@ const Topbar: React.FC = () => {
                     {getFullName()}
                   </Typography>
                   <Typography variant="caption" sx={{ color: colors.greenAccent[400] }}>
-                    Admin
+                    {t('topbar.admin')}
                   </Typography>
                 </Box>
               </Box>
@@ -225,7 +230,7 @@ const Topbar: React.FC = () => {
                 <LogoutIcon fontSize="small" sx={{ color: colors.redAccent[400] }} />
               </ListItemIcon>
               <Typography variant="body2" fontWeight="500">
-                Sign Out
+                {t('topbar.signOut')}
               </Typography>
             </MenuItem>
           </Menu>

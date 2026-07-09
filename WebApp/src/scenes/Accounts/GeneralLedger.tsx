@@ -27,6 +27,7 @@ import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import GetAppIcon from '@mui/icons-material/GetApp';
 import PictureAsPdfIcon from '@mui/icons-material/PictureAsPdf';
 import TableViewIcon from '@mui/icons-material/TableView';
+import { useTranslation } from 'react-i18next';
 import { tokens } from '../../shared/theme/theme';
 import {
   fetchChartOfAccounts,
@@ -48,6 +49,7 @@ interface LedgerEntry {
 }
 
 export default function GeneralLedger() {
+  const { t } = useTranslation();
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   const pageBg = theme.palette.mode === 'dark' ? colors.primary[500] : '#F5FAF7';
@@ -203,11 +205,11 @@ export default function GeneralLedger() {
   // Handle GET Result
   const handleGetResult = async () => {
     if (!selectedAccountId) {
-      setSnackbar({ open: true, message: 'Please select an account', severity: 'error' });
+      setSnackbar({ open: true, message: t('accounts.common.selectAccountError'), severity: 'error' });
       return;
     }
     if (!startingDate || !endingDate) {
-      setSnackbar({ open: true, message: 'Please select both starting and ending dates', severity: 'error' });
+      setSnackbar({ open: true, message: t('accounts.common.selectDatesError'), severity: 'error' });
       return;
     }
 
@@ -232,10 +234,10 @@ export default function GeneralLedger() {
       );
       setFilteredLedgerData(mapped);
       setShowData(true);
-      setSnackbar({ open: true, message: 'Ledger report generated successfully!', severity: 'success' });
+      setSnackbar({ open: true, message: t('accounts.generalLedger.reportSuccess'), severity: 'success' });
     } catch (e) {
       console.error('Failed to load general ledger', e);
-      setSnackbar({ open: true, message: 'Failed to generate ledger report.', severity: 'error' });
+      setSnackbar({ open: true, message: t('accounts.generalLedger.reportError'), severity: 'error' });
     }
   };
 
@@ -243,7 +245,7 @@ export default function GeneralLedger() {
   const handleCsvExport = () => {
     const dataToExport = showData ? filteredLedgerData : allLedgerData;
     const csvContent = [
-      ['Sr#', 'Date', 'Narration', 'Name', 'Type', 'Debit', 'Credit', 'Balance'],
+      [t('accounts.common.columns.srNo'), t('accounts.common.columns.date'), t('accounts.common.columns.narration'), t('accounts.common.columns.name'), t('accounts.common.columns.type'), t('accounts.common.columns.debit'), t('accounts.common.columns.credit'), t('accounts.common.columns.balance')],
       ...dataToExport.map((entry: LedgerEntry) => [
         entry.srNo,
         entry.date,
@@ -273,7 +275,7 @@ export default function GeneralLedger() {
   const handleExcelExport = () => {
     const dataToExport = showData ? filteredLedgerData : allLedgerData;
     const xlsContent = [
-      'Sr#\tDate\tNarration\tName\tType\tDebit\tCredit\tBalance',
+      [t('accounts.common.columns.srNo'), t('accounts.common.columns.date'), t('accounts.common.columns.narration'), t('accounts.common.columns.name'), t('accounts.common.columns.type'), t('accounts.common.columns.debit'), t('accounts.common.columns.credit'), t('accounts.common.columns.balance')].join('\t'),
       ...dataToExport.map((entry: LedgerEntry) => 
         `${entry.srNo}\t${entry.date}\t${entry.narration}\t${entry.name}\t${entry.type}\t${entry.debit}\t${entry.credit}\t${entry.balance}`
       )
@@ -296,16 +298,16 @@ export default function GeneralLedger() {
   const handleCopy = () => {
     const dataToExport = showData ? filteredLedgerData : allLedgerData;
     const textContent = [
-      'Sr#\tDate\tNarration\tName\tType\tDebit\tCredit\tBalance',
+      [t('accounts.common.columns.srNo'), t('accounts.common.columns.date'), t('accounts.common.columns.narration'), t('accounts.common.columns.name'), t('accounts.common.columns.type'), t('accounts.common.columns.debit'), t('accounts.common.columns.credit'), t('accounts.common.columns.balance')].join('\t'),
       ...dataToExport.map((entry: LedgerEntry) => 
         `${entry.srNo}\t${entry.date}\t${entry.narration}\t${entry.name}\t${entry.type}\t${entry.debit}\t${entry.credit}\t${entry.balance}`
       )
     ].join('\n');
 
     navigator.clipboard.writeText(textContent).then(() => {
-      setSnackbar({ open: true, message: 'Data copied to clipboard!', severity: 'success' });
+      setSnackbar({ open: true, message: t('accounts.common.copiedToClipboard'), severity: 'success' });
     }).catch(() => {
-      setSnackbar({ open: true, message: 'Failed to copy data', severity: 'error' });
+      setSnackbar({ open: true, message: t('accounts.common.copyFailed'), severity: 'error' });
     });
   };
 
@@ -317,7 +319,7 @@ export default function GeneralLedger() {
       pdfWindow.document.write(`
         <html>
           <head>
-            <title>General Ledger PDF</title>
+            <title>${t('accounts.generalLedger.pdfTitle')}</title>
             <style>
               body { font-family: Arial, sans-serif; padding: 20px; }
               table { width: 100%; border-collapse: collapse; margin: 20px 0; font-size: 10px; }
@@ -328,20 +330,20 @@ export default function GeneralLedger() {
           </head>
           <body>
             <div class="header">
-              <h2>General Ledger Report</h2>
-              <p>Period: ${startingDate} to ${endingDate}</p>
+              <h2>${t('accounts.generalLedger.reportTitle')}</h2>
+              <p>${t('accounts.common.period', { start: startingDate, end: endingDate })}</p>
             </div>
             <table>
               <thead>
                 <tr>
-                  <th>Sr#</th>
-                  <th>Date</th>
-                  <th>Narration</th>
-                  <th>Name</th>
-                  <th>Type</th>
-                  <th>Debit</th>
-                  <th>Credit</th>
-                  <th>Balance</th>
+                  <th>${t('accounts.common.columns.srNo')}</th>
+                  <th>${t('accounts.common.columns.date')}</th>
+                  <th>${t('accounts.common.columns.narration')}</th>
+                  <th>${t('accounts.common.columns.name')}</th>
+                  <th>${t('accounts.common.columns.type')}</th>
+                  <th>${t('accounts.common.columns.debit')}</th>
+                  <th>${t('accounts.common.columns.credit')}</th>
+                  <th>${t('accounts.common.columns.balance')}</th>
                 </tr>
               </thead>
               <tbody>
@@ -369,7 +371,7 @@ export default function GeneralLedger() {
 
   // Handle Column Visibility
   const handleColumnVisibility = () => {
-    setSnackbar({ open: true, message: 'Column visibility options would open here', severity: 'success' });
+    setSnackbar({ open: true, message: t('accounts.common.columnVisibilityInfo'), severity: 'success' });
   };
 
   // Handle export functions
@@ -388,7 +390,7 @@ export default function GeneralLedger() {
         handleCopy();
         break;
       default:
-        setSnackbar({ open: true, message: `Exporting to ${format.toUpperCase()}...`, severity: 'success' });
+        setSnackbar({ open: true, message: t('accounts.common.exportingTo', { format: format.toUpperCase() }), severity: 'success' });
     }
   };
 
@@ -397,7 +399,7 @@ export default function GeneralLedger() {
     const printContent = `
       <html>
         <head>
-          <title>General Ledger Report</title>
+          <title>${t('accounts.generalLedger.reportTitle')}</title>
           <style>
             body { font-family: Arial, sans-serif; padding: 20px; }
             .header { text-align: center; margin-bottom: 30px; border-bottom: 2px solid #005f73; padding-bottom: 10px; }
@@ -412,27 +414,27 @@ export default function GeneralLedger() {
         </head>
         <body>
           <div class="header">
-            <h2>General Ledger Report</h2>
+            <h2>${t('accounts.generalLedger.reportTitle')}</h2>
           </div>
           <div class="date-range">
-            <p><strong>Period:</strong> ${startingDate} to ${endingDate}</p>
+            <p>${t('accounts.common.period', { start: startingDate, end: endingDate })}</p>
           </div>
           <table>
             <thead>
               <tr>
-                <th>Sr.#</th>
-                <th>Date</th>
-                <th>Narration</th>
-                <th>Name</th>
-                <th>Type</th>
-                <th>Debit</th>
-                <th>Credit</th>
-                <th>Balance</th>
+                <th>${t('accounts.common.columns.srNo')}</th>
+                <th>${t('accounts.common.columns.date')}</th>
+                <th>${t('accounts.common.columns.narration')}</th>
+                <th>${t('accounts.common.columns.name')}</th>
+                <th>${t('accounts.common.columns.type')}</th>
+                <th>${t('accounts.common.columns.debit')}</th>
+                <th>${t('accounts.common.columns.credit')}</th>
+                <th>${t('accounts.common.columns.balance')}</th>
               </tr>
             </thead>
             <tbody>
               <tr class="opening-balance">
-                <td colspan="7" style="text-align: center;"><strong>Opening Balance</strong></td>
+                <td colspan="7" style="text-align: center;"><strong>${t('accounts.common.openingBalance')}</strong></td>
                 <td><strong>${openingBalance.toLocaleString()}</strong></td>
               </tr>
               ${filteredLedgerData.map((entry: LedgerEntry) => `
@@ -473,13 +475,13 @@ export default function GeneralLedger() {
   };
 
   return (
-    <PageContainer title="General Ledger">
+    <PageContainer title={t('accounts.generalLedger.title')}>
         {/* Date Range Selection */}
         <Paper elevation={0} sx={{ p: 3, mb: 2, borderRadius: 2, border: `1px solid ${theme.palette.divider}`, bgcolor: 'background.paper' }}>
           <Stack direction={{ xs: 'column', md: 'row' }} spacing={3} alignItems="center" justifyContent="space-between">
             <Stack direction={{ xs: 'column', sm: 'row' }} spacing={3} alignItems="center">
               <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                <Typography variant="body2" fontWeight={600}>Account:</Typography>
+                <Typography variant="body2" fontWeight={600}>{t('accounts.common.accountLabel')}</Typography>
                 <TextField
                   select
                   size="small"
@@ -487,7 +489,7 @@ export default function GeneralLedger() {
                   onChange={(e) => setSelectedAccountId(e.target.value)}
                   sx={{ minWidth: 240 }}
                 >
-                  <MenuItem value="" disabled>Select account</MenuItem>
+                  <MenuItem value="" disabled>{t('accounts.common.selectAccount')}</MenuItem>
                   {accounts.map((a) => (
                     <MenuItem key={a.id} value={String(a.id)}>
                       {a.account_code} - {a.account_name}
@@ -498,7 +500,7 @@ export default function GeneralLedger() {
 
               <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                 <CalendarTodayIcon sx={{ color: '#005f73' }} />
-                <Typography variant="body2" fontWeight={600}>Starting Date:</Typography>
+                <Typography variant="body2" fontWeight={600}>{t('accounts.common.startingDate')}</Typography>
                 <TextField
                   type="date"
                   size="small"
@@ -510,7 +512,7 @@ export default function GeneralLedger() {
               
               <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                 <CalendarTodayIcon sx={{ color: '#005f73' }} />
-                <Typography variant="body2" fontWeight={600}>Ending Date:</Typography>
+                <Typography variant="body2" fontWeight={600}>{t('accounts.common.endingDate')}</Typography>
                 <TextField
                   type="date"
                   size="small"
@@ -534,7 +536,7 @@ export default function GeneralLedger() {
                 }
               }}
             >
-              GET Result
+              {t('accounts.common.getResult')}
             </Button>
           </Stack>
         </Paper>
@@ -555,7 +557,7 @@ export default function GeneralLedger() {
             }}
           >
             <Typography variant="h6" fontWeight={600} sx={{ display: 'flex', alignItems: 'center' }}>
-              📊 Ledger Report
+              📊 {t('accounts.generalLedger.ledgerReport')}
             </Typography>
             <IconButton onClick={handlePrint} sx={{ color: 'white' }}>
               <PrintIcon />
@@ -573,7 +575,7 @@ export default function GeneralLedger() {
                   onClick={handleColumnVisibility}
                   sx={{ textTransform: 'none', fontSize: '0.75rem' }}
                 >
-                  Column visibility
+                  {t('accounts.common.columnVisibility')}
                 </Button>
                 <Button 
                   size="small" 
@@ -582,7 +584,7 @@ export default function GeneralLedger() {
                   onClick={() => handleExport('copy')}
                   sx={{ textTransform: 'none', fontSize: '0.75rem' }}
                 >
-                  Copy
+                  {t('accounts.common.copy')}
                 </Button>
                 <Button 
                   size="small" 
@@ -615,7 +617,7 @@ export default function GeneralLedger() {
               
               <TextField
                 size="small"
-                placeholder="Search:"
+                placeholder={t('common.search')}
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 InputProps={{
@@ -635,21 +637,21 @@ export default function GeneralLedger() {
             <Table size="small" stickyHeader>
               <TableHead>
                 <TableRow>
-                  <TableCell sx={{ fontWeight: 600, bgcolor: '#f5f5f5', border: '1px solid #e0e0e0' }}>Sr.#</TableCell>
-                  <TableCell sx={{ fontWeight: 600, bgcolor: '#f5f5f5', border: '1px solid #e0e0e0' }}>Date</TableCell>
-                  <TableCell sx={{ fontWeight: 600, bgcolor: '#f5f5f5', border: '1px solid #e0e0e0' }}>Narration</TableCell>
-                  <TableCell sx={{ fontWeight: 600, bgcolor: '#f5f5f5', border: '1px solid #e0e0e0' }}>Name</TableCell>
-                  <TableCell sx={{ fontWeight: 600, bgcolor: '#f5f5f5', border: '1px solid #e0e0e0' }}>Type</TableCell>
-                  <TableCell sx={{ fontWeight: 600, bgcolor: '#f5f5f5', border: '1px solid #e0e0e0', textAlign: 'right' }}>Debit</TableCell>
-                  <TableCell sx={{ fontWeight: 600, bgcolor: '#f5f5f5', border: '1px solid #e0e0e0', textAlign: 'right' }}>Credit</TableCell>
-                  <TableCell sx={{ fontWeight: 600, bgcolor: '#f5f5f5', border: '1px solid #e0e0e0', textAlign: 'right' }}>Balance</TableCell>
+                  <TableCell sx={{ fontWeight: 600, bgcolor: '#f5f5f5', border: '1px solid #e0e0e0' }}>{t('accounts.common.columns.srNo')}</TableCell>
+                  <TableCell sx={{ fontWeight: 600, bgcolor: '#f5f5f5', border: '1px solid #e0e0e0' }}>{t('accounts.common.columns.date')}</TableCell>
+                  <TableCell sx={{ fontWeight: 600, bgcolor: '#f5f5f5', border: '1px solid #e0e0e0' }}>{t('accounts.common.columns.narration')}</TableCell>
+                  <TableCell sx={{ fontWeight: 600, bgcolor: '#f5f5f5', border: '1px solid #e0e0e0' }}>{t('accounts.common.columns.name')}</TableCell>
+                  <TableCell sx={{ fontWeight: 600, bgcolor: '#f5f5f5', border: '1px solid #e0e0e0' }}>{t('accounts.common.columns.type')}</TableCell>
+                  <TableCell sx={{ fontWeight: 600, bgcolor: '#f5f5f5', border: '1px solid #e0e0e0', textAlign: 'right' }}>{t('accounts.common.columns.debit')}</TableCell>
+                  <TableCell sx={{ fontWeight: 600, bgcolor: '#f5f5f5', border: '1px solid #e0e0e0', textAlign: 'right' }}>{t('accounts.common.columns.credit')}</TableCell>
+                  <TableCell sx={{ fontWeight: 600, bgcolor: '#f5f5f5', border: '1px solid #e0e0e0', textAlign: 'right' }}>{t('accounts.common.columns.balance')}</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
                 {/* Opening Balance Row */}
                 <TableRow sx={{ bgcolor: '#f9f9f9' }}>
                   <TableCell colSpan={7} sx={{ textAlign: 'center', fontWeight: 600, border: '1px solid #e0e0e0' }}>
-                    Opening Balance
+                    {t('accounts.common.openingBalance')}
                   </TableCell>
                   <TableCell sx={{ textAlign: 'right', fontWeight: 600, border: '1px solid #e0e0e0' }}>
                     {openingBalance.toLocaleString()}
@@ -673,7 +675,7 @@ export default function GeneralLedger() {
                     </TableCell>
                     <TableCell sx={{ border: '1px solid #e0e0e0' }}>
                       <Typography variant="body2" sx={{ fontSize: '0.75rem' }}>
-                        {entry.type}
+                        {t(`accounts.common.types.${entry.type}`, entry.type)}
                       </Typography>
                     </TableCell>
                     <TableCell sx={{ border: '1px solid #e0e0e0', textAlign: 'right' }}>
@@ -700,7 +702,7 @@ export default function GeneralLedger() {
           {/* Footer */}
           <Box sx={{ p: 2, bgcolor: theme.palette.mode === 'dark' ? colors.primary[400] : '#f8f9fa', borderTop: `1px solid ${theme.palette.divider}` }}>
             <Typography variant="body2" color="text.secondary">
-              Showing {filteredData.length} entries
+              {t('accounts.common.showingEntries', { count: filteredData.length })}
             </Typography>
           </Box>
         </Paper>

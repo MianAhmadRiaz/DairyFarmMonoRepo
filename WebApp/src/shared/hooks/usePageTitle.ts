@@ -1,156 +1,156 @@
 import { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
-// Map routes to page titles - Complete list for entire app
-const routeTitles: Record<string, string> = {
+// Map routes to page title translation keys - Complete list for entire app
+const routeTitleKeys: Record<string, string> = {
   // ==================== AUTH ====================
-  '/login': 'Login',
-  '/sign-up': 'Sign Up',
-  '/forgot-password': 'Forgot Password',
-  '/verify-code': 'Verify Code',
-  '/set-new-password': 'Set New Password',
-  '/after-login': 'Select Module',
+  '/login': 'login',
+  '/sign-up': 'signUp',
+  '/forgot-password': 'forgotPassword',
+  '/verify-code': 'verifyCode',
+  '/set-new-password': 'setNewPassword',
+  '/after-login': 'selectModule',
 
   // ==================== HERD MANAGEMENT / MAIN ====================
-  '/dashboard': 'Dashboard',
-  '/herd-dashboard': 'Herd Dashboard',
-  '/add-animal': 'Add Animal',
-  '/animal-info': 'Animal Info',
-  '/move-to-pen': 'Move to Pen',
-  '/remove-animal': 'Remove Animal',
-  '/view-calves': 'View Calves',
-  '/cmt-test': 'CMT Test',
-  '/faq': 'FAQ',
+  '/dashboard': 'dashboard',
+  '/herd-dashboard': 'herdDashboard',
+  '/add-animal': 'addAnimal',
+  '/animal-info': 'animalInfo',
+  '/move-to-pen': 'moveToPen',
+  '/remove-animal': 'removeAnimal',
+  '/view-calves': 'viewCalves',
+  '/cmt-test': 'cmtTest',
+  '/faq': 'faq',
 
   // ==================== BREEDING EVENTS ====================
-  '/breeding-events': 'Breeding Events',
-  '/protocol': 'Protocol',
-  '/bull-breeding': 'Bull Breeding',
-  '/bull-breeding/new': 'Add Bull Breeding Event',
-  '/ai-breeding': 'AI Breeding',
-  '/aibreeding/new': 'Add AI Breeding Event',
-  '/heat-detection': 'Heat Detection',
-  '/pregnancy-check': 'Pregnancy Check',
-  '/pregnancy-test/new': 'Add Pregnancy Test',
-  '/abortion': 'Abortion',
-  '/abortion/new': 'Add Abortion Event',
-  '/calving': 'Calving',
-  '/dry-off': 'Dry Off',
+  '/breeding-events': 'breedingEvents',
+  '/protocol': 'protocol',
+  '/bull-breeding': 'bullBreeding',
+  '/bull-breeding/new': 'addBullBreedingEvent',
+  '/ai-breeding': 'aiBreeding',
+  '/aibreeding/new': 'addAiBreedingEvent',
+  '/heat-detection': 'heatDetection',
+  '/pregnancy-check': 'pregnancyCheck',
+  '/pregnancy-test/new': 'addPregnancyTest',
+  '/abortion': 'abortion',
+  '/abortion/new': 'addAbortionEvent',
+  '/calving': 'calving',
+  '/dry-off': 'dryOff',
 
   // ==================== MILK MANAGEMENT ====================
-  '/milk-dashboard': 'Milk Dashboard',
-  '/add-milking-session': 'Add Milking Session',
-  '/list-of-milking': 'Approved Milk List',
-  '/milk-in-out': 'Milk In/Out',
-  '/daily-milk-report': 'Daily Milk Report',
-  '/average-milk-report': 'Average Milk Report',
-  '/milk-out': 'Milk Out',
-  '/milk-difference-report': 'Milk Difference Report',
-  '/cow-milking-report': 'Cow Milking Report',
+  '/milk-dashboard': 'milkDashboard',
+  '/add-milking-session': 'addMilkingSession',
+  '/list-of-milking': 'approvedMilkList',
+  '/milk-in-out': 'milkInOut',
+  '/daily-milk-report': 'dailyMilkReport',
+  '/average-milk-report': 'averageMilkReport',
+  '/milk-out': 'milkOut',
+  '/milk-difference-report': 'milkDifferenceReport',
+  '/cow-milking-report': 'cowMilkingReport',
 
   // ==================== STOCK MANAGEMENT ====================
-  '/stock/dashboard': 'Stock Dashboard',
-  '/stock-registration': 'Stock Registration',
-  '/view-registration': 'View Registration',
-  '/open-voucher': 'Open Voucher',
-  '/feeding-stock': 'Feeding Stock',
-  '/medication-stock': 'Medication Stock',
-  '/semen-stock': 'Semen Stock',
-  '/other-stock': 'Other Stock',
-  '/issuance/add-stock-issuance': 'Add Stock Issuance',
-  '/issuance/view-stock-issuance': 'View Stock Issuance',
+  '/stock/dashboard': 'stockDashboard',
+  '/stock-registration': 'stockRegistration',
+  '/view-registration': 'viewRegistration',
+  '/open-voucher': 'openVoucher',
+  '/feeding-stock': 'feedingStock',
+  '/medication-stock': 'medicationStock',
+  '/semen-stock': 'semenStock',
+  '/other-stock': 'otherStock',
+  '/issuance/add-stock-issuance': 'addStockIssuance',
+  '/issuance/view-stock-issuance': 'viewStockIssuance',
 
   // ==================== EMPLOYEE MANAGEMENT ====================
-  '/employee/dashboard': 'Employee Dashboard',
-  '/employee/new': 'Add New Employee',
-  '/employee/view/employee': 'View Employees',
-  '/employee/generate-salary': 'Generate Salary',
-  '/employee/view/generate-salary': 'View Generated Salary',
-  '/employee/unpaid-salary': 'Unpaid Salary',
-  '/employee/view/paid-income': 'View Paid Income',
-  '/employee/add-advance': 'Add Advance',
-  '/employee/edit-advance': 'Edit Advance',
-  '/employee/view-advance': 'View Advance',
-  '/employee/receive-advance': 'Receive Advance',
-  '/employee/attendance': 'Attendance',
-  '/employee/view-attendance-report': 'View Attendance Report',
+  '/employee/dashboard': 'employeeDashboard',
+  '/employee/new': 'addNewEmployee',
+  '/employee/view/employee': 'viewEmployees',
+  '/employee/generate-salary': 'generateSalary',
+  '/employee/view/generate-salary': 'viewGeneratedSalary',
+  '/employee/unpaid-salary': 'unpaidSalary',
+  '/employee/view/paid-income': 'viewPaidIncome',
+  '/employee/add-advance': 'addAdvance',
+  '/employee/edit-advance': 'editAdvance',
+  '/employee/view-advance': 'viewAdvance',
+  '/employee/receive-advance': 'receiveAdvance',
+  '/employee/attendance': 'attendance',
+  '/employee/view-attendance-report': 'viewAttendanceReport',
 
   // ==================== FEEDING MANAGEMENT ====================
-  '/create-recipe': 'Create Recipe',
-  '/view-recipe': 'View Recipe',
-  '/shed-feed-report': 'Shed Feed Report',
-  '/date-wise-shed-feed-report': 'Date Wise Shed Feed Report',
-  '/shed-feed-stock-print': 'Shed Feed Stock Print',
-  '/conducted-vanda-feed-formulation': 'Conducted Vanda Feed Formulation',
-  '/create-feed-formulation': 'Create Feed Formulation',
-  '/view-feed-formulation': 'View Feed Formulation',
-  '/view-conducted-vanda-formulation': 'View Conducted Vanda Formulation',
-  '/apply-feed-recipe-shed': 'Apply Feed Recipe to Shed',
-  '/apply-feed-recipeA-adjustable-shed': 'Apply Feed Recipe Adjustable Shed',
+  '/create-recipe': 'createRecipe',
+  '/view-recipe': 'viewRecipe',
+  '/shed-feed-report': 'shedFeedReport',
+  '/date-wise-shed-feed-report': 'dateWiseShedFeedReport',
+  '/shed-feed-stock-print': 'shedFeedStockPrint',
+  '/conducted-vanda-feed-formulation': 'conductedVandaFeedFormulation',
+  '/create-feed-formulation': 'createFeedFormulation',
+  '/view-feed-formulation': 'viewFeedFormulation',
+  '/view-conducted-vanda-formulation': 'viewConductedVandaFormulation',
+  '/apply-feed-recipe-shed': 'applyFeedRecipeToShed',
+  '/apply-feed-recipeA-adjustable-shed': 'applyFeedRecipeAdjustableShed',
 
   // ==================== FEEDING CONSUMPTION ====================
-  '/feeding-consumption/add': 'Add Feeding Consumption',
-  '/feeding-consumption/view': 'View Feeding Consumption',
-  '/feeding-consumption/day-wise-report': 'Day Wise Consumption Report',
-  '/consumption-expense-wise': 'Consumption Expense',
-  '/feeding-consumption/cost-analysis': 'Feed Cost Analysis',
-  '/medicine-consumption': 'Medicine Consumption',
-  '/add-semen-consumption': 'Add Semen Consumption',
-  '/add-consumption': 'Add Other Consumption',
-  '/medicine-consumption-report': 'Medicine Consumption Report',
-  '/semen-consumption-report': 'Semen Consumption Report',
-  '/other-stock-consumption-report': 'Other Stock Consumption Report',
+  '/feeding-consumption/add': 'addFeedingConsumption',
+  '/feeding-consumption/view': 'viewFeedingConsumption',
+  '/feeding-consumption/day-wise-report': 'dayWiseConsumptionReport',
+  '/consumption-expense-wise': 'consumptionExpense',
+  '/feeding-consumption/cost-analysis': 'feedCostAnalysis',
+  '/medicine-consumption': 'medicineConsumption',
+  '/add-semen-consumption': 'addSemenConsumption',
+  '/add-consumption': 'addOtherConsumption',
+  '/medicine-consumption-report': 'medicineConsumptionReport',
+  '/semen-consumption-report': 'semenConsumptionReport',
+  '/other-stock-consumption-report': 'otherStockConsumptionReport',
 
   // ==================== STOCK REPORTS ====================
-  '/reports/feeding-summary': 'Feeding Summary',
-  '/reports/medicine-summary': 'Medicine Summary',
-  '/reports/semen-summary': 'Semen Summary',
-  '/reports/other-stock-summary': 'Other Stock Summary',
-  '/reports/stock-reorder': 'Stock Reorder Report',
-  '/reports/remaining-feeding-stock-days': 'Remaining Feed Stock Days',
-  '/reports/animal-wise-cost': 'Animal Wise Cost',
-  '/reports/stock-ledger': 'Stock Ledger',
-  '/reports/stock-ledger-amount': 'Stock Ledger Amount',
+  '/reports/feeding-summary': 'feedingSummary',
+  '/reports/medicine-summary': 'medicineSummary',
+  '/reports/semen-summary': 'semenSummary',
+  '/reports/other-stock-summary': 'otherStockSummary',
+  '/reports/stock-reorder': 'stockReorderReport',
+  '/reports/remaining-feeding-stock-days': 'remainingFeedStockDays',
+  '/reports/animal-wise-cost': 'animalWiseCost',
+  '/reports/stock-ledger': 'stockLedger',
+  '/reports/stock-ledger-amount': 'stockLedgerAmount',
 
   // ==================== ACCOUNTS / FINANCE ====================
-  '/accounts/dashboard': 'Finance Dashboard',
-  '/accounts/milk-dispatch': 'Milk Dispatch',
-  '/accounts/milk-dispatch-via-excel': 'Milk Dispatch via Excel',
-  '/accounts/milking-payments': 'Milking Payments',
-  '/accounts/view-milk-dispatch': 'View Milk Dispatch',
-  '/accounts/view-milk-payments': 'View Milk Payments',
-  '/accounts/add-account-head': 'Add Account Head',
-  '/accounts/chart-of-accounts': 'Chart of Accounts',
-  '/accounts/opening-voucher-accounts': 'Opening Voucher Accounts',
-  '/accounts/charts-of-accounts-levels': 'Chart of Accounts Levels',
-  '/accounts/cash-customers': 'Cash Customers',
-  '/accounts/view-transactions': 'View Transactions',
-  '/accounts/cpv-transaction': 'Cash Payment Voucher',
-  '/accounts/bpv-transaction': 'Bank Payment Voucher',
-  '/accounts/crv-transaction': 'Cash Receipt Voucher',
-  '/accounts/brv-transaction': 'Bank Receipt Voucher',
-  '/accounts/make-journal-transaction': 'Journal Transaction',
-  '/accounts/make-purchase-transaction': 'Purchase Transaction',
-  '/accounts/make-sales-transaction': 'Sales Transaction',
-  '/accounts/make-purchase-return': 'Purchase Return',
-  '/accounts/make-sales-return': 'Sales Return',
-  '/accounts/account-statements': 'Account Statements',
-  '/accounts/customer-milk-sale': 'Customer Milk Sale',
-  '/accounts/reports/general-ledger': 'General Ledger',
-  '/accounts/reports/ledger-report': 'Ledger Report',
-  '/accounts/reports/total-milk-consumption-report':
-    'Total Milk Consumption Report',
-  '/accounts/reports/profit-loss-report': 'Profit & Loss Report'
+  '/accounts/dashboard': 'financeDashboard',
+  '/accounts/milk-dispatch': 'milkDispatch',
+  '/accounts/milk-dispatch-via-excel': 'milkDispatchViaExcel',
+  '/accounts/milking-payments': 'milkingPayments',
+  '/accounts/view-milk-dispatch': 'viewMilkDispatch',
+  '/accounts/view-milk-payments': 'viewMilkPayments',
+  '/accounts/add-account-head': 'addAccountHead',
+  '/accounts/chart-of-accounts': 'chartOfAccounts',
+  '/accounts/opening-voucher-accounts': 'openingVoucherAccounts',
+  '/accounts/charts-of-accounts-levels': 'chartOfAccountsLevels',
+  '/accounts/cash-customers': 'cashCustomers',
+  '/accounts/view-transactions': 'viewTransactions',
+  '/accounts/cpv-transaction': 'cashPaymentVoucher',
+  '/accounts/bpv-transaction': 'bankPaymentVoucher',
+  '/accounts/crv-transaction': 'cashReceiptVoucher',
+  '/accounts/brv-transaction': 'bankReceiptVoucher',
+  '/accounts/make-journal-transaction': 'journalTransaction',
+  '/accounts/make-purchase-transaction': 'purchaseTransaction',
+  '/accounts/make-sales-transaction': 'salesTransaction',
+  '/accounts/make-purchase-return': 'purchaseReturn',
+  '/accounts/make-sales-return': 'salesReturn',
+  '/accounts/account-statements': 'accountStatements',
+  '/accounts/customer-milk-sale': 'customerMilkSale',
+  '/accounts/reports/general-ledger': 'generalLedger',
+  '/accounts/reports/ledger-report': 'ledgerReport',
+  '/accounts/reports/total-milk-consumption-report': 'totalMilkConsumptionReport',
+  '/accounts/reports/profit-loss-report': 'profitLossReport'
 };
 
-const getPageTitle = (pathname: string): string => {
+const getPageTitleKey = (pathname: string): string | null => {
   // Direct match
-  if (routeTitles[pathname]) {
-    return routeTitles[pathname];
+  if (routeTitleKeys[pathname]) {
+    return routeTitleKeys[pathname];
   }
 
   // Check for dynamic routes (e.g., /employee/profile/123)
-  for (const [route, title] of Object.entries(routeTitles)) {
+  for (const [route, key] of Object.entries(routeTitleKeys)) {
     const routeParts = route.split('/');
     const pathParts = pathname.split('/');
 
@@ -158,11 +158,15 @@ const getPageTitle = (pathname: string): string => {
       const isMatch = routeParts.every((part, index) => {
         return part === pathParts[index] || part.startsWith(':');
       });
-      if (isMatch) return title;
+      if (isMatch) return key;
     }
   }
 
-  // Fallback: Generate title from pathname
+  return null;
+};
+
+// Fallback: Generate a title from the pathname when no key matches.
+const fallbackTitle = (pathname: string): string => {
   const lastSegment = pathname.split('/').filter(Boolean).pop();
   if (lastSegment) {
     return lastSegment
@@ -170,17 +174,23 @@ const getPageTitle = (pathname: string): string => {
       .map(word => word.charAt(0).toUpperCase() + word.slice(1))
       .join(' ');
   }
-
   return 'DairyCare';
 };
 
 export const usePageTitle = (customTitle?: string) => {
   const location = useLocation();
+  const { t } = useTranslation();
 
   useEffect(() => {
-    const title = customTitle || getPageTitle(location.pathname);
-    document.title = `${title} | Cattle Care`;
-  }, [location.pathname, customTitle]);
+    let title: string;
+    if (customTitle) {
+      title = customTitle;
+    } else {
+      const key = getPageTitleKey(location.pathname);
+      title = key ? t('services.pageTitles.' + key) : fallbackTitle(location.pathname);
+    }
+    document.title = t('services.pageTitleFormat', { title });
+  }, [location.pathname, customTitle, t]);
 };
 
 export default usePageTitle;

@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Box, Grid, Typography, CircularProgress } from '@mui/material';
 import GlassCard from '../../../../../shared/components/charts/GlassCard';
 import EmptyState from '../../../../../shared/components/charts/EmptyState';
@@ -7,6 +8,7 @@ import { fetchAnimalPenHistory, fetchAnimalTagHistory } from '../../../../../sha
 const formatDate = (d?: string) => (d ? new Date(d).toLocaleDateString() : '—');
 
 const MovementTaggingTab: React.FC<{ profile: any }> = ({ profile }) => {
+  const { t } = useTranslation();
   const animalId = profile?.identity?.uuid;
   const [penHistory, setPenHistory] = useState<any[]>([]);
   const [tagHistory, setTagHistory] = useState<any[]>([]);
@@ -36,31 +38,31 @@ const MovementTaggingTab: React.FC<{ profile: any }> = ({ profile }) => {
     <Grid container spacing={2.5}>
       <Grid item xs={12} md={6}>
         <GlassCard delay={0}>
-          <Typography sx={{ fontWeight: 700, mb: 1.5 }}>Pen Movement History</Typography>
+          <Typography sx={{ fontWeight: 700, mb: 1.5 }}>{t('herd.cowProfile.movement.penMovementHistory')}</Typography>
           {penHistory.length ? (
             penHistory.map((p, idx) => (
               <Box key={idx} sx={{ py: 1, borderBottom: idx < penHistory.length - 1 ? '1px solid' : 'none', borderColor: 'divider' }}>
-                <Typography sx={{ fontSize: 13, fontWeight: 600 }}>{p.reason || 'Moved pen'}</Typography>
+                <Typography sx={{ fontSize: 13, fontWeight: 600 }}>{p.reason || t('herd.cowProfile.movement.movedPen')}</Typography>
                 <Typography sx={{ fontSize: 12, color: 'text.secondary' }}>{formatDate(p.date)}</Typography>
               </Box>
             ))
           ) : (
-            <EmptyState title="No pen movement recorded" icon="🏠" />
+            <EmptyState title={t('herd.cowProfile.movement.noPenMovement')} icon="🏠" />
           )}
         </GlassCard>
       </Grid>
       <Grid item xs={12} md={6}>
         <GlassCard delay={0.1}>
-          <Typography sx={{ fontWeight: 700, mb: 1.5 }}>Tag History</Typography>
+          <Typography sx={{ fontWeight: 700, mb: 1.5 }}>{t('herd.cowProfile.movement.tagHistory')}</Typography>
           {tagHistory.length ? (
-            tagHistory.map((t, idx) => (
+            tagHistory.map((th, idx) => (
               <Box key={idx} sx={{ py: 1, borderBottom: idx < tagHistory.length - 1 ? '1px solid' : 'none', borderColor: 'divider' }}>
-                <Typography sx={{ fontSize: 13, fontWeight: 600 }}>Tag Updated</Typography>
-                <Typography sx={{ fontSize: 12, color: 'text.secondary' }}>{formatDate(t.date)}</Typography>
+                <Typography sx={{ fontSize: 13, fontWeight: 600 }}>{t('herd.cowProfile.movement.tagUpdated')}</Typography>
+                <Typography sx={{ fontSize: 12, color: 'text.secondary' }}>{formatDate(th.date)}</Typography>
               </Box>
             ))
           ) : (
-            <EmptyState title="No tag changes recorded" icon="🏷️" />
+            <EmptyState title={t('herd.cowProfile.movement.noTagChanges')} icon="🏷️" />
           )}
         </GlassCard>
       </Grid>

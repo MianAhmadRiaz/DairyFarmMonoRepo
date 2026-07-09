@@ -1,12 +1,14 @@
 import React from 'react';
 import { Box, Paper, Typography, useTheme } from '@mui/material';
+import { useTranslation } from 'react-i18next';
 import PageContainer from '../../shared/components/Layout/PageContainer';
 
 export default function AccountStatements() {
   const theme = useTheme();
+  const { t } = useTranslation();
 
   return (
-    <PageContainer title="Account Statements">
+    <PageContainer title={t('accounts.accountStatements.title')}>
         {/* Main Card */}
         <Paper
           elevation={0}
@@ -38,7 +40,7 @@ export default function AccountStatements() {
               <Box component="span" sx={{ mr: 1 }}>
                 📊
               </Box>
-              Account Statements
+              {t('accounts.accountStatements.title')}
             </Typography>
           </Box>
 
@@ -61,7 +63,7 @@ export default function AccountStatements() {
                 textAlign: 'center'
               }}
             >
-              Coming Soon
+              {t('accounts.common.comingSoon')}
             </Typography>
           </Box>
         </Paper>

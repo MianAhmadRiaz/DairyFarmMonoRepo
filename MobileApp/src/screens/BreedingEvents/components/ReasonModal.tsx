@@ -1,4 +1,5 @@
 import React from 'react'
+import { useTranslation } from 'react-i18next'
 import { Modal, StyleSheet, View } from 'react-native'
 import AppText from 'shared/components/AppText/AppText'
 
@@ -22,21 +23,22 @@ export const ReasonModal = ({
   setModalVisible,
   onAdd
 }: Props) => {
+  const { t } = useTranslation()
   return (
     <Modal visible={isVisible} transparent animationType="slide">
       <View style={styles.modalContainer}>
         <View style={styles.modalContent}>
           <View style={{ alignItems: 'center' }}>
             <AppText fontSize="h6" bold color={'darkestGrey'}>
-              Add Reason
+              {t('breeding.reasonModal.title')}
             </AppText>
           </View>
 
           <AppInput
-            label="Reason"
+            label={t('breeding.reasonModal.reasonLabel')}
             labelStyle={styles.label}
             textInputStyle={styles.placeholder}
-            placeholder="Reason here"
+            placeholder={t('breeding.reasonModal.reasonPlaceholder')}
             style={styles.customContainerModal}
             error={undefined}
             value={reason}
@@ -45,13 +47,13 @@ export const ReasonModal = ({
 
           <View style={styles.buttonContainer}>
             <PrimaryButton
-              title="Cancel"
+              title={t('breeding.reasonModal.cancel')}
               buttonStyle={styles.button2}
               textStyle={styles.buttonText2}
               onPress={() => setModalVisible(false)}
             />
             <PrimaryButton
-              title="Add"
+              title={t('breeding.reasonModal.add')}
               buttonStyle={styles.button1}
               textStyle={styles.buttonText1}
               onPress={onAdd}

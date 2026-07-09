@@ -1,5 +1,6 @@
 import { ICONS } from 'assets/icons';
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { View, Text, StyleSheet, FlatList } from 'react-native';
 import FastImage from 'react-native-fast-image';
 import AppText from 'shared/components/AppText/AppText';
@@ -7,6 +8,7 @@ import { COLORS } from 'shared/theme';
 import { RF } from 'shared/theme/responsive';
 
 const HealthAlertCard = () => {
+  const { t } = useTranslation();
   // Sample data for health alerts
   const alerts = [
     { id: '1', condition: 'Foot Rot', cases: 1, status: 'TREATED' },
@@ -29,7 +31,7 @@ const HealthAlertCard = () => {
             {item.condition}
           </AppText>
           <AppText fontSize="caption" medium color="descriptionColor">
-            {item.cases} Case{item.cases > 1 ? 's' : ''}
+            {t('main.healthAlerts.cases', { count: item.cases })}
           </AppText>
         </View>
         <View
@@ -47,7 +49,7 @@ const HealthAlertCard = () => {
                 : styles.untreatedText,
             ]}
           >
-            {item.status}
+            {t('main.healthAlerts.status.' + item.status, item.status)}
           </AppText>
         </View>
       </View>
@@ -57,7 +59,7 @@ const HealthAlertCard = () => {
   return (
     <View style={styles.container}>
       <AppText semiBold style={styles.header}>
-        Health Alerts
+        {t('main.healthAlerts.title')}
       </AppText>
       <FlatList
       scrollEnabled={false}

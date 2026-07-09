@@ -27,9 +27,11 @@ import PageContainer from '../../../../../shared/components/Layout/PageContainer
 import { fetchFeedCostAnalysis } from '../../../../../shared/services/feeding.services';
 import * as XLSX from 'xlsx';
 import { FeedCostItem } from './type';
+import { useTranslation } from 'react-i18next';
 
 
 const FeedCostAnalysis: React.FC = () => {
+  const { t } = useTranslation();
   const [startDate, setStartDate] = useState<string>('');
   const [endDate, setEndDate] = useState<string>('');
   const [loading, setLoading] = useState(false);
@@ -72,14 +74,14 @@ const FeedCostAnalysis: React.FC = () => {
 
       setSnackbar({
         open: true,
-        message: "Feed Cost Analysis Report fetched successfully.",
+        message: t('stock.feedCostAnalysis.fetchSuccess'),
         severity: 'success'
       });
     } catch (error) {
       console.error('Error fetching report:', error);
       setSnackbar({
         open: true,
-        message: 'Failed to fetch feed cost analysis data',
+        message: t('stock.feedCostAnalysis.fetchError'),
         severity: 'error'
       });
     } finally {
@@ -131,26 +133,26 @@ const FeedCostAnalysis: React.FC = () => {
       ws['!cols'] = wscols;
 
       const wb = XLSX.utils.book_new();
-      XLSX.utils.book_append_sheet(wb, ws, "Feed Cost Analysis Report");
+      XLSX.utils.book_append_sheet(wb, ws, t('stock.feedCostAnalysis.sheetName'));
 
       XLSX.writeFile(wb, `Feed_Cost_Analysis_Report_${startDate}_to_${endDate}.xlsx`);
 
       setSnackbar({
         open: true,
-        message: "Excel file downloaded successfully",
+        message: t('stock.common.excelDownloadSuccess'),
         severity: 'success'
       });
     } catch (error) {
       setSnackbar({
         open: true,
-        message: "Failed to export Excel file",
+        message: t('stock.common.excelDownloadError'),
         severity: 'error'
       });
     }
   };
 
   return (
-    <PageContainer title="Feed Cost Analysis" subtitle="View feed cost analysis report">
+    <PageContainer title={t('stock.feedCostAnalysis.title')} subtitle={t('stock.feedCostAnalysis.subtitle')}>
       <Container maxWidth="lg" sx={{
     px: isMobile ? '11px' : undefined,
   }}>
@@ -174,7 +176,7 @@ const FeedCostAnalysis: React.FC = () => {
                 <Grid item xs={12} md={4}>
                   <TextField
                     type="date"
-                    label="Start Date"
+                    label={t('stock.common.startDate')}
                     size="small"
                     fullWidth
                     value={startDate}
@@ -185,7 +187,7 @@ const FeedCostAnalysis: React.FC = () => {
                 <Grid item xs={12} md={4}>
                   <TextField
                     type="date"
-                    label="End Date"
+                    label={t('stock.common.endDate')}
                     size="small"
                     fullWidth
                     value={endDate}
@@ -206,7 +208,7 @@ const FeedCostAnalysis: React.FC = () => {
                       flex: 1
                     }}
                   >
-                    Go!
+                    {t('stock.common.go')}
                   </Button>
                   <IconButton 
                     onClick={handleCopy}
@@ -241,10 +243,10 @@ const FeedCostAnalysis: React.FC = () => {
                 <TableHead>
                   <TableRow sx={{ backgroundColor: '#f8f9fA' }}>
                     <TableCell sx={{ fontWeight: 'bold' }}>#</TableCell>
-                    <TableCell sx={{ fontWeight: 'bold' }}>Product</TableCell>
-                    <TableCell align="right" sx={{ fontWeight: 'bold' }}>Quantity</TableCell>
-                    <TableCell align="right" sx={{ fontWeight: 'bold' }}>Rate</TableCell>
-                    <TableCell align="right" sx={{ fontWeight: 'bold' }}>Amount</TableCell>
+                    <TableCell sx={{ fontWeight: 'bold' }}>{t('stock.common.product')}</TableCell>
+                    <TableCell align="right" sx={{ fontWeight: 'bold' }}>{t('stock.common.quantity')}</TableCell>
+                    <TableCell align="right" sx={{ fontWeight: 'bold' }}>{t('stock.common.rate')}</TableCell>
+                    <TableCell align="right" sx={{ fontWeight: 'bold' }}>{t('stock.common.amount')}</TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
@@ -258,7 +260,7 @@ const FeedCostAnalysis: React.FC = () => {
                   ) : data.items.length === 0 ? (
                     <TableRow>
                       <TableCell colSpan={5} align="center">
-                        No data available
+                        {t('stock.common.noDataAvailable')}
                       </TableCell>
                     </TableRow>
                   ) : (
@@ -277,7 +279,7 @@ const FeedCostAnalysis: React.FC = () => {
                       })}
                       <TableRow sx={{ backgroundColor: '#f5f5f5' }}>
                         <TableCell colSpan={4} align="right" sx={{ fontWeight: 'bold' }}>
-                          Total Amount:
+                          {t('stock.common.totalAmount')}:
                         </TableCell>
                         <TableCell align="right" sx={{ fontWeight: 'bold' }}>
                           {data.totalAmount}

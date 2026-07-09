@@ -43,6 +43,7 @@ import {
 } from '../../../shared/services/stockModule.services';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { useTranslation } from 'react-i18next';
 
 const EXPIRY_HORIZON_DAYS = 60;
 const CONSUMPTION_WINDOW_DAYS = 30;
@@ -50,6 +51,7 @@ const CONSUMPTION_WINDOW_DAYS = 30;
 const formatDate = (d: Date) => d.toISOString().split('T')[0];
 
 const StockDashboard = () => {
+  const { t } = useTranslation();
   const navigate = useNavigate();
 
   const [loading, setLoading] = useState(false);
@@ -96,10 +98,10 @@ const StockDashboard = () => {
     ) as PromiseRejectedResult | undefined;
     if (failed) {
       const reason: any = failed.reason;
-      toast.error(reason?.response?.data?.message || 'Failed to load some dashboard data.');
+      toast.error(reason?.response?.data?.message || t('stock.stockDashboard.loadError'));
     }
     setLoading(false);
-  }, []);
+  }, [t]);
 
   useEffect(() => {
     loadDashboard();
@@ -107,22 +109,22 @@ const StockDashboard = () => {
 
   const kpiCards = [
     {
-      label: 'Total Stock Items',
+      label: t('stock.stockDashboard.totalStockItems'),
       value: totalItems,
       icon: <Inventory sx={{ color: '#77B255' }} />
     },
     {
-      label: 'Low Stock Alerts',
+      label: t('stock.stockDashboard.lowStockAlerts'),
       value: lowStockCount,
       icon: <Warning sx={{ color: lowStockCount > 0 ? '#e07a1f' : '#77B255' }} />
     },
     {
-      label: 'Expired Batches',
+      label: t('stock.stockDashboard.expiredBatches'),
       value: expiry?.counts?.expired ?? 0,
       icon: <EventBusy sx={{ color: (expiry?.counts?.expired ?? 0) > 0 ? '#d32f2f' : '#77B255' }} />
     },
     {
-      label: `Expiring in ${EXPIRY_HORIZON_DAYS} Days`,
+      label: t('stock.stockDashboard.expiringInDays', { days: EXPIRY_HORIZON_DAYS }),
       value: expiry?.counts?.expiringSoon ?? 0,
       icon: (
         <TrendingDown
@@ -134,23 +136,38 @@ const StockDashboard = () => {
 
   const alertEntries: { primary: string; secondary: string }[] = [
     ...lowStockItems.slice(0, 5).map(item => ({
-      primary: `${item.item_name || item.name || 'Item'} (low stock)`,
-      secondary: `Quantity: ${Number(item.quantity)} | Reorder Level: ${item.reorder_level}`
+      primary: t('stock.stockDashboard.lowStockEntry', {
+        name: item.item_name || item.name || t('stock.common.item')
+      }),
+      secondary: t('stock.stockDashboard.lowStockDetail', {
+        quantity: Number(item.quantity),
+        reorderLevel: item.reorder_level
+      })
     })),
     ...(expiry?.expired || []).slice(0, 3).map(batch => ({
-      primary: `${batch.item_name || 'Item'} (expired)`,
-      secondary: `Batch: ${batch.batch_number || '-'} | Expired: ${batch.expiry_date}`
+      primary: t('stock.stockDashboard.expiredEntry', {
+        name: batch.item_name || t('stock.common.item')
+      }),
+      secondary: t('stock.stockDashboard.expiredDetail', {
+        batch: batch.batch_number || '-',
+        date: batch.expiry_date
+      })
     })),
     ...(expiry?.expiringSoon || []).slice(0, 3).map(batch => ({
-      primary: `${batch.item_name || 'Item'} (expiring soon)`,
-      secondary: `Batch: ${batch.batch_number || '-'} | Expiry: ${batch.expiry_date}`
+      primary: t('stock.stockDashboard.expiringEntry', {
+        name: batch.item_name || t('stock.common.item')
+      }),
+      secondary: t('stock.stockDashboard.expiringDetail', {
+        batch: batch.batch_number || '-',
+        date: batch.expiry_date
+      })
     }))
   ];
 
   return (
     <PageContainer
-      title="Stock Dashboard"
-      subtitle="Track and manage your stock inventory"
+      title={t('stock.stockDashboard.title')}
+      subtitle={t('stock.stockDashboard.subtitle')}
       actions={
         <Stack direction="row" spacing={1} alignItems="center">
           {loading && <CircularProgress size={20} sx={{ color: '#005f73' }} />}
@@ -165,7 +182,7 @@ const StockDashboard = () => {
             onClick={loadDashboard}
             disabled={loading}
           >
-            Refresh
+            {t('stock.common.refresh')}
           </Button>
         </Stack>
       }
@@ -215,25 +232,25 @@ const StockDashboard = () => {
             }}
           >
             <Typography variant="h6" fontWeight="bold">
-              Top Consumed Items (last {CONSUMPTION_WINDOW_DAYS} days)
+              {t('stock.stockDashboard.topConsumedItems', { days: CONSUMPTION_WINDOW_DAYS })}
             </Typography>
           </Box>
           <TableContainer>
             <Table>
               <TableHead sx={{ backgroundColor: '#f8f8f8' }}>
                 <TableRow>
-                  <TableCell sx={{ fontWeight: 'bold' }}>Item</TableCell>
-                  <TableCell sx={{ fontWeight: 'bold' }}>Consumed Qty</TableCell>
-                  <TableCell sx={{ fontWeight: 'bold' }}>Avg Rate</TableCell>
-                  <TableCell sx={{ fontWeight: 'bold' }}>Closing Qty</TableCell>
-                  <TableCell sx={{ fontWeight: 'bold' }}>Status</TableCell>
+                  <TableCell sx={{ fontWeight: 'bold' }}>{t('stock.common.item')}</TableCell>
+                  <TableCell sx={{ fontWeight: 'bold' }}>{t('stock.stockDashboard.columns.consumedQty')}</TableCell>
+                  <TableCell sx={{ fontWeight: 'bold' }}>{t('stock.stockDashboard.columns.avgRate')}</TableCell>
+                  <TableCell sx={{ fontWeight: 'bold' }}>{t('stock.stockDashboard.columns.closingQty')}</TableCell>
+                  <TableCell sx={{ fontWeight: 'bold' }}>{t('stock.common.status')}</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
                 {topConsumed.length === 0 ? (
                   <TableRow>
                     <TableCell colSpan={5} align="center">
-                      No consumption recorded in the selected period.
+                      {t('stock.stockDashboard.noConsumption')}
                     </TableCell>
                   </TableRow>
                 ) : (
@@ -247,7 +264,7 @@ const StockDashboard = () => {
                         <TableCell>{closingQty}</TableCell>
                         <TableCell>
                           <Chip
-                            label={closingQty > 0 ? 'In Stock' : 'Out of Stock'}
+                            label={closingQty > 0 ? t('stock.common.inStock') : t('stock.common.outOfStock')}
                             color={closingQty > 0 ? 'success' : 'warning'}
                             size="small"
                           />
@@ -267,10 +284,10 @@ const StockDashboard = () => {
           <Card sx={{ boxShadow: 3, borderRadius: 2 }}>
             <CardContent>
               <Typography variant="h6" fontWeight="bold" sx={{ mb: 2 }}>
-                Stock Alerts
+                {t('stock.stockDashboard.stockAlerts')}
               </Typography>
               {alertEntries.length === 0 ? (
-                <Alert severity="success">No low-stock or expiry alerts right now.</Alert>
+                <Alert severity="success">{t('stock.stockDashboard.noAlerts')}</Alert>
               ) : (
                 <List>
                   {alertEntries.map((alert, index) => (
@@ -291,7 +308,7 @@ const StockDashboard = () => {
           <Card sx={{ boxShadow: 3, borderRadius: 2 }}>
             <CardContent>
               <Typography variant="h6" fontWeight="bold" sx={{ mb: 2 }}>
-                Quick Actions
+                {t('stock.stockDashboard.quickActions')}
               </Typography>
               <Stack spacing={2}>
                 <Button
@@ -304,7 +321,7 @@ const StockDashboard = () => {
                     '&:hover': { backgroundColor: '#5a8a3f' }
                   }}
                 >
-                  Record Purchase
+                  {t('stock.stockDashboard.recordPurchase')}
                 </Button>
                 <Button
                   variant="contained"
@@ -316,7 +333,7 @@ const StockDashboard = () => {
                     '&:hover': { backgroundColor: '#5a8a3f' }
                   }}
                 >
-                  Record Issuance
+                  {t('stock.stockDashboard.recordIssuance')}
                 </Button>
                 <Button
                   variant="contained"
@@ -328,7 +345,7 @@ const StockDashboard = () => {
                     '&:hover': { backgroundColor: '#5a8a3f' }
                   }}
                 >
-                  Add New Stock
+                  {t('stock.stockDashboard.addNewStock')}
                 </Button>
               </Stack>
             </CardContent>

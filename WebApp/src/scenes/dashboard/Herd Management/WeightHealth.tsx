@@ -1,4 +1,5 @@
-import React, { useState, useRef } from "react";
+import React, { useMemo, useState, useRef } from "react";
+import { useTranslation } from "react-i18next";
 import {
   Box,
   Grid,
@@ -15,13 +16,16 @@ import { ToastContainer, toast, Id } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import PageContainer from "../../../shared/components/Layout/PageContainer";
 
-const HEALTH_STATUSES = [
-  { value: "milking", label: "Healthy / Milking" },
-  { value: "sick", label: "Sick" },
-  { value: "culling", label: "Culling" },
-];
-
 const WeightHealth: React.FC = () => {
+  const { t } = useTranslation();
+  const HEALTH_STATUSES = useMemo(
+    () => [
+      { value: "milking", label: t("herd.weightHealth.statusMilking") },
+      { value: "sick", label: t("herd.weightHealth.statusSick") },
+      { value: "culling", label: t("herd.weightHealth.statusCulling") },
+    ],
+    [t]
+  );
   const [animals, setAnimals] = useState<AnimalInfoRow[]>([]);
   const [dropdownLoading, setDropdownLoading] = useState(false);
 
@@ -47,7 +51,7 @@ const WeightHealth: React.FC = () => {
       setAnimals(data);
     } catch (error) {
       console.error("Error fetching animals:", error);
-      toast.error("Failed to load animals.");
+      toast.error(t("herd.weightHealth.loadAnimalsError"));
     } finally {
       setDropdownLoading(false);
     }
@@ -61,18 +65,18 @@ const WeightHealth: React.FC = () => {
 
   const handleSaveWeight = async () => {
     if (!weightAnimalId || !(Number(weight) > 0) || !weightDate) {
-      warn("Select an animal and enter a valid weight and date");
+      warn(t("herd.weightHealth.warnWeight"));
       return;
     }
     setWeightLoading(true);
     try {
       await updateAnimalWeight({ animalId: weightAnimalId, weight: Number(weight), date: weightDate });
-      toast.success("Weight recorded successfully!");
+      toast.success(t("herd.weightHealth.weightRecorded"));
       setWeightAnimalId("");
       setWeight("");
     } catch (error: any) {
       console.error("WeightHealth => weight error:", error?.response?.data || error);
-      toast.error(error?.response?.data?.message || "Failed to record weight.");
+      toast.error(error?.response?.data?.message || t("herd.weightHealth.recordWeightError"));
     } finally {
       setWeightLoading(false);
     }
@@ -80,18 +84,18 @@ const WeightHealth: React.FC = () => {
 
   const handleSaveHealth = async () => {
     if (!healthAnimalId || !healthStatus || !healthDate) {
-      warn("Select an animal, status and date");
+      warn(t("herd.weightHealth.warnHealth"));
       return;
     }
     setHealthLoading(true);
     try {
       await updateAnimalHealthStatus({ animalId: healthAnimalId, healthStatus, date: healthDate });
-      toast.success("Health status updated successfully!");
+      toast.success(t("herd.weightHealth.healthUpdated"));
       setHealthAnimalId("");
       setHealthStatus("");
     } catch (error: any) {
       console.error("WeightHealth => health error:", error?.response?.data || error);
-      toast.error(error?.response?.data?.message || "Failed to update health status.");
+      toast.error(error?.response?.data?.message || t("herd.weightHealth.updateHealthError"));
     } finally {
       setHealthLoading(false);
     }
@@ -105,7 +109,7 @@ const WeightHealth: React.FC = () => {
     <TextField
       fullWidth
       select
-      label="Animal"
+      label={t("herd.weightHealth.animal")}
       value={value}
       onChange={(e) => onChange(e.target.value)}
       disabled={disabled}
@@ -118,7 +122,7 @@ const WeightHealth: React.FC = () => {
       ) : (
         animals.map((a) => (
           <MenuItem key={a.uuid} value={a.uuid}>
-            {`${a.name || "Unnamed"} (${a.tagName || "No Tag"})`}
+            {`${a.name || t("herd.weightHealth.unnamed")} (${a.tagName || t("herd.weightHealth.noTag")})`}
           </MenuItem>
         ))
       )}
@@ -137,10 +141,10 @@ const WeightHealth: React.FC = () => {
   };
 
   return (
-    <PageContainer title="Weight & Health Status" maxWidth={900}>
+    <PageContainer title={t("herd.weightHealth.title")} maxWidth={900}>
       <Box sx={cardSx}>
         <Typography variant="h6" sx={{ mb: 2 }}>
-          Record Weight
+          {t("herd.weightHealth.recordWeight")}
         </Typography>
         <Grid container spacing={3}>
           <Grid item xs={12} md={4}>
@@ -150,7 +154,7 @@ const WeightHealth: React.FC = () => {
             <TextField
               fullWidth
               type="number"
-              label="Weight (kg)"
+              label={t("herd.weightHealth.weightKg")}
               value={weight}
               onChange={(e) => setWeight(e.target.value)}
               disabled={weightLoading}
@@ -161,7 +165,7 @@ const WeightHealth: React.FC = () => {
             <TextField
               fullWidth
               type="date"
-              label="Date"
+              label={t("herd.weightHealth.date")}
               InputLabelProps={{ shrink: true }}
               value={weightDate}
               onChange={(e) => setWeightDate(e.target.value)}
@@ -176,13 +180,13 @@ const WeightHealth: React.FC = () => {
           disabled={weightLoading}
           sx={{ mt: 3, bgcolor: "#005f73", "&:hover": { bgcolor: "#004954" }, borderRadius: "8px", px: 5 }}
         >
-          {weightLoading ? <CircularProgress size={24} sx={{ color: "#0F7C8F" }} /> : "Save Weight"}
+          {weightLoading ? <CircularProgress size={24} sx={{ color: "#0F7C8F" }} /> : t("herd.weightHealth.saveWeight")}
         </Button>
       </Box>
 
       <Box sx={cardSx}>
         <Typography variant="h6" sx={{ mb: 2 }}>
-          Update Health Status
+          {t("herd.weightHealth.updateHealthStatus")}
         </Typography>
         <Grid container spacing={3}>
           <Grid item xs={12} md={4}>
@@ -192,7 +196,7 @@ const WeightHealth: React.FC = () => {
             <TextField
               fullWidth
               select
-              label="Health Status"
+              label={t("herd.weightHealth.healthStatus")}
               value={healthStatus}
               onChange={(e) => setHealthStatus(e.target.value)}
               disabled={healthLoading}
@@ -208,7 +212,7 @@ const WeightHealth: React.FC = () => {
             <TextField
               fullWidth
               type="date"
-              label="Date"
+              label={t("herd.weightHealth.date")}
               InputLabelProps={{ shrink: true }}
               value={healthDate}
               onChange={(e) => setHealthDate(e.target.value)}
@@ -223,7 +227,7 @@ const WeightHealth: React.FC = () => {
           disabled={healthLoading}
           sx={{ mt: 3, bgcolor: "#005f73", "&:hover": { bgcolor: "#004954" }, borderRadius: "8px", px: 5 }}
         >
-          {healthLoading ? <CircularProgress size={24} sx={{ color: "#0F7C8F" }} /> : "Save Status"}
+          {healthLoading ? <CircularProgress size={24} sx={{ color: "#0F7C8F" }} /> : t("herd.weightHealth.saveStatus")}
         </Button>
       </Box>
       <ToastContainer position="top-right" autoClose={3000} />

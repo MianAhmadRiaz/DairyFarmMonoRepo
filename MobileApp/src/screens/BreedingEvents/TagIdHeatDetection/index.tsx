@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { TouchableOpacity, View } from 'react-native'
 import AnyIcon, { Icons } from 'shared/components/AnyIcon'
 import AppText from 'shared/components/AppText/AppText'
@@ -12,6 +13,7 @@ import {
 
 interface Props extends GenericNavigation {}
 const TagIdHeatDetection = (props: Props) => {
+  const { t } = useTranslation()
   return (
     <>
       <GestureHandlerRootView style={{ flex: 1 }}>
@@ -47,7 +49,7 @@ const TagIdHeatDetection = (props: Props) => {
           <View style={styles.card}>
             <View style={styles.textStyle}>
               <AppText fontSize="h7" semiBold color={'labelColor'}>
-                AI date
+                {t('breeding.tagIdHeatDetection.aiDate')}
               </AppText>
 
               <AppText fontSize="h6" regular color={'grey'}>
@@ -56,7 +58,7 @@ const TagIdHeatDetection = (props: Props) => {
             </View>
             <View style={styles.textStyle}>
               <AppText fontSize="h7" semiBold color={'labelColor'}>
-                Sire Name
+                {t('breeding.tagIdHeatDetection.sireName')}
               </AppText>
 
               <AppText fontSize="h6" regular color={'grey'}>
@@ -66,7 +68,7 @@ const TagIdHeatDetection = (props: Props) => {
 
             <View style={styles.textStyle}>
               <AppText fontSize="h7" semiBold color={'labelColor'}>
-                Straw
+                {t('breeding.tagIdHeatDetection.straw')}
               </AppText>
 
               <AppText fontSize="h6" regular color={'grey'}>
@@ -76,7 +78,7 @@ const TagIdHeatDetection = (props: Props) => {
 
             <View style={styles.textStyle}>
               <AppText fontSize="h7" semiBold color={'labelColor'}>
-                Price ($)
+                {t('breeding.tagIdHeatDetection.price')}
               </AppText>
 
               <AppText fontSize="h6" regular color={'grey'}>
@@ -86,7 +88,7 @@ const TagIdHeatDetection = (props: Props) => {
 
             <View style={styles.textStyle}>
               <AppText fontSize="h7" semiBold color={'labelColor'}>
-                Comments
+                {t('breeding.tagIdHeatDetection.comments')}
               </AppText>
 
               <AppText fontSize="h6" regular color={'grey'}>
@@ -97,12 +99,12 @@ const TagIdHeatDetection = (props: Props) => {
 
           <View style={styles.buttonContainer}>
             <PrimaryButton
-              title="Delete"
+              title={t('breeding.tagIdHeatDetection.delete')}
               buttonStyle={styles.button2}
               textStyle={styles.buttonText2}
             />
             <PrimaryButton
-              title="Edit"
+              title={t('breeding.tagIdHeatDetection.edit')}
               buttonStyle={styles.button1}
               textStyle={styles.buttonText1}
             />

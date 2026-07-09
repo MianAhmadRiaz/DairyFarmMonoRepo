@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { FlatList, Text, TouchableOpacity, View } from 'react-native'
 import AnyIcon, { Icons } from 'shared/components/AnyIcon'
 import AppText from 'shared/components/AppText/AppText'
@@ -19,6 +20,7 @@ import AppHeader from 'shared/components/AppHeader'
 
 interface Props extends GenericNavigation {}
 const Protocol = (props: Props) => {
+  const { t } = useTranslation()
   const [selectedDate, setSelectedDate] = useState<string | undefined>(
     undefined
   )
@@ -32,7 +34,7 @@ const Protocol = (props: Props) => {
   return (
     <>
       <View style={styles.container}>
-        <AppHeader showBack title="Protocols" />
+        <AppHeader showBack title={t('breeding.protocol.headerTitle')} />
         {/* <View style={styles.top}>
           <TouchableOpacity>
             <AnyIcon
@@ -66,9 +68,9 @@ const Protocol = (props: Props) => {
         >
           <View>
             <DatePicker
-              label="Protocol Date"
+              label={t('breeding.protocol.protocolDate')}
               labelStyle={styles.label}
-              placeholder="Select"
+              placeholder={t('breeding.common.select')}
               placeholderStyle={styles.placeholder}
               style={styles.customContainer}
               value={selectedDate}
@@ -76,17 +78,17 @@ const Protocol = (props: Props) => {
               error={error}
             />
             <AppInput
-              label="Tag ID"
+              label={t('breeding.common.tagId')}
               textInputStyle={styles.placeholder}
               labelStyle={styles.label}
-              placeholder="Tag ID"
+              placeholder={t('breeding.common.tagIdPlaceholder')}
               style={styles.customContainer}
               error={undefined}
             />
             <DropDown
-              label="Protocols"
+              label={t('breeding.protocol.protocols')}
               labelStyle={styles.label}
-              placeholder="Select"
+              placeholder={t('breeding.common.select')}
               placeholderStyle={styles.placeholder}
               style={styles.customContainer}
               options={[]}
@@ -97,10 +99,10 @@ const Protocol = (props: Props) => {
             />
 
             <TimePicker
-              label="Start Time"
+              label={t('breeding.protocol.startTime')}
               labelStyle={styles.label}
               style={styles.customContainer}
-              placeholder="Select"
+              placeholder={t('breeding.common.select')}
               placeholderStyle={styles.placeholder}
               onChange={function (date: string): void {
                 throw new Error('Function not implemented.')
@@ -111,12 +113,12 @@ const Protocol = (props: Props) => {
               style={{ flexDirection: 'row', justifyContent: 'space-between' }}
             >
               <PrimaryButton
-                title="Add Protocol"
+                title={t('breeding.protocol.addProtocol')}
                 buttonStyle={styles.button1}
                 textStyle={styles.buttonText1}
               />
               <PrimaryButton
-                title="Cancel"
+                title={t('breeding.protocol.cancel')}
                 buttonStyle={styles.button2}
                 textStyle={styles.buttonText2}
               />
@@ -131,7 +133,7 @@ const Protocol = (props: Props) => {
                 color={'darkestGrey'}
                 style={styles.particularHeaderText}
               >
-                PARTICULARS
+                {t('breeding.protocol.cols.particulars')}
               </AppText>
               <AppText
                 fontSize="10"
@@ -139,7 +141,7 @@ const Protocol = (props: Props) => {
                 color={'darkestGrey'}
                 style={styles.tableHeaderText}
               >
-                HOURS
+                {t('breeding.protocol.cols.hours')}
               </AppText>
               <AppText
                 fontSize="10"
@@ -147,7 +149,7 @@ const Protocol = (props: Props) => {
                 color={'darkestGrey'}
                 style={styles.tableHeaderText}
               >
-                DATE
+                {t('breeding.protocol.cols.date')}
               </AppText>
               <AppText
                 fontSize="10"
@@ -155,7 +157,7 @@ const Protocol = (props: Props) => {
                 color={'darkestGrey'}
                 style={styles.tableHeaderText}
               >
-                TIME
+                {t('breeding.protocol.cols.time')}
               </AppText>
             </View>
 

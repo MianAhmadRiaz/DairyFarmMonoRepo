@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { SafeAreaView, ScrollView, StyleSheet, View } from 'react-native';
 import AppText from 'shared/components/AppText/AppText';
 import { COLORS } from 'shared/theme';
@@ -9,10 +10,11 @@ import UpcomingTasks from './UpcomingTasks';
 import AdditionalKpis from './AdditionalKpis';
 
 const UpcomingTasksCard = () => {
+  const { t } = useTranslation();
   return (
     <View style={styles.container}>
       <AppText semiBold fontSize="h7" style={styles.header}>
-        Upcoming Tasks/ Additional KPIs
+        {t('main.upcomingTasks.cardTitle')}
       </AppText>
       <BorderLine />
 

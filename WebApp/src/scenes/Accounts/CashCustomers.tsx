@@ -16,6 +16,7 @@ import {
 import AddIcon from '@mui/icons-material/Add';
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined';
+import { useTranslation } from 'react-i18next';
 import { tokens } from '../../shared/theme/theme';
 import PageContainer from '../../shared/components/Layout/PageContainer';
 
@@ -38,6 +39,7 @@ const toCsv = (headers: string[], rows: (string | number)[][]) =>
   [headers.join(','), ...rows.map(r => r.map(v => `"${String(v).replace(/"/g, '""')}"`).join(','))].join('\n');
 
 export default function CashCustomers() {
+  const { t } = useTranslation();
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   const pageBg = theme.palette.mode === 'dark' ? colors.primary[500] : '#F5FAF7';
@@ -68,16 +70,16 @@ export default function CashCustomers() {
   // Toolbar actions
   const handleCopy = async () => {
     const csv = toCsv(
-      ['#', 'Customer', 'Account', 'Status'],
+      ['#', t('accounts.common.customer'), t('accounts.common.account'), t('accounts.common.status')],
       filtered.map(c => [c.id, c.customer, c.account, c.status])
     );
     await navigator.clipboard.writeText(csv);
-    alert('Copied table (CSV) to clipboard');
+    alert(t('accounts.common.copiedCsv'));
   };
 
   const downloadCsv = (filename: string) => {
     const csv = toCsv(
-      ['#', 'Customer', 'Account', 'Status'],
+      ['#', t('accounts.common.customer'), t('accounts.common.account'), t('accounts.common.status')],
       filtered.map(c => [c.id, c.customer, c.account, c.status])
     );
     const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
@@ -87,23 +89,23 @@ export default function CashCustomers() {
   };
 
   const handleAddCustomer = () => {
-    alert('Add Customer functionality to be implemented');
+    alert(t('accounts.cashCustomers.addCustomerTodo'));
   };
 
   const handleEdit = (customer: Customer) => {
     console.log('Edit customer:', customer);
-    alert(`Edit customer: ${customer.customer}`);
+    alert(t('accounts.cashCustomers.editCustomer', { name: customer.customer }));
   };
 
   const handleDelete = (customer: Customer) => {
     console.log('Delete customer:', customer);
-    if (confirm(`Are you sure you want to delete ${customer.customer}?`)) {
-      alert('Delete functionality to be implemented');
+    if (confirm(t('accounts.cashCustomers.confirmDelete', { name: customer.customer }))) {
+      alert(t('accounts.cashCustomers.deleteTodo'));
     }
   };
 
   return (
-    <PageContainer title="Cash Customers">
+    <PageContainer title={t('accounts.cashCustomers.title')}>
         {/* Main Card */}
         <Paper elevation={0} sx={{ p: 0, borderRadius: 2, border: `1px solid ${theme.palette.divider}`, bgcolor: 'background.paper' }}>
           
@@ -120,7 +122,7 @@ export default function CashCustomers() {
             }}
           >
             <Typography variant="h6" fontWeight={600}>
-              View Cash Customers
+              {t('accounts.cashCustomers.viewTitle')}
             </Typography>
             <Button
               startIcon={<AddIcon />}
@@ -135,14 +137,14 @@ export default function CashCustomers() {
                 }
               }}
             >
-              Add Customer
+              {t('accounts.cashCustomers.addCustomer')}
             </Button>
           </Box>
 
           {/* Controls Section - matching screenshot layout */}
           <Box sx={{ p: 2, display: 'flex', justifyContent: 'space-between', alignItems: 'center', bgcolor: theme.palette.mode === 'dark' ? colors.primary[400] : '#f8f9fa', borderBottom: `1px solid ${theme.palette.divider}` }}>
             <Stack direction="row" spacing={1} alignItems="center">
-              <Typography variant="body2">Show</Typography>
+              <Typography variant="body2">{t('accounts.common.show')}</Typography>
               <TextField
                 select
                 size="small"
@@ -157,11 +159,11 @@ export default function CashCustomers() {
                   <MenuItem key={option} value={option}>{option}</MenuItem>
                 ))}
               </TextField>
-              <Typography variant="body2">entries</Typography>
+              <Typography variant="body2">{t('accounts.common.entries')}</Typography>
             </Stack>
 
             <Stack direction="row" spacing={1} alignItems="center">
-              <Typography variant="body2">Search:</Typography>
+              <Typography variant="body2">{t('accounts.common.searchLabel')}</Typography>
               <TextField
                 size="small"
                 value={search}
@@ -177,10 +179,10 @@ export default function CashCustomers() {
               <thead>
                 <tr>
                   <th style={th}>#</th>
-                  <th style={{ ...th, minWidth: 200 }}>Customer</th>
-                  <th style={{ ...th, minWidth: 200 }}>Account</th>
-                  <th style={{ ...th, minWidth: 120 }}>Status</th>
-                  <th style={{ ...th, minWidth: 120 }}>Actions</th>
+                  <th style={{ ...th, minWidth: 200 }}>{t('accounts.common.customer')}</th>
+                  <th style={{ ...th, minWidth: 200 }}>{t('accounts.common.account')}</th>
+                  <th style={{ ...th, minWidth: 120 }}>{t('accounts.common.status')}</th>
+                  <th style={{ ...th, minWidth: 120 }}>{t('accounts.common.actions')}</th>
                 </tr>
               </thead>
 
@@ -188,7 +190,7 @@ export default function CashCustomers() {
                 {paginatedData.length === 0 ? (
                   <tr>
                     <td style={{ ...td, textAlign: 'center', padding: '60px 12px', color: '#666' }} colSpan={5}>
-                      No data available in table
+                      {t('accounts.common.noDataInTable')}
                     </td>
                   </tr>
                 ) : (
@@ -200,7 +202,7 @@ export default function CashCustomers() {
                       <td style={td}>
                         <Chip
                           size="small"
-                          label={customer.status}
+                          label={t(`accounts.common.statusValues.${customer.status.toLowerCase()}`, customer.status)}
                           sx={{
                             bgcolor: customer.status === 'Active' ? '#E6F4EF' : '#FFF1F1',
                             color: customer.status === 'Active' ? '#1B5E20' : '#C62828',
@@ -209,12 +211,12 @@ export default function CashCustomers() {
                         />
                       </td>
                       <td style={td}>
-                        <Tooltip title="Edit">
+                        <Tooltip title={t('common.edit')}>
                           <IconButton size="small" onClick={() => handleEdit(customer)}>
                             <EditOutlinedIcon fontSize="small" />
                           </IconButton>
                         </Tooltip>
-                        <Tooltip title="Delete">
+                        <Tooltip title={t('common.delete')}>
                           <IconButton size="small" onClick={() => handleDelete(customer)}>
                             <DeleteOutlineOutlinedIcon fontSize="small" />
                           </IconButton>
@@ -230,7 +232,7 @@ export default function CashCustomers() {
           {/* Footer with pagination - matching screenshot */}
           <Box sx={{ p: 2, display: 'flex', justifyContent: 'space-between', alignItems: 'center', bgcolor: theme.palette.mode === 'dark' ? colors.primary[400] : '#f8f9fa', borderTop: `1px solid ${theme.palette.divider}` }}>
             <Typography variant="body2" color="text.secondary">
-              Showing {showingStart} to {showingEnd} of {filtered.length} entries
+              {t('accounts.common.showingEntriesRange', { start: showingStart, end: showingEnd, total: filtered.length })}
             </Typography>
             
             <Stack direction="row" spacing={1} alignItems="center">
@@ -244,7 +246,7 @@ export default function CashCustomers() {
                   color: 'text.secondary',
                 }}
               >
-                Previous
+                {t('accounts.common.previous')}
               </Button>
               
               <Button
@@ -257,7 +259,7 @@ export default function CashCustomers() {
                   color: '#6a757d',
                 }}
               >
-                Next
+                {t('common.next')}
               </Button>
             </Stack>
           </Box>
@@ -265,7 +267,7 @@ export default function CashCustomers() {
 
         {/* Copyright Footer */}
         <Typography variant="body2" color="text.secondary" sx={{ mt: 2, textAlign: 'left' }}>
-          Copyright © 2025
+          {t('accounts.common.copyright')}
         </Typography>
     </PageContainer>
   );

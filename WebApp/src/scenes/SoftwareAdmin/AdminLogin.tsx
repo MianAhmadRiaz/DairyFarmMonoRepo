@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import {
   Box,
   Button,
@@ -23,6 +24,7 @@ import { adminSignin, adminVerifyOtp } from '../../shared/services/SoftwareAdmin
 const AdminLogin: React.FC = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
   const [step, setStep] = useState<'credentials' | 'otp'>('credentials');
   const [email, setEmail] = useState('');
@@ -36,7 +38,7 @@ const AdminLogin: React.FC = () => {
   const handleCredentials = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!email || !password) {
-      toast.error('Email and password are required');
+      toast.error(t('softwareAdmin.login.emailPasswordRequired'));
       return;
     }
     setLoading(true);
@@ -49,7 +51,7 @@ const AdminLogin: React.FC = () => {
       setQrUrl(data.url);
       setStep('otp');
     } catch (err: any) {
-      toast.error(err?.response?.data?.message || 'Sign in failed');
+      toast.error(err?.response?.data?.message || t('softwareAdmin.login.signInFailed'));
     } finally {
       setLoading(false);
     }
@@ -58,7 +60,7 @@ const AdminLogin: React.FC = () => {
   const handleVerifyOtp = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!otp) {
-      toast.error('Authentication code is required');
+      toast.error(t('softwareAdmin.login.authCodeRequired'));
       return;
     }
     setLoading(true);
@@ -69,7 +71,7 @@ const AdminLogin: React.FC = () => {
       dispatch(setAuthToken(data.token));
       navigate('/software-admin/dashboard', { replace: true });
     } catch (err: any) {
-      toast.error(err?.response?.data?.message || 'Invalid authentication code');
+      toast.error(err?.response?.data?.message || t('softwareAdmin.login.invalidAuthCode'));
     } finally {
       setLoading(false);
     }
@@ -89,19 +91,19 @@ const AdminLogin: React.FC = () => {
       <Card sx={{ width: 420, maxWidth: '100%', borderRadius: 3, boxShadow: 6 }}>
         <CardContent sx={{ p: 4 }}>
           <Typography variant="h5" fontWeight={700} textAlign="center" gutterBottom>
-            Software Owner Portal
+            {t('softwareAdmin.login.portalTitle')}
           </Typography>
           <Typography variant="body2" color="text.secondary" textAlign="center" mb={3}>
             {step === 'credentials'
-              ? 'Sign in to manage farms & billing'
-              : 'Enter the code from your authenticator app'}
+              ? t('softwareAdmin.login.credentialsSubtitle')
+              : t('softwareAdmin.login.otpSubtitle')}
           </Typography>
 
           {step === 'credentials' && (
             <form onSubmit={handleCredentials}>
               <TextField
                 fullWidth
-                label="Email"
+                label={t('softwareAdmin.login.email')}
                 type="email"
                 value={email}
                 onChange={e => setEmail(e.target.value)}
@@ -110,7 +112,7 @@ const AdminLogin: React.FC = () => {
               />
               <TextField
                 fullWidth
-                label="Password"
+                label={t('softwareAdmin.login.password')}
                 type="password"
                 value={password}
                 onChange={e => setPassword(e.target.value)}
@@ -125,7 +127,7 @@ const AdminLogin: React.FC = () => {
                 disabled={loading}
                 sx={{ mt: 2 }}
               >
-                {loading ? <CircularProgress size={22} /> : 'Continue'}
+                {loading ? <CircularProgress size={22} /> : t('softwareAdmin.login.continue')}
               </Button>
             </form>
           )}
@@ -135,14 +137,14 @@ const AdminLogin: React.FC = () => {
               {qrUrl && (
                 <Box textAlign="center" mb={2}>
                   <Typography variant="body2" mb={1}>
-                    Scan this QR code with Google Authenticator, then enter the code below.
+                    {t('softwareAdmin.login.scanQr')}
                   </Typography>
-                  <img src={qrUrl} alt="2FA QR" style={{ width: 180, height: 180 }} />
+                  <img src={qrUrl} alt={t('softwareAdmin.login.qrAlt')} style={{ width: 180, height: 180 }} />
                 </Box>
               )}
               <TextField
                 fullWidth
-                label="Authentication Code"
+                label={t('softwareAdmin.login.authCode')}
                 value={otp}
                 onChange={e => setOtp(e.target.value)}
                 margin="normal"
@@ -157,7 +159,7 @@ const AdminLogin: React.FC = () => {
                 disabled={loading}
                 sx={{ mt: 2 }}
               >
-                {loading ? <CircularProgress size={22} /> : 'Verify & Sign In'}
+                {loading ? <CircularProgress size={22} /> : t('softwareAdmin.login.verifySignIn')}
               </Button>
               <Button
                 fullWidth
@@ -165,7 +167,7 @@ const AdminLogin: React.FC = () => {
                 sx={{ mt: 1 }}
                 disabled={loading}
               >
-                Back
+                {t('softwareAdmin.login.back')}
               </Button>
             </form>
           )}

@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import {
   View,
   TouchableOpacity,
@@ -38,6 +39,7 @@ const DatePicker: React.FC<DatePickerProps> = ({
   style,
   placeholderStyle
 }) => {
+  const { t } = useTranslation()
   const [date, setDate] = useState<Date | undefined>(undefined)
   const [showPicker, setShowPicker] = useState(false)
 
@@ -65,7 +67,7 @@ const DatePicker: React.FC<DatePickerProps> = ({
               { color: value ? COLORS.darkestGrey : COLORS.placeholder }
             ]}
           >
-            {value || placeholder || 'Select Date'}
+            {value || placeholder || t('shared.datePicker.select')}
           </Text>
 
           <AnyIcon

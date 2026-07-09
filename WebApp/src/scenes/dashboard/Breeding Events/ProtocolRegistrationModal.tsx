@@ -13,6 +13,7 @@ import {
   CircularProgress
 } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
+import { useTranslation } from 'react-i18next';
 import {
   addInjection,
   addProtocol,
@@ -22,6 +23,7 @@ import {
 // const injectionOptions = ["GnRH", "PGF2α", "Estradiol"];
 
 const ProtocolRegistrationModal = ({ open, onClose }) => {
+  const { t } = useTranslation();
   const [injectionOptions, setInjectionOptions] = useState(['']);
   const [protocolName, setProtocolName] = useState('');
   const [minDim, setMinDim] = useState('');
@@ -134,7 +136,7 @@ const ProtocolRegistrationModal = ({ open, onClose }) => {
     setAlert({
       open: true,
       type: 'error',
-      message: 'Please fill all required fields.'
+      message: t('breeding.protocolModal.fillRequiredFields')
     });
     return;
   }
@@ -161,10 +163,10 @@ const ProtocolRegistrationModal = ({ open, onClose }) => {
     setAlert({
       open: true,
       type: 'success',
-      message: 'New event added successfully!'
+      message: t('breeding.protocolModal.addSuccess')
     });
 
-   
+
     setTimeout(() => {
       // Reset form
       setProtocolName('');
@@ -185,7 +187,7 @@ const ProtocolRegistrationModal = ({ open, onClose }) => {
     setAlert({
       open: true,
       type: 'error',
-      message: 'Failed to add new event!'
+      message: t('breeding.protocolModal.addError')
     });
     console.error('Failed to add new event:', error);
   } finally {
@@ -215,7 +217,7 @@ const ProtocolRegistrationModal = ({ open, onClose }) => {
           }}
         >
           <Typography variant="h6" fontWeight="bold" mb={2} textAlign="center">
-            Protocol Registration
+            {t('breeding.protocolModal.title')}
           </Typography>
 
           {/* <Snackbar
@@ -263,7 +265,7 @@ const ProtocolRegistrationModal = ({ open, onClose }) => {
             <Grid item xs={12}>
               <TextField
                 fullWidth
-                label="Protocol Name"
+                label={t('breeding.protocolModal.protocolName')}
                 value={protocolName}
                 onChange={e => setProtocolName(e.target.value)}
               />
@@ -271,7 +273,7 @@ const ProtocolRegistrationModal = ({ open, onClose }) => {
             <Grid item xs={4}>
               <TextField
                 fullWidth
-                label="Min DIM"
+                label={t('breeding.protocol.minDim')}
                 value={minDim}
                 onChange={e => setMinDim(e.target.value)}
               />
@@ -279,7 +281,7 @@ const ProtocolRegistrationModal = ({ open, onClose }) => {
             <Grid item xs={4}>
               <TextField
                 fullWidth
-                label="Max DIM"
+                label={t('breeding.protocol.maxDim')}
                 value={maxDim}
                 onChange={e => setMaxDim(e.target.value)}
               />
@@ -287,7 +289,7 @@ const ProtocolRegistrationModal = ({ open, onClose }) => {
             <Grid item xs={4}>
               <TextField
                 fullWidth
-                label="AI Time (Hours)"
+                label={t('breeding.protocolModal.aiTimeHours')}
                 value={aiTime}
                 onChange={e => setAiTime(e.target.value)}
               />
@@ -338,7 +340,7 @@ const ProtocolRegistrationModal = ({ open, onClose }) => {
   gap={4}
   flexWrap="wrap" // ✅ allows wrap if screen is very narrow
 >
-  <Typography fontWeight="bold">Injections</Typography>
+  <Typography fontWeight="bold">{t('breeding.protocolModal.injections')}</Typography>
   <Button
     variant="contained"
     sx={{
@@ -360,12 +362,12 @@ const ProtocolRegistrationModal = ({ open, onClose }) => {
       }, 100);
     }}
   >
-    New Injection
+    {t('breeding.protocolModal.newInjection')}
   </Button>
 </Grid>
 
               <Grid item xs={4}>
-                <Typography fontWeight="bold">Interval</Typography>
+                <Typography fontWeight="bold">{t('breeding.protocolModal.interval')}</Typography>
               </Grid>
               <Box display="flex" justifyContent="flex-end">
                 <Button
@@ -382,7 +384,7 @@ const ProtocolRegistrationModal = ({ open, onClose }) => {
                     }
                   }}
                 >
-                  Add Intervals
+                  {t('breeding.protocolModal.addIntervals')}
                 </Button>
               </Box>
             </Grid>
@@ -452,7 +454,7 @@ const ProtocolRegistrationModal = ({ open, onClose }) => {
               }}
               onClick={handleAddEvent}
             >
-              Save
+              {t('breeding.common.save')}
             </Button>
 
             <Button
@@ -467,7 +469,7 @@ const ProtocolRegistrationModal = ({ open, onClose }) => {
               }}
               onClick={onClose}
             >
-              Close
+              {t('breeding.protocolModal.close')}
             </Button>
           </Box>
         </Box>
@@ -487,6 +489,7 @@ const ProtocolRegistrationModal = ({ open, onClose }) => {
 };
 
 const NewInjectionModal = ({ open, onClose, addInjection }) => {
+  const { t } = useTranslation();
   const [newInjectionName, setNewInjectionName] = useState('');
  const [snackbar, setSnackbar] = useState({
     open: false,
@@ -498,7 +501,7 @@ const NewInjectionModal = ({ open, onClose, addInjection }) => {
     if (!newInjectionName.trim()) {
       setSnackbar({
         open: true,
-        message: 'Injection name cannot be empty!',
+        message: t('breeding.protocolModal.injectionNameEmpty'),
         type: 'error'
       });
       return;
@@ -514,7 +517,7 @@ const NewInjectionModal = ({ open, onClose, addInjection }) => {
       
       setSnackbar({
         open: true,
-        message: 'New injection added successfully!',
+        message: t('breeding.protocolModal.injectionAddSuccess'),
         type: 'success'
       });
 
@@ -528,7 +531,7 @@ const NewInjectionModal = ({ open, onClose, addInjection }) => {
     } catch (error) {
       setSnackbar({
         open: true,
-        message: 'Failed to add new injection!',
+        message: t('breeding.protocolModal.injectionAddError'),
         type: 'error'
       });
       console.error('Error adding injection:', error);
@@ -553,11 +556,11 @@ const NewInjectionModal = ({ open, onClose, addInjection }) => {
         }}
       >
         <Typography variant="h6" fontWeight="bold" mb={2}>
-          New Injection
+          {t('breeding.protocolModal.newInjection')}
         </Typography>
         <TextField
           fullWidth
-          label="Enter New Injection Here"
+          label={t('breeding.protocolModal.enterNewInjection')}
           value={newInjectionName}
           onChange={e => setNewInjectionName(e.target.value)}
         />
@@ -572,7 +575,7 @@ const NewInjectionModal = ({ open, onClose, addInjection }) => {
             }}
             onClick={handleSaveInjection}
           >
-            Save
+            {t('breeding.common.save')}
           </Button>
           <Button
             variant="contained"
@@ -586,7 +589,7 @@ const NewInjectionModal = ({ open, onClose, addInjection }) => {
             }}
             onClick={onClose}
           >
-            Close
+            {t('breeding.protocolModal.close')}
           </Button>
         </Box>
         <Snackbar

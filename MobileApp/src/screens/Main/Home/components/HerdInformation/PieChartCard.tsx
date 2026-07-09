@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { StyleSheet, View } from 'react-native';
 import { PieChart } from 'react-native-svg-charts';
 import AppText from 'shared/components/AppText/AppText';
@@ -6,6 +7,7 @@ import { COLORS } from 'shared/theme';
 import { RF } from 'shared/theme/responsive';
 
 const PieChartCard = () => {
+  const { t } = useTranslation();
   // Data for the pie chart
   const data = [
     {
@@ -46,7 +48,9 @@ const PieChartCard = () => {
               { backgroundColor: COLORS.primaryMain },
             ]}
           />
-          <AppText fontSize="caption">12% Pregnant</AppText>
+          <AppText fontSize="caption">
+            {t('main.herdPieChart.pregnant', { percent: 12 })}
+          </AppText>
         </View>
         <View style={styles.legendItem}>
           <View
@@ -55,7 +59,9 @@ const PieChartCard = () => {
               { backgroundColor: COLORS.secondaryMain },
             ]}
           />
-          <AppText fontSize="caption">21% Open</AppText>
+          <AppText fontSize="caption">
+            {t('main.herdPieChart.open', { percent: 21 })}
+          </AppText>
         </View>
       </View>
     </View>

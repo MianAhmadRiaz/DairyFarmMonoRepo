@@ -11,11 +11,13 @@ import {
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
+import { useTranslation } from 'react-i18next';
 import { resetPassword } from '../../services/auth.services';
 
 const SetNewPassword = () => {
   const navigate = useNavigate();
   const location = useLocation();
+  const { t } = useTranslation();
   const [formData, setFormData] = useState({
     newPassword: '',
     confirmPassword: ''
@@ -45,27 +47,27 @@ const SetNewPassword = () => {
 
     // Validate passwords
     if (!formData.newPassword.trim()) {
-      setError('Please enter a new password');
+      setError(t('auth.setNewPasswordScreen.errorPasswordRequired'));
       return;
     }
 
     if (formData.newPassword.length < 6) {
-      setError('Password must be at least 6 characters long');
+      setError(t('auth.setNewPasswordScreen.errorPasswordMinLength'));
       return;
     }
 
     if (!formData.confirmPassword.trim()) {
-      setError('Please confirm your password');
+      setError(t('auth.setNewPasswordScreen.errorConfirmRequired'));
       return;
     }
 
     if (formData.newPassword !== formData.confirmPassword) {
-      setError('Passwords do not match');
+      setError(t('auth.setNewPasswordScreen.errorPasswordsMismatch'));
       return;
     }
 
     if (!otp) {
-      setError('OTP not found. Please verify your code first.');
+      setError(t('auth.setNewPasswordScreen.errorOtpMissing'));
       return;
     }
 
@@ -85,7 +87,7 @@ const SetNewPassword = () => {
       navigate('/login');
     } catch (e: any) {
       console.log('Password reset error:', e);
-      setError(e.response?.data?.message || 'Failed to update password. Please try again.');
+      setError(e.response?.data?.message || t('auth.setNewPasswordScreen.errorUpdateFailed'));
     } finally {
       setLoading(false);
     }
@@ -155,7 +157,7 @@ const SetNewPassword = () => {
           <Box
             component="img"
             src="/assets/Logo.png"
-            alt="Logo"
+            alt={t('auth.common.logoAlt')}
             sx={{
               width: { xs: '220px', md: '280px' },
               height: { xs: '230px', md: '270px' },
@@ -175,7 +177,7 @@ const SetNewPassword = () => {
             color: '#333'
           }}
         >
-          Set new Password
+          {t('auth.setNewPasswordScreen.title')}
         </Typography>
 
         {/* Set New Password Form */}
@@ -196,13 +198,13 @@ const SetNewPassword = () => {
               fontSize: '0.9rem'
             }}
           >
-            New Password
+            {t('auth.setNewPasswordScreen.newPassword')}
           </Typography>
 
           <TextField
             fullWidth
             variant="outlined"
-            placeholder="Enter password"
+            placeholder={t('auth.passwordPlaceholder')}
             name="newPassword"
             type={showPassword ? 'text' : 'password'}
             value={formData.newPassword}
@@ -240,13 +242,13 @@ const SetNewPassword = () => {
               fontSize: '0.9rem'
             }}
           >
-            Confirm Password
+            {t('auth.common.confirmPassword')}
           </Typography>
 
           <TextField
             fullWidth
             variant="outlined"
-            placeholder="Enter password"
+            placeholder={t('auth.passwordPlaceholder')}
             name="confirmPassword"
             type={showPassword ? 'text' : 'password'}
             value={formData.confirmPassword}
@@ -302,7 +304,7 @@ const SetNewPassword = () => {
             onClick={handleUpdatePassword}
             disabled={loading}
           >
-            {loading ? 'Updating...' : 'Update Password'}
+            {loading ? t('auth.setNewPasswordScreen.updating') : t('auth.setNewPasswordScreen.updateButton')}
           </Button>
         </Box>
       </Box>

@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { useNavigation } from '@react-navigation/native'
 import { ScrollView } from 'react-native'
 import Toast from 'react-native-toast-message'
@@ -17,6 +18,7 @@ const TIMES = ['morning', 'afternoon', 'evening']
 const today = new Date().toISOString().split('T')[0]
 
 const AddMilkSession = () => {
+  const { t } = useTranslation()
   const navigation = useNavigation<any>()
   const [animals, setAnimals] = useState<any[]>([])
   const [animalLabel, setAnimalLabel] = useState('')
@@ -30,16 +32,16 @@ const AddMilkSession = () => {
       .catch(() => {})
   }, [])
 
-  const label = (a: any) => `${a.name || 'Unnamed'} (${a.tagName || 'No Tag'})`
+  const label = (a: any) => `${a.name || t('milk.addMilkSession.unnamed')} (${a.tagName || t('milk.addMilkSession.noTag')})`
 
   const onSubmit = async () => {
     const animal = animals.find(a => label(a) === animalLabel)
     if (!animal) {
-      Toast.show({ type: 'error', text1: 'Validation', text2: 'Select an animal' })
+      Toast.show({ type: 'error', text1: t('milk.common.validation'), text2: t('milk.addMilkSession.selectAnimal') })
       return
     }
     if (!(Number(milk) >= 0)) {
-      Toast.show({ type: 'error', text1: 'Validation', text2: 'Enter milk quantity' })
+      Toast.show({ type: 'error', text1: t('milk.common.validation'), text2: t('milk.addMilkSession.enterMilkQuantity') })
       return
     }
     try {
@@ -48,16 +50,16 @@ const AddMilkSession = () => {
       if (res?.data?.data?.underMilkWithdrawal) {
         Toast.show({
           type: 'info',
-          text1: 'Recorded — Withdrawal Warning',
-          text2: `This animal is under withdrawal until ${res.data.data.milkWithdrawalUntil}. Do not tank its milk.`,
+          text1: t('milk.addMilkSession.withdrawalWarningTitle'),
+          text2: t('milk.addMilkSession.withdrawalWarningBody', { date: res.data.data.milkWithdrawalUntil }),
           visibilityTime: 6000
         })
       } else {
-        Toast.show({ type: 'success', text1: 'Success', text2: 'Session recorded' })
+        Toast.show({ type: 'success', text1: t('milk.common.success'), text2: t('milk.addMilkSession.sessionRecorded') })
       }
       navigation.goBack()
     } catch (e) {
-      Toast.show({ type: 'error', text1: 'Error', text2: getNormalizedError(e) })
+      Toast.show({ type: 'error', text1: t('milk.common.error'), text2: getNormalizedError(e) })
     } finally {
       setLoading(false)
     }
@@ -65,12 +67,12 @@ const AddMilkSession = () => {
 
   return (
     <AppContainer>
-      <AppHeader title="Add Milking Session" showBack />
+      <AppHeader title={t('milk.addMilkSession.title')} showBack />
       <ScrollView contentContainerStyle={{ padding: RF(16) }}>
-        <Dropdown label="Animal" options={animals.map(label)} value={animalLabel} onChange={setAnimalLabel} />
-        <Dropdown label="Milking Time" options={TIMES} value={milkingTime} onChange={setMilkingTime} />
-        <AppInput label="Milk (L)" value={milk} onChangeText={setMilk} keyboardType="numeric" placeholder="0" />
-        <PrimaryButton title="Save Session" loading={loading} loaderColor={COLORS.white} onPress={onSubmit} buttonStyle={{ marginTop: RF(16) }} />
+        <Dropdown label={t('milk.addMilkSession.animal')} options={animals.map(label)} value={animalLabel} onChange={setAnimalLabel} />
+        <Dropdown label={t('milk.addMilkSession.milkingTime')} options={TIMES} value={milkingTime} onChange={setMilkingTime} />
+        <AppInput label={t('milk.addMilkSession.milkL')} value={milk} onChangeText={setMilk} keyboardType="numeric" placeholder="0" />
+        <PrimaryButton title={t('milk.addMilkSession.saveSession')} loading={loading} loaderColor={COLORS.white} onPress={onSubmit} buttonStyle={{ marginTop: RF(16) }} />
       </ScrollView>
     </AppContainer>
   )

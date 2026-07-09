@@ -20,6 +20,7 @@ import {
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import AddIcon from '@mui/icons-material/Add';
 import { ToastContainer, toast } from 'react-toastify';
+import { useTranslation } from 'react-i18next';
 import 'react-toastify/dist/ReactToastify.css';
 import PageContainer from '../../shared/components/Layout/PageContainer';
 import { tokens } from '../../shared/theme/theme';
@@ -44,6 +45,7 @@ interface IngredientRow {
 
 /* ---------- component ---------- */
 const CreateRecipe: React.FC = () => {
+  const { t } = useTranslation();
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
 
@@ -65,7 +67,7 @@ const CreateRecipe: React.FC = () => {
       const data: RecipeGroupsListData = res?.data?.data;
       setGroups(data?.groups || []);
     } catch (error: any) {
-      toast.error(error?.response?.data?.message || "Can't load recipe groups");
+      toast.error(error?.response?.data?.message || t('feeding.common.cantLoadRecipeGroups'));
     }
   };
 
@@ -75,7 +77,7 @@ const CreateRecipe: React.FC = () => {
       const data: FeedIngredientsListData = res?.data?.data;
       setIngredientOptions(data?.ingredients || []);
     } catch (error: any) {
-      toast.error(error?.response?.data?.message || "Can't load ingredients");
+      toast.error(error?.response?.data?.message || t('feeding.common.cantLoadIngredients'));
     }
   };
 
@@ -124,15 +126,15 @@ const CreateRecipe: React.FC = () => {
 
     // basic validation
     if (!recipeName.trim()) {
-      toast.warn('Please enter a recipe name');
+      toast.warn(t('feeding.createRecipe.nameWarning'));
       return;
     }
     if (!groupId) {
-      toast.warn('Please select a recipe group');
+      toast.warn(t('feeding.createRecipe.groupWarning'));
       return;
     }
     if (rows.some((r) => !r.ingredientId || !(Number(r.quantity) > 0))) {
-      toast.warn('Please fill all ingredient rows');
+      toast.warn(t('feeding.common.fillAllIngredientRows'));
       return;
     }
 
@@ -147,10 +149,10 @@ const CreateRecipe: React.FC = () => {
         })),
       });
 
-      toast.success('Recipe saved successfully!');
+      toast.success(t('feeding.createRecipe.savedSuccess'));
       handleReset();
     } catch (error: any) {
-      toast.error(error?.response?.data?.message || 'Failed to save recipe');
+      toast.error(error?.response?.data?.message || t('feeding.createRecipe.saveFailed'));
     } finally {
       setIsLoading(false);
     }
@@ -158,7 +160,7 @@ const CreateRecipe: React.FC = () => {
 
   /* ---------- UI ---------- */
   return (
-    <PageContainer title="Make Recipe" maxWidth="1050px">
+    <PageContainer title={t('feeding.createRecipe.title')} maxWidth="1050px">
       {/* global loading overlay */}
       {isFetching && (
         <Box
@@ -190,7 +192,7 @@ const CreateRecipe: React.FC = () => {
             >
       <TextField
         fullWidth
-        label="Recipe Name"
+        label={t('feeding.createRecipe.recipeName')}
         value={recipeName}
         onChange={(e) => setRecipeName(e.target.value)}
         disabled={isLoading}
@@ -199,7 +201,7 @@ const CreateRecipe: React.FC = () => {
       <TextField
         fullWidth
         select
-        label="Choose Recipe Group"
+        label={t('feeding.createRecipe.chooseRecipeGroup')}
         value={groupId}
         onChange={(e) => setGroupId(e.target.value)}
         disabled={isLoading}
@@ -215,7 +217,7 @@ const CreateRecipe: React.FC = () => {
           onClick={() => setGroupModalOpen(true)}
           sx={{ fontWeight: 'bold', color: 'primary.main' }}
         >
-          ➕ Add Recipe Group
+          ➕ {t('feeding.createRecipe.addRecipeGroup')}
         </MenuItem>
       </TextField>
       </Paper>
@@ -230,7 +232,7 @@ const CreateRecipe: React.FC = () => {
 
         >
           <Typography variant="h6" fontWeight={600}>
-            Select Ingredients
+            {t('feeding.common.selectIngredients')}
           </Typography>
           <Button
             startIcon={<AddIcon />}
@@ -239,7 +241,7 @@ const CreateRecipe: React.FC = () => {
             onClick={handleAddRow}
             disabled={isLoading}
           >
-            Add Ingredient
+            {t('feeding.common.addIngredient')}
           </Button>
         </Box>
 
@@ -250,13 +252,13 @@ const CreateRecipe: React.FC = () => {
 
  }}>
           <Grid item xs={0}>
-            #Sr
+            {t('feeding.common.srNo')}
           </Grid>
           <Grid item xs={7} sx={{textAlign:'center'}}>
-            Ingredients
+            {t('feeding.common.ingredients')}
           </Grid>
           <Grid item xs={3}>
-            Quantity (Kg)
+            {t('feeding.common.quantityKg')}
           </Grid>
           <Grid item xs={1} />
         </Grid>
@@ -292,7 +294,7 @@ const CreateRecipe: React.FC = () => {
                   <MenuItem key={ing.uuid} value={ing.uuid}>
                     {ing.name}
                     {ing.unit_of_measure ? ` (${ing.unit_of_measure})` : ''}
-                    {` — stock: ${ing.currentStock}`}
+                    {` — ${t('feeding.common.stockLabel', { stock: ing.currentStock })}`}
                   </MenuItem>
                 ))}
               </TextField>
@@ -316,7 +318,7 @@ const CreateRecipe: React.FC = () => {
             {/* Delete */}
             <Grid item xs={1}>
               <IconButton
-                aria-label="delete"
+                aria-label={t('common.delete')}
                 onClick={() => handleDeleteRow(row.id)}
                 disabled={isLoading || rows.length === 1}
               >
@@ -348,7 +350,7 @@ const CreateRecipe: React.FC = () => {
                {isLoading ? (
                     <CircularProgress size={24} sx={{ color: "#0F7C8F" }} /> // Show spinner
                   ) : (
-                    "Save Receipe"
+                    t('feeding.createRecipe.saveRecipe')
                    )}
             </Button>
 
@@ -358,7 +360,7 @@ const CreateRecipe: React.FC = () => {
               onClick={handleReset}
               disabled={isLoading}
             >
-              Reset
+              {t('feeding.common.reset')}
             </Button>
           </Box>
 
@@ -372,7 +374,7 @@ const CreateRecipe: React.FC = () => {
               fontWeight: 600,
             }}
           >
-            TOTAL:&nbsp;&nbsp;{totalQtyKg || 0} KG
+            {t('feeding.common.totalColon')}&nbsp;&nbsp;{totalQtyKg || 0} {t('feeding.common.kgUpper')}
           </Box>
           </Box>
         </Box>
@@ -419,6 +421,7 @@ const AddRecipeGroupModal: React.FC<AddRecipeGroupModalProps> = ({
   onClose,
   onCreated,
 }) => {
+  const { t } = useTranslation();
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
   const [animalCategory, setAnimalCategory] = useState('');
@@ -433,7 +436,7 @@ const AddRecipeGroupModal: React.FC<AddRecipeGroupModalProps> = ({
 
   const handleAdd = async () => {
     if (!name.trim() || !animalCategory) {
-      toast.warning('Group name and animal category are required!');
+      toast.warning(t('feeding.addRecipeGroupModal.requiredWarning'));
       return;
     }
     try {
@@ -443,11 +446,11 @@ const AddRecipeGroupModal: React.FC<AddRecipeGroupModalProps> = ({
         description: description.trim() || undefined,
         animal_category: animalCategory,
       });
-      toast.success('Recipe group added successfully!');
+      toast.success(t('feeding.addRecipeGroupModal.added'));
       onCreated(res?.data?.data?.uuid);
       handleCancel();
     } catch (error: any) {
-      toast.error(error?.response?.data?.message || "Can't add recipe group!");
+      toast.error(error?.response?.data?.message || t('feeding.addRecipeGroupModal.cantAdd'));
     } finally {
       setSaving(false);
     }
@@ -455,31 +458,31 @@ const AddRecipeGroupModal: React.FC<AddRecipeGroupModalProps> = ({
 
   return (
     <Dialog open={open} onClose={handleCancel} maxWidth="sm" fullWidth>
-      <DialogTitle sx={{ fontWeight: 'bold' }}>Add Recipe Group</DialogTitle>
+      <DialogTitle sx={{ fontWeight: 'bold' }}>{t('feeding.createRecipe.addRecipeGroup')}</DialogTitle>
 
       <DialogContent>
         <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2, mb: 1, mt: 2 }}>
           <TextField
-            label="Group Name"
+            label={t('feeding.addRecipeGroupModal.groupName')}
             value={name}
             onChange={(e) => setName(e.target.value)}
             fullWidth
           />
           <TextField
             select
-            label="Animal Category"
+            label={t('feeding.addRecipeGroupModal.animalCategory')}
             value={animalCategory}
             onChange={(e) => setAnimalCategory(e.target.value)}
             fullWidth
           >
             {ANIMAL_CATEGORIES.map((c) => (
               <MenuItem key={c} value={c}>
-                {c.replace(/_/g, ' ')}
+                {t(`feeding.common.animalCategories.${c}`, c.replace(/_/g, ' '))}
               </MenuItem>
             ))}
           </TextField>
           <TextField
-            label="Description (optional)"
+            label={t('feeding.addShedDialog.descriptionOptional')}
             value={description}
             onChange={(e) => setDescription(e.target.value)}
             fullWidth
@@ -496,7 +499,7 @@ const AddRecipeGroupModal: React.FC<AddRecipeGroupModalProps> = ({
           sx={{ textTransform: 'none', mr: 2 }}
           disabled={saving}
         >
-          Cancel
+          {t('common.cancel')}
         </Button>
         <Button
           onClick={handleAdd}
@@ -508,7 +511,7 @@ const AddRecipeGroupModal: React.FC<AddRecipeGroupModalProps> = ({
             textTransform: 'none',
           }}
         >
-          {saving ? <CircularProgress size={20} sx={{ color: '#fff' }} /> : 'Add'}
+          {saving ? <CircularProgress size={20} sx={{ color: '#fff' }} /> : t('common.add')}
         </Button>
       </DialogActions>
     </Dialog>

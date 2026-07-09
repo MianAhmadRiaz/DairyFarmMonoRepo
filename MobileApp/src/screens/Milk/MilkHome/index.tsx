@@ -1,5 +1,6 @@
 import { useNavigation } from '@react-navigation/native'
-import React, { useCallback, useState } from 'react'
+import React, { useCallback, useMemo, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { RefreshControl, ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native'
 import { useFocusEffect } from '@react-navigation/native'
 import Toast from 'react-native-toast-message'
@@ -22,15 +23,16 @@ type Action = {
   permission: PermissionName
 }
 
-const ACTIONS: Action[] = [
-  { label: 'Milking Sessions', desc: 'Record AM/PM/evening milk', screen: 'MilkSessions', icon: { type: Icons.MaterialCommunityIcons, name: 'cup-water' }, permission: PERMISSIONS.MILK_VIEW },
-  { label: 'Approve Milk', desc: 'Approve sessions into the tank', screen: 'MilkApproval', icon: { type: Icons.MaterialCommunityIcons, name: 'check-decagram' }, permission: PERMISSIONS.MILK_APPROVE },
-  { label: 'Milk Out / Dispatch', desc: 'Sell or dispatch milk', screen: 'MilkOut', icon: { type: Icons.MaterialCommunityIcons, name: 'truck-delivery' }, permission: PERMISSIONS.MILK_DISPATCH }
-]
-
 const MilkHome = () => {
+  const { t } = useTranslation()
   const navigation = useNavigation<any>()
   const { can } = usePermissions()
+
+  const ACTIONS: Action[] = useMemo(() => [
+    { label: t('milk.milkHome.actions.milkingSessions.label'), desc: t('milk.milkHome.actions.milkingSessions.desc'), screen: 'MilkSessions', icon: { type: Icons.MaterialCommunityIcons, name: 'cup-water' }, permission: PERMISSIONS.MILK_VIEW },
+    { label: t('milk.milkHome.actions.approveMilk.label'), desc: t('milk.milkHome.actions.approveMilk.desc'), screen: 'MilkApproval', icon: { type: Icons.MaterialCommunityIcons, name: 'check-decagram' }, permission: PERMISSIONS.MILK_APPROVE },
+    { label: t('milk.milkHome.actions.milkOut.label'), desc: t('milk.milkHome.actions.milkOut.desc'), screen: 'MilkOut', icon: { type: Icons.MaterialCommunityIcons, name: 'truck-delivery' }, permission: PERMISSIONS.MILK_DISPATCH }
+  ], [t])
   const [analytics, setAnalytics] = useState<any>(null)
   const [refreshing, setRefreshing] = useState(false)
 
@@ -39,11 +41,11 @@ const MilkHome = () => {
       const res = await getMilkAnalytics()
       setAnalytics(res?.data?.data)
     } catch (e) {
-      Toast.show({ type: 'error', text1: 'Error', text2: getNormalizedError(e) })
+      Toast.show({ type: 'error', text1: t('milk.common.error'), text2: getNormalizedError(e) })
     } finally {
       setRefreshing(false)
     }
-  }, [])
+  }, [t])
 
   useFocusEffect(useCallback(() => { load() }, [load]))
 
@@ -62,19 +64,19 @@ const MilkHome = () => {
 
   return (
     <AppContainer>
-      <AppHeader title="Milk" showHam onPressHam={() => navigation.openDrawer?.()} />
+      <AppHeader title={t('milk.milkHome.title')} showHam onPressHam={() => navigation.openDrawer?.()} />
       <ScrollView
         contentContainerStyle={{ padding: RF(16), paddingBottom: RF(40) }}
         refreshControl={<RefreshControl refreshing={refreshing} onRefresh={() => { setRefreshing(true); load() }} colors={[COLORS.primaryMain]} />}
       >
         <View style={styles.statsRow}>
-          {stat("Today's Milk (L)", analytics?.totalMilk)}
-          {stat('Dispatched (L)', analytics?.totalMilkOut)}
-          {stat('In Tank (L)', analytics?.finalMilk)}
+          {stat(t('milk.milkHome.todaysMilk'), analytics?.totalMilk)}
+          {stat(t('milk.milkHome.dispatched'), analytics?.totalMilkOut)}
+          {stat(t('milk.milkHome.inTank'), analytics?.finalMilk)}
         </View>
 
         <AppText fontSize="h7" semiBold style={{ marginBottom: RF(12) }}>
-          Actions
+          {t('milk.milkHome.actionsHeading')}
         </AppText>
         {visible.map((a, i) => (
           <TouchableOpacity key={i} style={styles.actionCard} onPress={() => navigation.navigate(a.screen)} activeOpacity={0.85}>

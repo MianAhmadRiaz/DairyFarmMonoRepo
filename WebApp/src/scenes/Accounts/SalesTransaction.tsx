@@ -26,6 +26,7 @@ import {
   ChartAccount
 } from '../../shared/services/finance.service';
 import PageContainer from '../../shared/components/Layout/PageContainer';
+import { useTranslation } from 'react-i18next';
 
 interface StockRow {
   id: number;
@@ -39,6 +40,7 @@ interface StockRow {
 }
 
 export default function SalesTransaction() {
+  const { t } = useTranslation();
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   const pageBg = theme.palette.mode === 'dark' ? colors.primary[500] : '#F5FAF7';
@@ -157,12 +159,12 @@ export default function SalesTransaction() {
   // Handle save
   const handleSave = async () => {
     if (!transactionDate) {
-      setSnackbar({ open: true, message: 'Please fill in Transaction Date', severity: 'error' });
+      setSnackbar({ open: true, message: t('accounts.common.fillTransactionDate'), severity: 'error' });
       return;
     }
 
     if (stockRows.some(row => !row.selectType || !row.selectProduct || !row.rate || !row.qty)) {
-      setSnackbar({ open: true, message: 'Please fill in all stock information', severity: 'error' });
+      setSnackbar({ open: true, message: t('accounts.common.fillAllStockInfo'), severity: 'error' });
       return;
     }
 
@@ -170,7 +172,7 @@ export default function SalesTransaction() {
       const cash = accounts.find(a => a.account_code === '1110') || accounts.find(a => a.account_type === 'asset');
       const revenue = accounts.find(a => a.account_code === '4100') || accounts.find(a => a.account_type === 'revenue');
       if (!cash || !revenue) {
-        setSnackbar({ open: true, message: 'Cash or revenue account not configured.', severity: 'error' });
+        setSnackbar({ open: true, message: t('accounts.common.cashOrRevenueNotConfigured'), severity: 'error' });
         return;
       }
       await createTransaction({
@@ -182,11 +184,11 @@ export default function SalesTransaction() {
         description: narration || `Sales ${invoiceNo}`.trim(),
         payment_method: 'cash'
       });
-      setSnackbar({ open: true, message: 'Sales transaction saved successfully!', severity: 'success' });
+      setSnackbar({ open: true, message: t('accounts.salesTransaction.saveSuccess'), severity: 'success' });
       handleReset();
     } catch (e) {
       console.error('Failed to save sales transaction', e);
-      setSnackbar({ open: true, message: 'Failed to save sales transaction.', severity: 'error' });
+      setSnackbar({ open: true, message: t('accounts.salesTransaction.saveError'), severity: 'error' });
     }
   };
 
@@ -207,7 +209,7 @@ export default function SalesTransaction() {
     const printContent = `
       <html>
         <head>
-          <title>Sales Transaction</title>
+          <title>${t('accounts.salesTransaction.title')}</title>
           <style>
             body { font-family: Arial, sans-serif; padding: 20px; }
             .header { text-align: center; margin-bottom: 30px; border-bottom: 2px solid #005f73; padding-bottom: 10px; }
@@ -225,25 +227,25 @@ export default function SalesTransaction() {
         </head>
         <body>
           <div class="header">
-            <h2>Sales Transaction</h2>
-            <p>Generated on ${new Date().toLocaleDateString()}</p>
+            <h2>${t('accounts.salesTransaction.title')}</h2>
+            <p>${t('accounts.common.generatedOn', { date: new Date().toLocaleDateString() })}</p>
           </div>
           <div class="details">
-            <div class="row"><span class="label">Invoice No:</span><span class="value">${invoiceNo}</span></div>
-            <div class="row"><span class="label">Transaction Date:</span><span class="value">${transactionDate}</span></div>
-            <div class="row"><span class="label">Customer:</span><span class="value">${customer}</span></div>
-            <div class="row"><span class="label">Narration:</span><span class="value">${narration}</span></div>
+            <div class="row"><span class="label">${t('accounts.common.invoiceNo')}:</span><span class="value">${invoiceNo}</span></div>
+            <div class="row"><span class="label">${t('accounts.common.transactionDate')}:</span><span class="value">${transactionDate}</span></div>
+            <div class="row"><span class="label">${t('accounts.common.customer')}:</span><span class="value">${customer}</span></div>
+            <div class="row"><span class="label">${t('accounts.common.narration')}:</span><span class="value">${narration}</span></div>
           </div>
           <table>
             <thead>
               <tr>
-                <th>Type</th>
-                <th>Product</th>
-                <th>Current Qty</th>
-                <th>Unit</th>
-                <th>Rate</th>
-                <th>Qty Sold</th>
-                <th>Total</th>
+                <th>${t('accounts.common.type')}</th>
+                <th>${t('accounts.common.product')}</th>
+                <th>${t('accounts.common.currentQty')}</th>
+                <th>${t('accounts.common.unit')}</th>
+                <th>${t('accounts.common.rate')}</th>
+                <th>${t('accounts.salesTransaction.qtySold')}</th>
+                <th>${t('accounts.common.total')}</th>
               </tr>
             </thead>
             <tbody>
@@ -261,9 +263,9 @@ export default function SalesTransaction() {
             </tbody>
           </table>
           <div class="totals">
-            <div class="total-row">Subtotal: ${subtotal}</div>
-            <div class="total-row">Discount (${discount}%): ${discountAmount.toFixed(2)}</div>
-            <div class="total-row grand-total">Grand Total: ${grandTotal.toFixed(2)}</div>
+            <div class="total-row">${t('accounts.common.subtotalValue', { value: subtotal })}</div>
+            <div class="total-row">${t('accounts.common.discountValue', { percent: discount, value: discountAmount.toFixed(2) })}</div>
+            <div class="total-row grand-total">${t('accounts.common.grandTotalValue', { value: grandTotal.toFixed(2) })}</div>
           </div>
         </body>
       </html>
@@ -282,7 +284,7 @@ export default function SalesTransaction() {
     const gatePassContent = `
       <html>
         <head>
-          <title>Gate Pass</title>
+          <title>${t('accounts.salesTransaction.gatePassTitle')}</title>
           <style>
             body { font-family: Arial, sans-serif; padding: 20px; }
             .header { text-align: center; margin-bottom: 30px; border-bottom: 2px solid #005f73; padding-bottom: 10px; }
@@ -297,17 +299,17 @@ export default function SalesTransaction() {
         </head>
         <body>
           <div class="header">
-            <h2>GATE PASS</h2>
-            <p>Date: ${new Date().toLocaleDateString()}</p>
+            <h2>${t('accounts.salesTransaction.gatePassHeading')}</h2>
+            <p>${t('accounts.common.columns.date')}: ${new Date().toLocaleDateString()}</p>
           </div>
           <div class="gate-pass">
             <div class="details">
-              <div class="row"><span class="label">Customer:</span><span class="value">${customer}</span></div>
-              <div class="row"><span class="label">Invoice No:</span><span class="value">${invoiceNo}</span></div>
-              <div class="row"><span class="label">Date:</span><span class="value">${transactionDate}</span></div>
+              <div class="row"><span class="label">${t('accounts.common.customer')}:</span><span class="value">${customer}</span></div>
+              <div class="row"><span class="label">${t('accounts.common.invoiceNo')}:</span><span class="value">${invoiceNo}</span></div>
+              <div class="row"><span class="label">${t('accounts.common.columns.date')}:</span><span class="value">${transactionDate}</span></div>
             </div>
             <div class="items">
-              <h3>Items:</h3>
+              <h3>${t('accounts.salesTransaction.items')}:</h3>
               ${stockRows.map(row => `
                 <div class="item">
                   <strong>${row.selectProduct}</strong> - ${row.qty} ${row.unit}
@@ -316,8 +318,8 @@ export default function SalesTransaction() {
             </div>
             <div style="margin-top: 40px;">
               <div style="display: flex; justify-content: space-between;">
-                <div>Security Signature: _______________</div>
-                <div>Authorized By: _______________</div>
+                <div>${t('accounts.salesTransaction.securitySignature')}: _______________</div>
+                <div>${t('accounts.salesTransaction.authorizedBy')}: _______________</div>
               </div>
             </div>
           </div>
@@ -338,7 +340,7 @@ export default function SalesTransaction() {
   };
 
   return (
-    <PageContainer title="Sales Transaction">
+    <PageContainer title={t('accounts.salesTransaction.title')}>
         {/* Main Card */}
         <Paper elevation={0} sx={{ p: 0, borderRadius: 2, border: `1px solid ${theme.palette.divider}`, bgcolor: 'background.paper' }}>
           
@@ -357,7 +359,7 @@ export default function SalesTransaction() {
           >
             <Typography variant="h6" fontWeight={600} sx={{ display: 'flex', alignItems: 'center' }}>
               <Box component="span" sx={{ mr: 1 }}>💰</Box>
-              Sales Transaction
+              {t('accounts.salesTransaction.title')}
             </Typography>
             <Stack direction="row" spacing={1} alignItems="center">
             
@@ -373,14 +375,14 @@ export default function SalesTransaction() {
             {/* Top Row Fields */}
             <Stack direction={{ xs: 'column', md: 'row' }} spacing={3} sx={{ mb: 3 }}>
               <TextField
-                label="Invoice No"
+                label={t('accounts.common.invoiceNo')}
                 value={invoiceNo}
                 onChange={(e) => setInvoiceNo(e.target.value)}
                 size="small"
                 sx={{ flex: 1 }}
               />
               <TextField
-                label="Transaction Date"
+                label={t('accounts.common.transactionDate')}
                 type="date"
                 value={transactionDate}
                 onChange={(e) => setTransactionDate(e.target.value)}
@@ -394,7 +396,7 @@ export default function SalesTransaction() {
             {/* Second Row */}
             <Stack direction={{ xs: 'column', md: 'row' }} spacing={3} sx={{ mb: 3 }}>
               <TextField
-                label="Narration"
+                label={t('accounts.common.narration')}
                 value={narration}
                 onChange={(e) => setNarration(e.target.value)}
                 multiline
@@ -403,11 +405,11 @@ export default function SalesTransaction() {
                 sx={{ flex: 2 }}
               />
               <FormControl size="small" sx={{ flex: 1 }}>
-                <InputLabel>Customer</InputLabel>
+                <InputLabel>{t('accounts.common.customer')}</InputLabel>
                 <Select
                   value={customer}
                   onChange={(e) => setCustomer(e.target.value)}
-                  label="Customer"
+                  label={t('accounts.common.customer')}
                 >
                   {customerOptions.map((cust, index) => (
                     <MenuItem key={index} value={cust}>{cust}</MenuItem>
@@ -419,7 +421,7 @@ export default function SalesTransaction() {
             {/* Stock Information Section */}
             <Box sx={{ mb: 3 }}>
               <Typography variant="h6" sx={{ color: '#005f73', mb: 2, display: 'flex', alignItems: 'center', fontWeight: 'bold' }}>
-                📦 Stock Information
+                📦 {t('accounts.common.stockInformation')}
               </Typography>
 
               {/* Add More Items Button */}
@@ -440,19 +442,19 @@ export default function SalesTransaction() {
                     }
                   }}
                 >
-                  Add more items...
+                  {t('accounts.common.addMoreItems')}
                 </Button>
               </Box>
 
               {/* Table Header */}
               <Box sx={{ display: 'flex', bgcolor: theme.palette.mode === 'dark' ? colors.primary[400] : '#F5F5F5', p: 1, borderRadius: '4px 4px 0 0', border: `1px solid ${theme.palette.divider}` }}>
-                <Typography variant="body2" fontWeight={600} sx={{ flex: 1, px: 1 }}>Select Type</Typography>
-                <Typography variant="body2" fontWeight={600} sx={{ flex: 2, px: 1 }}>Select Product</Typography>
-                <Typography variant="body2" fontWeight={600} sx={{ flex: 1, px: 1 }}>Cur Qty</Typography>
-                <Typography variant="body2" fontWeight={600} sx={{ flex: 1, px: 1 }}>Unit</Typography>
-                <Typography variant="body2" fontWeight={600} sx={{ flex: 1, px: 1 }}>Rate</Typography>
-                <Typography variant="body2" fontWeight={600} sx={{ flex: 1, px: 1 }}>Qty</Typography>
-                <Typography variant="body2" fontWeight={600} sx={{ flex: 1, px: 1 }}>Total</Typography>
+                <Typography variant="body2" fontWeight={600} sx={{ flex: 1, px: 1 }}>{t('accounts.common.selectType')}</Typography>
+                <Typography variant="body2" fontWeight={600} sx={{ flex: 2, px: 1 }}>{t('accounts.common.selectProduct')}</Typography>
+                <Typography variant="body2" fontWeight={600} sx={{ flex: 1, px: 1 }}>{t('accounts.common.curQty')}</Typography>
+                <Typography variant="body2" fontWeight={600} sx={{ flex: 1, px: 1 }}>{t('accounts.common.unit')}</Typography>
+                <Typography variant="body2" fontWeight={600} sx={{ flex: 1, px: 1 }}>{t('accounts.common.rate')}</Typography>
+                <Typography variant="body2" fontWeight={600} sx={{ flex: 1, px: 1 }}>{t('accounts.common.qty')}</Typography>
+                <Typography variant="body2" fontWeight={600} sx={{ flex: 1, px: 1 }}>{t('accounts.common.total')}</Typography>
                 <Box sx={{ width: 40 }}></Box>
               </Box>
 
@@ -465,7 +467,7 @@ export default function SalesTransaction() {
                       onChange={(e) => updateStockRow(row.id, 'selectType', e.target.value)}
                       displayEmpty
                     >
-                      <MenuItem value="">Select Type</MenuItem>
+                      <MenuItem value="">{t('accounts.common.selectType')}</MenuItem>
                       {productTypes.map((type, index) => (
                         <MenuItem key={index} value={type}>{type}</MenuItem>
                       ))}
@@ -478,7 +480,7 @@ export default function SalesTransaction() {
                       onChange={(e) => updateStockRow(row.id, 'selectProduct', e.target.value)}
                       displayEmpty
                     >
-                      <MenuItem value="">Select Product</MenuItem>
+                      <MenuItem value="">{t('accounts.common.selectProduct')}</MenuItem>
                       {row.selectType && products[row.selectType as keyof typeof products]?.map((product, index) => (
                         <MenuItem key={index} value={product}>{product}</MenuItem>
                       ))}
@@ -499,7 +501,7 @@ export default function SalesTransaction() {
                       onChange={(e) => updateStockRow(row.id, 'unit', e.target.value)}
                       displayEmpty
                     >
-                      <MenuItem value="">Unit</MenuItem>
+                      <MenuItem value="">{t('accounts.common.unit')}</MenuItem>
                       {units.map((unit, index) => (
                         <MenuItem key={index} value={unit}>{unit}</MenuItem>
                       ))}
@@ -544,11 +546,11 @@ export default function SalesTransaction() {
               <Box sx={{ mt: 3, p: 2, bgcolor: theme.palette.mode === 'dark' ? colors.primary[400] : '#F9F9F9', borderRadius: 1 }}>
                 <Stack direction="row" spacing={4} alignItems="center" justifyContent="flex-end">
                   <Typography variant="h6" fontWeight={700}>
-                    Total: {subtotal}
+                    {t('accounts.common.totalValue', { value: subtotal })}
                   </Typography>
-                  
+
                   <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                    <Typography variant="body2">Discount:</Typography>
+                    <Typography variant="body2">{t('accounts.common.discountLabel')}</Typography>
                     <TextField
                       size="small"
                       type="number"
@@ -562,7 +564,7 @@ export default function SalesTransaction() {
                   </Box>
                   
                   <Typography variant="h6" fontWeight={700}>
-                    Grand Total: {grandTotal.toFixed(2)}
+                    {t('accounts.common.grandTotalValue', { value: grandTotal.toFixed(2) })}
                   </Typography>
                 </Stack>
               </Box>
@@ -580,7 +582,7 @@ export default function SalesTransaction() {
                   textTransform: 'none'
                 }}
               >
-                💾 Save Changes
+                💾 {t('accounts.common.saveChanges')}
               </Button>
               <Button
                 variant="contained"
@@ -596,7 +598,7 @@ export default function SalesTransaction() {
                   }
                 }}
               >
-                📋 Submit & Print/Gate Pass
+                📋 {t('accounts.salesTransaction.submitPrintGatePass')}
               </Button>
               <Button
                 variant="contained"
@@ -612,7 +614,7 @@ export default function SalesTransaction() {
                   }
                 }}
               >
-                🖨️ Submit & Print
+                🖨️ {t('accounts.salesTransaction.submitPrint')}
               </Button>
             </Box>
           </Box>

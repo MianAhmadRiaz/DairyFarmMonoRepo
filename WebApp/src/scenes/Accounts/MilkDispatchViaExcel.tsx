@@ -1,12 +1,14 @@
 import React from 'react';
 import { Box, Paper, Typography, useTheme } from '@mui/material';
+import { useTranslation } from 'react-i18next';
 import PageContainer from '../../shared/components/Layout/PageContainer';
 
 export default function MilkDispatchViaExcel() {
+  const { t } = useTranslation();
   const theme = useTheme();
 
   return (
-    <PageContainer title="Milk Dispatch Via Excel">
+    <PageContainer title={t('accounts.milkDispatchViaExcel.title')}>
         {/* Main Card */}
         <Paper
           elevation={0}
@@ -38,7 +40,7 @@ export default function MilkDispatchViaExcel() {
               <Box component="span" sx={{ mr: 1 }}>
                 📊
               </Box>
-              Milk Dispatch Via Excel
+              {t('accounts.milkDispatchViaExcel.title')}
             </Typography>
           </Box>
 
@@ -61,7 +63,7 @@ export default function MilkDispatchViaExcel() {
                 textAlign: 'center'
               }}
             >
-              Coming Soon
+              {t('accounts.common.comingSoon')}
             </Typography>
           </Box>
         </Paper>

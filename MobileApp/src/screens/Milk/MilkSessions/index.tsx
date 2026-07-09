@@ -1,5 +1,6 @@
 import { useNavigation } from '@react-navigation/native'
 import React, { useCallback, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { useFocusEffect } from '@react-navigation/native'
 import { StyleSheet, View } from 'react-native'
 import Toast from 'react-native-toast-message'
@@ -17,6 +18,7 @@ import { RF } from 'shared/theme/responsive'
 const today = new Date().toISOString().split('T')[0]
 
 const MilkSessions = () => {
+  const { t } = useTranslation()
   const navigation = useNavigation<any>()
   const { can } = usePermissions()
   const [date] = useState(today)
@@ -32,12 +34,12 @@ const MilkSessions = () => {
       const rows = res?.data?.data?.milkingSessions || res?.data?.data || []
       setSessions(Array.isArray(rows) ? rows : [])
     } catch (e) {
-      Toast.show({ type: 'error', text1: 'Error', text2: getNormalizedError(e) })
+      Toast.show({ type: 'error', text1: t('milk.common.error'), text2: getNormalizedError(e) })
     } finally {
       setLoading(false)
       setRefreshing(false)
     }
-  }, [date])
+  }, [date, t])
 
   useFocusEffect(useCallback(() => { load() }, [load]))
 
@@ -46,13 +48,13 @@ const MilkSessions = () => {
     const byTime = (t: string) => s.find((x: any) => x.milkingTime === t)?.milk ?? '—'
     return (
       <InfoCard
-        title={item.tagName || item.name || 'Animal'}
+        title={item.tagName || item.name || t('milk.common.animal')}
         subtitle={item.date}
         leftIcon={{ type: Icons.MaterialCommunityIcons, name: 'cow' }}
         rows={[
-          { label: 'Morning', value: byTime('morning') },
-          { label: 'Afternoon', value: byTime('afternoon') },
-          { label: 'Evening', value: byTime('evening') }
+          { label: t('milk.common.morning'), value: byTime('morning') },
+          { label: t('milk.common.afternoon'), value: byTime('afternoon') },
+          { label: t('milk.common.evening'), value: byTime('evening') }
         ]}
       />
     )
@@ -60,19 +62,19 @@ const MilkSessions = () => {
 
   return (
     <ListScreen
-      title="Milking Sessions"
+      title={t('milk.milkSessions.title')}
       data={sessions}
       renderItem={renderItem}
       loading={loading}
       refreshing={refreshing}
       onRefresh={() => { setRefreshing(true); load() }}
-      emptyText={`No milking sessions for ${date}.`}
+      emptyText={t('milk.milkSessions.emptyText', { date })}
       keyExtractor={(item: any, i) => item.uuid || String(i)}
       onPressAdd={can(PERMISSIONS.MILK_RECORD) ? () => navigation.navigate('AddMilkSession') : undefined}
       ListHeaderComponent={
         <View style={styles.dateBar}>
           <AppText color="descriptionColor" fontSize="caption">
-            Showing sessions for
+            {t('milk.milkSessions.showingSessionsFor')}
           </AppText>
           <AppText semiBold color="primaryMain">
             {date}

@@ -3,6 +3,7 @@ import { Linking } from 'react-native'
 import ImagePicker from 'react-native-image-crop-picker'
 
 import Toast from 'react-native-toast-message'
+import i18n from 'shared/i18n'
 
 export const showToast = (
   type: 'success' | 'error',
@@ -25,32 +26,35 @@ export const handleNotification = (
 
   switch (context) {
     case 'validation_name':
-      title = 'Validation Error'
-      defaultMessage = 'Name is required'
+      title = i18n.t('services.toast.validationTitle')
+      defaultMessage = i18n.t('services.validation.nameRequired')
       break
     case 'validation_email':
-      title = 'Validation Error'
-      defaultMessage = 'Email is required'
+      title = i18n.t('services.toast.validationTitle')
+      defaultMessage = i18n.t('services.validation.emailRequired')
       break
     case 'validation_password':
-      title = 'Validation Error'
-      defaultMessage = 'Password is required'
+      title = i18n.t('services.toast.validationTitle')
+      defaultMessage = i18n.t('services.validation.passwordRequired')
       break
     case 'validation_confirmPassword':
-      title = 'Validation Error'
-      defaultMessage = 'Passwords do not match'
+      title = i18n.t('services.toast.validationTitle')
+      defaultMessage = i18n.t('services.validation.passwordsMismatch')
       break
     case 'registration_success':
-      title = 'Success'
-      defaultMessage = 'Your account was registered successfully!'
+      title = i18n.t('services.toast.successTitle')
+      defaultMessage = i18n.t('services.registration.success')
       break
     case 'registration_error':
-      title = 'Error'
-      defaultMessage = 'Error creating account'
+      title = i18n.t('services.toast.errorTitle')
+      defaultMessage = i18n.t('services.registration.error')
       break
     default:
-      title = type === 'success' ? 'Success' : 'Error'
-      defaultMessage = 'An unexpected error occurred'
+      title =
+        type === 'success'
+          ? i18n.t('services.toast.successTitle')
+          : i18n.t('services.toast.errorTitle')
+      defaultMessage = i18n.t('services.toast.unexpectedError')
       break
   }
 
@@ -63,8 +67,9 @@ export const handleNotification = (
     autoHide: true
   })
 }
-export const capitalizeFirstWord = (str: string) => {
-  return str?.charAt(0).toUpperCase() + str?.slice(1).toLowerCase()
+export const capitalizeFirstWord = (str?: string) => {
+  if (!str) return ''
+  return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase()
 }
 
 export const openExternalLink = async (link: string) => {
@@ -79,7 +84,7 @@ export const openExternalLink = async (link: string) => {
 }
 
 export const getNormalizedError = (err: any) => {
-  return err?.response?.data?.message || 'Request Failed!'
+  return err?.response?.data?.message || i18n.t('services.error.requestFailed')
 }
 
 export const handleImageSelection = () => {
@@ -106,5 +111,5 @@ export const handleImageSelection = () => {
 
 export const copyToClipboard = (string: string | undefined) => {
   Clipboard.setString(String(string))
-  showToast('success', '', 'Copied Successfully')
+  showToast('success', '', i18n.t('services.toast.copiedSuccess'))
 }

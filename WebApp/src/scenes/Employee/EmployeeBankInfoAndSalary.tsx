@@ -23,12 +23,14 @@ import {
   getEmployeeById,
   GetEmployeeResponse
 } from '../../shared/services/EmployeeAPI/viewemployee.service';
+import { useTranslation } from 'react-i18next';
 
 interface BankInfoAndSalaryProps {
   employeeId?: string;
 }
 
 const BankInfoAndSalary: React.FC<BankInfoAndSalaryProps> = ({ employeeId }) => {
+  const { t } = useTranslation();
   const [records, setRecords] = useState<SalaryRecord[]>([]);
   const [employee, setEmployee] = useState<GetEmployeeResponse | null>(null);
   const [loading, setLoading] = useState(true);
@@ -72,22 +74,22 @@ const BankInfoAndSalary: React.FC<BankInfoAndSalaryProps> = ({ employeeId }) => 
     );
     return [
       {
-        label: 'Total Number of Salaries',
+        label: t('employee.bankInfoAndSalary.totalNumberOfSalaries'),
         value: String(records.length),
         icon: <AccountBalanceWalletIcon color="primary" />
       },
       {
-        label: 'Total Gross Salary',
+        label: t('employee.bankInfoAndSalary.totalGrossSalary'),
         value: totalReceived.toLocaleString(),
         icon: <AttachMoneyIcon color="success" />
       },
       {
-        label: 'Bonus Amount',
+        label: t('employee.bankInfoAndSalary.bonusAmount'),
         value: totalBonus.toLocaleString(),
         icon: <RedeemIcon color="warning" />
       }
     ];
-  }, [records]);
+  }, [records, t]);
 
   const bonusRecords = useMemo(
     () => records.filter((r) => Number(r.bonus) > 0),
@@ -110,17 +112,17 @@ const BankInfoAndSalary: React.FC<BankInfoAndSalaryProps> = ({ employeeId }) => 
         <Grid item xs={12} md={3}>
           <Card sx={{ height: '150%' }}>
             <CardContent>
-              <Typography fontWeight="bold">Bank Info</Typography>
+              <Typography fontWeight="bold">{t('employee.bankInfoAndSalary.bankInfo')}</Typography>
               <Typography variant="body2" mt={1}>
-                Account Title
+                {t('employee.common.accountTitle')}
               </Typography>
               <Typography>{employee?.name || '-'}</Typography>
               <Typography variant="body2" mt={1}>
-                Account Number
+                {t('employee.addNewEmployee.fields.accountNumber')}
               </Typography>
               <Typography>{employee?.acc_no || '-'}</Typography>
               <Typography variant="body2" mt={1}>
-                Monthly Salary
+                {t('employee.editProfessionalInfo.monthlySalary')}
               </Typography>
               <Typography>{employee?.salary ?? '-'}</Typography>
             </CardContent>
@@ -159,24 +161,24 @@ const BankInfoAndSalary: React.FC<BankInfoAndSalaryProps> = ({ employeeId }) => 
       <Card sx={{ mb: 3, borderRadius: '12px' }}>
         <CardContent>
           <Typography variant="h6" fontWeight="bold" mb={2}>
-            Salary History
+            {t('employee.bankInfoAndSalary.salaryHistory')}
           </Typography>
           <Table size="small">
             <TableHead>
               <TableRow sx={{ bgcolor: 'lightgray' }}>
-                <TableCell>Date</TableCell>
-                <TableCell>Month Of</TableCell>
-                <TableCell>Gross Salary</TableCell>
-                <TableCell>Present Days</TableCell>
-                <TableCell>Deduction</TableCell>
-                <TableCell>Bonus</TableCell>
+                <TableCell>{t('employee.common.date')}</TableCell>
+                <TableCell>{t('employee.bankInfoAndSalary.monthOf')}</TableCell>
+                <TableCell>{t('employee.bankInfoAndSalary.grossSalary')}</TableCell>
+                <TableCell>{t('employee.bankInfoAndSalary.presentDays')}</TableCell>
+                <TableCell>{t('employee.bankInfoAndSalary.deduction')}</TableCell>
+                <TableCell>{t('employee.bankInfoAndSalary.bonus')}</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
               {records.length === 0 ? (
                 <TableRow>
                   <TableCell colSpan={6} align="center">
-                    No salary records found.
+                    {t('employee.bankInfoAndSalary.noSalaryRecords')}
                   </TableCell>
                 </TableRow>
               ) : (
@@ -200,21 +202,21 @@ const BankInfoAndSalary: React.FC<BankInfoAndSalaryProps> = ({ employeeId }) => 
       <Card sx={{ borderRadius: '12px' }}>
         <CardContent>
           <Typography variant="h6" fontWeight="bold" mb={2}>
-            Bonus History
+            {t('employee.bankInfoAndSalary.bonusHistory')}
           </Typography>
           <Table size="small">
             <TableHead>
               <TableRow sx={{ bgcolor: 'lightgray' }}>
-                <TableCell>Date</TableCell>
-                <TableCell>Month Of</TableCell>
-                <TableCell>Bonus Amount</TableCell>
+                <TableCell>{t('employee.common.date')}</TableCell>
+                <TableCell>{t('employee.bankInfoAndSalary.monthOf')}</TableCell>
+                <TableCell>{t('employee.bankInfoAndSalary.bonusAmount')}</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
               {bonusRecords.length === 0 ? (
                 <TableRow>
                   <TableCell colSpan={3} align="center">
-                    No bonus records found.
+                    {t('employee.bankInfoAndSalary.noBonusRecords')}
                   </TableCell>
                 </TableRow>
               ) : (

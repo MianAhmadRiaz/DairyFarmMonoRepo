@@ -23,6 +23,7 @@ import {
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { fetchBullBreedingList } from '../../../shared/services/breeds.services';
 import { fetchAnimals } from '../../../shared/services/herdinfo.services';
 import useLayoutShift from '../../../shared/components/Hooks/useLayoutShift';
@@ -41,6 +42,7 @@ interface BullBreedingRow {
 
 const BullBreeding: React.FC = () => {
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
   // ----------------------------
   // Demo Data
@@ -163,7 +165,7 @@ const BullBreeding: React.FC = () => {
 
 
   return (
-    <PageContainer title="Bull Breeding">
+    <PageContainer title={t('breeding.bullBreedingList.pageTitle')}>
       {/* Back button */}
       <Button
         variant="text"
@@ -176,7 +178,7 @@ const BullBreeding: React.FC = () => {
           mb: 2,
         }}
       >
-        Back
+        {t('breeding.common.back')}
       </Button>
 
       {/* Header (Add New button) */}
@@ -193,7 +195,7 @@ const BullBreeding: React.FC = () => {
           }}
           onClick={handleAddNew}
         >
-          Add New
+          {t('breeding.common.addNew')}
         </Button>
       </Box>
 
@@ -210,7 +212,7 @@ const BullBreeding: React.FC = () => {
       >
          <Box sx={{p: { xs: 2, sm: 3, md: 3 }}}>
         <Typography variant="subtitle1" sx={{ mb: 2, fontWeight: 'bold' }}>
-          Recent Entries ({rows.length})
+          {t('breeding.common.recentEntries', { count: rows.length })}
         </Typography>
 
         {/* Search & Sort row */}
@@ -225,21 +227,21 @@ const BullBreeding: React.FC = () => {
           <TextField
             variant="outlined"
             fullWidth
-            placeholder="Search"
+            placeholder={t('breeding.common.search')}
             value={search}
             onChange={handleSearchChange}
           />
           <FormControl sx={{ width: '150px' }}>
-            <InputLabel>Sort</InputLabel>
+            <InputLabel>{t('breeding.common.sort')}</InputLabel>
             <Select
-              label="Sort"
+              label={t('breeding.common.sort')}
               value={sort}
              // onChange={handleSortChange}
             >
-              <MenuItem value="">None</MenuItem>
-              <MenuItem value="srNo">By SR #</MenuItem>
-              <MenuItem value="date">By Date</MenuItem>
-              <MenuItem value="tagId">By Tag ID</MenuItem>
+              <MenuItem value="">{t('breeding.common.none')}</MenuItem>
+              <MenuItem value="srNo">{t('breeding.common.bySrNo')}</MenuItem>
+              <MenuItem value="date">{t('breeding.common.byDate')}</MenuItem>
+              <MenuItem value="tagId">{t('breeding.common.byTagId')}</MenuItem>
             </Select>
           </FormControl>
         </Box>
@@ -277,11 +279,11 @@ const BullBreeding: React.FC = () => {
                     onChange={(e) => handleSelectAll(e.target.checked)}
                   />
                 </TableCell>
-                <TableCell sx={{ fontWeight: 'bold' }}>SR #</TableCell>
-                <TableCell sx={{ fontWeight: 'bold' }}>BULL BREED DATE</TableCell>
-                <TableCell sx={{ fontWeight: 'bold' }}>TAG ID</TableCell>
-                <TableCell sx={{ fontWeight: 'bold' }}>SIRE NAME</TableCell>
-                <TableCell sx={{ fontWeight: 'bold' }}>COMMENTS</TableCell>
+                <TableCell sx={{ fontWeight: 'bold' }}>{t('breeding.common.srNo')}</TableCell>
+                <TableCell sx={{ fontWeight: 'bold' }}>{t('breeding.bullBreedingList.columns.bullBreedDate')}</TableCell>
+                <TableCell sx={{ fontWeight: 'bold' }}>{t('breeding.bullBreedingList.columns.tagId')}</TableCell>
+                <TableCell sx={{ fontWeight: 'bold' }}>{t('breeding.bullBreedingList.columns.sireName')}</TableCell>
+                <TableCell sx={{ fontWeight: 'bold' }}>{t('breeding.bullBreedingList.columns.comments')}</TableCell>
                 <TableCell align="center">
                   <MoreVertIcon sx={{ opacity: 0.0 }} />
                   {/* We show an icon here to match the screenshot's layout, 
@@ -319,7 +321,7 @@ const BullBreeding: React.FC = () => {
               {currentRows.length === 0 && (
                 <TableRow>
                   <TableCell colSpan={7} align="center">
-                    No data found.
+                    {t('breeding.common.noDataFound')}
                   </TableCell>
                 </TableRow>
               )}
@@ -338,7 +340,7 @@ const BullBreeding: React.FC = () => {
         >
           {/* Rows per page control (optional) */}
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-            <Typography variant="body2"  sx={{pl:{xs:1,md:3}}}>Rows per page:</Typography>
+            <Typography variant="body2"  sx={{pl:{xs:1,md:3}}}>{t('breeding.common.rowsPerPage')}</Typography>
             <Select
               size="small"
               value={rowsPerPage}

@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { TouchableOpacity, View } from 'react-native'
 import AnyIcon, { Icons } from 'shared/components/AnyIcon';
 import AppText from 'shared/components/AppText/AppText';
@@ -14,28 +15,29 @@ import AppHeader from 'shared/components/AppHeader';
 
 interface Props extends GenericNavigation {}
 const Abortion = (props: Props) => {
+    const { t } = useTranslation()
     return(
         <>
   <GestureHandlerRootView style={{ flex: 1 }}>        
      <View style={styles.container}>
-             <AppHeader title="Abortion" showBack/>
+             <AppHeader title={t('breeding.abortion.headerTitle')} showBack/>
             <ScrollView 
                 contentContainerStyle={{ flexGrow: 1 }} 
                 keyboardShouldPersistTaps="always" 
                 style={styles.boxContainer}
                 showsVerticalScrollIndicator={false}>
                <AppInput
-                    label="Tag ID"
+                    label={t('breeding.common.tagId')}
                     textInputStyle={styles.placeholder}
                     labelStyle={styles.label}
-                    placeholder='Tag ID' 
+                    placeholder={t('breeding.common.tagIdPlaceholder')}
                     style={styles.customContainer}
-                    error={undefined}                 
+                    error={undefined}
                  />
                  <DropDown
-                    label="AI Type"
+                    label={t('breeding.common.aiType')}
                     labelStyle={styles.label}
-                    placeholder='Select' 
+                    placeholder={t('breeding.common.select')}
                     placeholderStyle={styles.placeholder}
                     style={styles.customContainer}
                     options={[]} value={''} onChange={function (value: string): void {
@@ -43,18 +45,18 @@ const Abortion = (props: Props) => {
                     } }                 
                     />
                  <DatePicker
-                    label= "Date"
+                    label={t('breeding.common.date')}
                     labelStyle={styles.label}
-                    placeholder="Select"
+                    placeholder={t('breeding.common.select')}
                     placeholderStyle={styles.placeholder}
                     style={styles.customContainer} onChange={function (date: string): void {
                         throw new Error('Function not implemented.');
-                    } }                 
+                    } }
                     />
                  <DropDown
-                    label="Semen"
+                    label={t('breeding.common.semen')}
                     labelStyle={styles.label}
-                    placeholder='Select' 
+                    placeholder={t('breeding.common.select')}
                     placeholderStyle={styles.placeholder}
                     style={styles.customContainer}
                     options={[]} value={''} onChange={function (value: string): void {
@@ -62,48 +64,48 @@ const Abortion = (props: Props) => {
                     } }                 
                     />
                 <AppInput
-                    label="Dose"
+                    label={t('breeding.common.dose')}
                     textInputStyle={styles.placeholder}
                     labelStyle={styles.label}
-                    placeholder='Select' 
+                    placeholder={t('breeding.common.select')}
                     style={styles.customContainer}
-                    error={undefined}                 
+                    error={undefined}
                  />
                  <AppInput
-                    label="Cost"
+                    label={t('breeding.common.cost')}
                     textInputStyle={styles.placeholder}
                     labelStyle={styles.label}
-                    placeholder='Select' 
+                    placeholder={t('breeding.common.select')}
                     style={styles.customContainer}
-                    error={undefined}                 
+                    error={undefined}
                  />
                 <TimePicker
-                    label="Time"
+                    label={t('breeding.common.time')}
                     labelStyle={styles.label}
                     style={styles.customContainer}
-                    placeholder="Select" 
+                    placeholder={t('breeding.common.select')}
                     placeholderStyle={styles.placeholder}
                     onChange={function (date: string): void {
                         throw new Error('Function not implemented.');
-                    } }     
+                    } }
                 />
                  <AppInput
-                    label="Weight"
+                    label={t('breeding.common.weight')}
                     textInputStyle={styles.placeholder}
                     labelStyle={styles.label}
-                    placeholder='Select' 
+                    placeholder={t('breeding.common.select')}
                     style={styles.customContainer}
-                    error={undefined}                 
+                    error={undefined}
                  />
-                
+
                  <View style={styles.buttonContainer}>
                 <PrimaryButton
-                    title="Cancel"
+                    title={t('breeding.abortion.cancel')}
                     buttonStyle={styles.button2}
                     textStyle={styles.buttonText2}
                 />
                 <PrimaryButton
-                    title="Add New"
+                    title={t('breeding.common.addNew')}
                     buttonStyle={styles.button1}
                     textStyle={styles.buttonText1}
                 />

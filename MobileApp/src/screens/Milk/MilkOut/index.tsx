@@ -1,4 +1,5 @@
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { useNavigation } from '@react-navigation/native'
 import { ScrollView, StyleSheet, View } from 'react-native'
 import Toast from 'react-native-toast-message'
@@ -15,23 +16,24 @@ import { PERMISSIONS } from 'shared/rbac/permissions'
 import { COLORS } from 'shared/theme'
 import { RF } from 'shared/theme/responsive'
 
-const OUT_TYPES = [
-  { label: 'Company (Sale)', value: 'sell' },
-  { label: 'Suckler (Calves)', value: 'suckler' },
-  { label: 'Employee', value: 'employee' },
-  { label: 'Dumped / Withheld', value: 'dumped' },
-  { label: 'Other', value: 'other' }
-]
-
 const today = new Date().toISOString().split('T')[0]
 
 const MilkOut = () => {
+  const { t } = useTranslation()
   const navigation = useNavigation<any>()
   const { can } = usePermissions()
   const canDispatch = can(PERMISSIONS.MILK_DISPATCH)
 
+  const OUT_TYPES = useMemo(() => [
+    { label: t('milk.milkOut.outTypes.sell'), value: 'sell' },
+    { label: t('milk.milkOut.outTypes.suckler'), value: 'suckler' },
+    { label: t('milk.milkOut.outTypes.employee'), value: 'employee' },
+    { label: t('milk.milkOut.outTypes.dumped'), value: 'dumped' },
+    { label: t('milk.milkOut.outTypes.other'), value: 'other' }
+  ], [t])
+
   const [remaining, setRemaining] = useState<number>(0)
-  const [outTypeLabel, setOutTypeLabel] = useState('Company (Sale)')
+  const [outTypeLabel, setOutTypeLabel] = useState(() => t('milk.milkOut.outTypes.sell'))
   const [companies, setCompanies] = useState<any[]>([])
   const [companyName, setCompanyName] = useState('')
   const [volume, setVolume] = useState('')
@@ -40,7 +42,7 @@ const MilkOut = () => {
   const [snf, setSnf] = useState('')
   const [loading, setLoading] = useState(false)
 
-  const outType = OUT_TYPES.find(t => t.label === outTypeLabel)?.value || 'other'
+  const outType = OUT_TYPES.find(o => o.label === outTypeLabel)?.value || 'other'
   const isSale = outType === 'sell'
 
   const loadData = useCallback(async () => {
@@ -58,11 +60,11 @@ const MilkOut = () => {
 
   const onSubmit = async () => {
     if (!(Number(volume) > 0)) {
-      Toast.show({ type: 'error', text1: 'Validation', text2: 'Enter a volume greater than 0' })
+      Toast.show({ type: 'error', text1: t('milk.common.validation'), text2: t('milk.milkOut.enterVolume') })
       return
     }
     if (isSale && !(Number(pricePerLitre) > 0)) {
-      Toast.show({ type: 'error', text1: 'Validation', text2: 'Price per litre is required for a sale' })
+      Toast.show({ type: 'error', text1: t('milk.common.validation'), text2: t('milk.milkOut.priceRequired') })
       return
     }
     try {
@@ -77,10 +79,10 @@ const MilkOut = () => {
         ...(snf ? { snf: Number(snf) } : {})
       }
       await milkOut(payload)
-      Toast.show({ type: 'success', text1: 'Success', text2: 'Milk out recorded' })
+      Toast.show({ type: 'success', text1: t('milk.common.success'), text2: t('milk.milkOut.milkOutRecorded') })
       navigation.goBack()
     } catch (e) {
-      Toast.show({ type: 'error', text1: 'Error', text2: getNormalizedError(e) })
+      Toast.show({ type: 'error', text1: t('milk.common.error'), text2: getNormalizedError(e) })
     } finally {
       setLoading(false)
     }
@@ -89,9 +91,9 @@ const MilkOut = () => {
   if (!canDispatch) {
     return (
       <AppContainer>
-        <AppHeader title="Milk Out" showBack />
+        <AppHeader title={t('milk.milkOut.shortTitle')} showBack />
         <View style={styles.noPerm}>
-          <AppText color="error">You do not have permission to dispatch milk.</AppText>
+          <AppText color="error">{t('milk.milkOut.noPermission')}</AppText>
         </View>
       </AppContainer>
     )
@@ -99,16 +101,16 @@ const MilkOut = () => {
 
   return (
     <AppContainer>
-      <AppHeader title="Milk Out / Dispatch" showBack />
+      <AppHeader title={t('milk.milkOut.title')} showBack />
       <ScrollView contentContainerStyle={{ padding: RF(16), paddingBottom: RF(40) }}>
         <View style={styles.remainingCard}>
-          <AppText color="descriptionColor" fontSize="caption">Remaining in tank</AppText>
+          <AppText color="descriptionColor" fontSize="caption">{t('milk.milkOut.remainingInTank')}</AppText>
           <AppText fontSize="h4" bold color="primaryMain">{remaining} L</AppText>
         </View>
 
         <Dropdown
-          label="Out Type"
-          options={OUT_TYPES.map(t => t.label)}
+          label={t('milk.milkOut.outType')}
+          options={OUT_TYPES.map(o => o.label)}
           value={outTypeLabel}
           onChange={setOutTypeLabel}
         />
@@ -116,21 +118,21 @@ const MilkOut = () => {
         {isSale ? (
           <>
             <Dropdown
-              label="Company"
+              label={t('milk.milkOut.company')}
               options={companies.map(c => c.name)}
               value={companyName}
               onChange={setCompanyName}
             />
-            <AppInput label="Price / Litre" value={pricePerLitre} onChangeText={setPricePerLitre} keyboardType="numeric" placeholder="0.00" />
-            <AppInput label="Fat %" value={fat} onChangeText={setFat} keyboardType="numeric" placeholder="Optional" />
-            <AppInput label="SNF %" value={snf} onChangeText={setSnf} keyboardType="numeric" placeholder="Optional" />
+            <AppInput label={t('milk.milkOut.pricePerLitre')} value={pricePerLitre} onChangeText={setPricePerLitre} keyboardType="numeric" placeholder="0.00" />
+            <AppInput label={t('milk.milkOut.fat')} value={fat} onChangeText={setFat} keyboardType="numeric" placeholder={t('milk.common.optional')} />
+            <AppInput label={t('milk.milkOut.snf')} value={snf} onChangeText={setSnf} keyboardType="numeric" placeholder={t('milk.common.optional')} />
           </>
         ) : null}
 
-        <AppInput label="Volume (L)" value={volume} onChangeText={setVolume} keyboardType="numeric" placeholder="0" />
+        <AppInput label={t('milk.milkOut.volume')} value={volume} onChangeText={setVolume} keyboardType="numeric" placeholder="0" />
 
         <PrimaryButton
-          title="Record Milk Out"
+          title={t('milk.milkOut.recordMilkOut')}
           loading={loading}
           loaderColor={COLORS.white}
           onPress={onSubmit}

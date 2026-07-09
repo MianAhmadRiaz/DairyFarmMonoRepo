@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { TouchableOpacity, View } from 'react-native'
 import AnyIcon, { Icons } from 'shared/components/AnyIcon';
 import AppText from 'shared/components/AppText/AppText';
@@ -13,6 +14,7 @@ import Dropdown from 'shared/components/Dropdown';
 
 interface Props extends GenericNavigation {}
 const Calving = (props: Props) => {
+    const { t } = useTranslation()
     const [childList, setChildList] = useState([{ id: 1 }]);
 
   const addChild = () => {
@@ -42,7 +44,7 @@ const Calving = (props: Props) => {
                   bold
                   color={'erieBlack'}
                 >
-                  Calving
+                  {t('breeding.calving.headerTitle')}
              </AppText>
 
              <TouchableOpacity style={styles.languageButton}>
@@ -67,17 +69,17 @@ const Calving = (props: Props) => {
                 style={styles.tableContainer}
                 showsVerticalScrollIndicator={false}>
                <AppInput
-                    label="Tag ID"
+                    label={t('breeding.common.tagId')}
                     textInputStyle={styles.placeholder}
                     labelStyle={styles.label}
-                    placeholder='Tag ID' 
+                    placeholder={t('breeding.common.tagIdPlaceholder')}
                     style={styles.customContainer}
-                    error={undefined}                 
+                    error={undefined}
                  />
                  <DropDown
-                    label="AI Type"
+                    label={t('breeding.common.aiType')}
                     labelStyle={styles.label}
-                    placeholder='Select' 
+                    placeholder={t('breeding.common.select')}
                     placeholderStyle={styles.placeholder}
                     style={styles.customContainer}
                     options={[]} value={''} onChange={function (value: string): void {
@@ -85,18 +87,18 @@ const Calving = (props: Props) => {
                     } }                 
                     />
                  <DatePicker
-                    label= "Date"
+                    label={t('breeding.common.date')}
                     labelStyle={styles.label}
-                    placeholder="Select"
+                    placeholder={t('breeding.common.select')}
                     placeholderStyle={styles.placeholder}
                     style={styles.customContainer} onChange={function (date: string): void {
                         throw new Error('Function not implemented.');
-                    } }                 
+                    } }
                     />
                  <DropDown
-                    label="Semen"
+                    label={t('breeding.common.semen')}
                     labelStyle={styles.label}
-                    placeholder='Select' 
+                    placeholder={t('breeding.common.select')}
                     placeholderStyle={styles.placeholder}
                     style={styles.customContainer}
                     options={[]} value={''} onChange={function (value: string): void {
@@ -110,20 +112,20 @@ const Calving = (props: Props) => {
                         semiBold
                         color={'labelColor'}
                         style={styles.text}>
-                        Child
+                        {t('breeding.calving.child')}
                         </AppText>
                         <TouchableOpacity onPress={addChild}>
-                        <AppText 
-                        fontSize="subtitle" 
+                        <AppText
+                        fontSize="subtitle"
                         regular
                         style={styles.underline}
                         color={'secondaryMain'}>
-                            Add New Child
+                            {t('breeding.calving.addNewChild')}
                         </AppText>
                         </TouchableOpacity>
                 </View>
-                <Dropdown  
-                        placeholder='Add Child'
+                <Dropdown
+                        placeholder={t('breeding.calving.addChild')}
                         placeholderStyle={styles.placeholder}
                         style={styles.customContainer}
                         options={[]} value={''} onChange={function (value: string): void {
@@ -137,70 +139,70 @@ const Calving = (props: Props) => {
                         fontSize="subtitle" 
                         bold 
                         color={'darkestGrey'}>
-                            Alive Child
+                            {t('breeding.calving.aliveChild')}
                         </AppText>
                         <TouchableOpacity onPress={() => removeChild(child.id)}>
-                        <AppText 
-                        fontSize="subtitle" 
+                        <AppText
+                        fontSize="subtitle"
                         style={styles.underline}
                         color={'error'}>
-                            Delete
+                            {t('breeding.calving.delete')}
                         </AppText>
                         </TouchableOpacity>
                     </View>
                     <AppInput
-                    label="Shed"
+                    label={t('breeding.common.shed')}
                     textInputStyle={styles.placeholder}
                     labelStyle={styles.label}
-                    placeholder='Select' 
+                    placeholder={t('breeding.common.select')}
                     style={styles.customContainer}
-                    error={undefined}                 
+                    error={undefined}
                  />
                  <AppInput
-                    label="Tag ID"
+                    label={t('breeding.common.tagId')}
                     textInputStyle={styles.placeholder}
                     labelStyle={styles.label}
-                    placeholder='Select' 
+                    placeholder={t('breeding.common.select')}
                     style={styles.customContainer}
-                    error={undefined}                 
+                    error={undefined}
                  />
                  <AppInput
-                    label="Breed Type"
+                    label={t('breeding.common.breedType')}
                     textInputStyle={styles.placeholder}
                     labelStyle={styles.label}
-                    placeholder='Select' 
+                    placeholder={t('breeding.common.select')}
                     style={styles.customContainer}
-                    error={undefined}                 
+                    error={undefined}
                  />
                  <AppInput
-                    label="Sex"
+                    label={t('breeding.common.sex')}
                     textInputStyle={styles.placeholder}
                     labelStyle={styles.label}
-                    placeholder='Select' 
+                    placeholder={t('breeding.common.select')}
                     style={styles.customContainer}
-                    error={undefined}                 
+                    error={undefined}
                  />
                     </View> 
                 ))}
                 </View>
 
                  <AppInput
-                    label="Reason"
+                    label={t('breeding.common.reason')}
                     textInputStyle={styles.reasonText}
                     labelStyle={styles.label}
-                    placeholder='Reason' 
+                    placeholder={t('breeding.common.reason')}
                     style={styles.reasonContainer}
-                    error={undefined}                 
+                    error={undefined}
                  />
-                
+
                  <View style={styles.buttonContainer}>
                 <PrimaryButton
-                    title="Cancel"
+                    title={t('breeding.calving.cancel')}
                     buttonStyle={styles.button2}
                     textStyle={styles.buttonText2}
                 />
                 <PrimaryButton
-                    title="Add New"
+                    title={t('breeding.common.addNew')}
                     buttonStyle={styles.button1}
                     textStyle={styles.buttonText1}
                 />

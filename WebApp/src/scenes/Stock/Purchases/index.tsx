@@ -41,6 +41,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import PageContainer from '../../../shared/components/Layout/PageContainer';
 import { usePermissions } from '../../../shared/rbac/usePermissions';
 import { PERMISSIONS } from '../../../shared/rbac/permissions';
+import { useTranslation } from 'react-i18next';
 
 interface PurchaseFormValues {
   supplierId: string;
@@ -55,20 +56,6 @@ interface PurchaseFormValues {
 
 const today = () => new Date().toISOString().split('T')[0];
 
-const validationSchema = Yup.object().shape({
-  supplierId: Yup.string().required('Supplier is required'),
-  itemId: Yup.string().required('Item is required'),
-  quantity: Yup.number()
-    .typeError('Quantity must be a number')
-    .moreThan(0, 'Quantity must be greater than 0')
-    .required('Quantity is required'),
-  cost_per_unit: Yup.number()
-    .typeError('Cost must be a number')
-    .min(0, 'Cost must be 0 or more')
-    .required('Cost per unit is required'),
-  date: Yup.string().required('Date is required')
-});
-
 const initialValues: PurchaseFormValues = {
   supplierId: '',
   itemId: '',
@@ -81,7 +68,22 @@ const initialValues: PurchaseFormValues = {
 };
 
 const Purchases: React.FC = () => {
+  const { t } = useTranslation();
   const theme = useTheme();
+
+  const validationSchema = Yup.object().shape({
+    supplierId: Yup.string().required(t('stock.purchases.validation.supplierRequired')),
+    itemId: Yup.string().required(t('stock.purchases.validation.itemRequired')),
+    quantity: Yup.number()
+      .typeError(t('stock.purchases.validation.quantityNumber'))
+      .moreThan(0, t('stock.purchases.validation.quantityPositive'))
+      .required(t('stock.purchases.validation.quantityRequired')),
+    cost_per_unit: Yup.number()
+      .typeError(t('stock.purchases.validation.costNumber'))
+      .min(0, t('stock.purchases.validation.costMin'))
+      .required(t('stock.purchases.validation.costRequired')),
+    date: Yup.string().required(t('stock.purchases.validation.dateRequired'))
+  });
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
   const { can } = usePermissions();
   const canPurchase = can(PERMISSIONS.STOCK_PURCHASE);
@@ -107,7 +109,7 @@ const Purchases: React.FC = () => {
       setPurchases(data.items || []);
       setTotalCount(data.totalCount || 0);
     } catch (error: any) {
-      toast.error(error?.response?.data?.message || 'Failed to fetch purchases.');
+      toast.error(error?.response?.data?.message || t('stock.purchases.fetchError'));
     } finally {
       setLoadingTable(false);
     }
@@ -123,7 +125,7 @@ const Purchases: React.FC = () => {
         setSuppliers(suppliersData.suppliers || []);
         setStockItems(itemsData);
       } catch (error: any) {
-        toast.error(error?.response?.data?.message || 'Failed to fetch suppliers/items.');
+        toast.error(error?.response?.data?.message || t('stock.purchases.fetchDropdownsError'));
       }
     };
     fetchDropdowns();
@@ -149,11 +151,11 @@ const Purchases: React.FC = () => {
         batch_number: values.batch_number || undefined,
         expiry_date: values.expiry_date || undefined
       });
-      toast.success('Purchase recorded successfully!');
+      toast.success(t('stock.purchases.recordSuccess'));
       resetForm();
       loadPurchases();
     } catch (error: any) {
-      toast.error(error?.response?.data?.message || 'Failed to record purchase.');
+      toast.error(error?.response?.data?.message || t('stock.purchases.recordError'));
     } finally {
       setIsSubmitting(false);
     }
@@ -161,7 +163,7 @@ const Purchases: React.FC = () => {
 
   const handleAddSupplier = async () => {
     if (!newSupplier.name.trim()) {
-      toast.warning('Please enter a supplier name.');
+      toast.warning(t('stock.common.supplierNameWarning'));
       return;
     }
     setIsSupplierSubmitting(true);
@@ -172,11 +174,11 @@ const Purchases: React.FC = () => {
         address: newSupplier.address || undefined
       });
       setSuppliers(prev => [created, ...prev]);
-      toast.success('Supplier added successfully!');
+      toast.success(t('stock.common.supplierAddedSuccess'));
       setIsSupplierModalOpen(false);
       setNewSupplier({ name: '', contact: '', address: '' });
     } catch (error: any) {
-      toast.error(error?.response?.data?.message || 'Failed to add supplier.');
+      toast.error(error?.response?.data?.message || t('stock.common.addSupplierError'));
     } finally {
       setIsSupplierSubmitting(false);
     }
@@ -186,17 +188,17 @@ const Purchases: React.FC = () => {
     setDeletingId(purchaseId);
     try {
       await deletePurchaseItem(purchaseId);
-      toast.success('Purchase deleted successfully!');
+      toast.success(t('stock.purchases.deleteSuccess'));
       loadPurchases();
     } catch (error: any) {
-      toast.error(error?.response?.data?.message || 'Failed to delete purchase.');
+      toast.error(error?.response?.data?.message || t('stock.purchases.deleteError'));
     } finally {
       setDeletingId(null);
     }
   };
 
   return (
-    <PageContainer title="Stock Purchases" subtitle="Record purchases and review purchase history">
+    <PageContainer title={t('stock.purchases.title')} subtitle={t('stock.purchases.subtitle')}>
       <Container maxWidth="lg" sx={{ px: isMobile ? '11px' : undefined }}>
         <Paper
           elevation={3}
@@ -221,7 +223,7 @@ const Purchases: React.FC = () => {
                 <Grid container spacing={3}>
                   <Grid item xs={12}>
                     <Typography variant="h6" sx={{ mb: 1, fontWeight: 'bold' }}>
-                      New Purchase
+                      {t('stock.purchases.newPurchase')}
                     </Typography>
                   </Grid>
 
@@ -230,7 +232,7 @@ const Purchases: React.FC = () => {
                       <Field
                         as={TextField}
                         name="supplierId"
-                        label="Supplier"
+                        label={t('stock.common.supplier')}
                         select
                         fullWidth
                         size="small"
@@ -238,14 +240,14 @@ const Purchases: React.FC = () => {
                         helperText={touched.supplierId && errors.supplierId}
                         sx={{ flex: 1 }}
                       >
-                        <MenuItem value="">Select Supplier</MenuItem>
+                        <MenuItem value="">{t('stock.purchases.selectSupplier')}</MenuItem>
                         {suppliers.map(supplier => (
                           <MenuItem key={supplier.uuid} value={supplier.uuid}>
                             {supplier.name}
                           </MenuItem>
                         ))}
                       </Field>
-                      <Tooltip title="Add New Supplier">
+                      <Tooltip title={t('stock.common.addNewSupplier')}>
                         <IconButton
                           onClick={() => setIsSupplierModalOpen(true)}
                           sx={{
@@ -268,14 +270,14 @@ const Purchases: React.FC = () => {
                     <Field
                       as={TextField}
                       name="itemId"
-                      label="Stock Item"
+                      label={t('stock.purchases.stockItem')}
                       select
                       fullWidth
                       size="small"
                       error={touched.itemId && Boolean(errors.itemId)}
                       helperText={touched.itemId && errors.itemId}
                     >
-                      <MenuItem value="">Select Item</MenuItem>
+                      <MenuItem value="">{t('stock.purchases.selectItem')}</MenuItem>
                       {stockItems.map(item => (
                         <MenuItem key={item.uuid} value={item.uuid}>
                           {item.name}
@@ -288,7 +290,7 @@ const Purchases: React.FC = () => {
                     <Field
                       as={TextField}
                       name="quantity"
-                      label="Quantity"
+                      label={t('stock.common.quantity')}
                       type="number"
                       fullWidth
                       size="small"
@@ -301,7 +303,7 @@ const Purchases: React.FC = () => {
                     <Field
                       as={TextField}
                       name="cost_per_unit"
-                      label="Cost Per Unit"
+                      label={t('stock.purchases.costPerUnit')}
                       type="number"
                       fullWidth
                       size="small"
@@ -314,7 +316,7 @@ const Purchases: React.FC = () => {
                     <Field
                       as={TextField}
                       name="date"
-                      label="Purchase Date"
+                      label={t('stock.purchases.purchaseDate')}
                       type="date"
                       fullWidth
                       size="small"
@@ -328,7 +330,7 @@ const Purchases: React.FC = () => {
                     <Field
                       as={TextField}
                       name="batch_number"
-                      label="Batch Number (optional)"
+                      label={t('stock.purchases.batchNumberOptional')}
                       fullWidth
                       size="small"
                     />
@@ -338,7 +340,7 @@ const Purchases: React.FC = () => {
                     <Field
                       as={TextField}
                       name="expiry_date"
-                      label="Expiry Date (optional)"
+                      label={t('stock.purchases.expiryDateOptional')}
                       type="date"
                       fullWidth
                       size="small"
@@ -350,7 +352,7 @@ const Purchases: React.FC = () => {
                     <Field
                       as={TextField}
                       name="note"
-                      label="Note (optional)"
+                      label={t('stock.purchases.noteOptional')}
                       fullWidth
                       size="small"
                       multiline
@@ -364,7 +366,7 @@ const Purchases: React.FC = () => {
                         type="submit"
                         variant="contained"
                         disabled={isSubmitting || !canPurchase}
-                        title={canPurchase ? '' : 'No permission'}
+                        title={canPurchase ? '' : t('stock.common.noPermission')}
                         size="large"
                         startIcon={
                           isSubmitting ? (
@@ -390,7 +392,7 @@ const Purchases: React.FC = () => {
                           }
                         }}
                       >
-                        {!isSubmitting && 'Save'}
+                        {!isSubmitting && t('common.save')}
                       </Button>
                     </Box>
                   </Grid>
@@ -415,7 +417,7 @@ const Purchases: React.FC = () => {
         >
           <Box sx={{ p: 2, display: 'flex', alignItems: 'center', gap: 2 }}>
             <Typography variant="h6" sx={{ fontWeight: 'bold' }}>
-              Purchase History
+              {t('stock.purchases.history')}
             </Typography>
             {loadingTable && <CircularProgress size={18} />}
           </Box>
@@ -423,22 +425,22 @@ const Purchases: React.FC = () => {
             <Table size={isMobile ? 'small' : 'medium'}>
               <TableHead>
                 <TableRow sx={{ backgroundColor: '#f8f9fA' }}>
-                  <TableCell sx={{ fontWeight: 'bold' }}>Date</TableCell>
-                  <TableCell sx={{ fontWeight: 'bold' }}>Item</TableCell>
-                  <TableCell sx={{ fontWeight: 'bold' }}>Supplier</TableCell>
+                  <TableCell sx={{ fontWeight: 'bold' }}>{t('stock.common.date')}</TableCell>
+                  <TableCell sx={{ fontWeight: 'bold' }}>{t('stock.common.item')}</TableCell>
+                  <TableCell sx={{ fontWeight: 'bold' }}>{t('stock.common.supplier')}</TableCell>
                   <TableCell sx={{ fontWeight: 'bold' }} align="right">
-                    Qty
+                    {t('stock.purchases.columns.qty')}
                   </TableCell>
                   <TableCell sx={{ fontWeight: 'bold' }} align="right">
-                    Cost/Unit
+                    {t('stock.purchases.columns.costPerUnit')}
                   </TableCell>
                   <TableCell sx={{ fontWeight: 'bold' }} align="right">
-                    Total
+                    {t('stock.common.total')}
                   </TableCell>
-                  <TableCell sx={{ fontWeight: 'bold' }}>Batch</TableCell>
-                  <TableCell sx={{ fontWeight: 'bold' }}>Expiry</TableCell>
+                  <TableCell sx={{ fontWeight: 'bold' }}>{t('stock.purchases.columns.batch')}</TableCell>
+                  <TableCell sx={{ fontWeight: 'bold' }}>{t('stock.purchases.columns.expiry')}</TableCell>
                   <TableCell sx={{ fontWeight: 'bold' }} align="center">
-                    Actions
+                    {t('stock.common.actions')}
                   </TableCell>
                 </TableRow>
               </TableHead>
@@ -446,7 +448,7 @@ const Purchases: React.FC = () => {
                 {purchases.length === 0 && !loadingTable ? (
                   <TableRow>
                     <TableCell colSpan={9} align="center">
-                      No purchases recorded yet.
+                      {t('stock.purchases.noPurchases')}
                     </TableCell>
                   </TableRow>
                 ) : (
@@ -498,39 +500,39 @@ const Purchases: React.FC = () => {
       <Modal
         open={isSupplierModalOpen}
         onClose={() => setIsSupplierModalOpen(false)}
-        title="Add New Supplier"
+        title={t('stock.common.addNewSupplier')}
         onSubmit={handleAddSupplier}
-        submitText={isSupplierSubmitting ? 'Saving...' : 'Submit'}
+        submitText={isSupplierSubmitting ? t('stock.common.saving') : t('common.submit')}
       >
         <Grid container spacing={2}>
           <Grid item xs={12}>
             <TextField
-              label="Supplier Name"
+              label={t('stock.common.supplierName')}
               value={newSupplier.name}
               onChange={e => setNewSupplier(prev => ({ ...prev, name: e.target.value }))}
               fullWidth
               size="small"
-              placeholder="Enter supplier name"
+              placeholder={t('stock.common.enterSupplierName')}
             />
           </Grid>
           <Grid item xs={12}>
             <TextField
-              label="Contact"
+              label={t('stock.common.contact')}
               value={newSupplier.contact}
               onChange={e => setNewSupplier(prev => ({ ...prev, contact: e.target.value }))}
               fullWidth
               size="small"
-              placeholder="Enter contact number"
+              placeholder={t('stock.common.enterContactNumber')}
             />
           </Grid>
           <Grid item xs={12}>
             <TextField
-              label="Address"
+              label={t('stock.common.address')}
               value={newSupplier.address}
               onChange={e => setNewSupplier(prev => ({ ...prev, address: e.target.value }))}
               fullWidth
               size="small"
-              placeholder="Enter address"
+              placeholder={t('stock.common.enterAddress')}
               multiline
               rows={2}
             />

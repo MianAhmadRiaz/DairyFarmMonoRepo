@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import {
   Box,
   Button,
@@ -59,6 +60,7 @@ const AnimalWiseCostTable: React.FC<AnimalWiseCostTableProps> = ({
   endDate,
   onDateChange
 }) => {
+  const { t } = useTranslation();
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   const [searchTerm, setSearchTerm] = useState('');
@@ -119,8 +121,11 @@ const AnimalWiseCostTable: React.FC<AnimalWiseCostTableProps> = ({
 
   return (
     <PageContainer
-      title="Animal Wise Cost Report"
-      subtitle={`Report Period: ${localStartDate} to ${localEndDate}`}
+      title={t('shared.animalWiseCostTable.title')}
+      subtitle={t('shared.common.reportPeriod', {
+        startDate: localStartDate,
+        endDate: localEndDate
+      })}
     >
       <Paper
         elevation={3}
@@ -140,7 +145,7 @@ const AnimalWiseCostTable: React.FC<AnimalWiseCostTableProps> = ({
               <Grid item xs={12} md={4}>
                 <TextField
                   type="date"
-                  label="Start Date"
+                  label={t('shared.common.startDate')}
                   size="small"
                   fullWidth
                   value={localStartDate}
@@ -151,7 +156,7 @@ const AnimalWiseCostTable: React.FC<AnimalWiseCostTableProps> = ({
               <Grid item xs={12} md={4}>
                 <TextField
                   type="date"
-                  label="End Date"
+                  label={t('shared.common.endDate')}
                   size="small"
                   fullWidth
                   value={localEndDate}
@@ -171,7 +176,7 @@ const AnimalWiseCostTable: React.FC<AnimalWiseCostTableProps> = ({
                     flex: 1
                   }}
                 >
-                  View Report
+                  {t('shared.common.viewReport')}
                 </Button>
                 <Button
                   variant="outlined"
@@ -180,7 +185,7 @@ const AnimalWiseCostTable: React.FC<AnimalWiseCostTableProps> = ({
                   onClick={handlePrint}
                   sx={{ borderColor: '#005f73', color: '#005f73' }}
                 >
-                  Print
+                  {t('shared.common.print')}
                 </Button>
               </Grid>
             </Grid>
@@ -198,13 +203,13 @@ const AnimalWiseCostTable: React.FC<AnimalWiseCostTableProps> = ({
             size="small"
             sx={{ minWidth: 200, ml: { xs: 3, md: 4 } }}
           >
-            <InputLabel>Animal Status</InputLabel>
+            <InputLabel>{t('shared.animalWiseCostTable.animalStatus')}</InputLabel>
             <Select
               value={statusFilter}
-              label="Animal Status"
+              label={t('shared.animalWiseCostTable.animalStatus')}
               onChange={e => setStatusFilter(e.target.value)}
             >
-              <MenuItem value="">All</MenuItem>
+              <MenuItem value="">{t('shared.common.all')}</MenuItem>
               {uniqueStatuses.map(status => (
                 <MenuItem key={status} value={status}>
                   {status}
@@ -217,13 +222,13 @@ const AnimalWiseCostTable: React.FC<AnimalWiseCostTableProps> = ({
             size="small"
             sx={{ minWidth: 200, ml: { xs: 3, md: 0 } }}
           >
-            <InputLabel>Animal Sex</InputLabel>
+            <InputLabel>{t('shared.animalWiseCostTable.animalSex')}</InputLabel>
             <Select
               value={sexFilter}
-              label="Animal Sex"
+              label={t('shared.animalWiseCostTable.animalSex')}
               onChange={e => setSexFilter(e.target.value)}
             >
-              <MenuItem value="">All</MenuItem>
+              <MenuItem value="">{t('shared.common.all')}</MenuItem>
               {uniqueSexes.map(sex => (
                 <MenuItem key={sex} value={sex}>
                   {sex}
@@ -236,13 +241,13 @@ const AnimalWiseCostTable: React.FC<AnimalWiseCostTableProps> = ({
             size="small"
             sx={{ minWidth: 200, ml: { xs: 3, md: 0 } }}
           >
-            <InputLabel>Category</InputLabel>
+            <InputLabel>{t('shared.common.category')}</InputLabel>
             <Select
               value={categoryFilter}
-              label="Category"
+              label={t('shared.common.category')}
               onChange={e => setCategoryFilter(e.target.value)}
             >
-              <MenuItem value="">All</MenuItem>
+              <MenuItem value="">{t('shared.common.all')}</MenuItem>
               {uniqueCategories.map(category => (
                 <MenuItem key={category} value={category}>
                   {category}
@@ -255,13 +260,13 @@ const AnimalWiseCostTable: React.FC<AnimalWiseCostTableProps> = ({
             size="small"
             sx={{ minWidth: 200, ml: { xs: 3, md: 0 } }}
           >
-            <InputLabel>Item Name</InputLabel>
+            <InputLabel>{t('shared.common.itemName')}</InputLabel>
             <Select
               value={itemNameFilter}
-              label="Item Name"
+              label={t('shared.common.itemName')}
               onChange={e => setItemNameFilter(e.target.value)}
             >
-              <MenuItem value="">All</MenuItem>
+              <MenuItem value="">{t('shared.common.all')}</MenuItem>
               {uniqueItemNames.map(name => (
                 <MenuItem key={name} value={name}>
                   {name}
@@ -291,7 +296,7 @@ const AnimalWiseCostTable: React.FC<AnimalWiseCostTableProps> = ({
               color: '#005f73'
             }}
           >
-            Column visibility
+            {t('shared.common.columnVisibility')}
           </Button>
           <IconButton
             size="small"
@@ -318,7 +323,7 @@ const AnimalWiseCostTable: React.FC<AnimalWiseCostTableProps> = ({
           <Box sx={{ flexGrow: 1 }} />
           <Box sx={{ display: 'flex', alignItems: 'center' }}>
             <Box component="span" sx={{ mr: 1, color: '#666' }}>
-              Search:
+              {t('shared.common.searchLabel')}
             </Box>
             <TextField
               size="small"
@@ -349,46 +354,46 @@ const AnimalWiseCostTable: React.FC<AnimalWiseCostTableProps> = ({
                   #
                 </TableCell>
                 <TableCell sx={{ color: 'black', fontWeight: 'bold' }}>
-                  Tag ID
+                  {t('shared.animalWiseCostTable.columns.tagId')}
                 </TableCell>
                 <TableCell sx={{ color: 'black', fontWeight: 'bold' }}>
-                  Animal Status
+                  {t('shared.animalWiseCostTable.animalStatus')}
                 </TableCell>
                 <TableCell sx={{ color: 'black', fontWeight: 'bold' }}>
-                  Animal Sex
+                  {t('shared.animalWiseCostTable.animalSex')}
                 </TableCell>
                 <TableCell sx={{ color: 'black', fontWeight: 'bold' }}>
-                  Item Code
+                  {t('shared.animalWiseCostTable.columns.itemCode')}
                 </TableCell>
                 <TableCell sx={{ color: 'black', fontWeight: 'bold' }}>
-                  Item Name
+                  {t('shared.common.itemName')}
                 </TableCell>
                 <TableCell sx={{ color: 'black', fontWeight: 'bold' }}>
-                  Category
+                  {t('shared.common.category')}
                 </TableCell>
                 <TableCell
                   align="right"
                   sx={{ color: 'black', fontWeight: 'bold' }}
                 >
-                  Days
+                  {t('shared.animalWiseCostTable.columns.days')}
                 </TableCell>
                 <TableCell
                   align="right"
                   sx={{ color: 'black', fontWeight: 'bold' }}
                 >
-                  Qty
+                  {t('shared.common.qty')}
                 </TableCell>
                 <TableCell
                   align="right"
                   sx={{ color: 'black', fontWeight: 'bold' }}
                 >
-                  Rate
+                  {t('shared.common.rate')}
                 </TableCell>
                 <TableCell
                   align="right"
                   sx={{ color: 'black', fontWeight: 'bold' }}
                 >
-                  Amount
+                  {t('shared.common.amount')}
                 </TableCell>
               </TableRow>
             </TableHead>

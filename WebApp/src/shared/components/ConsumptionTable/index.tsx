@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import {
   Table,
   TableBody,
@@ -53,6 +54,7 @@ const ConsumptionTable: React.FC<ConsumptionTableProps> = ({
   onSelectionChange
 }) => {
   console.log('🚀 ~ items:', items);
+  const { t } = useTranslation();
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
@@ -88,7 +90,7 @@ const ConsumptionTable: React.FC<ConsumptionTableProps> = ({
                   minWidth: { xs: '60px', sm: '120px' }
                 }}
               >
-                Select
+                {t('shared.consumptionTable.columns.select')}
               </TableCell>
               <TableCell
                 sx={{
@@ -99,7 +101,7 @@ const ConsumptionTable: React.FC<ConsumptionTableProps> = ({
                   minWidth: { xs: '120px', sm: '200px' }
                 }}
               >
-                Product Name
+                {t('shared.consumptionTable.columns.productName')}
               </TableCell>
               <TableCell
                 sx={{
@@ -110,7 +112,7 @@ const ConsumptionTable: React.FC<ConsumptionTableProps> = ({
                   minWidth: { xs: '120px', sm: '200px' }
                 }}
               >
-                Quantity
+                {t('shared.common.quantity')}
               </TableCell>
               <TableCell
                 sx={{
@@ -121,7 +123,7 @@ const ConsumptionTable: React.FC<ConsumptionTableProps> = ({
                   minWidth: { xs: '120px', sm: '200px' }
                 }}
               >
-                Total Quantity
+                {t('shared.consumptionTable.columns.totalQuantity')}
               </TableCell>
             </TableRow>
           </TableHead>
@@ -138,7 +140,9 @@ const ConsumptionTable: React.FC<ConsumptionTableProps> = ({
             ) : items.length === 0 ? (
               <TableRow>
                 <TableCell colSpan={3} sx={{ textAlign: 'center', py: 1 }}>
-                  <Typography color="black">No data available</Typography>
+                  <Typography color="black">
+                    {t('shared.common.noDataAvailable')}
+                  </Typography>
                 </TableCell>
               </TableRow>
             ) : (
@@ -226,6 +230,10 @@ const ConsumptionTable: React.FC<ConsumptionTableProps> = ({
         rowsPerPage={rowsPerPage}
         onRowsPerPageChange={onRowsPerPageChange}
         rowsPerPageOptions={[5, 10, 25, 50]}
+        labelRowsPerPage={t('shared.common.rowsPerPage')}
+        labelDisplayedRows={({ from, to, count }) =>
+          t('shared.common.displayedRows', { from, to, total: count })
+        }
         sx={{
           '& .MuiTablePagination-toolbar': {
             flexWrap: 'wrap',

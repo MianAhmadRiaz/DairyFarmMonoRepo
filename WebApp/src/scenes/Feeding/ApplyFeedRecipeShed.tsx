@@ -35,6 +35,7 @@ import {
   useTheme
 } from '@mui/material';
 import { ToastContainer, toast } from 'react-toastify';
+import { useTranslation } from 'react-i18next';
 import 'react-toastify/dist/ReactToastify.css';
 import CustomPagination from '../../shared/components/Custom Pagination/CustomPagination';
 import PageContainer from '../../shared/components/Layout/PageContainer';
@@ -68,6 +69,7 @@ const todayStr = () => new Date().toISOString().split('T')[0];
 
 /* ================================================================ */
 const ApplyFeedRecipeShed: React.FC = () => {
+  const { t } = useTranslation();
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
 
@@ -107,7 +109,7 @@ const ApplyFeedRecipeShed: React.FC = () => {
       const data: ShedsListData = res?.data?.data;
       setSheds(data?.sheds || []);
     } catch (error: any) {
-      toast.error(error?.response?.data?.message || "Can't load sheds");
+      toast.error(error?.response?.data?.message || t('feeding.common.cantLoadSheds'));
     }
   };
 
@@ -117,7 +119,7 @@ const ApplyFeedRecipeShed: React.FC = () => {
       const data: RecipesListData = res?.data?.data;
       setRecipes(data?.recipes || []);
     } catch (error: any) {
-      toast.error(error?.response?.data?.message || "Can't load recipes");
+      toast.error(error?.response?.data?.message || t('feeding.common.cantLoadRecipes'));
     }
   };
 
@@ -127,7 +129,7 @@ const ApplyFeedRecipeShed: React.FC = () => {
       const data: PensWithAnimalsListData = res?.data?.data;
       setPens(data?.pens || []);
     } catch (error: any) {
-      toast.error(error?.response?.data?.message || "Can't load pens");
+      toast.error(error?.response?.data?.message || t('feeding.common.cantLoadPens'));
     }
   };
 
@@ -173,15 +175,15 @@ const ApplyFeedRecipeShed: React.FC = () => {
   const handleApply = async () => {
     if (!applyShed) return;
     if (!selectedRecipe) {
-      toast.warning('Please select a recipe');
+      toast.warning(t('feeding.common.selectRecipeWarning'));
       return;
     }
     if (!date) {
-      toast.warning('Please select a feeding date');
+      toast.warning(t('feeding.common.selectFeedingDateWarning'));
       return;
     }
     if (!(Number(qtyPerAnimal) > 0)) {
-      toast.warning('Quantity per animal must be greater than 0');
+      toast.warning(t('feeding.applyFeedRecipeShed.qtyPerAnimalWarning'));
       return;
     }
 
@@ -200,10 +202,13 @@ const ApplyFeedRecipeShed: React.FC = () => {
       setApplyRowClosed();
       setResult(data);
       toast.success(
-        `Recipe applied! Total feed: ${data?.totalFeedRequired} Kg, cost: ${data?.totalCost}`
+        t('feeding.applyFeedRecipeShed.recipeAppliedTotalCost', {
+          total: data?.totalFeedRequired,
+          cost: data?.totalCost
+        })
       );
     } catch (error: any) {
-      toast.error(error?.response?.data?.message || "Can't apply recipe!");
+      toast.error(error?.response?.data?.message || t('feeding.common.cantApplyRecipe'));
     } finally {
       setApplying(false);
     }
@@ -219,7 +224,7 @@ const ApplyFeedRecipeShed: React.FC = () => {
 
   /* ──────────────────────────────── */
   return (
-    <PageContainer title="Apply Feed Recipe (Shed)" maxWidth="1200px">
+    <PageContainer title={t('feeding.applyFeedRecipeShed.title')} maxWidth="1200px">
       {/* search + date + actions */}
       <Box
         sx={{
@@ -231,7 +236,7 @@ const ApplyFeedRecipeShed: React.FC = () => {
       >
         <TextField
           fullWidth
-          placeholder="Search"
+          placeholder={t('common.search')}
           value={query}
           onChange={e => {
             setQuery(e.target.value);
@@ -256,7 +261,7 @@ const ApplyFeedRecipeShed: React.FC = () => {
           }}
         />
         <TextField
-          label="Feeding Date"
+          label={t('feeding.common.feedingDate')}
           type="date"
           value={date}
           onChange={e => setDate(e.target.value)}
@@ -279,7 +284,7 @@ const ApplyFeedRecipeShed: React.FC = () => {
           onClick={() => setAddShedOpen(true)}
           sx={{ bgcolor: '#0F677C', whiteSpace: 'nowrap', px: 3, textTransform: 'none' }}
         >
-          Add Shed
+          {t('feeding.common.addShed')}
         </Button>
         <Button
           variant="contained"
@@ -287,7 +292,7 @@ const ApplyFeedRecipeShed: React.FC = () => {
           onClick={() => setAssignOpen(true)}
           sx={{ bgcolor: '#005f73', whiteSpace: 'nowrap', px: 3, textTransform: 'none' }}
         >
-          Assign Pens
+          {t('feeding.common.assignPens')}
         </Button>
       </Box>
 
@@ -301,10 +306,10 @@ const ApplyFeedRecipeShed: React.FC = () => {
 
                  } }}
               >
-                <TableCell>#Sr</TableCell>
-                <TableCell>Shed</TableCell>
-                <TableCell>Pens</TableCell>
-                <TableCell>No of Animals</TableCell>
+                <TableCell>{t('feeding.common.srNo')}</TableCell>
+                <TableCell>{t('feeding.common.shed')}</TableCell>
+                <TableCell>{t('feeding.common.pens')}</TableCell>
+                <TableCell>{t('feeding.common.noOfAnimals')}</TableCell>
                 <TableCell />
                 <TableCell />
               </TableRow>
@@ -342,7 +347,7 @@ const ApplyFeedRecipeShed: React.FC = () => {
                       sx={{ bgcolor: '#005f73', fontSize: 11 }}
                       onClick={() => setDetailShed(s)}
                     >
-                      View Details
+                      {t('feeding.common.viewDetails')}
                     </Button>
                   </TableCell>
                   <TableCell>
@@ -352,7 +357,7 @@ const ApplyFeedRecipeShed: React.FC = () => {
                       sx={{ bgcolor: '#5aaa2b', fontSize: 11 }}
                       onClick={() => openApply(s)}
                     >
-                      Apply Recipe
+                      {t('feeding.common.applyRecipe')}
                     </Button>
                   </TableCell>
                 </TableRow>
@@ -360,7 +365,7 @@ const ApplyFeedRecipeShed: React.FC = () => {
               {!loading && paged.length === 0 && (
                 <TableRow>
                   <TableCell colSpan={6} align="center" sx={{ py: 3 }}>
-                    No sheds found. Use “Add Shed” to create one.
+                    {t('feeding.applyFeedRecipeShed.noShedsFoundAdd')}
                   </TableCell>
                 </TableRow>
               )}
@@ -385,14 +390,14 @@ const ApplyFeedRecipeShed: React.FC = () => {
         fullWidth
       >
         <DialogTitle sx={{ textAlign: 'center', fontWeight: 700, pt: 3 }}>
-          Apply Recipe — {applyShed?.name}
+          {t('feeding.applyFeedRecipeShed.dialogTitle', { name: applyShed?.name })}
         </DialogTitle>
         <DialogContent>
           <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2, mt: 1 }}>
             <TextField
               select
               fullWidth
-              label="Recipe"
+              label={t('feeding.common.recipe')}
               value={selectedRecipe}
               onChange={e => setSelectedRecipe(e.target.value)}
             >
@@ -406,35 +411,34 @@ const ApplyFeedRecipeShed: React.FC = () => {
             <TextField
               select
               fullWidth
-              label="Meal Time"
+              label={t('feeding.common.mealTime')}
               value={mealTime}
               onChange={e => setMealTime(e.target.value)}
             >
               {MEAL_TIMES.map(m => (
                 <MenuItem key={m} value={m}>
-                  {m.charAt(0).toUpperCase() + m.slice(1)}
+                  {t(`feeding.common.mealTimes.${m}`, m.charAt(0).toUpperCase() + m.slice(1))}
                 </MenuItem>
               ))}
             </TextField>
             <TextField
               fullWidth
               type="number"
-              label="Quantity Per Animal (Kg)"
+              label={t('feeding.applyFeedRecipeShed.qtyPerAnimalKg')}
               inputProps={{ min: 0, step: 0.1 }}
               value={qtyPerAnimal}
               onChange={e => setQtyPerAnimal(e.target.value)}
             />
             <TextField
               fullWidth
-              label="Notes (optional)"
+              label={t('feeding.common.notesOptional')}
               multiline
               rows={2}
               value={notes}
               onChange={e => setNotes(e.target.value)}
             />
             <Typography variant="body2" color="text.secondary">
-              Feeding date: <b>{date}</b> — stock will be deducted for all pens in
-              this shed.
+              {t('feeding.common.feedingDate')}: <b>{date}</b> — {t('feeding.applyFeedRecipeShed.stockDeductedNote')}
             </Typography>
           </Box>
         </DialogContent>
@@ -445,7 +449,7 @@ const ApplyFeedRecipeShed: React.FC = () => {
             onClick={() => setApplyRowClosed()}
             disabled={applying}
           >
-            Cancel
+            {t('common.cancel')}
           </Button>
           <Button
             variant="contained"
@@ -456,7 +460,7 @@ const ApplyFeedRecipeShed: React.FC = () => {
             {applying ? (
               <CircularProgress size={22} sx={{ color: '#fff' }} />
             ) : (
-              'Apply Recipe'
+              t('feeding.common.applyRecipe')
             )}
           </Button>
         </DialogActions>
@@ -481,7 +485,7 @@ const ApplyFeedRecipeShed: React.FC = () => {
               }}
             >
               <Typography fontWeight={700} fontSize={18}>
-                {detailShed.name} — Pens &amp; Animals
+                {t('feeding.applyFeedRecipeShed.pensAndAnimals', { name: detailShed.name })}
               </Typography>
               <IconButton
                 onClick={() => setDetailShed(null)}
@@ -496,10 +500,10 @@ const ApplyFeedRecipeShed: React.FC = () => {
                   <TableRow
                     sx={{ '& th': { fontWeight: 700, bgcolor: '#F4FAFD' } }}
                   >
-                    <TableCell sx={{ pl: 4 }}>Pen</TableCell>
-                    <TableCell>Type</TableCell>
-                    <TableCell>Animals</TableCell>
-                    <TableCell sx={{ pr: 4 }}>Tags</TableCell>
+                    <TableCell sx={{ pl: 4 }}>{t('feeding.common.pen')}</TableCell>
+                    <TableCell>{t('feeding.applyFeedRecipeShed.type')}</TableCell>
+                    <TableCell>{t('feeding.common.animals')}</TableCell>
+                    <TableCell sx={{ pr: 4 }}>{t('feeding.applyFeedRecipeShed.tags')}</TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
@@ -519,7 +523,7 @@ const ApplyFeedRecipeShed: React.FC = () => {
                   {detailPens.length === 0 && (
                     <TableRow>
                       <TableCell colSpan={4} align="center" sx={{ py: 3 }}>
-                        No pens assigned to this shed yet. Use “Assign Pens”.
+                        {t('feeding.applyFeedRecipeShed.noPensAssignedUse')}
                       </TableCell>
                     </TableRow>
                   )}
@@ -549,29 +553,29 @@ const ApplyFeedRecipeShed: React.FC = () => {
           >
             <CheckIcon sx={{ fontSize: 60, color: '#18B66F' }} />
             <Typography fontWeight={700} fontSize={18}>
-              Recipe “{result.recipeName}” applied to {result.shedName}!
+              {t('feeding.common.recipeAppliedTo', { recipe: result.recipeName, shed: result.shedName })}
             </Typography>
             <Box sx={{ width: '100%' }}>
               <Typography variant="body2">
-                Feeding date: <b>{result.feeding_date}</b> ({result.meal_time})
+                {t('feeding.common.feedingDate')}: <b>{result.feeding_date}</b> ({t(`feeding.common.mealTimes.${result.meal_time}`, result.meal_time)})
               </Typography>
               <Typography variant="body2">
-                Total animals: <b>{result.totalAnimals}</b> — Pens affected:{' '}
+                {t('feeding.applyFeedRecipeShed.totalAnimals')}: <b>{result.totalAnimals}</b> — {t('feeding.applyFeedRecipeAdjustableShed.pensAffected')}:{' '}
                 <b>{result.pensAffected}</b>
               </Typography>
               <Typography variant="body2">
-                Total feed required: <b>{result.totalFeedRequired} Kg</b>
+                {t('feeding.common.totalFeedRequired')}: <b>{result.totalFeedRequired} {t('feeding.common.kg')}</b>
               </Typography>
               <Typography variant="body2">
-                Total cost: <b>{result.totalCost}</b>
+                {t('feeding.applyFeedRecipeShed.totalCost')}: <b>{result.totalCost}</b>
               </Typography>
               <Divider sx={{ my: 1.5 }} />
               <Table size="small">
                 <TableHead>
                   <TableRow sx={{ '& th': { fontWeight: 600, bgcolor: '#f4fafd' } }}>
-                    <TableCell>Pen</TableCell>
-                    <TableCell>Animals</TableCell>
-                    <TableCell>Feed Qty (Kg)</TableCell>
+                    <TableCell>{t('feeding.common.pen')}</TableCell>
+                    <TableCell>{t('feeding.common.animals')}</TableCell>
+                    <TableCell>{t('feeding.common.feedQtyKg')}</TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
@@ -590,7 +594,7 @@ const ApplyFeedRecipeShed: React.FC = () => {
               sx={{ bgcolor: '#005f73', px: 6 }}
               onClick={() => setResult(null)}
             >
-              Close
+              {t('common.close')}
             </Button>
           </DialogContent>
         )}
@@ -648,6 +652,7 @@ export const AddShedDialog: React.FC<AddShedDialogProps> = ({
   onClose,
   onCreated
 }) => {
+  const { t } = useTranslation();
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
   const [capacity, setCapacity] = useState('');
@@ -666,7 +671,7 @@ export const AddShedDialog: React.FC<AddShedDialogProps> = ({
 
   const handleSave = async () => {
     if (!name.trim()) {
-      toast.warning('Shed name is required!');
+      toast.warning(t('feeding.addShedDialog.nameRequired'));
       return;
     }
     try {
@@ -678,11 +683,11 @@ export const AddShedDialog: React.FC<AddShedDialogProps> = ({
         location: location.trim() || undefined,
         shed_type: shedType
       });
-      toast.success('Shed created successfully!');
+      toast.success(t('feeding.addShedDialog.created'));
       onCreated();
       handleCancel();
     } catch (error: any) {
-      toast.error(error?.response?.data?.message || "Can't create shed!");
+      toast.error(error?.response?.data?.message || t('feeding.addShedDialog.cantCreate'));
     } finally {
       setSaving(false);
     }
@@ -690,30 +695,30 @@ export const AddShedDialog: React.FC<AddShedDialogProps> = ({
 
   return (
     <Dialog open={open} onClose={handleCancel} maxWidth="sm" fullWidth>
-      <DialogTitle sx={{ fontWeight: 'bold' }}>Add Shed</DialogTitle>
+      <DialogTitle sx={{ fontWeight: 'bold' }}>{t('feeding.common.addShed')}</DialogTitle>
       <DialogContent>
         <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2, mt: 2 }}>
           <TextField
-            label="Shed Name"
+            label={t('feeding.addShedDialog.shedName')}
             value={name}
             onChange={e => setName(e.target.value)}
             fullWidth
           />
           <TextField
             select
-            label="Shed Type"
+            label={t('feeding.addShedDialog.shedType')}
             value={shedType}
             onChange={e => setShedType(e.target.value)}
             fullWidth
           >
-            {SHED_TYPES.map(t => (
-              <MenuItem key={t} value={t}>
-                {t.charAt(0).toUpperCase() + t.slice(1)}
+            {SHED_TYPES.map(st => (
+              <MenuItem key={st} value={st}>
+                {t(`feeding.common.shedTypes.${st}`, st.charAt(0).toUpperCase() + st.slice(1))}
               </MenuItem>
             ))}
           </TextField>
           <TextField
-            label="Capacity (optional)"
+            label={t('feeding.addShedDialog.capacityOptional')}
             type="number"
             inputProps={{ min: 0 }}
             value={capacity}
@@ -721,13 +726,13 @@ export const AddShedDialog: React.FC<AddShedDialogProps> = ({
             fullWidth
           />
           <TextField
-            label="Location (optional)"
+            label={t('feeding.addShedDialog.locationOptional')}
             value={location}
             onChange={e => setLocation(e.target.value)}
             fullWidth
           />
           <TextField
-            label="Description (optional)"
+            label={t('feeding.addShedDialog.descriptionOptional')}
             value={description}
             onChange={e => setDescription(e.target.value)}
             fullWidth
@@ -743,7 +748,7 @@ export const AddShedDialog: React.FC<AddShedDialogProps> = ({
           sx={{ textTransform: 'none', mr: 2 }}
           disabled={saving}
         >
-          Cancel
+          {t('common.cancel')}
         </Button>
         <Button
           onClick={handleSave}
@@ -755,7 +760,7 @@ export const AddShedDialog: React.FC<AddShedDialogProps> = ({
             textTransform: 'none'
           }}
         >
-          {saving ? <CircularProgress size={20} sx={{ color: '#fff' }} /> : 'Add'}
+          {saving ? <CircularProgress size={20} sx={{ color: '#fff' }} /> : t('common.add')}
         </Button>
       </DialogActions>
     </Dialog>
@@ -780,6 +785,7 @@ export const AssignPensDialog: React.FC<AssignPensDialogProps> = ({
   onClose,
   onAssigned
 }) => {
+  const { t } = useTranslation();
   const [shedId, setShedId] = useState('');
   const [selectedPens, setSelectedPens] = useState<string[]>([]);
   const [saving, setSaving] = useState(false);
@@ -798,21 +804,21 @@ export const AssignPensDialog: React.FC<AssignPensDialogProps> = ({
 
   const handleAssign = async () => {
     if (!shedId) {
-      toast.warning('Please select a shed');
+      toast.warning(t('feeding.assignPensDialog.selectShedWarning'));
       return;
     }
     if (selectedPens.length === 0) {
-      toast.warning('Please select at least one pen');
+      toast.warning(t('feeding.assignPensDialog.selectPenWarning'));
       return;
     }
     try {
       setSaving(true);
       await assignPensToShed({ shedId, penIds: selectedPens });
-      toast.success('Pens assigned successfully!');
+      toast.success(t('feeding.assignPensDialog.assigned'));
       onAssigned();
       onClose();
     } catch (error: any) {
-      toast.error(error?.response?.data?.message || "Can't assign pens!");
+      toast.error(error?.response?.data?.message || t('feeding.assignPensDialog.cantAssign'));
     } finally {
       setSaving(false);
     }
@@ -820,13 +826,13 @@ export const AssignPensDialog: React.FC<AssignPensDialogProps> = ({
 
   return (
     <Dialog open={open} onClose={onClose} maxWidth="sm" fullWidth>
-      <DialogTitle sx={{ fontWeight: 'bold' }}>Assign Pens To Shed</DialogTitle>
+      <DialogTitle sx={{ fontWeight: 'bold' }}>{t('feeding.assignPensDialog.title')}</DialogTitle>
       <DialogContent>
         <Box sx={{ mt: 2 }}>
           <TextField
             select
             fullWidth
-            label="Shed"
+            label={t('feeding.common.shed')}
             value={shedId}
             onChange={e => setShedId(e.target.value)}
             sx={{ mb: 2 }}
@@ -839,7 +845,7 @@ export const AssignPensDialog: React.FC<AssignPensDialogProps> = ({
           </TextField>
 
           <Typography fontWeight={600} mb={1}>
-            Pens
+            {t('feeding.common.pens')}
           </Typography>
           <Paper variant="outlined" sx={{ maxHeight: 300, overflowY: 'auto' }}>
             {pens.map(p => (
@@ -847,15 +853,22 @@ export const AssignPensDialog: React.FC<AssignPensDialogProps> = ({
                 <Checkbox checked={selectedPens.includes(p.uuid)} size="small" />
                 <ListItemText
                   primary={p.name}
-                  secondary={`${p.animalCount} animal(s)${
-                    p.shed?.name ? ` — currently in ${p.shed.name}` : ' — unassigned'
-                  }`}
+                  secondary={
+                    p.shed?.name
+                      ? t('feeding.assignPensDialog.penSummaryIn', {
+                          count: p.animalCount,
+                          shed: p.shed.name
+                        })
+                      : t('feeding.assignPensDialog.penSummaryUnassigned', {
+                          count: p.animalCount
+                        })
+                  }
                 />
               </MenuItem>
             ))}
             {pens.length === 0 && (
               <Typography sx={{ p: 2 }} color="text.secondary">
-                No pens found.
+                {t('feeding.common.noPensFound')}
               </Typography>
             )}
           </Paper>
@@ -868,7 +881,7 @@ export const AssignPensDialog: React.FC<AssignPensDialogProps> = ({
           sx={{ textTransform: 'none', mr: 2 }}
           disabled={saving}
         >
-          Cancel
+          {t('common.cancel')}
         </Button>
         <Button
           onClick={handleAssign}
@@ -880,7 +893,7 @@ export const AssignPensDialog: React.FC<AssignPensDialogProps> = ({
             textTransform: 'none'
           }}
         >
-          {saving ? <CircularProgress size={20} sx={{ color: '#fff' }} /> : 'Assign'}
+          {saving ? <CircularProgress size={20} sx={{ color: '#fff' }} /> : t('feeding.assignPensDialog.assign')}
         </Button>
       </DialogActions>
     </Dialog>

@@ -11,6 +11,7 @@ import {
   FormControl,
   Grid
 } from '@mui/material';
+import { useTranslation } from 'react-i18next';
 
 interface EditProfessionalInfoModalProps {
   isOpen: boolean;
@@ -36,6 +37,7 @@ const EditProfessionalInfoModal: React.FC<EditProfessionalInfoModalProps> = ({
   initialValues,
   onSave
 }) => {
+  const { t } = useTranslation();
   const [role, setRole] = useState('');
   const [joiningDate, setJoiningDate] = useState('');
   const [salary, setSalary] = useState('');
@@ -78,25 +80,25 @@ const EditProfessionalInfoModal: React.FC<EditProfessionalInfoModalProps> = ({
         }}
       >
         <Typography variant="h6" fontWeight="bold" mb={3}>
-          Edit Professional Info
+          {t('employee.editProfessionalInfo.title')}
         </Typography>
 
         {/* Role Dropdown */}
         <FormControl fullWidth sx={{ mb: 2 }}>
-          <InputLabel>Role</InputLabel>
+          <InputLabel>{t('employee.editProfessionalInfo.role')}</InputLabel>
           <Select
             value={role}
             onChange={(e) => setRole(e.target.value)}
-            label="Role"
+            label={t('employee.editProfessionalInfo.role')}
           >
             {role &&
               !['Manager', 'Developer', 'Designer', 'Admin'].includes(role) && (
                 <MenuItem value={role}>{role}</MenuItem>
               )}
-            <MenuItem value="Manager">Manager</MenuItem>
-            <MenuItem value="Developer">Developer</MenuItem>
-            <MenuItem value="Designer">Designer</MenuItem>
-            <MenuItem value="Admin">Admin</MenuItem>
+            <MenuItem value="Manager">{t('employee.editProfessionalInfo.roles.manager')}</MenuItem>
+            <MenuItem value="Developer">{t('employee.editProfessionalInfo.roles.developer')}</MenuItem>
+            <MenuItem value="Designer">{t('employee.editProfessionalInfo.roles.designer')}</MenuItem>
+            <MenuItem value="Admin">{t('employee.editProfessionalInfo.roles.admin')}</MenuItem>
             {/* Add more roles as needed */}
           </Select>
         </FormControl>
@@ -105,7 +107,7 @@ const EditProfessionalInfoModal: React.FC<EditProfessionalInfoModalProps> = ({
         <TextField
           fullWidth
           type="date"
-          label="Joining Date"
+          label={t('employee.editProfessionalInfo.joiningDate')}
           InputLabelProps={{ shrink: true }}
           variant="outlined"
           value={joiningDate}
@@ -116,7 +118,7 @@ const EditProfessionalInfoModal: React.FC<EditProfessionalInfoModalProps> = ({
         {/* Monthly Salary */}
         <TextField
           fullWidth
-          label="Monthly Salary"
+          label={t('employee.editProfessionalInfo.monthlySalary')}
           variant="outlined"
           value={salary}
           onChange={(e) => setSalary(e.target.value)}
@@ -128,7 +130,7 @@ const EditProfessionalInfoModal: React.FC<EditProfessionalInfoModalProps> = ({
           <Grid item xs={8}>
             <TextField
               fullWidth
-              label="Working Days"
+              label={t('employee.editProfessionalInfo.workingDays')}
               variant="outlined"
               value={workingDays}
               onChange={(e) => setWorkingDays(e.target.value)}
@@ -136,14 +138,14 @@ const EditProfessionalInfoModal: React.FC<EditProfessionalInfoModalProps> = ({
           </Grid>
           <Grid item xs={4}>
             <FormControl fullWidth>
-              <InputLabel>Period</InputLabel>
+              <InputLabel>{t('employee.editProfessionalInfo.period')}</InputLabel>
               <Select
                 value={workingPeriod}
                 onChange={(e) => setWorkingPeriod(e.target.value as 'Week' | 'Month')} // Corrected type casting
-                label="Period"
+                label={t('employee.editProfessionalInfo.period')}
               >
-                <MenuItem value="Week">Week</MenuItem>
-                <MenuItem value="Month">Month</MenuItem>
+                <MenuItem value="Week">{t('employee.attendanceSheet.filter.week')}</MenuItem>
+                <MenuItem value="Month">{t('employee.attendanceSheet.filter.month')}</MenuItem>
               </Select>
             </FormControl>
           </Grid>
@@ -151,7 +153,7 @@ const EditProfessionalInfoModal: React.FC<EditProfessionalInfoModalProps> = ({
 
         <Box display="flex" justifyContent="center" gap={2} mt={3}>
           <Button variant="outlined" sx={{padding:'5px 25px',borderRadius:'8px'}} onClick={onClose}>
-            Cancel
+            {t('common.cancel')}
           </Button>
           <Button variant="contained"  sx={{
               backgroundColor: '#005f73',
@@ -164,7 +166,7 @@ const EditProfessionalInfoModal: React.FC<EditProfessionalInfoModalProps> = ({
                 backgroundColor: '#007f91'
               }
             }} onClick={handleSave}>
-            Save
+            {t('common.save')}
           </Button>
         </Box>
       </Box>

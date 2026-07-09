@@ -1,5 +1,6 @@
 import { useNavigation } from '@react-navigation/native'
 import React, { useCallback, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { ActivityIndicator, RefreshControl, ScrollView, StyleSheet, View } from 'react-native'
 import { useFocusEffect } from '@react-navigation/native'
 import Toast from 'react-native-toast-message'
@@ -21,6 +22,7 @@ type Section = {
 }
 
 const HerdAlerts = () => {
+  const { t } = useTranslation()
   const navigation = useNavigation<any>()
   const [alerts, setAlerts] = useState<any>(null)
   const [loading, setLoading] = useState(false)
@@ -32,19 +34,19 @@ const HerdAlerts = () => {
       const res = await getHerdAlerts()
       setAlerts(res?.data?.data || null)
     } catch (e) {
-      Toast.show({ type: 'error', text1: 'Error', text2: getNormalizedError(e) })
+      Toast.show({ type: 'error', text1: t('health.common.error'), text2: getNormalizedError(e) })
     } finally {
       setLoading(false)
       setRefreshing(false)
     }
-  }, [])
+  }, [t])
 
   useFocusEffect(useCallback(() => { load() }, [load]))
 
   const animalCard = (rows: (item: any) => any[]) => (item: any, i: number) => (
     <InfoCard
       key={i}
-      title={item.tagName || item.animal?.tagName || item.name || 'Animal'}
+      title={item.tagName || item.animal?.tagName || item.name || t('health.common.animal')}
       leftIcon={{ type: Icons.MaterialCommunityIcons, name: 'cow' }}
       rows={rows(item)}
     />
@@ -53,50 +55,50 @@ const HerdAlerts = () => {
   const sections: Section[] = [
     {
       key: 'pregnancyCheckDue',
-      title: 'Pregnancy Check Due',
+      title: t('health.herdAlerts.pregnancyCheckDue'),
       icon: 'clipboard-pulse',
       render: animalCard(a => [
-        { label: 'Category', value: a.animalCategory },
-        { label: 'Inseminated', value: a.inseminated_date }
+        { label: t('health.herdAlerts.category'), value: a.animalCategory },
+        { label: t('health.herdAlerts.inseminated'), value: a.inseminated_date }
       ])
     },
     {
       key: 'dryOffDue',
-      title: 'Dry-Off Due',
+      title: t('health.herdAlerts.dryOffDue'),
       icon: 'cup-off',
       render: animalCard(a => [
-        { label: 'Dry-off due', value: a.dryOffDueDate },
-        { label: 'Expected calving', value: a.expectedCalvingDate }
+        { label: t('health.herdAlerts.dryOffDueLabel'), value: a.dryOffDueDate },
+        { label: t('health.herdAlerts.expectedCalving'), value: a.expectedCalvingDate }
       ])
     },
     {
       key: 'calvingExpected',
-      title: 'Calving Expected',
+      title: t('health.herdAlerts.calvingExpected'),
       icon: 'cow',
       render: animalCard(a => [
-        { label: 'Expected calving', value: a.expectedCalvingDate }
+        { label: t('health.herdAlerts.expectedCalving'), value: a.expectedCalvingDate }
       ])
     },
     {
       key: 'heatWatch',
-      title: 'Heat Watch',
+      title: t('health.herdAlerts.heatWatch'),
       icon: 'heart-pulse',
-      render: animalCard(a => [{ label: 'Reason', value: a.reason }])
+      render: animalCard(a => [{ label: t('health.herdAlerts.reason'), value: a.reason }])
     },
     {
       key: 'activeMilkWithdrawals',
-      title: 'Active Withdrawals',
+      title: t('health.common.activeWithdrawals'),
       icon: 'cup-off',
       render: animalCard(a => [
-        { label: 'Medicine', value: a.medicineName },
-        { label: 'Milk withdrawal until', value: a.milkWithdrawalUntil }
+        { label: t('health.common.medicine'), value: a.medicineName },
+        { label: t('health.common.milkWithdrawalUntil'), value: a.milkWithdrawalUntil }
       ])
     }
   ]
 
   return (
     <AppContainer>
-      <AppHeader title="Herd Alerts" showBack onPressHam={() => navigation.openDrawer?.()} />
+      <AppHeader title={t('health.herdAlerts.title')} showBack onPressHam={() => navigation.openDrawer?.()} />
       {loading && !refreshing ? (
         <View style={styles.center}>
           <ActivityIndicator size="large" color={COLORS.primaryMain} />
@@ -122,7 +124,7 @@ const HerdAlerts = () => {
                 </View>
                 {items.length === 0 ? (
                   <AppText fontSize="caption" color="descriptionColor" style={{ marginBottom: RF(8) }}>
-                    Nothing due.
+                    {t('health.herdAlerts.nothingDue')}
                   </AppText>
                 ) : (
                   items.map((item, i) => section.render(item, i))

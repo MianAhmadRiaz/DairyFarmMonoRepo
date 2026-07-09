@@ -10,6 +10,7 @@ import {
   InputAdornment,
 } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
+import { useTranslation } from 'react-i18next';
 import { tokens } from '../../shared/theme/theme';
 import {
   fetchChartOfAccounts,
@@ -19,6 +20,7 @@ import {
 import PageContainer from '../../shared/components/Layout/PageContainer';
 
 export default function OpeningVoucherAccount() {
+  const { t } = useTranslation();
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   const pageBg = theme.palette.mode === 'dark' ? colors.primary[500] : '#F5FAF7';
@@ -62,15 +64,15 @@ export default function OpeningVoucherAccount() {
           updateAccount(acc.id, { opening_balance: Number(openingBalances[acc.id] || 0) } as any)
         )
       );
-      alert('Opening balances saved!');
+      alert(t('accounts.openingVoucherAccount.saveSuccess'));
     } catch (e) {
       console.error('Failed to save opening balances', e);
-      alert('Failed to save opening balances.');
+      alert(t('accounts.openingVoucherAccount.saveError'));
     }
   };
 
   return (
-    <PageContainer title="Chart of Accounts Opening">
+    <PageContainer title={t('accounts.openingVoucherAccount.title')}>
         {/* Title Row */}
         <Stack direction="row" alignItems="center" justifyContent="flex-end" sx={{ mb: 1 }}>
           <Stack direction="row" spacing={1} alignItems="center" flexWrap="wrap">
@@ -84,13 +86,13 @@ export default function OpeningVoucherAccount() {
                 px: 3,
               }}
             >
-              Save
+              {t('common.save')}
             </Button>
 
             {/* Search */}
             <TextField
               size="small"
-              placeholder="Search..."
+              placeholder={t('common.search')}
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               InputProps={{
@@ -108,8 +110,8 @@ export default function OpeningVoucherAccount() {
               <thead>
                 <tr>
                   <th style={th}>#</th>
-                  <th style={{ ...th, minWidth: 420 }}>1st Level</th>
-                  <th style={{ ...th, minWidth: 200, textAlign: 'right' }}>Opening</th>
+                  <th style={{ ...th, minWidth: 420 }}>{t('accounts.openingVoucherAccount.firstLevel')}</th>
+                  <th style={{ ...th, minWidth: 200, textAlign: 'right' }}>{t('accounts.openingVoucherAccount.opening')}</th>
                 </tr>
               </thead>
 
@@ -142,7 +144,7 @@ export default function OpeningVoucherAccount() {
                 ))}
                 {filteredAccounts.length === 0 && (
                   <tr>
-                    <td style={{ ...td, padding: 24 }} colSpan={3}>No data</td>
+                    <td style={{ ...td, padding: 24 }} colSpan={3}>{t('accounts.common.noData')}</td>
                   </tr>
                 )}
               </tbody>

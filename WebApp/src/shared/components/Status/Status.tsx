@@ -1,5 +1,6 @@
 import React from 'react';
 import { Box, Typography, Chip } from '@mui/material';
+import { useTranslation } from 'react-i18next';
 
 interface StatusProps {
   status: 'active' | 'inactive' | 'pending' | 'completed' | 'cancelled';
@@ -8,20 +9,22 @@ interface StatusProps {
 }
 
 const Status: React.FC<StatusProps> = ({ status, label, size = 'medium' }) => {
+  const { t } = useTranslation();
+
   const getStatusColor = () => {
     switch (status) {
       case 'active':
-        return { bg: '#E9F4D1', text: '#7DAD3F', label: 'Active' };
+        return { bg: '#E9F4D1', text: '#7DAD3F', label: t('shared.status.active') };
       case 'inactive':
-        return { bg: '#FCD1B259', text: '#F79009', label: 'Inactive' };
+        return { bg: '#FCD1B259', text: '#F79009', label: t('shared.status.inactive') };
       case 'pending':
-        return { bg: '#fff3e0', text: '#ef6c00', label: 'Pending' };
+        return { bg: '#fff3e0', text: '#ef6c00', label: t('shared.status.pending') };
       case 'completed':
-        return { bg: '#e3f2fd', text: '#1565c0', label: 'Completed' };
+        return { bg: '#e3f2fd', text: '#1565c0', label: t('shared.status.completed') };
       case 'cancelled':
-        return { bg: '#f5f5f5', text: '#616161', label: 'Cancelled' };
+        return { bg: '#f5f5f5', text: '#616161', label: t('shared.status.cancelled') };
       default:
-        return { bg: '#f5f5f5', text: '#616161', label: 'Unknown' };
+        return { bg: '#f5f5f5', text: '#616161', label: t('shared.status.unknown') };
     }
   };
 

@@ -30,6 +30,7 @@ import {
   ArrowDropDown as ArrowIcon,
 } from '@mui/icons-material';
 import { ToastContainer, toast } from 'react-toastify';
+import { useTranslation } from 'react-i18next';
 import 'react-toastify/dist/ReactToastify.css';
 import CustomPagination from '../../shared/components/Custom Pagination/CustomPagination';
 import PageContainer from '../../shared/components/Layout/PageContainer';
@@ -43,15 +44,6 @@ import {
 
 /* ------------------------------------------------------------------ */
 type ColKey = 'sr' | 'group' | 'schedules' | 'animals' | 'planned' | 'actual' | 'totalCost';
-const COL_TITLES: Record<ColKey, string> = {
-  sr: 'Sr#',
-  group: 'Group',
-  schedules: 'Schedules',
-  animals: 'Animals',
-  planned: 'Planned Qty',
-  actual: 'Actual Qty',
-  totalCost: 'Total Feed Cost',
-};
 const ROWS_PER_PAGE = 10;
 
 const fmt = (n: number | string) => {
@@ -63,7 +55,21 @@ const fmt = (n: number | string) => {
 
 /* ================================================================== */
 const DateWiseFeedReport: React.FC = () => {
+  const { t } = useTranslation();
   const theme = useTheme();
+
+  const colTitles = useMemo<Record<ColKey, string>>(
+    () => ({
+      sr: t('feeding.dateWiseFeedReport.columns.sr'),
+      group: t('feeding.dateWiseFeedReport.columns.group'),
+      schedules: t('feeding.dateWiseFeedReport.columns.schedules'),
+      animals: t('feeding.common.animals'),
+      planned: t('feeding.dateWiseFeedReport.columns.plannedQty'),
+      actual: t('feeding.dateWiseFeedReport.columns.actualQty'),
+      totalCost: t('feeding.dateWiseFeedReport.columns.totalFeedCost'),
+    }),
+    [t],
+  );
 
   /* ---------------- filters & fetch ------------------ */
   const [from, setFrom] = useState('');
@@ -75,7 +81,7 @@ const DateWiseFeedReport: React.FC = () => {
 
   const handleGet = async () => {
     if (!from || !to) {
-      toast.warning('Start date and end date are required');
+      toast.warning(t('feeding.common.datesRequired'));
       return;
     }
     try {
@@ -90,7 +96,7 @@ const DateWiseFeedReport: React.FC = () => {
       setReport(data || null);
       setPage(1);
     } catch (error: any) {
-      toast.error(error?.response?.data?.message || "Can't load date wise report");
+      toast.error(error?.response?.data?.message || t('feeding.dateWiseFeedReport.cantLoad'));
     } finally {
       setLoading(false);
     }
@@ -134,7 +140,7 @@ const DateWiseFeedReport: React.FC = () => {
 
   /* ============================================================= */
   return (
-    <PageContainer title="Date Wise Report" maxWidth="1100px">
+    <PageContainer title={t('feeding.dateWiseFeedReport.title')} maxWidth="1100px">
       {/* ================= TOP CARD (dates + GET) ================= */}
       <Paper
         elevation={1}
@@ -149,8 +155,8 @@ const DateWiseFeedReport: React.FC = () => {
         }}
       >
         {[
-          { label: 'Start Date', val: from, set: setFrom },
-          { label: 'End Date',   val: to,   set: setTo   },
+          { label: t('feeding.common.startDate'), val: from, set: setFrom },
+          { label: t('feeding.common.endDate'),   val: to,   set: setTo   },
         ].map(({ label, val, set }) => (
           <Box key={label} sx={{ minWidth: 190 }}>
             <Typography variant="body2" fontWeight={600} mb={0.5}>
@@ -168,7 +174,7 @@ const DateWiseFeedReport: React.FC = () => {
 
         <Box sx={{ minWidth: 160 }}>
           <Typography variant="body2" fontWeight={600} mb={0.5}>
-            Group By
+            {t('feeding.dateWiseFeedReport.groupBy')}
           </Typography>
           <TextField
             select
@@ -179,9 +185,9 @@ const DateWiseFeedReport: React.FC = () => {
               setGroupBy(e.target.value as 'date' | 'shed' | 'recipe')
             }
           >
-            <MenuItem value="date">Date</MenuItem>
-            <MenuItem value="shed">Shed</MenuItem>
-            <MenuItem value="recipe">Recipe</MenuItem>
+            <MenuItem value="date">{t('feeding.common.date')}</MenuItem>
+            <MenuItem value="shed">{t('feeding.common.shed')}</MenuItem>
+            <MenuItem value="recipe">{t('feeding.common.recipe')}</MenuItem>
           </TextField>
         </Box>
 
@@ -195,7 +201,7 @@ const DateWiseFeedReport: React.FC = () => {
           }}
           onClick={handleGet}
         >
-          Get
+          {t('feeding.common.get')}
         </Button>
       </Paper>
 
@@ -209,7 +215,7 @@ const DateWiseFeedReport: React.FC = () => {
 
       >
         <TextField
-          placeholder="Search"
+          placeholder={t('common.search')}
           size="small"
           sx={{ flexGrow: 1, maxWidth: 260, backgroundColor: theme.palette.background.paper,
     boxShadow: "0 4px 12px rgba(0,0,0,0.05)",
@@ -234,7 +240,7 @@ const DateWiseFeedReport: React.FC = () => {
           sx={{ textTransform: 'none', px: 3, backgroundColor: theme.palette.background.paper,
     boxShadow: "0 4px 12px rgba(0,0,0,0.1)" }}
         >
-          Filter
+          {t('feeding.common.filter')}
         </Button>
       </Box>
 
@@ -244,10 +250,10 @@ const DateWiseFeedReport: React.FC = () => {
         open={Boolean(filterAnchor)}
         onClose={() => setFilterAnchor(null)}
       >
-        {(Object.keys(COL_TITLES) as ColKey[]).map(k => (
+        {(Object.keys(colTitles) as ColKey[]).map(k => (
           <MenuItem key={k} onClick={() => toggleCol(k)}>
             <Checkbox checked={colVisible[k]} />
-            <ListItemText primary={COL_TITLES[k]} />
+            <ListItemText primary={colTitles[k]} />
           </MenuItem>
         ))}
       </Menu>
@@ -273,7 +279,7 @@ sx={{
        </Box>
       ) : !report || filtered.length === 0 ? (
         <Typography align="center" sx={{ mt: 6, fontWeight: 600 }}>
-          No&nbsp;Result&nbsp;Found&nbsp;!
+          {t('feeding.common.noResultFound')}
         </Typography>
       ) : (
         <>
@@ -290,16 +296,16 @@ sx={{
                     },
                   }}
                 >
-                  {colVisible.sr        && <TableCell>Sr#</TableCell>}
-                  {colVisible.group     && <TableCell>Group</TableCell>}
-                  {colVisible.schedules && <TableCell>Schedules</TableCell>}
-                  {colVisible.animals   && <TableCell>Animals</TableCell>}
-                  {colVisible.planned   && <TableCell>Planned&nbsp;Qty</TableCell>}
-                  {colVisible.actual    && <TableCell>Actual&nbsp;Qty</TableCell>}
+                  {colVisible.sr        && <TableCell>{colTitles.sr}</TableCell>}
+                  {colVisible.group     && <TableCell>{colTitles.group}</TableCell>}
+                  {colVisible.schedules && <TableCell>{colTitles.schedules}</TableCell>}
+                  {colVisible.animals   && <TableCell>{colTitles.animals}</TableCell>}
+                  {colVisible.planned   && <TableCell>{colTitles.planned}</TableCell>}
+                  {colVisible.actual    && <TableCell>{colTitles.actual}</TableCell>}
                   {colVisible.totalCost && (
-                    <TableCell>Total Feed Cost</TableCell>
+                    <TableCell>{colTitles.totalCost}</TableCell>
                   )}
-                  <TableCell align="center">Details</TableCell>
+                  <TableCell align="center">{t('feeding.dateWiseFeedReport.details')}</TableCell>
                 </TableRow>
               </TableHead>
 
@@ -353,7 +359,7 @@ sx={{
                           '&:hover': { bgcolor: '#004a5a' },
                         }}
                       >
-                        Schedule&nbsp;Details
+                        {t('feeding.dateWiseFeedReport.scheduleDetails')}
                       </Button>
                     </TableCell>
                   </TableRow>
@@ -367,7 +373,7 @@ sx={{
                     }
                     sx={{ fontWeight: 700, fontSize: '1.05rem' }}
                   >
-                    TOTAL:
+                    {t('feeding.common.totalColon')}
                   </TableCell>
                   {colVisible.schedules && (
                     <TableCell sx={{ fontWeight: 700 }}>
@@ -421,8 +427,10 @@ sx={{
         {report.summary.topIngredients.length > 0 && (
           <Paper elevation={1} sx={{ borderRadius: 2, p: 2, mb: { xs: 1, md: 2 } }}>
             <Typography fontWeight={700} mb={1}>
-              Top Ingredients Used ({report.summary.dateRange.start_date} —{' '}
-              {report.summary.dateRange.end_date})
+              {t('feeding.dateWiseFeedReport.topIngredientsUsed', {
+                startDate: report.summary.dateRange.start_date,
+                endDate: report.summary.dateRange.end_date,
+              })}
             </Typography>
             <Grid container spacing={1}>
               {report.summary.topIngredients.map(ing => (
@@ -438,7 +446,7 @@ sx={{
                   >
                     <Typography variant="body2">{ing.name}</Typography>
                     <Typography variant="body2" fontWeight={700}>
-                      {fmt(ing.totalQuantity)} Kg
+                      {fmt(ing.totalQuantity)} {t('feeding.common.kg')}
                     </Typography>
                   </Paper>
                 </Grid>
@@ -459,7 +467,7 @@ sx={{
         {openRow && (
           <>
             <DialogTitle sx={{ textAlign: 'center', fontWeight: 700, pb: 1 }}>
-              {openRow.groupName} — Schedules
+              {t('feeding.dateWiseFeedReport.groupSchedules', { name: openRow.groupName })}
             </DialogTitle>
 
             <DialogContent sx={{ pt: 0 }}>
@@ -468,17 +476,17 @@ sx={{
                   <TableRow
                     sx={{ '& th': { fontWeight: 600,   backgroundColor: "#F8F9FA" } }}
                   >
-                    <TableCell>#Sr</TableCell>
-                    <TableCell>Date</TableCell>
-                    <TableCell>Meal</TableCell>
-                    <TableCell>Shed</TableCell>
-                    <TableCell>Pen</TableCell>
-                    <TableCell>Recipe</TableCell>
-                    <TableCell>Animals</TableCell>
-                    <TableCell>Planned</TableCell>
-                    <TableCell>Actual</TableCell>
-                    <TableCell>Status</TableCell>
-                    <TableCell>Cost</TableCell>
+                    <TableCell>{t('feeding.common.srNo')}</TableCell>
+                    <TableCell>{t('feeding.common.date')}</TableCell>
+                    <TableCell>{t('feeding.dateWiseFeedReport.meal')}</TableCell>
+                    <TableCell>{t('feeding.common.shed')}</TableCell>
+                    <TableCell>{t('feeding.common.pen')}</TableCell>
+                    <TableCell>{t('feeding.common.recipe')}</TableCell>
+                    <TableCell>{t('feeding.common.animals')}</TableCell>
+                    <TableCell>{t('feeding.dateWiseFeedReport.planned')}</TableCell>
+                    <TableCell>{t('feeding.dateWiseFeedReport.actual')}</TableCell>
+                    <TableCell>{t('feeding.common.status')}</TableCell>
+                    <TableCell>{t('feeding.dateWiseFeedReport.cost')}</TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
@@ -488,14 +496,14 @@ sx={{
                       <TableCell sx={{ whiteSpace: 'nowrap' }}>
                         {s.feeding_date}
                       </TableCell>
-                      <TableCell>{s.meal_time}</TableCell>
+                      <TableCell>{t(`feeding.common.mealTimes.${s.meal_time}`, s.meal_time)}</TableCell>
                       <TableCell>{s.shed?.name || '-'}</TableCell>
                       <TableCell>{s.pen?.name || '-'}</TableCell>
                       <TableCell>{s.recipe?.name || '-'}</TableCell>
                       <TableCell>{fmt(s.animals_count)}</TableCell>
                       <TableCell>{fmt(s.scheduled_quantity)}</TableCell>
                       <TableCell>{fmt(s.actual_quantity)}</TableCell>
-                      <TableCell>{s.feeding_status.replace(/_/g, ' ')}</TableCell>
+                      <TableCell>{t(`feeding.common.feedingStatuses.${s.feeding_status}`, s.feeding_status.replace(/_/g, ' '))}</TableCell>
                       <TableCell>{fmt(s.estimatedCost)}</TableCell>
                     </TableRow>
                   ))}
@@ -509,7 +517,7 @@ sx={{
                 onClick={() => setOpenRow(null)}
                 sx={{ bgcolor: '#005f73', width: 110 }}
               >
-                Close
+                {t('common.close')}
               </Button>
             </DialogActions>
           </>

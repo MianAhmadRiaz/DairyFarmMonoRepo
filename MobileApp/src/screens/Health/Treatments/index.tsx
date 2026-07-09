@@ -1,5 +1,6 @@
 import { useNavigation } from '@react-navigation/native'
 import React, { useCallback, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { useFocusEffect } from '@react-navigation/native'
 import { Alert, TouchableOpacity } from 'react-native'
 import Toast from 'react-native-toast-message'
@@ -16,6 +17,7 @@ import { RF } from 'shared/theme/responsive'
 const todayStr = new Date().toISOString().split('T')[0]
 
 const Treatments = () => {
+  const { t } = useTranslation()
   const navigation = useNavigation<any>()
   const { can } = usePermissions()
   const canManage = can(PERMISSIONS.HEALTH_MANAGE)
@@ -30,28 +32,28 @@ const Treatments = () => {
       const rows = res?.data?.data?.treatments || []
       setTreatments(Array.isArray(rows) ? rows : [])
     } catch (e) {
-      Toast.show({ type: 'error', text1: 'Error', text2: getNormalizedError(e) })
+      Toast.show({ type: 'error', text1: t('health.common.error'), text2: getNormalizedError(e) })
     } finally {
       setLoading(false)
       setRefreshing(false)
     }
-  }, [])
+  }, [t])
 
   useFocusEffect(useCallback(() => { load() }, [load]))
 
   const onDelete = (item: any) => {
-    Alert.alert('Delete Treatment', 'Are you sure you want to delete this treatment record?', [
-      { text: 'Cancel', style: 'cancel' },
+    Alert.alert(t('health.treatments.deleteTreatment'), t('health.treatments.deleteConfirm'), [
+      { text: t('common.cancel'), style: 'cancel' },
       {
-        text: 'Delete',
+        text: t('common.delete'),
         style: 'destructive',
         onPress: async () => {
           try {
             await deleteTreatment(item.uuid)
-            Toast.show({ type: 'success', text1: 'Success', text2: 'Treatment deleted' })
+            Toast.show({ type: 'success', text1: t('health.common.success'), text2: t('health.treatments.treatmentDeleted') })
             load()
           } catch (e) {
-            Toast.show({ type: 'error', text1: 'Error', text2: getNormalizedError(e) })
+            Toast.show({ type: 'error', text1: t('health.common.error'), text2: getNormalizedError(e) })
           }
         }
       }
@@ -62,16 +64,16 @@ const Treatments = () => {
     const underWithdrawal = item.milkWithdrawalUntil && item.milkWithdrawalUntil >= todayStr
     return (
       <InfoCard
-        title={item.animal?.tagName || item.animal?.name || 'Animal'}
+        title={item.animal?.tagName || item.animal?.name || t('health.common.animal')}
         subtitle={item.date}
         leftIcon={{ type: Icons.MaterialCommunityIcons, name: 'medical-bag' }}
         rows={[
-          { label: 'Type', value: item.treatmentType },
-          { label: 'Diagnosis', value: item.diagnosis },
-          { label: 'Medicine', value: item.medicineName },
-          { label: 'Vet', value: item.vetName }
+          { label: t('health.treatments.type'), value: item.treatmentType },
+          { label: t('health.treatments.diagnosis'), value: item.diagnosis },
+          { label: t('health.common.medicine'), value: item.medicineName },
+          { label: t('health.treatments.vet'), value: item.vetName }
         ]}
-        badge={underWithdrawal ? { text: `Withdrawal until ${item.milkWithdrawalUntil}`, color: 'error' } : undefined}
+        badge={underWithdrawal ? { text: t('health.treatments.withdrawalUntil', { date: item.milkWithdrawalUntil }), color: 'error' } : undefined}
         right={
           canManage ? (
             <TouchableOpacity onPress={() => onDelete(item)} hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}>
@@ -85,13 +87,13 @@ const Treatments = () => {
 
   return (
     <ListScreen
-      title="Treatments"
+      title={t('health.treatments.title')}
       data={treatments}
       renderItem={renderItem}
       loading={loading}
       refreshing={refreshing}
       onRefresh={() => { setRefreshing(true); load() }}
-      emptyText="No treatments recorded yet."
+      emptyText={t('health.treatments.emptyText')}
       keyExtractor={(item: any, i) => item.uuid || String(i)}
       onPressAdd={canManage ? () => navigation.navigate('AddTreatment') : undefined}
     />

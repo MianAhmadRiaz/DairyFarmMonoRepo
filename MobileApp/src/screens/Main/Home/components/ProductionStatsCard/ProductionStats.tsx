@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { FlatList, StyleSheet, View } from 'react-native';
 import AnyIcon, { Icons } from 'shared/components/AnyIcon';
 import AppText from 'shared/components/AppText/AppText';
@@ -8,11 +9,16 @@ import GLOBAL_STYLE from 'shared/theme/global';
 import { RF } from 'shared/theme/responsive';
 
 const ProductionStats = () => {
+  const { t } = useTranslation();
   const productionStats = [
-    { id: '1', label: "Today's Milk (L)", value: '2,750' },
-    { id: '2', label: "Yesterday's Milk (L)", value: '2,750' },
-    { id: '3', label: 'Avg/Cow (L)', value: '23.5' },
-    { id: '4', label: 'Trend', value: '+2%' },
+    { id: '1', label: t('main.productionStats.todaysMilk'), value: '2,750' },
+    {
+      id: '2',
+      label: t('main.productionStats.yesterdaysMilk'),
+      value: '2,750',
+    },
+    { id: '3', label: t('main.productionStats.avgPerCow'), value: '23.5' },
+    { id: '4', label: t('main.productionStats.trend'), value: '+2%' },
   ];
 
   const renderItem = ({item}:any ) => (
@@ -21,7 +27,7 @@ const ProductionStats = () => {
         {item.label}
       </AppText>
 
-      {item.label == 'Trend' ? (
+      {item.id === '4' ? (
         <View style={GLOBAL_STYLE.ROW}>
           <AppText
             fontSize="h6"
@@ -51,7 +57,7 @@ const ProductionStats = () => {
   return (
     <View>
       <AppText semiBold fontSize="h7" style={styles.header}>
-        Production Stats
+        {t('main.productionStats.title')}
       </AppText>
       <BorderLine />
       <FlatList

@@ -11,6 +11,7 @@ import {
   CircularProgress
 } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { fetchAnimals } from '../../../shared/services/animalinfo.service';
 import {
   addPregnancyEvent,
@@ -32,6 +33,7 @@ interface PregnancyHistory {
 
 const AddPregnancyTest = () => {
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
   // State variables
   const [tagId, setTagId] = useState('');
@@ -113,7 +115,7 @@ const AddPregnancyTest = () => {
     !recheck
   ) {
     if (toastId.current === null || !toast.isActive(toastId.current)) {
-      toastId.current = toast.warn('Please fill all the missing required fields');
+      toastId.current = toast.warn(t('breeding.common.fillMissingFields'));
     }
     return;
   }
@@ -153,7 +155,7 @@ const AddPregnancyTest = () => {
   try {
     await addPregnancyEvent(params);
     toast.dismiss(); // Remove old error toast
-    toast.success('Pregnancy test added successfully!', {
+    toast.success(t('breeding.pregnancyTestAdd.addSuccess'), {
       onClose: () => window.location.reload()
     });
   } catch (error:any) {
@@ -161,7 +163,7 @@ const AddPregnancyTest = () => {
     //   `Error: ${error.response?.data?.message || 'Failed to add test'}`
     // );
     if (toastId.current === null || !toast.isActive(toastId.current)) {
-  toastId.current = toast.error('Failed to Add Event!');
+  toastId.current = toast.error(t('breeding.pregnancyTestAdd.addError'));
 }
 
     console.error('Server Response:', error.response?.data);
@@ -171,7 +173,7 @@ const AddPregnancyTest = () => {
 };
 
   return (
-    <PageContainer title="Pregnancy Test / Add New Event">
+    <PageContainer title={t('breeding.pregnancyTestAdd.pageTitle')}>
       <Typography
         variant="body2"
         sx={{
@@ -182,7 +184,7 @@ const AddPregnancyTest = () => {
         }}
          onClick={() => navigate(-1)}
       >
-        ← Back
+        ← {t('breeding.common.back')}
       </Typography>
 
       <Box
@@ -199,7 +201,7 @@ const AddPregnancyTest = () => {
           <Grid item xs={12} sm={6} md={6}>
             <TextField
               fullWidth
-              label="Tag Id"
+              label={t('breeding.common.tagId')}
               select
               value={tagId}
               onChange={e => setTagId(e.target.value)}
@@ -219,7 +221,7 @@ const AddPregnancyTest = () => {
           <Grid item xs={12} sm={6}>
             <TextField
               fullWidth
-              label="Check Date"
+              label={t('breeding.pregnancyTestAdd.checkDate')}
               type="date"
               value={checkDate}
               onChange={e => setCheckDate(e.target.value)}
@@ -231,7 +233,7 @@ const AddPregnancyTest = () => {
           <Grid item xs={12} sm={6}>
             <TextField
               fullWidth
-              label="Cost in Pkr"
+              label={t('breeding.pregnancyTestAdd.costInPkr')}
               type="number"
               value={cost}
               onChange={e => setCost(e.target.value)}
@@ -242,13 +244,13 @@ const AddPregnancyTest = () => {
           <Grid item xs={12} sm={6}>
             <TextField
               fullWidth
-              label="Pregnancy Result"
+              label={t('breeding.pregnancyTestAdd.pregnancyResult')}
               select
               value={pregnancyResult}
               onChange={e => setPregnancyResult(e.target.value)}
             >
-              <MenuItem value="Positive">Positive</MenuItem>
-              <MenuItem value="Negative">Negative</MenuItem>
+              <MenuItem value="Positive">{t('breeding.pregnancyTestAdd.positive')}</MenuItem>
+              <MenuItem value="Negative">{t('breeding.pregnancyTestAdd.negative')}</MenuItem>
             </TextField>
           </Grid>
 
@@ -256,7 +258,7 @@ const AddPregnancyTest = () => {
           <Grid item xs={12} sm={6}>
             <TextField
               fullWidth
-              label="Technician"
+              label={t('breeding.pregnancyTestAdd.technician')}
               select
               value={technician}
               onChange={e => setTechnician(e.target.value)}
@@ -273,13 +275,13 @@ const AddPregnancyTest = () => {
           <Grid item xs={12} sm={6}>
             <TextField
               fullWidth
-              label="P-Test Technique"
+              label={t('breeding.pregnancyTestAdd.pTestTechnique')}
               select
               value={pTestTechnique}
               onChange={e => setPTestTechnique(e.target.value)}
             >
-              <MenuItem value="by hand">By Hand</MenuItem>
-              <MenuItem value="ultrasound">Ultrasound</MenuItem>
+              <MenuItem value="by hand">{t('breeding.pregnancyTestAdd.byHand')}</MenuItem>
+              <MenuItem value="ultrasound">{t('breeding.pregnancyTestAdd.ultrasound')}</MenuItem>
             </TextField>
           </Grid>
 
@@ -287,13 +289,13 @@ const AddPregnancyTest = () => {
           <Grid item xs={12} sm={6}>
             <TextField
               fullWidth
-              label="Recheck"
+              label={t('breeding.pregnancyTestAdd.recheck')}
               select
               value={recheck}
               onChange={e => setRecheck(e.target.value)}
             >
-              <MenuItem value="Yes">Yes</MenuItem>
-              <MenuItem value="No">No</MenuItem>
+              <MenuItem value="Yes">{t('breeding.common.yes')}</MenuItem>
+              <MenuItem value="No">{t('breeding.common.no')}</MenuItem>
             </TextField>
           </Grid>
         </Grid>
@@ -308,12 +310,12 @@ const AddPregnancyTest = () => {
           }}
         >
           <Typography variant="h6" fontWeight="bold">
-            History
+            {t('breeding.pregnancyTestAdd.history')}
           </Typography>
 
           {!pregnancyHistory ? (
             <Typography color="text.secondary">
-              No pregnancy history found.
+              {t('breeding.pregnancyTestAdd.noHistory')}
             </Typography>
           ) : (
             <Grid
@@ -326,25 +328,25 @@ const AddPregnancyTest = () => {
               }}
             >
               <Grid item xs={6}>
-                <Typography fontWeight="bold">Breed Date</Typography>
+                <Typography fontWeight="bold">{t('breeding.pregnancyTestAdd.breedDate')}</Typography>
                 <Typography color="text.secondary">
                   {new Date(pregnancyHistory.breed_date).toLocaleDateString()}
                 </Typography>
               </Grid>
               <Grid item xs={6}>
-                <Typography fontWeight="bold">Breed With</Typography>
+                <Typography fontWeight="bold">{t('breeding.pregnancyTestAdd.breedWith')}</Typography>
                 <Typography color="text.secondary">
                   {pregnancyHistory.breed_with}
                 </Typography>
               </Grid>
               <Grid item xs={6}>
-                <Typography fontWeight="bold">PG Days</Typography>
+                <Typography fontWeight="bold">{t('breeding.pregnancyTestAdd.pgDays')}</Typography>
                 <Typography color="text.secondary">
                   {pregnancyHistory.pg_days}
                 </Typography>
               </Grid>
               <Grid item xs={6}>
-                <Typography fontWeight="bold">Expected Dryoff Date</Typography>
+                <Typography fontWeight="bold">{t('breeding.pregnancyTestAdd.expectedDryoffDate')}</Typography>
                 <Typography color="text.secondary">
                   {new Date(
                     pregnancyHistory.exp_dryoff_date
@@ -352,17 +354,17 @@ const AddPregnancyTest = () => {
                 </Typography>
               </Grid>
               <Grid item xs={6}>
-                <Typography fontWeight="bold">Previous Ptest Date</Typography>
+                <Typography fontWeight="bold">{t('breeding.pregnancyTestAdd.previousPtestDate')}</Typography>
                 <Typography color="text.secondary">
                   {pregnancyHistory.prev_test_date
                     ? new Date(
                         pregnancyHistory.prev_test_date
                       ).toLocaleDateString()
-                    : 'N/A'}
+                    : t('breeding.pregnancyTestAdd.na')}
                 </Typography>
               </Grid>
               <Grid item xs={6}>
-                <Typography fontWeight="bold">Expected Calving Date</Typography>
+                <Typography fontWeight="bold">{t('breeding.pregnancyTestAdd.expectedCalvingDate')}</Typography>
                 <Typography color="text.secondary">
                   {new Date(
                     pregnancyHistory.exp_calving_date
@@ -384,10 +386,10 @@ const AddPregnancyTest = () => {
             {loading ? (
               <CircularProgress size={24} sx={{ color: '#0F7C8F' }} />
             ) : (
-              'Save'
+              t('breeding.common.save')
             )}
           </Button>
-          <Button variant="outlined">Cancel</Button>
+          <Button variant="outlined">{t('breeding.common.cancel')}</Button>
         </Box>
       </Box>
       <ToastContainer

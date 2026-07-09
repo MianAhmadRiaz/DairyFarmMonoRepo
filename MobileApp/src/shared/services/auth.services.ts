@@ -3,6 +3,7 @@ import API_CONFIG from '../../../cattle.config';
 
 import axios from 'axios';
 import {LOGIN_ENUM} from 'shared/utils/models/enums';
+import i18n from 'shared/i18n';
 import {handleNotification} from './helper.services';
 
 const login = async (params: LOGIN_ENUM) => {
@@ -28,25 +29,25 @@ export const handleValidation = (values: any) => {
       field: 'name',
       condition: !values.name.trim(),
       context: 'validation_name',
-      message: 'Name is required',
+      message: i18n.t('services.validation.nameRequired'),
     },
     {
       field: 'email',
       condition: !values.email.trim(),
       context: 'validation_email',
-      message: 'Email is required',
+      message: i18n.t('services.validation.emailRequired'),
     },
     {
       field: 'password',
       condition: !values.password.trim(),
       context: 'validation_password',
-      message: 'Password is required',
+      message: i18n.t('services.validation.passwordRequired'),
     },
     {
       field: 'confirmPassword',
       condition: values.password !== values.confirmPassword,
       context: 'validation_confirmPassword',
-      message: 'Passwords do not match',
+      message: i18n.t('services.validation.passwordsMismatch'),
     },
   ];
 

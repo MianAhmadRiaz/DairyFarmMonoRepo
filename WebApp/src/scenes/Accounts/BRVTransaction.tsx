@@ -19,6 +19,7 @@ import {
 import PrintIcon from '@mui/icons-material/Print';
 import DeleteIcon from '@mui/icons-material/Delete';
 import CloseIcon from '@mui/icons-material/Close';
+import { useTranslation } from 'react-i18next';
 import { tokens } from '../../shared/theme/theme';
 import {
   fetchChartOfAccounts,
@@ -37,6 +38,7 @@ interface AccountRow {
 }
 
 export default function BRVTransaction() {
+  const { t } = useTranslation();
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   const pageBg = theme.palette.mode === 'dark' ? colors.primary[500] : '#F5FAF7';
@@ -115,15 +117,15 @@ export default function BRVTransaction() {
   // Handle save
   const handleSave = async () => {
     if (!transactionDate) {
-      setSnackbar({ open: true, message: 'Please fill in Transaction Date', severity: 'error' });
+      setSnackbar({ open: true, message: t('accounts.common.fillTransactionDate'), severity: 'error' });
       return;
     }
     if (!receiveIn) {
-      setSnackbar({ open: true, message: 'Please select a Receive In account', severity: 'error' });
+      setSnackbar({ open: true, message: t('accounts.common.selectReceiveInAccount'), severity: 'error' });
       return;
     }
     if (accountRows.some(row => !row.selectAccount || !row.amount)) {
-      setSnackbar({ open: true, message: 'Please fill in all account details', severity: 'error' });
+      setSnackbar({ open: true, message: t('accounts.common.fillAllAccountDetails'), severity: 'error' });
       return;
     }
 
@@ -139,11 +141,11 @@ export default function BRVTransaction() {
           payment_method: 'bank_transfer'
         });
       }
-      setSnackbar({ open: true, message: 'Bank receive transaction saved successfully!', severity: 'success' });
+      setSnackbar({ open: true, message: t('accounts.brvTransaction.saveSuccess'), severity: 'success' });
       handleReset();
     } catch (e) {
       console.error('Failed to save voucher', e);
-      setSnackbar({ open: true, message: 'Failed to save transaction.', severity: 'error' });
+      setSnackbar({ open: true, message: t('accounts.common.saveTransactionError'), severity: 'error' });
     }
   };
 
@@ -161,7 +163,7 @@ export default function BRVTransaction() {
     const printContent = `
       <html>
         <head>
-          <title>Bank Receive Voucher</title>
+          <title>${t('accounts.brvTransaction.printTitle')}</title>
           <style>
             body { font-family: Arial, sans-serif; padding: 20px; }
             .header { text-align: center; margin-bottom: 30px; border-bottom: 2px solid #005f73; padding-bottom: 10px; }
@@ -177,22 +179,22 @@ export default function BRVTransaction() {
         </head>
         <body>
           <div class="header">
-            <h2>Bank Receive Voucher/Transaction</h2>
-            <p>Generated on ${new Date().toLocaleDateString()}</p>
+            <h2>${t('accounts.brvTransaction.title')}</h2>
+            <p>${t('accounts.common.generatedOn', { date: new Date().toLocaleDateString() })}</p>
           </div>
           <div class="details">
-            <div class="row"><span class="label">Transaction Date:</span><span class="value">${transactionDate}</span></div>
-            <div class="row"><span class="label">Cheque #:</span><span class="value">${cheqNo}</span></div>
-            <div class="row"><span class="label">Receive In:</span><span class="value">${receiveIn}</span></div>
+            <div class="row"><span class="label">${t('accounts.common.transactionDate')}:</span><span class="value">${transactionDate}</span></div>
+            <div class="row"><span class="label">${t('accounts.common.chequeNo')}:</span><span class="value">${cheqNo}</span></div>
+            <div class="row"><span class="label">${t('accounts.common.receiveIn')}:</span><span class="value">${receiveIn}</span></div>
           </div>
           <table>
             <thead>
               <tr>
-                <th>Account</th>
-                <th>Balance</th>
-                <th>Type</th>
-                <th>Amount</th>
-                <th>Narration</th>
+                <th>${t('accounts.common.account')}</th>
+                <th>${t('accounts.common.balance')}</th>
+                <th>${t('accounts.common.type')}</th>
+                <th>${t('accounts.common.amount')}</th>
+                <th>${t('accounts.common.narration')}</th>
               </tr>
             </thead>
             <tbody>
@@ -207,7 +209,7 @@ export default function BRVTransaction() {
               `).join('')}
             </tbody>
           </table>
-          <div class="total">Total: ${total}</div>
+          <div class="total">${t('accounts.common.totalValue', { value: total })}</div>
         </body>
       </html>
     `;
@@ -225,7 +227,7 @@ export default function BRVTransaction() {
   };
 
   return (
-    <PageContainer title="Bank Receive Voucher/Transaction">
+    <PageContainer title={t('accounts.brvTransaction.title')}>
         {/* Main Card */}
         <Paper elevation={0} sx={{ p: 0, borderRadius: 2, border: `1px solid ${theme.palette.divider}`, bgcolor: 'background.paper' }}>
           
@@ -244,7 +246,7 @@ export default function BRVTransaction() {
           >
             <Typography variant="h6" fontWeight={600} sx={{ display: 'flex', alignItems: 'center' }}>
               <Box component="span" sx={{ mr: 1 }}>🏦</Box>
-              Bank Receive Voucher/Transaction
+              {t('accounts.brvTransaction.title')}
             </Typography>
             <Stack direction="row" spacing={1}>
               <IconButton size="small" onClick={handlePrint} sx={{ color: '#005f73' }}>
@@ -261,7 +263,7 @@ export default function BRVTransaction() {
             {/* Top Row Fields */}
             <Stack direction={{ xs: 'column', md: 'row' }} spacing={3} sx={{ mb: 3 }}>
               <TextField
-                label="Transaction Date"
+                label={t('accounts.common.transactionDate')}
                 type="date"
                 value={transactionDate}
                 onChange={(e) => setTransactionDate(e.target.value)}
@@ -271,19 +273,19 @@ export default function BRVTransaction() {
                 sx={{ flex: 1 }}
               />
               <TextField
-                label="Cheq #"
+                label={t('accounts.common.cheqNo')}
                 value={cheqNo}
                 onChange={(e) => setCheqNo(e.target.value)}
-                placeholder="Cheque #(If Any)"
+                placeholder={t('accounts.common.chequePlaceholder')}
                 size="small"
                 sx={{ flex: 1 }}
               />
               <FormControl size="small" sx={{ flex: 1 }}>
-                <InputLabel>Receive In</InputLabel>
+                <InputLabel>{t('accounts.common.receiveIn')}</InputLabel>
                 <Select
                   value={receiveIn}
                   onChange={(e) => setReceiveIn(e.target.value)}
-                  label="Receive In"
+                  label={t('accounts.common.receiveIn')}
                 >
                   {(bankAccounts.length ? bankAccounts : accounts).map((account) => (
                     <MenuItem key={account.id} value={String(account.id)}>{account.account_code} - {account.account_name}</MenuItem>
@@ -295,7 +297,7 @@ export default function BRVTransaction() {
             {/* Select Accounts Section */}
             <Box sx={{ mb: 3 }}>
               <Typography variant="h6" sx={{ color: '#005f73', mb: 2, display: 'flex', alignItems: 'center', fontWeight: 'bold' }}>
-                🛒 Select Accounts
+                🛒 {t('accounts.common.selectAccounts')}
               </Typography>
 
               {/* Add Account Button - positioned like in screenshot */}
@@ -315,17 +317,17 @@ export default function BRVTransaction() {
                     }
                   }}
                 >
-                  Add Account
+                  {t('accounts.common.addAccount')}
                 </Button>
               </Box>
 
               {/* Table Header */}
               <Box sx={{ display: 'flex', bgcolor: theme.palette.mode === 'dark' ? colors.primary[400] : '#F5F5F5', p: 1, borderRadius: '4px 4px 0 0', border: `1px solid ${theme.palette.divider}` }}>
-                <Typography variant="body2" fontWeight={600} sx={{ flex: 2, px: 1 }}>Select Account</Typography>
-                <Typography variant="body2" fontWeight={600} sx={{ flex: 1, px: 1 }}>Cur Balance</Typography>
-                <Typography variant="body2" fontWeight={600} sx={{ flex: 1, px: 1 }}>Account Type</Typography>
-                <Typography variant="body2" fontWeight={600} sx={{ flex: 1, px: 1 }}>Amount</Typography>
-                <Typography variant="body2" fontWeight={600} sx={{ flex: 2, px: 1 }}>Narration</Typography>
+                <Typography variant="body2" fontWeight={600} sx={{ flex: 2, px: 1 }}>{t('accounts.common.selectAccount')}</Typography>
+                <Typography variant="body2" fontWeight={600} sx={{ flex: 1, px: 1 }}>{t('accounts.common.curBalance')}</Typography>
+                <Typography variant="body2" fontWeight={600} sx={{ flex: 1, px: 1 }}>{t('accounts.common.accountType')}</Typography>
+                <Typography variant="body2" fontWeight={600} sx={{ flex: 1, px: 1 }}>{t('accounts.common.amount')}</Typography>
+                <Typography variant="body2" fontWeight={600} sx={{ flex: 2, px: 1 }}>{t('accounts.common.narration')}</Typography>
                 <Box sx={{ width: 40 }}></Box>
               </Box>
 
@@ -338,7 +340,7 @@ export default function BRVTransaction() {
                       onChange={(e) => updateAccountRow(row.id, 'selectAccount', e.target.value)}
                       displayEmpty
                     >
-                      <MenuItem value="" disabled>Select account</MenuItem>
+                      <MenuItem value="" disabled>{t('accounts.common.selectAccountPlaceholder')}</MenuItem>
                       {accounts.map((a) => (
                         <MenuItem key={a.id} value={String(a.id)}>
                           {a.account_code} - {a.account_name}
@@ -360,12 +362,12 @@ export default function BRVTransaction() {
                       onChange={(e) => updateAccountRow(row.id, 'accountType', e.target.value)}
                       displayEmpty
                     >
-                      <MenuItem value="" disabled>Type</MenuItem>
-                      <MenuItem value="asset">Asset</MenuItem>
-                      <MenuItem value="liability">Liability</MenuItem>
-                      <MenuItem value="equity">Equity</MenuItem>
-                      <MenuItem value="revenue">Revenue</MenuItem>
-                      <MenuItem value="expense">Expense</MenuItem>
+                      <MenuItem value="" disabled>{t('accounts.common.type')}</MenuItem>
+                      <MenuItem value="asset">{t('accounts.common.accountTypes.asset')}</MenuItem>
+                      <MenuItem value="liability">{t('accounts.common.accountTypes.liability')}</MenuItem>
+                      <MenuItem value="equity">{t('accounts.common.accountTypes.equity')}</MenuItem>
+                      <MenuItem value="revenue">{t('accounts.common.accountTypes.revenue')}</MenuItem>
+                      <MenuItem value="expense">{t('accounts.common.accountTypes.expense')}</MenuItem>
                     </Select>
                   </FormControl>
                   
@@ -400,7 +402,7 @@ export default function BRVTransaction() {
               {/* Total */}
               <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: 2 }}>
                 <Typography variant="h6" fontWeight={700}>
-                  Total: {total}
+                  {t('accounts.common.totalValue', { value: total })}
                 </Typography>
               </Box>
             </Box>
@@ -417,7 +419,7 @@ export default function BRVTransaction() {
                   textTransform: 'none'
                 }}
               >
-                💾 Save Changes
+                💾 {t('accounts.common.saveChanges')}
               </Button>
               <Button
                 variant="contained"
@@ -433,7 +435,7 @@ export default function BRVTransaction() {
                   }
                 }}
               >
-                🔄 Reset
+                🔄 {t('accounts.common.reset')}
               </Button>
             </Box>
           </Box>

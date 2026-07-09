@@ -27,6 +27,7 @@ import {
 import { InputAdornment } from '@mui/material';
 import PageContainer from '../../../../shared/components/Layout/PageContainer';
 import { tokens } from '../../../../shared/theme/theme';
+import { useTranslation } from 'react-i18next';
 
 interface StockReorderItem {
   id: number;
@@ -54,6 +55,7 @@ const stockReorderData = [
 ];
 
 const RemainingFeedStockDays: React.FC<StockReorderTableProps> = () => {
+  const { t } = useTranslation();
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
 
@@ -85,9 +87,9 @@ const RemainingFeedStockDays: React.FC<StockReorderTableProps> = () => {
   };
 
   return (
-    <PageContainer title="Stock Reorder Report">
+    <PageContainer title={t('stock.remainingFeedStockDays.title')}>
       <Alert severity="warning" sx={{ mb: 2 }}>
-        This report is not yet connected to live data.
+        {t('stock.common.reportNotConnected')}
       </Alert>
 
       <Paper
@@ -135,7 +137,7 @@ const RemainingFeedStockDays: React.FC<StockReorderTableProps> = () => {
                 }
               }}
             >
-              View
+              {t('stock.common.view')}
             </Button>
             <Button
               variant="outlined"
@@ -146,7 +148,7 @@ const RemainingFeedStockDays: React.FC<StockReorderTableProps> = () => {
               }}
               onClick={handlePrint}
             >
-              Print
+              {t('stock.common.print')}
             </Button>
           </Box>
         </Box>
@@ -181,7 +183,7 @@ const RemainingFeedStockDays: React.FC<StockReorderTableProps> = () => {
                 flex: { xs: 1, sm: 'none' }
               }}
             >
-              Column visibility
+              {t('stock.common.columnVisibility')}
             </Button>
             <Box sx={{ display: 'flex', gap: 1 }}>
               <IconButton
@@ -224,13 +226,13 @@ const RemainingFeedStockDays: React.FC<StockReorderTableProps> = () => {
                 display: { xs: 'none', sm: 'block' }
               }}
             >
-              Search:
+              {t('stock.common.searchLabel')}
             </Box>
             <TextField
               size="small"
               value={searchTerm}
               onChange={e => setSearchTerm(e.target.value)}
-              placeholder="Search..."
+              placeholder={t('stock.common.searchPlaceholder')}
               fullWidth
               sx={{
                 '& .MuiOutlinedInput-root': {
@@ -275,7 +277,7 @@ const RemainingFeedStockDays: React.FC<StockReorderTableProps> = () => {
                       minWidth: { xs: '150px', sm: 'auto' }
                     }}
                   >
-                    Products
+                    {t('stock.common.products')}
                   </TableCell>
                   <TableCell
                     sx={{
@@ -284,7 +286,7 @@ const RemainingFeedStockDays: React.FC<StockReorderTableProps> = () => {
                       minWidth: { xs: '100px', sm: 'auto' }
                     }}
                   >
-                    Current Stock
+                    {t('stock.common.currentStock')}
                   </TableCell>
                   <TableCell
                     sx={{
@@ -293,7 +295,7 @@ const RemainingFeedStockDays: React.FC<StockReorderTableProps> = () => {
                       minWidth: { xs: '100px', sm: 'auto' }
                     }}
                   >
-                    Last Consume Qty
+                    {t('stock.remainingFeedStockDays.lastConsumeQty')}
                   </TableCell>
                   <TableCell
                     sx={{
@@ -302,7 +304,7 @@ const RemainingFeedStockDays: React.FC<StockReorderTableProps> = () => {
                       minWidth: { xs: '80px', sm: 'auto' }
                     }}
                   >
-                    Purchase Rate
+                    {t('stock.remainingFeedStockDays.purchaseRate')}
                   </TableCell>
                   <TableCell
                     sx={{
@@ -311,7 +313,7 @@ const RemainingFeedStockDays: React.FC<StockReorderTableProps> = () => {
                       minWidth: { xs: '80px', sm: 'auto' }
                     }}
                   >
-                    Days
+                    {t('stock.remainingFeedStockDays.days')}
                   </TableCell>
                 </TableRow>
               </TableHead>

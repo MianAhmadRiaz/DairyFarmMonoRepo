@@ -18,6 +18,7 @@ import {
 import { Print as PrintIcon } from '@mui/icons-material';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { useTranslation } from 'react-i18next';
 import PageContainer from '../../shared/components/Layout/PageContainer';
 import useLayoutShift from '../../shared/components/Hooks/useLayoutShift';
 import {
@@ -38,6 +39,7 @@ const fmt = (n: number | string | undefined | null) => {
 
 /* ===== COMPONENT ============================================= */
 const ShedFeedStockPrint: React.FC = () => {
+  const { t } = useTranslation();
   const [date, setDate] = useState('');
   const [shedId, setShedId] = useState('');
   const [mealTime, setMealTime] = useState('');
@@ -54,7 +56,7 @@ const ShedFeedStockPrint: React.FC = () => {
         const data: ShedsListData = res?.data?.data;
         setSheds(data?.sheds || []);
       } catch (error: any) {
-        toast.error(error?.response?.data?.message || "Can't load sheds");
+        toast.error(error?.response?.data?.message || t('feeding.common.cantLoadSheds'));
       }
     };
     loadSheds();
@@ -62,7 +64,7 @@ const ShedFeedStockPrint: React.FC = () => {
 
   const handleGet = async () => {
     if (!shedId || !date) {
-      toast.warning('Shed and feeding date are required');
+      toast.warning(t('feeding.shedFeedStockPrint.shedDateRequired'));
       return;
     }
     try {
@@ -78,7 +80,7 @@ const ShedFeedStockPrint: React.FC = () => {
       setPrintData(data || null);
     } catch (error: any) {
       toast.error(
-        error?.response?.data?.message || "Can't load shed feed stock print data"
+        error?.response?.data?.message || t('feeding.shedFeedStockPrint.cantLoadPrintData')
       );
     } finally {
       setLoading(false);
@@ -87,14 +89,14 @@ const ShedFeedStockPrint: React.FC = () => {
 
   const handlePrint = () => {
     if (!printData) {
-      toast.warning('Load the print sheet first');
+      toast.warning(t('feeding.shedFeedStockPrint.loadFirst'));
       return;
     }
     window.print();
   };
 
   return (
-    <PageContainer title="Shed Feed Stock Print Sheet" maxWidth="1200px">
+    <PageContainer title={t('feeding.shedFeedStockPrint.title')} maxWidth="1200px">
       {/* ---------- control bar ---------- */}
       <Paper
         elevation={1}
@@ -111,7 +113,7 @@ const ShedFeedStockPrint: React.FC = () => {
         {/* shed picker */}
         <Box sx={{ minWidth: 220 }}>
           <Typography fontWeight={600} mb={0.5}>
-            Shed
+            {t('feeding.common.shed')}
           </Typography>
           <TextField
             select
@@ -131,7 +133,7 @@ const ShedFeedStockPrint: React.FC = () => {
         {/* date picker */}
         <Box sx={{ minWidth: 220 }}>
           <Typography fontWeight={600} mb={0.5}>
-            Date
+            {t('feeding.common.date')}
           </Typography>
           <TextField
             size="small"
@@ -145,7 +147,7 @@ const ShedFeedStockPrint: React.FC = () => {
         {/* meal time */}
         <Box sx={{ minWidth: 220 }}>
           <Typography fontWeight={600} mb={0.5}>
-            Meal Time
+            {t('feeding.common.mealTime')}
           </Typography>
           <TextField
             select
@@ -154,10 +156,10 @@ const ShedFeedStockPrint: React.FC = () => {
             value={mealTime}
             onChange={e => setMealTime(e.target.value)}
           >
-            <MenuItem value="">All</MenuItem>
+            <MenuItem value="">{t('feeding.shedFeedStockPrint.all')}</MenuItem>
             {MEAL_TIMES.map(m => (
               <MenuItem key={m} value={m}>
-                {m.charAt(0).toUpperCase() + m.slice(1)}
+                {t(`feeding.common.mealTimes.${m}`, m.charAt(0).toUpperCase() + m.slice(1))}
               </MenuItem>
             ))}
           </TextField>
@@ -175,7 +177,7 @@ const ShedFeedStockPrint: React.FC = () => {
             '&:hover': { bgcolor: '#004a5a' }
           }}
         >
-          Get
+          {t('feeding.common.get')}
         </Button>
 
         {/* PRINT  */}
@@ -192,7 +194,7 @@ const ShedFeedStockPrint: React.FC = () => {
           startIcon={<PrintIcon />}
           onClick={handlePrint}
         >
-          Print
+          {t('feeding.shedFeedStockPrint.print')}
         </Button>
       </Paper>
 
@@ -213,7 +215,7 @@ const ShedFeedStockPrint: React.FC = () => {
 
       {!loading && !printData && (
         <Typography align="center" sx={{ mt: 6, fontWeight: 600 }}>
-          Choose a shed and a date, then press “Get”.
+          {t('feeding.shedFeedStockPrint.choosePrompt')}
         </Typography>
       )}
 
@@ -226,22 +228,24 @@ const ShedFeedStockPrint: React.FC = () => {
             </Typography>
             <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 4 }}>
               <Typography variant="body2">
-                Pens: <b>{printData.summary.pensCount}</b>
+                {t('feeding.shedFeedStockPrint.pensColon')} <b>{printData.summary.pensCount}</b>
               </Typography>
               <Typography variant="body2">
-                Recipes used: <b>{printData.summary.recipesUsed}</b>
+                {t('feeding.shedFeedStockPrint.recipesUsedColon')} <b>{printData.summary.recipesUsed}</b>
               </Typography>
               <Typography variant="body2">
-                Total animals: <b>{printData.summary.totalAnimals}</b>
+                {t('feeding.shedFeedStockPrint.totalAnimalsColon')} <b>{printData.summary.totalAnimals}</b>
               </Typography>
               <Typography variant="body2">
-                Planned qty: <b>{printData.summary.totalPlannedQuantity} Kg</b>
+                {t('feeding.shedFeedStockPrint.plannedQtyColon')}{' '}
+                <b>{printData.summary.totalPlannedQuantity} {t('feeding.common.kg')}</b>
               </Typography>
               <Typography variant="body2">
-                Avg / animal: <b>{printData.summary.averagePerAnimal} Kg</b>
+                {t('feeding.shedFeedStockPrint.avgPerAnimalColon')}{' '}
+                <b>{printData.summary.averagePerAnimal} {t('feeding.common.kg')}</b>
               </Typography>
               <Typography variant="body2">
-                Estimated cost: <b>{printData.summary.totalEstimatedCost}</b>
+                {t('feeding.shedFeedStockPrint.estimatedCostColon')} <b>{printData.summary.totalEstimatedCost}</b>
               </Typography>
             </Box>
           </Paper>
@@ -253,19 +257,20 @@ const ShedFeedStockPrint: React.FC = () => {
                 fontWeight={700}
                 sx={{ px: 2, py: 1.5, bgcolor: '#F8F9FA', borderRadius: '8px 8px 0 0' }}
               >
-                Meal: {group.meal_time.charAt(0).toUpperCase() + group.meal_time.slice(1)}
+                {t('feeding.shedFeedStockPrint.mealColon')}{' '}
+                {t(`feeding.common.mealTimes.${group.meal_time}`, group.meal_time.charAt(0).toUpperCase() + group.meal_time.slice(1))}
               </Typography>
               <TableContainer>
                 <Table size="small">
                   <TableHead>
                     <TableRow sx={{ '& th': { fontWeight: 700, bgcolor: '#F4FAFD' } }}>
-                      <TableCell>Pen</TableCell>
-                      <TableCell>Recipe</TableCell>
-                      <TableCell>Animals</TableCell>
-                      <TableCell>Scheduled (Kg)</TableCell>
-                      <TableCell>Actual (Kg)</TableCell>
-                      <TableCell>Status</TableCell>
-                      <TableCell>Est. Cost</TableCell>
+                      <TableCell>{t('feeding.common.pen')}</TableCell>
+                      <TableCell>{t('feeding.common.recipe')}</TableCell>
+                      <TableCell>{t('feeding.common.animals')}</TableCell>
+                      <TableCell>{t('feeding.shedFeedReport.scheduledKg')}</TableCell>
+                      <TableCell>{t('feeding.shedFeedReport.actualKg')}</TableCell>
+                      <TableCell>{t('feeding.common.status')}</TableCell>
+                      <TableCell>{t('feeding.shedFeedStockPrint.estCost')}</TableCell>
                     </TableRow>
                   </TableHead>
                   <TableBody>
@@ -276,12 +281,14 @@ const ShedFeedStockPrint: React.FC = () => {
                         <TableCell>{fmt(s.animals_count)}</TableCell>
                         <TableCell>{fmt(s.scheduled_quantity)}</TableCell>
                         <TableCell>{fmt(s.actual_quantity)}</TableCell>
-                        <TableCell>{s.feeding_status.replace(/_/g, ' ')}</TableCell>
+                        <TableCell>
+                          {t(`feeding.shedFeedReport.status.${s.feeding_status}`, s.feeding_status.replace(/_/g, ' '))}
+                        </TableCell>
                         <TableCell>{fmt(s.estimatedCost)}</TableCell>
                       </TableRow>
                     ))}
                     <TableRow sx={{ '& td': { fontWeight: 700, bgcolor: '#F4FAFD' } }}>
-                      <TableCell colSpan={2}>Subtotal:</TableCell>
+                      <TableCell colSpan={2}>{t('feeding.shedFeedStockPrint.subtotalColon')}</TableCell>
                       <TableCell>{fmt(group.subtotal.animals)}</TableCell>
                       <TableCell>{fmt(group.subtotal.plannedQuantity)}</TableCell>
                       <TableCell>{fmt(group.subtotal.actualQuantity)}</TableCell>
@@ -301,7 +308,7 @@ const ShedFeedStockPrint: React.FC = () => {
                 fontWeight={700}
                 sx={{ px: 2, py: 1.5, bgcolor: '#F8F9FA', borderRadius: '8px 8px 0 0' }}
               >
-                Ingredient Requirements
+                {t('feeding.shedFeedStockPrint.ingredientRequirements')}
               </Typography>
               <TableContainer sx={{ maxHeight: 'calc(100vh - 270px)' }}>
                 <Table stickyHeader size="small">
@@ -315,11 +322,11 @@ const ShedFeedStockPrint: React.FC = () => {
                         }
                       }}
                     >
-                      <TableCell sx={{ px: 1 }}>Sr#</TableCell>
-                      <TableCell sx={{ px: 1 }}>Ingredient</TableCell>
+                      <TableCell sx={{ px: 1 }}>{t('feeding.common.srNo')}</TableCell>
+                      <TableCell sx={{ px: 1 }}>{t('feeding.shedFeedStockPrint.ingredient')}</TableCell>
                       {printData.summary.mealTimes.map(m => (
                         <TableCell key={m} sx={{ px: 1, textAlign: 'center' }}>
-                          {m.charAt(0).toUpperCase() + m.slice(1)}
+                          {t(`feeding.common.mealTimes.${m}`, m.charAt(0).toUpperCase() + m.slice(1))}
                         </TableCell>
                       ))}
                       <TableCell
@@ -330,7 +337,7 @@ const ShedFeedStockPrint: React.FC = () => {
                           fontWeight: 800
                         }}
                       >
-                        TOTAL
+                        {t('feeding.shedFeedStockPrint.totalUpper')}
                       </TableCell>
                     </TableRow>
                   </TableHead>
@@ -382,8 +389,10 @@ const ShedFeedStockPrint: React.FC = () => {
           )}
 
           <Typography variant="caption" color="text.secondary" sx={{ display: 'block', mt: 1 }}>
-            Generated at {new Date(printData.printMetadata.generatedAt).toLocaleString()} by{' '}
-            {printData.printMetadata.generatedBy}
+            {t('feeding.shedFeedStockPrint.generatedAtBy', {
+              time: new Date(printData.printMetadata.generatedAt).toLocaleString(),
+              user: printData.printMetadata.generatedBy,
+            })}
           </Typography>
         </>
       )}

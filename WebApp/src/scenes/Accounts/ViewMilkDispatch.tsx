@@ -12,6 +12,7 @@ import ContentCopyOutlinedIcon from '@mui/icons-material/ContentCopyOutlined';
 import FileDownloadOutlinedIcon from '@mui/icons-material/FileDownloadOutlined';
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined';
+import { useTranslation } from 'react-i18next';
 import { tokens } from '../../shared/theme/theme';
 import PageContainer from '../../shared/components/Layout/PageContainer';
 
@@ -65,6 +66,7 @@ const ddmmyy = (iso: string) => {
 
 // ---------- component ----------
 export default function ViewMilkDispatch() {
+  const { t } = useTranslation();
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   const pageBg = theme.palette.mode === 'dark' ? colors.primary[500] : '#F5FAF7';
@@ -83,18 +85,18 @@ export default function ViewMilkDispatch() {
   // columns with visibility
   const allColumns = [
     { key: 'id', label: '#', width: 60 },
-    { key: 'date', label: 'Date', width: 120 },
-    { key: 'company', label: 'Company', width: 280 },
-    { key: 'vol', label: 'Vol', width: 80 },
-    { key: 'fat', label: 'Fat', width: 80 },
-    { key: 'lr', label: 'Lr', width: 80 },
-    { key: 'snf', label: 'S.N.F', width: 90 },
-    { key: 'ts13', label: '13 TS', width: 90 },
-    { key: 'adjVol', label: 'Adj Vol', width: 110 },
-    { key: 'deduct', label: 'Deduct', width: 90 },
-    { key: 'baseRate', label: 'Base Rate', width: 110 },
-    { key: 'amount', label: 'Amount', width: 110 },
-    { key: 'action', label: 'Action', width: 100 },
+    { key: 'date', label: t('accounts.common.columns.date'), width: 120 },
+    { key: 'company', label: t('accounts.common.company'), width: 280 },
+    { key: 'vol', label: t('accounts.viewMilkDispatch.columns.vol'), width: 80 },
+    { key: 'fat', label: t('accounts.viewMilkDispatch.columns.fat'), width: 80 },
+    { key: 'lr', label: t('accounts.viewMilkDispatch.columns.lr'), width: 80 },
+    { key: 'snf', label: t('accounts.viewMilkDispatch.columns.snf'), width: 90 },
+    { key: 'ts13', label: t('accounts.viewMilkDispatch.columns.ts13'), width: 90 },
+    { key: 'adjVol', label: t('accounts.viewMilkDispatch.columns.adjVol'), width: 110 },
+    { key: 'deduct', label: t('accounts.viewMilkDispatch.columns.deduct'), width: 90 },
+    { key: 'baseRate', label: t('accounts.common.baseRate'), width: 110 },
+    { key: 'amount', label: t('accounts.common.amount'), width: 110 },
+    { key: 'action', label: t('accounts.common.action'), width: 100 },
   ] as const;
 
   type ColKey = typeof allColumns[number]['key'];
@@ -114,11 +116,11 @@ export default function ViewMilkDispatch() {
   // GET handler (simulate fetch)
   const onGet = async () => {
     if (!startDate || !endDate) {
-      alert('Select starting and ending dates.');
+      alert(t('accounts.common.selectDatesError'));
       return;
     }
     if (new Date(startDate) > new Date(endDate)) {
-      alert('Starting Date must be before Ending Date.');
+      alert(t('accounts.viewMilkDispatch.dateOrderError'));
       return;
     }
     setLoading(true);
@@ -175,7 +177,7 @@ export default function ViewMilkDispatch() {
       }))
     );
     await navigator.clipboard.writeText(csv);
-    alert('Copied table (CSV) to clipboard');
+    alert(t('accounts.common.copiedCsv'));
   };
 
   const downloadCsv = (filename: string) => {
@@ -200,13 +202,13 @@ export default function ViewMilkDispatch() {
   const onPrint = () => window.print();
 
   return (
-    <PageContainer title="Corporate Dispatch">
+    <PageContainer title={t('accounts.viewMilkDispatch.title')}>
         {/* Search Row */}
         <Stack direction="row" alignItems="center" justifyContent="flex-end" sx={{ mb: 1 }}>
           <Stack direction="row" alignItems="center" spacing={1}>
             <TextField
               size="small"
-              placeholder="Search"
+              placeholder={t('common.search')}
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               InputProps={{
@@ -227,22 +229,22 @@ export default function ViewMilkDispatch() {
           <Grid container spacing={2} alignItems="center">
             <Grid item xs={12} md="auto">
               <TextField
-                select size="small" label="Company" value={company}
+                select size="small" label={t('accounts.common.company')} value={company}
                 onChange={(e) => setCompany(e.target.value as Company)}
                 sx={{ minWidth: 180 }}
               >
-                {COMPANY_OPTIONS.map(c => <MenuItem key={c} value={c}>{c}</MenuItem>)}
+                {COMPANY_OPTIONS.map(c => <MenuItem key={c} value={c}>{c === 'All' ? t('accounts.common.all') : c}</MenuItem>)}
               </TextField>
             </Grid>
             <Grid item xs={12} md="auto">
               <TextField
-                size="small" type="date" label="Starting Date" value={startDate}
+                size="small" type="date" label={t('accounts.viewMilkDispatch.startingDate')} value={startDate}
                 onChange={(e) => setStartDate(e.target.value)} InputLabelProps={{ shrink: true }}
               />
             </Grid>
             <Grid item xs={12} md="auto">
               <TextField
-                size="small" type="date" label="Ending Date" value={endDate}
+                size="small" type="date" label={t('accounts.viewMilkDispatch.endingDate')} value={endDate}
                 onChange={(e) => setEndDate(e.target.value)} InputLabelProps={{ shrink: true }}
               />
             </Grid>
@@ -253,7 +255,7 @@ export default function ViewMilkDispatch() {
                 variant="contained"
                 sx={{ backgroundColor: '#005f73', color: '#fff', textTransform: 'none', px: 3 }}
               >
-                {loading ? 'Loading…' : 'GET'}
+                {loading ? t('common.loading') : t('accounts.viewMilkDispatch.get')}
               </Button>
             </Grid>
 
@@ -267,7 +269,7 @@ export default function ViewMilkDispatch() {
                 onClick={(e) => setAnchorCols(e.currentTarget)}
                 sx={{ textTransform: 'none', borderColor: '#d6d6d6', color: '#6a757d', mr: 1, background: '#fff' }}
               >
-                Column visibility
+                {t('accounts.common.columnVisibility')}
               </Button>
 
               <Button
@@ -277,7 +279,7 @@ export default function ViewMilkDispatch() {
                 onClick={handleCopy}
                 sx={{ textTransform: 'none', borderColor: '#d6d6d6', color: '#6a757d', mr: 1, background: '#fff' }}
               >
-                Copy
+                {t('accounts.common.copy')}
               </Button>
 
               <Button
@@ -361,15 +363,15 @@ export default function ViewMilkDispatch() {
                     {visible.amount  && <td style={td}>{r.amount}</td>}
                     {visible.action  && (
                       <td style={td}>
-                        <Tooltip title="Edit"><IconButton size="small"><EditOutlinedIcon fontSize="small" /></IconButton></Tooltip>
-                        <Tooltip title="Delete"><IconButton size="small"><DeleteOutlineOutlinedIcon fontSize="small" /></IconButton></Tooltip>
+                        <Tooltip title={t('common.edit')}><IconButton size="small"><EditOutlinedIcon fontSize="small" /></IconButton></Tooltip>
+                        <Tooltip title={t('common.delete')}><IconButton size="small"><DeleteOutlineOutlinedIcon fontSize="small" /></IconButton></Tooltip>
                       </td>
                     )}
                   </tr>
                 ))}
                 {filtered.length === 0 && (
                   <tr><td style={{ ...td, padding: 24 }} colSpan={Object.values(visible).filter(Boolean).length}>
-                    {loading ? 'Loading…' : 'No data'}
+                    {loading ? t('common.loading') : t('accounts.common.noData')}
                   </td></tr>
                 )}
               </tbody>

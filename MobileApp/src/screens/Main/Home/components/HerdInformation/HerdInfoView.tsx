@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { StyleSheet, View } from 'react-native';
 import AppText from 'shared/components/AppText/AppText';
 
@@ -6,12 +7,16 @@ import FastImage from 'react-native-fast-image';
 import { RF, WP } from 'shared/theme/responsive';
 import { ICONS } from 'assets/icons';
 const dashboardData = [
-  { label: 'Current Animals', value: '230', icon: ICONS.COW },
-  { label: 'Pregnant Animals', value: '230', icon: ICONS.BABY },
-  { label: 'Non-Pregnant Animals', value: '230', icon: ICONS.BABY_RED },
-  { label: 'Unjoined Heifers', value: '230', icon: ICONS.BULL },
-  { label: 'Milking Cows', value: '230', icon: ICONS.MILK_COW },
-  { label: 'Dry Cows', value: '230', icon: ICONS.DRY_COW },
+  { labelKey: 'main.herdInfo.currentAnimals', value: '230', icon: ICONS.COW },
+  { labelKey: 'main.herdInfo.pregnantAnimals', value: '230', icon: ICONS.BABY },
+  {
+    labelKey: 'main.herdInfo.nonPregnantAnimals',
+    value: '230',
+    icon: ICONS.BABY_RED,
+  },
+  { labelKey: 'main.herdInfo.unjoinedHeifers', value: '230', icon: ICONS.BULL },
+  { labelKey: 'main.herdInfo.milkingCows', value: '230', icon: ICONS.MILK_COW },
+  { labelKey: 'main.herdInfo.dryCows', value: '230', icon: ICONS.DRY_COW },
 ];
 const HerdInfoCard = (props: any) => {
   const size = RF(37);
@@ -39,12 +44,13 @@ const HerdInfoCard = (props: any) => {
   );
 };
 const HerdInfoCardsView = ({ data }: any) => {
+  const { t } = useTranslation();
   return (
     <View style={styles.grid}>
       {dashboardData.map((item: any, index: any) => (
         <HerdInfoCard
           key={index}
-          label={item.label}
+          label={t(item.labelKey)}
           value={item.value}
           icon={item.icon}
         />

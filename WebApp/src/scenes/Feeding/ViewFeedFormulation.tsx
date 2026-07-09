@@ -22,6 +22,7 @@ import {
 import SearchIcon from '@mui/icons-material/Search';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import { ToastContainer, toast } from 'react-toastify';
+import { useTranslation } from 'react-i18next';
 import 'react-toastify/dist/ReactToastify.css';
 import CustomPagination from '../../shared/components/Custom Pagination/CustomPagination';
 import { AlterationRow } from '../../shared/components/View Alteration/ViewAlterations';
@@ -46,6 +47,7 @@ interface FormulationView {
 const ViewFeedFormulation: React.FC = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
+  const { t } = useTranslation();
 
   /* search + paging for the **group** table */
   const [query, setQuery] = useState('');
@@ -87,7 +89,7 @@ const ViewFeedFormulation: React.FC = () => {
           name: f.name,
           alterations: (f.items || []).map((item, idx) => ({
             id: idx + 1,
-            name: ingredientNames.get(item.itemId) || 'Unknown ingredient',
+            name: ingredientNames.get(item.itemId) || t('feeding.common.unknownIngredient'),
             weight: Number(item.quantity || 0),
             createdAt: f.createdAt || new Date().toISOString(),
             status: 'inactive' as const,
@@ -98,7 +100,7 @@ const ViewFeedFormulation: React.FC = () => {
         setFormulations(mapped);
       } catch (error: any) {
         toast.error(
-          error?.response?.data?.message || "Can't load feed formulations"
+          error?.response?.data?.message || t('feeding.common.cantLoadFormulations')
         );
       } finally {
         setLoading(false);
@@ -129,7 +131,7 @@ const ViewFeedFormulation: React.FC = () => {
 
   /* render */
   return (
-    <PageContainer title="Feeding Formulation Vanda" maxWidth="1100px">
+    <PageContainer title={t('feeding.viewFeedFormulation.title')} maxWidth="1100px">
       {/* Search bar */}
       <Paper
         elevation={1}
@@ -143,7 +145,7 @@ const ViewFeedFormulation: React.FC = () => {
         }}
       >
         <TextField
-          placeholder="Search"
+          placeholder={t('common.search')}
           variant="standard"
           fullWidth
           value={query}
@@ -183,13 +185,13 @@ const ViewFeedFormulation: React.FC = () => {
                 }}
               >
                 <TableCell width={80} sx={{ fontWeight: 600, fontSize: 16 }}>
-                  Sr#
+                  {t('feeding.viewFeedFormulation.columns.sr')}
                 </TableCell>
                 <TableCell sx={{ fontWeight: 600, fontSize: 16 }}>
-                  Vanda Name
+                  {t('feeding.viewFeedFormulation.columns.vandaName')}
                 </TableCell>
                 <TableCell sx={{ fontWeight: 600, fontSize: 16 }}>
-                  Formulation Alteration
+                  {t('feeding.viewFeedFormulation.columns.formulationAlteration')}
                 </TableCell>
                 <TableCell width={180} />
               </TableRow>
@@ -231,7 +233,7 @@ const ViewFeedFormulation: React.FC = () => {
                         }}
                         onClick={() => handleOpen(g)}
                       >
-                        View Alterations
+                        {t('feeding.common.viewAlterations')}
                       </Button>
                     </TableCell>
                   </TableRow>
@@ -240,7 +242,7 @@ const ViewFeedFormulation: React.FC = () => {
               {!loading && pagedGroups.length === 0 && (
                 <TableRow>
                   <TableCell colSpan={4} align="center" sx={{ fontSize: 15 }}>
-                    No recipes found.
+                    {t('feeding.common.noRecipesFound')}
                   </TableCell>
                 </TableRow>
               )}

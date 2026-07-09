@@ -1,4 +1,5 @@
-import React, { useState, useRef } from "react";
+import React, { useMemo, useState, useRef } from "react";
+import { useTranslation } from "react-i18next";
 import {
   Box,
   Grid,
@@ -18,16 +19,19 @@ import { ToastContainer, toast, Id } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import PageContainer from "../../../shared/components/Layout/PageContainer";
 
-const TREATMENT_TYPES = [
-  { value: "treatment", label: "Treatment" },
-  { value: "vaccination", label: "Vaccination" },
-  { value: "deworming", label: "Deworming" },
-  { value: "hoof trimming", label: "Hoof Trimming" },
-  { value: "vet visit", label: "Vet Visit" },
-  { value: "other", label: "Other" },
-];
-
 const AddTreatment: React.FC = () => {
+  const { t } = useTranslation();
+  const TREATMENT_TYPES = useMemo(
+    () => [
+      { value: "treatment", label: t("herd.addTreatment.typeTreatment") },
+      { value: "vaccination", label: t("herd.addTreatment.typeVaccination") },
+      { value: "deworming", label: t("herd.addTreatment.typeDeworming") },
+      { value: "hoof trimming", label: t("herd.addTreatment.typeHoofTrimming") },
+      { value: "vet visit", label: t("herd.addTreatment.typeVetVisit") },
+      { value: "other", label: t("herd.addTreatment.typeOther") },
+    ],
+    [t]
+  );
   const [animals, setAnimals] = useState<AnimalInfoRow[]>([]);
   const [medicines, setMedicines] = useState<{ uuid: string; name: string }[]>([]);
   const [dropdownLoading, setDropdownLoading] = useState(false);
@@ -59,7 +63,7 @@ const AddTreatment: React.FC = () => {
       setAnimals(data);
     } catch (error) {
       console.error("Error fetching animals:", error);
-      toast.error("Failed to load animals.");
+      toast.error(t("herd.addTreatment.loadAnimalsError"));
     } finally {
       setDropdownLoading(false);
     }
@@ -78,13 +82,13 @@ const AddTreatment: React.FC = () => {
   const handleSave = async () => {
     if (!animalId || !date || !treatmentType) {
       if (toastId.current === null || !toast.isActive(toastId.current)) {
-        toastId.current = toast.warning("Please select an animal, date and treatment type");
+        toastId.current = toast.warning(t("herd.addTreatment.warnRequired"));
       }
       return;
     }
     if (medicineStockItemId && !(Number(quantityUsed) > 0)) {
       if (toastId.current === null || !toast.isActive(toastId.current)) {
-        toastId.current = toast.warning("Enter the quantity used for the selected medicine");
+        toastId.current = toast.warning(t("herd.addTreatment.warnQuantity"));
       }
       return;
     }
@@ -106,7 +110,7 @@ const AddTreatment: React.FC = () => {
         markSick,
         ...(comments ? { comments } : {}),
       });
-      toast.success("Treatment recorded successfully!");
+      toast.success(t("herd.addTreatment.recorded"));
       // Reset
       setAnimalId("");
       setDiagnosis("");
@@ -123,7 +127,7 @@ const AddTreatment: React.FC = () => {
     } catch (error: any) {
       console.error("AddTreatment => error:", error?.response?.data || error);
       if (toastId.current === null || !toast.isActive(toastId.current)) {
-        toastId.current = toast.error(error?.response?.data?.message || "Failed to record treatment.");
+        toastId.current = toast.error(error?.response?.data?.message || t("herd.addTreatment.recordError"));
       }
     } finally {
       setIsLoading(false);
@@ -131,7 +135,7 @@ const AddTreatment: React.FC = () => {
   };
 
   return (
-    <PageContainer title="Add Treatment / Vaccination" maxWidth={900}>
+    <PageContainer title={t("herd.addTreatment.title")} maxWidth={900}>
       <Box
         sx={{
           backgroundColor: theme.palette.background.paper,
@@ -148,7 +152,7 @@ const AddTreatment: React.FC = () => {
             <TextField
               fullWidth
               select
-              label="Animal"
+              label={t("herd.addTreatment.animal")}
               value={animalId}
               onChange={(e) => setAnimalId(e.target.value)}
               disabled={isLoading}
@@ -161,7 +165,7 @@ const AddTreatment: React.FC = () => {
               ) : (
                 animals.map((a) => (
                   <MenuItem key={a.uuid} value={a.uuid}>
-                    {`${a.name || "Unnamed"} (${a.tagName || "No Tag"})`}
+                    {`${a.name || t("herd.addTreatment.unnamed")} (${a.tagName || t("herd.addTreatment.noTag")})`}
                   </MenuItem>
                 ))
               )}
@@ -171,7 +175,7 @@ const AddTreatment: React.FC = () => {
             <TextField
               fullWidth
               type="date"
-              label="Date"
+              label={t("herd.addTreatment.date")}
               InputLabelProps={{ shrink: true }}
               value={date}
               onChange={(e) => setDate(e.target.value)}
@@ -183,14 +187,14 @@ const AddTreatment: React.FC = () => {
             <TextField
               fullWidth
               select
-              label="Treatment Type"
+              label={t("herd.addTreatment.treatmentType")}
               value={treatmentType}
               onChange={(e) => setTreatmentType(e.target.value)}
               disabled={isLoading}
             >
-              {TREATMENT_TYPES.map((t) => (
-                <MenuItem key={t.value} value={t.value}>
-                  {t.label}
+              {TREATMENT_TYPES.map((opt) => (
+                <MenuItem key={opt.value} value={opt.value}>
+                  {opt.label}
                 </MenuItem>
               ))}
             </TextField>
@@ -198,7 +202,7 @@ const AddTreatment: React.FC = () => {
           <Grid item xs={12} md={6}>
             <TextField
               fullWidth
-              label="Diagnosis / Condition"
+              label={t("herd.addTreatment.diagnosis")}
               value={diagnosis}
               onChange={(e) => setDiagnosis(e.target.value)}
               disabled={isLoading}
@@ -207,7 +211,7 @@ const AddTreatment: React.FC = () => {
           <Grid item xs={12} md={6}>
             <TextField
               fullWidth
-              label="Vet Name"
+              label={t("herd.addTreatment.vetName")}
               value={vetName}
               onChange={(e) => setVetName(e.target.value)}
               disabled={isLoading}
@@ -217,13 +221,13 @@ const AddTreatment: React.FC = () => {
             <TextField
               fullWidth
               select
-              label="Medicine (from stock, optional)"
+              label={t("herd.addTreatment.medicineFromStock")}
               value={medicineStockItemId}
               onChange={(e) => setMedicineStockItemId(e.target.value)}
               disabled={isLoading}
               SelectProps={{ onOpen: loadMedicines }}
             >
-              <MenuItem value="">None</MenuItem>
+              <MenuItem value="">{t("herd.addTreatment.none")}</MenuItem>
               {medicines.map((m) => (
                 <MenuItem key={m.uuid} value={m.uuid}>
                   {m.name}
@@ -235,7 +239,7 @@ const AddTreatment: React.FC = () => {
             <TextField
               fullWidth
               type="number"
-              label="Quantity Used"
+              label={t("herd.addTreatment.quantityUsed")}
               value={quantityUsed}
               onChange={(e) => setQuantityUsed(e.target.value)}
               disabled={isLoading || !medicineStockItemId}
@@ -245,7 +249,7 @@ const AddTreatment: React.FC = () => {
           <Grid item xs={12} md={4}>
             <TextField
               fullWidth
-              label="Medicine Name (if not from stock)"
+              label={t("herd.addTreatment.medicineName")}
               value={medicineName}
               onChange={(e) => setMedicineName(e.target.value)}
               disabled={isLoading}
@@ -254,18 +258,18 @@ const AddTreatment: React.FC = () => {
           <Grid item xs={12} md={4}>
             <TextField
               fullWidth
-              label="Dosage"
+              label={t("herd.addTreatment.dosage")}
               value={dosage}
               onChange={(e) => setDosage(e.target.value)}
               disabled={isLoading}
-              placeholder="e.g. 10ml IM once daily"
+              placeholder={t("herd.addTreatment.dosagePlaceholder")}
             />
           </Grid>
           <Grid item xs={12} md={4}>
             <TextField
               fullWidth
               type="number"
-              label="Cost"
+              label={t("herd.addTreatment.cost")}
               value={cost}
               onChange={(e) => setCost(e.target.value)}
               disabled={isLoading}
@@ -277,7 +281,7 @@ const AddTreatment: React.FC = () => {
               control={
                 <Checkbox checked={markSick} onChange={(e) => setMarkSick(e.target.checked)} disabled={isLoading} />
               }
-              label="Mark animal as sick"
+              label={t("herd.addTreatment.markSick")}
               sx={{ mt: 1 }}
             />
           </Grid>
@@ -285,19 +289,19 @@ const AddTreatment: React.FC = () => {
             <TextField
               fullWidth
               type="number"
-              label="Milk Withdrawal (days)"
+              label={t("herd.addTreatment.milkWithdrawalDays")}
               value={milkWithdrawalDays}
               onChange={(e) => setMilkWithdrawalDays(e.target.value)}
               disabled={isLoading}
               inputProps={{ min: 0 }}
-              helperText="Milk from this animal must not be sold during the withdrawal period"
+              helperText={t("herd.addTreatment.milkWithdrawalHelper")}
             />
           </Grid>
           <Grid item xs={12} md={6}>
             <TextField
               fullWidth
               type="number"
-              label="Meat Withdrawal (days)"
+              label={t("herd.addTreatment.meatWithdrawalDays")}
               value={meatWithdrawalDays}
               onChange={(e) => setMeatWithdrawalDays(e.target.value)}
               disabled={isLoading}
@@ -307,7 +311,7 @@ const AddTreatment: React.FC = () => {
           <Grid item xs={12}>
             <TextField
               fullWidth
-              label="Comments"
+              label={t("herd.addTreatment.comments")}
               multiline
               rows={3}
               value={comments}
@@ -330,7 +334,7 @@ const AddTreatment: React.FC = () => {
               padding: "8px 50px",
             }}
           >
-            {isLoading ? <CircularProgress size={24} sx={{ color: "#0F7C8F" }} /> : "Save"}
+            {isLoading ? <CircularProgress size={24} sx={{ color: "#0F7C8F" }} /> : t("common.save")}
           </Button>
         </Box>
       </Box>

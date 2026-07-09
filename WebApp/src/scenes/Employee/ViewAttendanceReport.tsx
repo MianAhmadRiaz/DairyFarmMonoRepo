@@ -1,4 +1,5 @@
 import React, { useState, useMemo, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import {
   Box,
   Button,
@@ -28,6 +29,7 @@ import { getAttendance ,Employee,getAllEmployees ,MappedAttendance } from '../..
 import { tokens } from '../../shared/theme/theme';
 
 export default function EmployeeDashboard() {
+  const { t } = useTranslation();
   const [employees, setEmployees] = useState<Employee[]>([]);
 
 const [attendanceRecords, setAttendanceRecords] = useState<{ [key: string]: { [date: string]: 'present' | 'absent'|'leave' } }>({});
@@ -59,12 +61,12 @@ const [dates, setDates] = useState<string[]>([]);
 
 const handleFetchAttendance = async () => {
   if (!startDate || !endDate) {
-    alert("Select both start and end dates!");
+    alert(t('employee.viewAttendanceReport.selectBothDates'));
     return;
   }
 
   try {
-  
+
     generateDates(startDate, endDate);
     const attendanceData: MappedAttendance[] = await getAttendance(startDate, endDate);
 
@@ -87,7 +89,7 @@ records[emp.userId][formatDateRaw(att.date)] = att.status;
 
   } catch (error) {
     console.error("Error fetching attendance:", error);
-    alert("Failed to fetch attendance records");
+    alert(t('employee.viewAttendanceReport.fetchFailed'));
   }
 };
 
@@ -97,7 +99,7 @@ records[emp.userId][formatDateRaw(att.date)] = att.status;
 
   function generateDates(start: string, end: string) {
   if (!start || !end) {
-    alert("Select both dates!");
+    alert(t('employee.viewAttendanceReport.selectBothDatesShort'));
     return;
   }
 
@@ -179,7 +181,7 @@ useEffect(() => {
 
 
   return (
-    <PageContainer title="View Attendance Report">
+    <PageContainer title={t('employee.viewAttendanceReport.title')}>
       <Card
         sx={{
           mb: 3,
@@ -208,12 +210,12 @@ useEffect(() => {
               }}
             >
               <label style={{ marginBottom: '4px', fontWeight: 'bold' }}>
-                Start Date
+                {t('employee.viewAttendanceReport.startDate')}
               </label>
               <TextField
                 size="small"
                 type="date"
-                placeholder="Select"
+                placeholder={t('employee.common.select')}
                 variant="outlined"
                 value={startDate}
                 onChange={(e)=>setstartDate(e.target.value)}
@@ -235,12 +237,12 @@ useEffect(() => {
               }}
             >
               <label style={{ marginBottom: '4px', fontWeight: 'bold' }}>
-                End Date
+                {t('employee.viewAttendanceReport.endDate')}
               </label>
               <TextField
                 size="small"
                 type="date"
-                placeholder="Select"
+                placeholder={t('employee.common.select')}
                 variant="outlined"
                 value={endDate}
                 onChange={(e)=>setendDate(e.target.value)}
@@ -273,7 +275,7 @@ alignSelf: 'flex-end'
                   }
                 }}
               >
-                Get
+                {t('employee.viewAttendanceReport.get')}
               </Button>
             </Box>
           </Box>
@@ -302,7 +304,7 @@ alignSelf: 'flex-end'
     
 <TextField
   size="small"
-  placeholder="Search by name or date"
+  placeholder={t('employee.viewAttendanceReport.searchByNameOrDate')}
   value={searchTerm}
   onChange={(e) => {
     setSearchTerm(e.target.value);
@@ -320,27 +322,27 @@ alignSelf: 'flex-end'
       endIcon={<ArrowDropDown />}
       sx={{ backgroundColor: 'white', whiteSpace: 'nowrap' }}
     >
-      Filter
+      {t('employee.viewAttendanceReport.filter')}
     </Button>
   </Stack>
 
   {/* Copy + Excel + CSV */}
   <Stack direction="row" spacing={2} sx={{ width: { xs: '100%', sm: 'auto' } }}>
     <Button variant="outlined" sx={{ backgroundColor: 'white' }} startIcon={<FileCopy />}>
-      Copy
+      {t('employee.viewAttendanceReport.copy')}
     </Button>
     <Button variant="outlined" sx={{ backgroundColor: 'white' }} startIcon={<TableChart />}>
-      Excel
+      {t('employee.viewAttendanceReport.excel')}
     </Button>
     <Button variant="outlined" sx={{ backgroundColor: 'white' }} startIcon={<GetApp />}>
-      CSV
+      {t('employee.viewAttendanceReport.csv')}
     </Button>
   </Stack>
 
   {/* PDF + Print */}
   <Stack direction="row" spacing={2} sx={{ width: { xs: '100%', sm: 'auto' } }}>
     <Button variant="outlined" sx={{ backgroundColor: 'white' }} startIcon={<PictureAsPdf />}>
-      PDF
+      {t('employee.viewAttendanceReport.pdf')}
     </Button>
     <Button
       variant="outlined"
@@ -348,7 +350,7 @@ alignSelf: 'flex-end'
       startIcon={<Print />}
       endIcon={<ArrowDropDown />}
     >
-      Print
+      {t('employee.viewAttendanceReport.print')}
     </Button>
   </Stack>
 </Stack>
@@ -424,8 +426,8 @@ alignSelf: 'flex-end'
     >
       <thead>
         <tr>
-          <th>Sr#</th>
-          <th>Employee</th>
+          <th>{t('employee.common.srNo')}</th>
+          <th>{t('employee.common.employee')}</th>
 
           {weeks.flat().map((date) => (
             <th key={date}>{date}</th>
@@ -438,11 +440,14 @@ alignSelf: 'flex-end'
             <td>{(page - 1) * ITEMS_PER_PAGE + index + 1}</td>
             <td>{emp.name}</td>
 
-            {weeks.flat().map((date, i) => (
-              <td key={i}>
-                {attendanceRecords[emp.uuid]?.[date] || "–"}
-              </td>
-            ))}
+            {weeks.flat().map((date, i) => {
+              const status = attendanceRecords[emp.uuid]?.[date];
+              return (
+                <td key={i}>
+                  {status ? t('employee.viewAttendanceReport.attendanceStatus.' + status, status) : "–"}
+                </td>
+              );
+            })}
           </tr>
         ))}
       </tbody>

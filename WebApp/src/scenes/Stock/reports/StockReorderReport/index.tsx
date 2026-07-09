@@ -4,6 +4,7 @@ import { Box } from '@mui/material';
 import { getReorderReport } from '../../../../shared/services/stockModule.services';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { useTranslation } from 'react-i18next';
 
 interface StockReorderRow {
   id: number;
@@ -16,6 +17,7 @@ interface StockReorderRow {
 }
 
 const StockReorderReport: React.FC = () => {
+  const { t } = useTranslation();
   const [rows, setRows] = useState<StockReorderRow[]>([]);
 
   useEffect(() => {
@@ -38,10 +40,11 @@ const StockReorderReport: React.FC = () => {
           })
         );
       } catch (error: any) {
-        toast.error(error?.response?.data?.message || 'Failed to fetch reorder report.');
+        toast.error(error?.response?.data?.message || t('stock.stockReorderReport.fetchError'));
       }
     };
     load();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (

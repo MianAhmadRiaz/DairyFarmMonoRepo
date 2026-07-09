@@ -20,6 +20,7 @@ import {
 import SaveIcon from '@mui/icons-material/Save';
 import SearchIcon from '@mui/icons-material/Search';
 import SettingsIcon from '@mui/icons-material/Settings';
+import { useTranslation } from 'react-i18next';
 import { tokens } from '../../shared/theme/theme';
 import PageContainer from '../../shared/components/Layout/PageContainer';
 
@@ -32,6 +33,7 @@ interface MilkSaleRow {
 }
 
 export default function CustomerMilkSale() {
+  const { t } = useTranslation();
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   const pageBg = theme.palette.mode === 'dark' ? colors.primary[500] : '#F5FAF7';
@@ -77,7 +79,7 @@ export default function CustomerMilkSale() {
 
   // Handle save
   const handleSave = () => {
-    setSnackbar({ open: true, message: 'Customer milk sales saved successfully!', severity: 'success' });
+    setSnackbar({ open: true, message: t('accounts.customerMilkSale.saveSuccess'), severity: 'success' });
   };
 
   // Filter sales based on search term
@@ -90,7 +92,7 @@ export default function CustomerMilkSale() {
   };
 
   return (
-    <PageContainer title="Customer Milk Sales">
+    <PageContainer title={t('accounts.customerMilkSale.title')}>
         {/* Main Card */}
         <Paper elevation={0} sx={{ p: 0, borderRadius: 2, border: `1px solid ${theme.palette.divider}`, bgcolor: 'background.paper' }}>
           
@@ -109,7 +111,7 @@ export default function CustomerMilkSale() {
           >
             <Typography variant="h6" fontWeight={600} sx={{ display: 'flex', alignItems: 'center' }}>
               <Box component="span" sx={{ mr: 1 }}>🥛</Box>
-              Customer Milk Sales
+              {t('accounts.customerMilkSale.title')}
             </Typography>
             <Stack direction="row" spacing={2} alignItems="center">
               <TextField
@@ -138,7 +140,7 @@ export default function CustomerMilkSale() {
                   }
                 }}
               >
-                Save
+                {t('common.save')}
               </Button>
               <IconButton sx={{ color: '#FF9800' }}>
                 <SettingsIcon />
@@ -152,7 +154,7 @@ export default function CustomerMilkSale() {
             <Box sx={{ mb: 3, display: 'flex', justifyContent: 'flex-end' }}>
               <TextField
                 size="small"
-                placeholder="Search:"
+                placeholder={t('accounts.common.searchLabel')}
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 InputProps={{
@@ -171,9 +173,9 @@ export default function CustomerMilkSale() {
                 <TableHead>
                   <TableRow sx={{ bgcolor: '#F5F5F5' }}>
                     <TableCell sx={{ fontWeight: 600, border: '1px solid #E0E0E0', width: '60px' }}>#</TableCell>
-                    <TableCell sx={{ fontWeight: 600, border: '1px solid #E0E0E0' }}>Customer</TableCell>
+                    <TableCell sx={{ fontWeight: 600, border: '1px solid #E0E0E0' }}>{t('accounts.common.customer')}</TableCell>
                     <TableCell sx={{ fontWeight: 600, border: '1px solid #E0E0E0', textAlign: 'center' }} colSpan={2}>
-                      Milk
+                      {t('accounts.customerMilkSale.milk')}
                     </TableCell>
                     <TableCell sx={{ fontWeight: 600, border: '1px solid #E0E0E0', width: '100px' }}></TableCell>
                   </TableRow>
@@ -181,10 +183,10 @@ export default function CustomerMilkSale() {
                     <TableCell sx={{ border: '1px solid #E0E0E0' }}></TableCell>
                     <TableCell sx={{ border: '1px solid #E0E0E0' }}></TableCell>
                     <TableCell sx={{ fontWeight: 600, border: '1px solid #E0E0E0', textAlign: 'center', width: '120px' }}>
-                      Quantity
+                      {t('accounts.customerMilkSale.quantity')}
                     </TableCell>
                     <TableCell sx={{ fontWeight: 600, border: '1px solid #E0E0E0', textAlign: 'center', width: '120px' }}>
-                      Rate
+                      {t('accounts.customerMilkSale.rate')}
                     </TableCell>
                     <TableCell sx={{ fontWeight: 600, border: '1px solid #E0E0E0', width: '100px' }}></TableCell>
                   </TableRow>
@@ -252,7 +254,7 @@ export default function CustomerMilkSale() {
                   {/* Total Row */}
                   <TableRow sx={{ bgcolor: '#F5F5F5', fontWeight: 'bold' }}>
                     <TableCell sx={{ border: '1px solid #E0E0E0', fontWeight: 600 }}>
-                      Total
+                      {t('accounts.customerMilkSale.total')}
                     </TableCell>
                     <TableCell sx={{ border: '1px solid #E0E0E0' }}>
                     </TableCell>
@@ -272,7 +274,7 @@ export default function CustomerMilkSale() {
             {/* Footer Info */}
             <Box sx={{ mt: 2, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
               <Typography variant="body2" color="text.secondary">
-                Showing 1 to {filteredSales.length} of {milkSales.length} entries
+                {t('accounts.common.showingEntriesRange', { start: 1, end: filteredSales.length, total: milkSales.length })}
               </Typography>
             </Box>
           </Box>

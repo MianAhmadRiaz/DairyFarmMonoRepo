@@ -284,7 +284,7 @@ export const ColorModeContext = createContext({
   toggleColorMode: () => {}
 });
 
-export const useMode = () => {
+export const useMode = (direction = 'ltr') => {
   const [mode, setMode] = useState('light');
 
   const colorMode = useMemo(
@@ -295,6 +295,9 @@ export const useMode = () => {
     []
   );
 
-  const theme = useMemo(() => createTheme(themeSettings(mode)), [mode]);
+  const theme = useMemo(
+    () => createTheme({ ...themeSettings(mode), direction }),
+    [mode, direction]
+  );
   return [theme, colorMode];
 };

@@ -1,6 +1,7 @@
 import React from 'react';
 import { Box, Typography, Button } from '@mui/material';
 import { TableChart, Refresh } from '@mui/icons-material';
+import { useTranslation } from 'react-i18next';
 import ErrorBoundary from './ErrorBoundary';
 
 interface Props {
@@ -12,6 +13,7 @@ const TableErrorBoundary: React.FC<Props> = ({
   children,
   tableName = 'table'
 }) => {
+  const { t } = useTranslation();
   const handleError = (error: Error, errorInfo: React.ErrorInfo) => {
     console.error(`${tableName} Table Error:`, error);
   };
@@ -27,10 +29,12 @@ const TableErrorBoundary: React.FC<Props> = ({
         sx={{ fontSize: 40, color: 'text.secondary', marginBottom: 1 }}
       />
       <Typography variant="h6" gutterBottom>
-        Unable to Load {tableName}
+        {t('shared.tableErrorBoundary.title', { tableName })}
       </Typography>
       <Typography variant="body2" color="text.secondary" paragraph>
-        There was an error loading the {tableName.toLowerCase()} data.
+        {t('shared.tableErrorBoundary.message', {
+          tableName: tableName.toLowerCase()
+        })}
       </Typography>
       <Button
         size="small"
@@ -38,7 +42,7 @@ const TableErrorBoundary: React.FC<Props> = ({
         startIcon={<Refresh />}
         onClick={() => window.location.reload()}
       >
-        Retry
+        {t('shared.tableErrorBoundary.retry')}
       </Button>
     </Box>
   );

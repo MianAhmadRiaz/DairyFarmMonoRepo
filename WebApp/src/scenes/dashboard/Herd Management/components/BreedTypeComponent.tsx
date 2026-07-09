@@ -1,8 +1,10 @@
 import { Grid, MenuItem, Modal, TextField } from '@mui/material';
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import AddItemModal from '../../../Item Modal/AddItemModal';
 
 const BreedTypeComponent = () => {
+  const { t } = useTranslation();
   const [isModalOpen, setModalOpen] = useState(false);
   const [typeOptions, setTypeOptions] = useState(['Angus', 'Australian']);
 
@@ -20,7 +22,7 @@ const BreedTypeComponent = () => {
         <TextField
           fullWidth
           select
-          label="BreedType"
+          label={t('herd.common.breedType')}
           variant="outlined"
           value={breedType}
           onChange={e => setBreedType(e.target.value)}
@@ -48,14 +50,14 @@ const BreedTypeComponent = () => {
               borderTop: '1px solid #ddd'
             }}
           >
-            Add New Breed Type
+            {t('herd.common.addNewBreedType')}
           </MenuItem>
         </TextField>
       </Grid>
       {/* Modal for Adding New Pen ID */}
       <Modal open={isModalOpen} onClose={handleCloseModal}>
         <AddItemModal
-          label="Breed Type"
+          label={t('herd.common.breedType')}
           isOpen={isModalOpen}
           onClose={handleCloseModal}
           onAdd={handleAddBreedType}

@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { Image, SafeAreaView, View } from 'react-native'
 import FastImage from 'react-native-fast-image'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
@@ -18,6 +19,7 @@ import { RF } from 'shared/theme/responsive'
 // was created with a temporary password. Setting a new one clears the flag and
 // unlocks the app.
 const SetPassword = () => {
+  const { t } = useTranslation()
   const dispatch = useDispatch()
   const [current, setCurrent] = useState('')
   const [password, setPass] = useState('')
@@ -27,11 +29,11 @@ const SetPassword = () => {
 
   const onSubmit = async () => {
     if (!current || !password || !confirm) {
-      Toast.show({ type: 'error', text1: 'Validation', text2: 'Fill all fields' })
+      Toast.show({ type: 'error', text1: t('auth.setPassword.validation'), text2: t('auth.setPassword.fillAllFields') })
       return
     }
     if (password !== confirm) {
-      Toast.show({ type: 'error', text1: 'Validation', text2: 'Passwords do not match' })
+      Toast.show({ type: 'error', text1: t('auth.setPassword.validation'), text2: t('auth.setPassword.passwordsDoNotMatch') })
       return
     }
     try {
@@ -40,9 +42,9 @@ const SetPassword = () => {
       // Re-hydrate the user so must_reset_password clears and permissions refresh.
       const res = await getCurrentUser()
       if (res?.data?.data) dispatch(setUser(res.data.data))
-      Toast.show({ type: 'success', text1: 'Success', text2: 'Password updated' })
+      Toast.show({ type: 'success', text1: t('auth.common.success'), text2: t('auth.setPassword.passwordUpdated') })
     } catch (e) {
-      Toast.show({ type: 'error', text1: 'Error', text2: getNormalizedError(e) })
+      Toast.show({ type: 'error', text1: t('auth.common.error'), text2: getNormalizedError(e) })
     } finally {
       setLoading(false)
     }
@@ -53,10 +55,10 @@ const SetPassword = () => {
       <View style={{ flex: 0.5, justifyContent: 'center', alignItems: 'center' }}>
         <Image source={ICONS.MAIN_LOGO} style={{ width: RF(120), height: RF(120) }} resizeMode={FastImage.resizeMode.contain} />
         <AppText fontSize="h5" bold color="primaryMain">
-          Set Your Password
+          {t('auth.setPassword.title')}
         </AppText>
         <AppText fontSize="caption" color="descriptionColor" style={{ marginTop: RF(6), textAlign: 'center', paddingHorizontal: RF(30) }}>
-          Your account uses a temporary password. Set a new one to continue.
+          {t('auth.setPassword.subtitle')}
         </AppText>
       </View>
       <KeyboardAwareScrollView
@@ -70,11 +72,11 @@ const SetPassword = () => {
           paddingTop: RF(24)
         }}
       >
-        <AppInput label="Temporary Password" value={current} onChangeText={setCurrent} secureTextEntry={secure} eye={secure ? 'eye-off' : 'eye'} onPressIcon={() => setSecure(!secure)} placeholder="Enter temporary password" />
-        <AppInput label="New Password" value={password} onChangeText={setPass} secureTextEntry={secure} placeholder="Min 8 chars, upper/lower/number/special" />
-        <AppInput label="Confirm New Password" value={confirm} onChangeText={setConfirm} secureTextEntry={secure} placeholder="Re-enter new password" />
+        <AppInput label={t('auth.setPassword.temporaryPassword')} value={current} onChangeText={setCurrent} secureTextEntry={secure} eye={secure ? 'eye-off' : 'eye'} onPressIcon={() => setSecure(!secure)} placeholder={t('auth.setPassword.temporaryPasswordPlaceholder')} />
+        <AppInput label={t('auth.setPassword.newPassword')} value={password} onChangeText={setPass} secureTextEntry={secure} placeholder={t('auth.setPassword.newPasswordPlaceholder')} />
+        <AppInput label={t('auth.setPassword.confirmNewPassword')} value={confirm} onChangeText={setConfirm} secureTextEntry={secure} placeholder={t('auth.setPassword.confirmNewPasswordPlaceholder')} />
         <PrimaryButton
-          title="Set Password"
+          title={t('auth.setPassword.setPassword')}
           loading={loading}
           loaderColor={COLORS.white}
           onPress={onSubmit}

@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { SafeAreaView, ScrollView, StyleSheet, View } from 'react-native';
 import AppText from 'shared/components/AppText/AppText';
 import { COLORS } from 'shared/theme';
@@ -8,10 +9,11 @@ import BorderLine from 'shared/components/BorderLine/BorderLine';
 import PieChartView from './PieChartView';
 
 const InventorySupplyCard = () => {
+  const { t } = useTranslation();
   return (
     <View style={styles.container}>
       <AppText semiBold fontSize="h7" style={styles.header}>
-        Inventory And Supplies
+        {t('main.inventory.title')}
       </AppText>
       <BorderLine />
 

@@ -13,14 +13,8 @@ import {
 } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import ArticleOutlinedIcon from '@mui/icons-material/ArticleOutlined';
+import { useTranslation } from 'react-i18next';
 import AttendanceSheet from './AtendenceSheet';
-
-const summary = [
-  { label: 'Total Employees', value: 26, color: 'bg-blue-100 text-blue-700' },
-  { label: 'Presents', value: 20, color: 'bg-green-100 text-green-700' },
-  { label: 'Leaves', value: '0/7', color: 'bg-orange-100 text-orange-700' },
-  { label: 'On Time', value: '0/7', color: 'bg-red-100 text-red-700' }
-];
 
 // Mock data with id and designation for search functionality
 const attendance = Array(10).fill({
@@ -47,8 +41,16 @@ const getStatusColor = (status: 'Present' | 'Absent' | 'Leave'): string => {
 };
 
 export default function Attendance() {
+  const { t } = useTranslation();
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedTab, setSelectedTab] = useState(0);
+
+  const summary = [
+    { label: t('employee.attendanceSheet.summary.totalEmployees'), value: 26, color: 'bg-blue-100 text-blue-700' },
+    { label: t('employee.attendanceSheet.summary.presents'), value: 20, color: 'bg-green-100 text-green-700' },
+    { label: t('employee.attendanceSheet.summary.leaves'), value: '0/7', color: 'bg-orange-100 text-orange-700' },
+    { label: t('employee.attendanceSheet.summary.onTime'), value: '0/7', color: 'bg-red-100 text-red-700' }
+  ];
 
   const handleTabChange = (event: React.SyntheticEvent, newValue: number) => {
     setSelectedTab(newValue);
@@ -68,11 +70,11 @@ export default function Attendance() {
     >
       <Box sx={{ borderBottom: 1, borderColor: 'divider', mt: 2 }}>
         <Typography variant="h5" fontWeight="bold">
-          Attendance
+          {t('employee.common.attendance')}
         </Typography>
         <Tabs value={selectedTab} onChange={handleTabChange}>
-          <Tab label="Today's Attendance" />
-          <Tab label="Attendance Sheet" />
+          <Tab label={t('employee.attendance.todaysAttendance')} />
+          <Tab label={t('employee.attendance.attendanceSheet')} />
         </Tabs>
       </Box>
       {selectedTab === 0 && (
@@ -81,7 +83,7 @@ export default function Attendance() {
           <Box className="mb-5">
             <TextField
               fullWidth
-              placeholder="Search"
+              placeholder={t('common.search')}
               variant="outlined"
               sx={{
                 width: '300px',
@@ -133,13 +135,13 @@ export default function Attendance() {
           <Card className="rounded-xl" sx={{width:'100%'}}>
             <CardContent>
               <Typography variant="h6" fontWeight="bold" mb={2}>
-                Attendance
+                {t('employee.common.attendance')}
               </Typography>
 
               {/* Search Bar */}
               <TextField
                 fullWidth
-                placeholder="Search by Employee Name, Id or Designation"
+                placeholder={t('employee.attendanceSheet.searchPlaceholder')}
                 variant="outlined"
                 size="small"
                 className="mb-4 bg-white"
@@ -159,11 +161,11 @@ export default function Attendance() {
               <Box className="overflow-x-auto">
                 {/* Table Header */}
                 <Box className="grid grid-cols-5 font-semibold text-gray-600 py-2 border-b border-gray-300 text-sm px-4">
-                  <div className="bg-gray-100">NAME</div>
-                  <div className="bg-gray-100">FIRST PUNCH IN</div>
-                  <div className="bg-gray-100">LAST PUNCH OUT</div>
-                  <div className="bg-gray-100">PRODUCTION</div>
-                  <div className="bg-gray-100">Status</div>
+                  <div className="bg-gray-100">{t('employee.attendanceSheet.nameColumn')}</div>
+                  <div className="bg-gray-100">{t('employee.attendance.firstPunchIn')}</div>
+                  <div className="bg-gray-100">{t('employee.attendance.lastPunchOut')}</div>
+                  <div className="bg-gray-100">{t('employee.attendance.production')}</div>
+                  <div className="bg-gray-100">{t('employee.attendance.statusColumn')}</div>
                 </Box>
 
                 {filteredEmployees.map((att, idx) => (
@@ -195,7 +197,7 @@ export default function Attendance() {
                           getStatusColor(att.status)
                         }`}
                       >
-                        {att.status}
+                        {t('employee.attendance.status.' + att.status, { defaultValue: att.status })}
                       </span>
                     </div>
                   </Box>

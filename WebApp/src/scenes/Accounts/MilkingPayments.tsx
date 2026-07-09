@@ -16,6 +16,7 @@ import {
 } from '@mui/material';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
+import { useTranslation } from 'react-i18next';
 import { tokens } from '../../shared/theme/theme';
 import PageContainer from '../../shared/components/Layout/PageContainer';
 
@@ -61,6 +62,7 @@ const isEmpty = (v: any) => v === '' || v === undefined || v === null;
 const toNum = (v: Num) => (isEmpty(v) ? 0 : Number(v));
 
 export default function MilkingPayments() {
+  const { t } = useTranslation();
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   const pageBg = theme.palette.mode === 'dark' ? colors.primary[500] : '#F5FAF7';
@@ -104,10 +106,10 @@ export default function MilkingPayments() {
 
   // ---- Validation (required like your previous screen) ----
   const errors: Partial<Record<keyof FormState, string>> = {};
-  if (!form.company) errors.company = 'Required';
-  if (!form.paymentDate) errors.paymentDate = 'Required';
-  if (!form.startDate) errors.startDate = 'Required';
-  if (!form.endDate) errors.endDate = 'Required';
+  if (!form.company) errors.company = t('accounts.common.required');
+  if (!form.paymentDate) errors.paymentDate = t('accounts.common.required');
+  if (!form.startDate) errors.startDate = t('accounts.common.required');
+  if (!form.endDate) errors.endDate = t('accounts.common.required');
 
   // ---- Handlers ----
   const onChange = <K extends keyof FormState>(key: K, value: FormState[K]) =>
@@ -148,7 +150,7 @@ export default function MilkingPayments() {
 
   const save = () => {
     if (Object.keys(errors).length) {
-      alert('Please fill required fields.');
+      alert(t('accounts.common.fillRequiredFields'));
       return;
     }
     const payload = {
@@ -158,11 +160,11 @@ export default function MilkingPayments() {
       grandTotal,
     };
     console.log('Saving company payment...', payload);
-    alert('Saved! (demo)');
+    alert(t('accounts.milkingPayments.savedDemo'));
   };
 
   return (
-    <PageContainer title="Corporate Company Payments">
+    <PageContainer title={t('accounts.milkingPayments.title')}>
         {/* Card */}
         <Paper
           elevation={0}
@@ -180,7 +182,7 @@ export default function MilkingPayments() {
                 fullWidth
                 size="small"
                 type="date"
-                label="Payment Receiving Date"
+                label={t('accounts.milkingPayments.paymentReceivingDate')}
                 value={form.paymentDate}
                 error={!!errors.paymentDate}
                 helperText={errors.paymentDate || ' '}
@@ -194,7 +196,7 @@ export default function MilkingPayments() {
                 select
                 fullWidth
                 size="small"
-                label="Choose Company"
+                label={t('accounts.milkingPayments.chooseCompany')}
                 value={form.company}
                 error={!!errors.company}
                 helperText={errors.company || ' '}
@@ -213,7 +215,7 @@ export default function MilkingPayments() {
                 fullWidth
                 size="small"
                 type="number"
-                label="Week No"
+                label={t('accounts.milkingPayments.weekNo')}
                 value={form.weekNo}
                 onChange={(e) =>
                   onChange('weekNo', e.target.value === '' ? '' : Number(e.target.value))
@@ -226,7 +228,7 @@ export default function MilkingPayments() {
                 fullWidth
                 size="small"
                 type="date"
-                label="Start Date"
+                label={t('accounts.milkingPayments.startDate')}
                 value={form.startDate}
                 error={!!errors.startDate}
                 helperText={errors.startDate || ' '}
@@ -240,7 +242,7 @@ export default function MilkingPayments() {
                 fullWidth
                 size="small"
                 type="date"
-                label="End Date"
+                label={t('accounts.milkingPayments.endDate')}
                 value={form.endDate}
                 error={!!errors.endDate}
                 helperText={errors.endDate || ' '}
@@ -257,7 +259,7 @@ export default function MilkingPayments() {
                 fullWidth
                 size="small"
                 type="number"
-                label="Volume (L)"
+                label={t('accounts.milkingPayments.volume')}
                 value={form.volume}
                 onChange={(e) =>
                   onChange('volume', e.target.value === '' ? '' : Number(e.target.value))
@@ -271,7 +273,7 @@ export default function MilkingPayments() {
                 fullWidth
                 size="small"
                 type="number"
-                label="Adjusted Volume (L)"
+                label={t('accounts.milkingPayments.adjustedVolume')}
                 value={form.adjustedVolume}
                 onChange={(e) =>
                   onChange('adjustedVolume', e.target.value === '' ? '' : Number(e.target.value))
@@ -285,7 +287,7 @@ export default function MilkingPayments() {
                 fullWidth
                 size="small"
                 type="number"
-                label="Rate"
+                label={t('accounts.milkingPayments.rate')}
                 value={form.rate}
                 onChange={(e) => onChange('rate', e.target.value === '' ? '' : Number(e.target.value))}
                 inputProps={{ min: 0, step: 0.1 }}
@@ -296,7 +298,7 @@ export default function MilkingPayments() {
               <TextField
                 fullWidth
                 size="small"
-                label="Bill Total"
+                label={t('accounts.milkingPayments.billTotal')}
                 value={billTotal}
                 InputProps={{ readOnly: true }}
               />
@@ -310,7 +312,7 @@ export default function MilkingPayments() {
           <Divider sx={{ my: 3 }} />
           <Stack direction="row" alignItems="center" justifyContent="space-between" sx={{ mb: 1 }}>
             <Typography variant="subtitle2" fontWeight={800}>
-              Select Incentives
+              {t('accounts.milkingPayments.selectIncentives')}
             </Typography>
             <Button
               size="small"
@@ -325,13 +327,13 @@ export default function MilkingPayments() {
                 '&:hover': { backgroundColor: '#d7efe6' },
               }}
             >
-              Add Incentives
+              {t('accounts.milkingPayments.addIncentives')}
             </Button>
           </Stack>
 
           {form.incentives.length === 0 && (
             <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
-              No incentives added.
+              {t('accounts.milkingPayments.noIncentives')}
             </Typography>
           )}
 
@@ -342,7 +344,7 @@ export default function MilkingPayments() {
                   select
                   fullWidth
                   size="small"
-                  label="Incentive"
+                  label={t('accounts.milkingPayments.incentive')}
                   value={row.incentive}
                   onChange={(e) => updateIncentive(row.id, { incentive: e.target.value })}
                 >
@@ -358,7 +360,7 @@ export default function MilkingPayments() {
                   fullWidth
                   size="small"
                   type="number"
-                  label="Amount"
+                  label={t('accounts.milkingPayments.amount')}
                   value={row.amount}
                   onChange={(e) =>
                     updateIncentive(row.id, {
@@ -373,7 +375,7 @@ export default function MilkingPayments() {
                   fullWidth
                   size="small"
                   type="number"
-                  label="Week"
+                  label={t('accounts.milkingPayments.week')}
                   value={row.week}
                   onChange={(e) =>
                     updateIncentive(row.id, {
@@ -384,7 +386,7 @@ export default function MilkingPayments() {
                 />
               </Grid>
               <Grid item xs={2} md={0.5} sx={{ display: 'flex', alignItems: 'center' }}>
-                <Tooltip title="Remove">
+                <Tooltip title={t('accounts.milkingPayments.remove')}>
                   <IconButton onClick={() => removeIncentive(row.id)} size="small">
                     <DeleteOutlineIcon fontSize="small" />
                   </IconButton>
@@ -398,7 +400,7 @@ export default function MilkingPayments() {
               <TextField
                 fullWidth
                 size="small"
-                label="Total Incentive"
+                label={t('accounts.milkingPayments.totalIncentive')}
                 value={totalIncentive}
                 InputProps={{ readOnly: true }}
               />
@@ -409,7 +411,7 @@ export default function MilkingPayments() {
                 select
                 fullWidth
                 size="small"
-                label="Income Account"
+                label={t('accounts.milkingPayments.incomeAccount')}
                 value={form.incomeAccount}
                 onChange={(e) => onChange('incomeAccount', e.target.value)}
               >
@@ -426,7 +428,7 @@ export default function MilkingPayments() {
                 select
                 fullWidth
                 size="small"
-                label="Cash/Bank Account"
+                label={t('accounts.milkingPayments.cashBankAccount')}
                 value={form.cashBankAccount}
                 onChange={(e) => onChange('cashBankAccount', e.target.value)}
               >
@@ -442,7 +444,7 @@ export default function MilkingPayments() {
               <TextField
                 fullWidth
                 size="small"
-                label="Grand Total"
+                label={t('accounts.milkingPayments.grandTotal')}
                 value={grandTotal}
                 InputProps={{ readOnly: true }}
               />
@@ -456,7 +458,7 @@ export default function MilkingPayments() {
               onClick={save}
               sx={{ backgroundColor: '#005f73', color: '#ffffff', textTransform: 'none', px: 3 }}
             >
-              Save Changes
+              {t('accounts.common.saveChanges')}
             </Button>
             <Button
               variant="outlined"
@@ -469,7 +471,7 @@ export default function MilkingPayments() {
                 px: 3,
               }}
             >
-              Reset
+              {t('accounts.common.reset')}
             </Button>
           </Stack>
         </Paper>

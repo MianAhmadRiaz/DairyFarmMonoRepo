@@ -11,6 +11,7 @@ import {
   Stack,
   Divider,
 } from '@mui/material';
+import { useTranslation } from 'react-i18next';
 import { tokens } from '../../shared/theme/theme';
 import { createAccount } from '../../shared/services/finance.service';
 
@@ -43,7 +44,18 @@ const TYPES: AcctType[] = [
   'Equity',
 ];
 
+const TYPE_LABEL_KEYS: Record<AcctType, string> = {
+  'Cash-In-Hand': 'cashInHand',
+  Bank: 'bank',
+  Receivable: 'receivable',
+  Payable: 'payable',
+  Expense: 'expense',
+  Revenue: 'revenue',
+  Equity: 'equity',
+};
+
 export default function AddAccountHead() {
+  const { t } = useTranslation();
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   const pageBg = theme.palette.mode === 'dark' ? colors.primary[500] : '#F5FAF7';
@@ -55,10 +67,10 @@ export default function AddAccountHead() {
 
   const errors = useMemo(() => {
     const e: Record<string, string> = {};
-    if (!name.trim()) e.name = 'Required';
-    if (!type) e.type = 'Required';
+    if (!name.trim()) e.name = t('accounts.common.required');
+    if (!type) e.type = t('accounts.common.required');
     return e;
-  }, [name, type]);
+  }, [name, type, t]);
 
   const reset = () => {
     setName('');
@@ -69,7 +81,7 @@ export default function AddAccountHead() {
 
   const save = async () => {
     if (Object.keys(errors).length) {
-      alert('Please fill required fields.');
+      alert(t('accounts.common.fillRequiredFields'));
       return;
     }
     try {
@@ -79,11 +91,11 @@ export default function AddAccountHead() {
         account_type: TYPE_TO_BACKEND[type] || 'asset',
         opening_balance: openingBalance === '' ? 0 : Number(openingBalance),
       } as any);
-      alert('Account created successfully!');
+      alert(t('accounts.addAccountHead.createSuccess'));
       reset();
     } catch (e) {
       console.error('Failed to create account', e);
-      alert('Failed to create account.');
+      alert(t('accounts.addAccountHead.createError'));
     }
   };
 
@@ -118,7 +130,7 @@ export default function AddAccountHead() {
             }}
           >
             <Typography variant="subtitle1" fontWeight={700}>
-              Add Account Head
+              {t('accounts.addAccountHead.title')}
             </Typography>
           </Box>
 
@@ -129,8 +141,8 @@ export default function AddAccountHead() {
                 <TextField
                   fullWidth
                   size="small"
-                  label="Account Name"
-                  placeholder="Account Head Name"
+                  label={t('accounts.addAccountHead.accountName')}
+                  placeholder={t('accounts.addAccountHead.accountHeadNamePlaceholder')}
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                   error={!!errors.name}
@@ -142,7 +154,7 @@ export default function AddAccountHead() {
                 <TextField
                   fullWidth
                   size="small"
-                  label="Account Code"
+                  label={t('accounts.addAccountHead.accountCode')}
                   value={code}
                   onChange={(e) => setCode(e.target.value)}
                   helperText=" "
@@ -154,15 +166,15 @@ export default function AddAccountHead() {
                   select
                   fullWidth
                   size="small"
-                  label="Choose Type"
+                  label={t('accounts.addAccountHead.chooseType')}
                   value={type}
                   onChange={(e) => setType(e.target.value as AcctType)}
                   error={!!errors.type}
                   helperText={errors.type || ' '}
                 >
-                  {TYPES.map((t) => (
-                    <MenuItem key={t} value={t}>
-                      {t}
+                  {TYPES.map((acct) => (
+                    <MenuItem key={acct} value={acct}>
+                      {t(`accounts.addAccountHead.types.${TYPE_LABEL_KEYS[acct]}`, acct)}
                     </MenuItem>
                   ))}
                 </TextField>
@@ -172,7 +184,7 @@ export default function AddAccountHead() {
                 <TextField
                   fullWidth
                   size="small"
-                  label="Opening Balance"
+                  label={t('accounts.addAccountHead.openingBalance')}
                   type="number"
                   value={openingBalance}
                   onChange={(e) => setOpeningBalance(e.target.value)}
@@ -196,7 +208,7 @@ export default function AddAccountHead() {
                   px: 3,
                 }}
               >
-                Save Changes
+                {t('accounts.common.saveChanges')}
               </Button>
               <Button
                 variant="outlined"
@@ -209,7 +221,7 @@ export default function AddAccountHead() {
                   px: 3,
                 }}
               >
-                Reset
+                {t('accounts.common.reset')}
               </Button>
             </Stack>
           </Box>

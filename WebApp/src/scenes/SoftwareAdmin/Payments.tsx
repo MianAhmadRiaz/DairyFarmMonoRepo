@@ -21,6 +21,7 @@ import {
 import AddIcon from '@mui/icons-material/Add';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { useTranslation } from 'react-i18next';
 
 import {
   Farm,
@@ -40,6 +41,7 @@ const statusColor: Record<string, any> = {
 };
 
 const Payments: React.FC = () => {
+  const { t } = useTranslation();
   const [payments, setPayments] = useState<FarmPayment[]>([]);
   const [farms, setFarms] = useState<Farm[]>([]);
   const [loading, setLoading] = useState(true);
@@ -63,7 +65,7 @@ const Payments: React.FC = () => {
       setPayments(payRes.payments);
       setFarms(farmRes.farms);
     } catch (err: any) {
-      toast.error(err?.response?.data?.message || 'Failed to load payments');
+      toast.error(err?.response?.data?.message || t('softwareAdmin.payments.loadFailed'));
     } finally {
       setLoading(false);
     }
@@ -75,11 +77,11 @@ const Payments: React.FC = () => {
 
   const handleRecord = async () => {
     if (!form.farmId) {
-      toast.error('Select a farm');
+      toast.error(t('softwareAdmin.payments.selectFarm'));
       return;
     }
     if (form.amount === '' || isNaN(Number(form.amount)) || Number(form.amount) <= 0) {
-      toast.error('Enter a valid amount');
+      toast.error(t('softwareAdmin.payments.enterValidAmount'));
       return;
     }
     setSaving(true);
@@ -93,7 +95,7 @@ const Payments: React.FC = () => {
         reference: form.reference,
         notes: form.notes
       });
-      toast.success('Payment recorded');
+      toast.success(t('softwareAdmin.payments.toast.recorded'));
       setOpen(false);
       setForm({
         farmId: '',
@@ -106,7 +108,7 @@ const Payments: React.FC = () => {
       });
       load();
     } catch (err: any) {
-      toast.error(err?.response?.data?.message || 'Failed to record payment');
+      toast.error(err?.response?.data?.message || t('softwareAdmin.payments.failedRecord'));
     } finally {
       setSaving(false);
     }
@@ -116,10 +118,10 @@ const Payments: React.FC = () => {
     <Box>
       <Box display="flex" justifyContent="space-between" alignItems="center" mb={3}>
         <Typography variant="h4" fontWeight={700}>
-          Payments & Invoices
+          {t('softwareAdmin.payments.title')}
         </Typography>
         <Button variant="contained" startIcon={<AddIcon />} onClick={() => setOpen(true)}>
-          Record Payment
+          {t('softwareAdmin.payments.recordPayment')}
         </Button>
       </Box>
 
@@ -132,18 +134,18 @@ const Payments: React.FC = () => {
           <Table>
             <TableHead>
               <TableRow>
-                <TableCell>Invoice</TableCell>
-                <TableCell>Farm</TableCell>
-                <TableCell>Amount</TableCell>
-                <TableCell>Method</TableCell>
-                <TableCell>Date</TableCell>
-                <TableCell>Status</TableCell>
+                <TableCell>{t('softwareAdmin.payments.columns.invoice')}</TableCell>
+                <TableCell>{t('softwareAdmin.payments.columns.farm')}</TableCell>
+                <TableCell>{t('softwareAdmin.payments.columns.amount')}</TableCell>
+                <TableCell>{t('softwareAdmin.payments.columns.method')}</TableCell>
+                <TableCell>{t('softwareAdmin.payments.columns.date')}</TableCell>
+                <TableCell>{t('softwareAdmin.payments.columns.status')}</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
               {payments.length === 0 && (
                 <TableRow>
-                  <TableCell colSpan={6}>No payments recorded yet.</TableCell>
+                  <TableCell colSpan={6}>{t('softwareAdmin.payments.noPayments')}</TableCell>
                 </TableRow>
               )}
               {payments.map(p => (
@@ -153,10 +155,10 @@ const Payments: React.FC = () => {
                   <TableCell>
                     {p.amount} {p.currency}
                   </TableCell>
-                  <TableCell>{p.method}</TableCell>
+                  <TableCell>{t('softwareAdmin.payments.methods.' + p.method, p.method)}</TableCell>
                   <TableCell>{p.payment_date}</TableCell>
                   <TableCell>
-                    <Chip size="small" label={p.status} color={statusColor[p.status]} />
+                    <Chip size="small" label={t('softwareAdmin.payments.status.' + p.status, p.status)} color={statusColor[p.status]} />
                   </TableCell>
                 </TableRow>
               ))}
@@ -166,13 +168,13 @@ const Payments: React.FC = () => {
       )}
 
       <Dialog open={open} onClose={() => setOpen(false)} fullWidth maxWidth="sm">
-        <DialogTitle>Record Payment</DialogTitle>
+        <DialogTitle>{t('softwareAdmin.payments.recordPayment')}</DialogTitle>
         <DialogContent>
           <TextField
             select
             fullWidth
             margin="normal"
-            label="Farm"
+            label={t('softwareAdmin.payments.columns.farm')}
             value={form.farmId}
             onChange={e => setForm({ ...form, farmId: e.target.value })}
           >
@@ -186,7 +188,7 @@ const Payments: React.FC = () => {
             <TextField
               fullWidth
               margin="normal"
-              label="Amount"
+              label={t('softwareAdmin.payments.columns.amount')}
               type="number"
               value={form.amount}
               onChange={e => setForm({ ...form, amount: e.target.value })}
@@ -194,7 +196,7 @@ const Payments: React.FC = () => {
             <TextField
               fullWidth
               margin="normal"
-              label="Currency"
+              label={t('softwareAdmin.payments.currency')}
               value={form.currency}
               onChange={e => setForm({ ...form, currency: e.target.value })}
             />
@@ -204,20 +206,20 @@ const Payments: React.FC = () => {
               select
               fullWidth
               margin="normal"
-              label="Method"
+              label={t('softwareAdmin.payments.columns.method')}
               value={form.method}
               onChange={e => setForm({ ...form, method: e.target.value })}
             >
               {methods.map(m => (
                 <MenuItem key={m} value={m}>
-                  {m}
+                  {t('softwareAdmin.payments.methods.' + m, m)}
                 </MenuItem>
               ))}
             </TextField>
             <TextField
               fullWidth
               margin="normal"
-              label="Payment Date"
+              label={t('softwareAdmin.payments.paymentDate')}
               type="date"
               value={form.payment_date}
               onChange={e => setForm({ ...form, payment_date: e.target.value })}
@@ -227,14 +229,14 @@ const Payments: React.FC = () => {
           <TextField
             fullWidth
             margin="normal"
-            label="Reference"
+            label={t('softwareAdmin.payments.reference')}
             value={form.reference}
             onChange={e => setForm({ ...form, reference: e.target.value })}
           />
           <TextField
             fullWidth
             margin="normal"
-            label="Notes"
+            label={t('softwareAdmin.payments.notes')}
             multiline
             rows={2}
             value={form.notes}
@@ -242,9 +244,9 @@ const Payments: React.FC = () => {
           />
         </DialogContent>
         <DialogActions>
-          <Button onClick={() => setOpen(false)}>Cancel</Button>
+          <Button onClick={() => setOpen(false)}>{t('common.cancel')}</Button>
           <Button variant="contained" onClick={handleRecord} disabled={saving}>
-            {saving ? 'Saving…' : 'Record'}
+            {saving ? t('softwareAdmin.payments.saving') : t('softwareAdmin.payments.record')}
           </Button>
         </DialogActions>
       </Dialog>

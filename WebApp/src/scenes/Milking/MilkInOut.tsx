@@ -9,6 +9,7 @@ import RemoveShoppingCartIcon from '@mui/icons-material/RemoveShoppingCart'; // 
 import { milk_out } from '../../shared/services/milkout.service';
 import { milk_analytics } from '../../shared/services/milkanalytics.service';
 import { CircularProgress, Backdrop } from '@mui/material';
+import { useTranslation } from 'react-i18next';
 import PageContainer from '../../shared/components/Layout/PageContainer';
 
 
@@ -17,6 +18,7 @@ const MilkInOut = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
+  const { t } = useTranslation();
 
   interface Company {
     uuid: string;
@@ -67,7 +69,7 @@ const MilkInOut = () => {
             setLoading(false);
           }
           else{
-            alert("No Data found for " + date)
+            alert(t('milking.milkInOut.noDataForDate', { date }))
           }
         } catch (error) {
           console.log(error)
@@ -92,7 +94,7 @@ const MilkInOut = () => {
   }
 
   return (
-    <PageContainer title="Milk In/Out" maxWidth="1200px">
+    <PageContainer title={t('milking.milkInOut.title')} maxWidth="1200px">
   {/* Page Title */}
   <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3 }}>
     {/* Date (responsive positioning) */}
@@ -107,9 +109,9 @@ const MilkInOut = () => {
         ml: 3,
       }}
     >
-      <TextField 
+      <TextField
         type='date'
-        label='Date'
+        label={t('milking.common.date')}
         value={date}
         onChange={(e) => setdate(e.target.value)}
         InputLabelProps={{ shrink: true }}
@@ -149,7 +151,7 @@ const MilkInOut = () => {
       <Box sx={{ display: 'flex', justifyContent: 'center', mb: 1 }}>
         <PeopleIcon sx={{ fontSize: 34, color: '#004f5e' }} />
       </Box>
-      <Typography sx={{ color: '#505A5F' }}>Total Milk</Typography>
+      <Typography sx={{ color: '#505A5F' }}>{t('milking.milkInOut.totalMilk')}</Typography>
       <Typography sx={{ fontSize: '1.5rem', fontWeight: 600 }}>
         {milkanalytics?.finalMilk}
       </Typography>
@@ -170,7 +172,7 @@ const MilkInOut = () => {
       <Box sx={{ display: 'flex', justifyContent: 'center', mb: 1 }}>
         <LocalShippingIcon sx={{ fontSize: 34, color: '#fa6400' }} />
       </Box>
-      <Typography sx={{ color: '#505A5F' }}>Total Milk In</Typography>
+      <Typography sx={{ color: '#505A5F' }}>{t('milking.milkInOut.totalMilkIn')}</Typography>
       <Typography sx={{ fontSize: '1.5rem', fontWeight: 600 }}>
         {milkanalytics?.totalMilk}
       </Typography>
@@ -191,7 +193,7 @@ const MilkInOut = () => {
       <Box sx={{ display: 'flex', justifyContent: 'center', mb: 1 }}>
         <RemoveShoppingCartIcon sx={{ fontSize: 34, color: '#ff5c8a' }} />
       </Box>
-      <Typography sx={{ color: '#505A5F' }}>Total Milk Out</Typography>
+      <Typography sx={{ color: '#505A5F' }}>{t('milking.milkInOut.totalMilkOut')}</Typography>
       <Typography sx={{ fontSize: '1.5rem', fontWeight: 600 }}>
         {milkanalytics?.totalMilkOut}
       </Typography>
@@ -210,7 +212,7 @@ const MilkInOut = () => {
     }}
   >
     <Typography sx={{ fontSize: '1.125rem', fontWeight: 600, mb: 4 }}>
-      Milk In
+      {t('milking.milkInOut.milkIn')}
     </Typography>
     <Box
   sx={{
@@ -224,7 +226,7 @@ const MilkInOut = () => {
   }}
 >
   <TextField
-    label="Milk 1"
+    label={t('milking.milkInOut.milk1')}
     value={milkanalytics?.totalMilk1}
     InputProps={{
       readOnly: true,
@@ -234,7 +236,7 @@ const MilkInOut = () => {
 
   <Box sx={{ position: 'relative' }}>
     <TextField
-      label="Milk 2"
+      label={t('milking.milkInOut.milk2')}
       value={milkanalytics?.totalMilk2}
       InputProps={{
         readOnly: true,
@@ -258,7 +260,7 @@ const MilkInOut = () => {
   </Box>
 
   <TextField
-    label="Milk 3"
+    label={t('milking.milkInOut.milk3')}
     value={milkanalytics?.totalMilk3}
     InputProps={{
       readOnly: true,
@@ -282,7 +284,7 @@ const MilkInOut = () => {
     <Typography sx={{ fontSize: '1.125rem', fontWeight: 600, mb: 1 ,
    
       p: { xs: 2, md: 3.5 }}}>
-      Milk Out
+      {t('milking.milkInOut.milkOut')}
     </Typography>
 
     <Box
@@ -296,8 +298,8 @@ const MilkInOut = () => {
         px: { xs: 2, md: 4 }
       }}
     >
-      <TextField 
-        placeholder="Search" 
+      <TextField
+        placeholder={t('common.search')}
         value={searchValue} 
         onChange={(e) => setsearchValue(e.target.value)} 
         size="small" 
@@ -311,7 +313,7 @@ const MilkInOut = () => {
         onClick={handleClick}
         sx={{ width: { xs: '100%', sm: 'auto' } }}
       >
-        Filter
+        {t('milking.common.filter')}
       </Button>
     </Box>
 
@@ -348,23 +350,23 @@ const MilkInOut = () => {
       >
         <Box component="thead">
           <Box component="tr">
-            <Box component="th">CONSUMPTION TYPE</Box>
-            <Box component="th">HEAD</Box>
-            <Box component="th">VOLUME</Box>
+            <Box component="th">{t('milking.milkInOut.columns.consumptionType')}</Box>
+            <Box component="th">{t('milking.milkInOut.columns.head')}</Box>
+            <Box component="th">{t('milking.milkInOut.columns.volume')}</Box>
           </Box>
         </Box>
         <Box component="tbody">
   {Filtermilkout.map((row, index) => (
     <Box component="tr" key={index}>
       <Box component="td" sx={{ minWidth: '120px' }}>
-        {row.outType}
+        {t('milking.common.outTypes.' + row.outType, row.outType)}
       </Box>
       <Box component="td" sx={{ minWidth: '120px' }}>
-       {row?.companies?.name 
-          ? row.companies.name 
-          : row?.category?.name 
-            ? row.category.name 
-            : "No specific out type"}
+       {row?.companies?.name
+          ? row.companies.name
+          : row?.category?.name
+            ? row.category.name
+            : t('milking.milkInOut.noSpecificOutType')}
         
       </Box>
       <Box component="td">

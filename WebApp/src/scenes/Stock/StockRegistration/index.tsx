@@ -41,20 +41,9 @@ import {
 import { ToastContainer, toast,Id } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { tokens } from '../../../shared/theme/theme';
+import { useTranslation } from 'react-i18next';
 
 
-
-const validationSchema = Yup.object().shape({
-  name: Yup.string().required('Product Name is required'),
-  description: Yup.string().required('Description is required'),
-  categoryId: Yup.string().required('Category is required'),
-  unit_of_measure: Yup.string().required('Unit is required'),
-  reorder_level: Yup.number().required('Reorder Level is required').min(0),
-  isStockItem: Yup.boolean(),
-  openingStockQuantity: Yup.number(),
- 
- 
-});
 
 const initialValues: StockFormValues = {
   name: '',
@@ -67,7 +56,20 @@ const initialValues: StockFormValues = {
 };
 
 const StockRegistration: React.FC = () => {
+  const { t } = useTranslation();
   const theme = useTheme();
+
+  const validationSchema = Yup.object().shape({
+    name: Yup.string().required(t('stock.stockRegistration.validation.nameRequired')),
+    description: Yup.string().required(t('stock.stockRegistration.validation.descriptionRequired')),
+    categoryId: Yup.string().required(t('stock.stockRegistration.validation.categoryRequired')),
+    unit_of_measure: Yup.string().required(t('stock.stockRegistration.validation.unitRequired')),
+    reorder_level: Yup.number().required(t('stock.stockRegistration.validation.reorderLevelRequired')).min(0),
+    isStockItem: Yup.boolean(),
+    openingStockQuantity: Yup.number(),
+
+
+  });
   const colors = tokens(theme.palette.mode);
   const [isCategoryModalOpen, setIsCategoryModalOpen] = useState(false);
   const [isUnitModalOpen, setIsUnitModalOpen] = useState(false);
@@ -115,7 +117,7 @@ const [unitSnackbar, setUnitSnackbar] = useState({
         console.error('Error fetching data:', error);
         setSnackbar({
           open: true,
-          message: 'Failed to fetch data',
+          message: t('stock.stockRegistration.fetchDataError'),
           severity: 'error'
         });
       }
@@ -140,10 +142,10 @@ const handleSubmit = async (
     };
 
     await addStockItem(payload);
-    toast.success('Stock item registered successfully!');
+    toast.success(t('stock.stockRegistration.registerSuccess'));
     resetForm();
   } catch (error: any) {
-    toast.error(error?.response?.data?.message || 'Failed to register stock item.');
+    toast.error(error?.response?.data?.message || t('stock.stockRegistration.registerError'));
   } finally {
     setIsSubmitting(false);
   }
@@ -153,7 +155,7 @@ const handleSubmit = async (
 
 const handleAddCategory = async () => {
   if (!newCategory.trim() || !newCategoryDescription.trim()) {
-   showCategorySnackbar('Please fill all the missing required fields!', 'warning');
+   showCategorySnackbar(t('stock.stockRegistration.fillRequiredFields'), 'warning');
     return;
   }
     setIsCategorySubmitting(true);
@@ -166,7 +168,7 @@ const handleAddCategory = async () => {
 
     setCategories([...categories, newCategoryData])
 
-  showCategorySnackbar('Category added successfully!', 'success');
+  showCategorySnackbar(t('stock.stockRegistration.categoryAddedSuccess'), 'success');
   setTimeout(() => {
   setIsCategoryModalOpen(false);
   setNewCategory('');
@@ -175,7 +177,7 @@ const handleAddCategory = async () => {
 
   } catch (error) {
     console.error('Error adding category:', error);
-  showCategorySnackbar('Failed to add category', 'error');
+  showCategorySnackbar(t('stock.stockRegistration.addCategoryError'), 'error');
 
   }
     finally {
@@ -214,7 +216,7 @@ const showCategorySnackbar = (
 
 const handleAddUnit = async () => {
   if (!newUnit.trim()) {
-    showUnitSnackbar('Please enter a unit name', 'warning');
+    showUnitSnackbar(t('stock.stockRegistration.enterUnitNameWarning'), 'warning');
     return;
   }
     setIsUnitSubmitting(true);
@@ -225,7 +227,7 @@ const handleAddUnit = async () => {
     const updatedUnits = await fetchUnits();
     setUnits(updatedUnits);
 
-    showUnitSnackbar('Unit added successfully!', 'success');
+    showUnitSnackbar(t('stock.stockRegistration.unitAddedSuccess'), 'success');
 
     setTimeout(() => {
       setIsUnitModalOpen(false);
@@ -233,7 +235,7 @@ const handleAddUnit = async () => {
     }, 500); // Delay modal close
   } catch (error) {
     console.error('Error adding unit:', error);
-    showUnitSnackbar('Failed to add unit', 'error');
+    showUnitSnackbar(t('stock.stockRegistration.addUnitError'), 'error');
   }
    finally {
     setIsUnitSubmitting(false); // Stop spinner
@@ -273,10 +275,10 @@ const handleDeleteUnit = async (unitId: string) => {
 
     setUnits((prevUnits) => prevUnits.filter((unit) => unit.uuid !== unitId));
 
-    showUnitSnackbar('Unit deleted successfully!', 'success');
+    showUnitSnackbar(t('stock.stockRegistration.unitDeletedSuccess'), 'success');
   } catch (error: any) {
     console.error('Error deleting unit:', error);
-    const message = error?.response?.data?.message || 'Failed to delete unit';
+    const message = error?.response?.data?.message || t('stock.stockRegistration.deleteUnitError');
     showUnitSnackbar(message, 'error');
   }
 };
@@ -287,7 +289,7 @@ const handleDeleteUnit = async (unitId: string) => {
   };
 
   return (
-    <PageContainer title="Stock Registration" subtitle="Register new stock items">
+    <PageContainer title={t('stock.stockRegistration.title')} subtitle={t('stock.stockRegistration.subtitle')}>
       <Container maxWidth="lg"  sx={{
     px: isMobile ? '11px' : undefined,
   }}>
@@ -321,7 +323,7 @@ const handleDeleteUnit = async (unitId: string) => {
                         gap: 1
                       }}
                     >
-                      Basic Information
+                      {t('stock.stockRegistration.basicInformation')}
                     </Typography>
                   </Grid>
 
@@ -329,10 +331,10 @@ const handleDeleteUnit = async (unitId: string) => {
                     <Field
                       as={GlobalTextField}
                       name="name"
-                      label="Product Name"
+                      label={t('stock.stockRegistration.productName')}
                       error={touched.name && Boolean(errors.name)}
                       helperText={touched.name && errors.name}
-                      placeholder="Enter product name"
+                      placeholder={t('stock.stockRegistration.enterProductName')}
                     />
                   </Grid>
 
@@ -340,10 +342,10 @@ const handleDeleteUnit = async (unitId: string) => {
                     <Field
                       as={GlobalTextField}
                       name="description"
-                      label="Description"
+                      label={t('stock.stockRegistration.description')}
                       error={touched.description && Boolean(errors.description)}
                       helperText={touched.description && errors.description}
-                      placeholder="Enter product description"
+                      placeholder={t('stock.stockRegistration.enterProductDescription')}
                     />
                   </Grid>
 
@@ -352,7 +354,7 @@ const handleDeleteUnit = async (unitId: string) => {
                       <Field
                         as={GlobalTextField}
                         name="categoryId"
-                        label="Choose Category"
+                        label={t('stock.stockRegistration.chooseCategory')}
                         select
                         error={touched.categoryId && Boolean(errors.categoryId)}
                         helperText={touched.categoryId && errors.categoryId}
@@ -367,14 +369,14 @@ const handleDeleteUnit = async (unitId: string) => {
                           }
                         }}
                       >
-                        <MenuItem value="" sx={{ minHeight: '32px' }}>Select Category</MenuItem>
+                        <MenuItem value="" sx={{ minHeight: '32px' }}>{t('stock.common.selectCategory')}</MenuItem>
                         {categories.map((category) => (
                           <MenuItem key={category.uuid} value={category.uuid} sx={{ minHeight: '32px' }}>
                             {category.name}
                           </MenuItem>
                         ))}
                       </Field>
-                      <Tooltip title="Add New Category">
+                      <Tooltip title={t('stock.stockRegistration.addNewCategory')}>
                         <IconButton
                           onClick={() => setIsCategoryModalOpen(true)}
                           sx={{
@@ -398,7 +400,7 @@ const handleDeleteUnit = async (unitId: string) => {
                       <Field
                         as={GlobalTextField}
                         name="unit_of_measure"
-                        label="Choose Unit"
+                        label={t('stock.stockRegistration.chooseUnit')}
                         select
                         error={touched.unit_of_measure && Boolean(errors.unit_of_measure)}
                         helperText={touched.unit_of_measure && errors.unit_of_measure}
@@ -413,14 +415,14 @@ const handleDeleteUnit = async (unitId: string) => {
                           }
                         }}
                       >
-                        <MenuItem value="" sx={{ minHeight: '32px' }}>Select Unit</MenuItem>
+                        <MenuItem value="" sx={{ minHeight: '32px' }}>{t('stock.stockRegistration.selectUnit')}</MenuItem>
                         {units?.map((unit) => (
                           <MenuItem key={unit.uuid} value={unit?.uuid} sx={{ minHeight: '32px' }}>
                             {unit?.name}
                           </MenuItem>
                         ))}
                       </Field>
-                      <Tooltip title="Add New Unit">
+                      <Tooltip title={t('stock.stockRegistration.addNewUnit')}>
                         <IconButton
                           onClick={() => setIsUnitModalOpen(true)}
                           sx={{
@@ -443,11 +445,11 @@ const handleDeleteUnit = async (unitId: string) => {
                     <Field
                       as={GlobalTextField}
                       name="reorder_level"
-                      label="Reorder Level"
+                      label={t('stock.stockRegistration.reorderLevel')}
                       type="number"
                       error={touched.reorder_level && Boolean(errors.reorder_level)}
                       helperText={touched.reorder_level && errors.reorder_level}
-                      placeholder="Enter reorder level"
+                      placeholder={t('stock.stockRegistration.enterReorderLevel')}
                     />
                   </Grid>
 
@@ -494,7 +496,7 @@ const handleDeleteUnit = async (unitId: string) => {
                     }
                     }}
                     >
-                    {!isSubmitting && 'Save'}
+                    {!isSubmitting && t('common.save')}
                    </Button>
 
                     </Box>
@@ -510,7 +512,7 @@ const handleDeleteUnit = async (unitId: string) => {
   <Modal
   open={isCategoryModalOpen}
   onClose={() => setIsCategoryModalOpen(false)}
-  title="Add New Category"
+  title={t('stock.stockRegistration.addNewCategory')}
   onSubmit={handleAddCategory}
 
   
@@ -550,21 +552,21 @@ const handleDeleteUnit = async (unitId: string) => {
       <Grid item xs={12}>
         <GlobalTextField
           name="newCategory"
-          label="Category Name"
+          label={t('stock.stockRegistration.categoryName')}
           value={newCategory}
           onChange={e => setNewCategory(e.target.value)}
           fullWidth
-          placeholder="Enter category name"
+          placeholder={t('stock.stockRegistration.enterCategoryName')}
         />
       </Grid>
       <Grid item xs={12}>
         <GlobalTextField
           name="newCategoryDescription"
-          label="Category Description"
+          label={t('stock.stockRegistration.categoryDescription')}
           value={newCategoryDescription}
           onChange={e => setNewCategoryDescription(e.target.value)}
           fullWidth
-          placeholder="Enter category description"
+          placeholder={t('stock.stockRegistration.enterCategoryDescription')}
           multiline
           rows={3}
         />
@@ -579,7 +581,7 @@ const handleDeleteUnit = async (unitId: string) => {
 <Modal
   open={isUnitModalOpen}
   onClose={() => setIsUnitModalOpen(false)}
-  title="Add New Unit"
+  title={t('stock.stockRegistration.addNewUnit')}
   onSubmit={handleAddUnit}
 
 >
@@ -621,16 +623,16 @@ const handleDeleteUnit = async (unitId: string) => {
       <Grid item xs={12}>
         <GlobalTextField
           name="newUnit"
-          label="Unit Name"
+          label={t('stock.stockRegistration.unitName')}
           value={newUnit}
           onChange={(e) => setNewUnit(e.target.value)}
           fullWidth
-          placeholder="Enter unit name"
+          placeholder={t('stock.stockRegistration.enterUnitName')}
         />
       </Grid>
       <Grid item xs={12}>
         <Typography variant="subtitle1" sx={{ mb: 2 }}>
-          Existing Units
+          {t('stock.stockRegistration.existingUnits')}
         </Typography>
         <List>
           {units.map((unit) => (

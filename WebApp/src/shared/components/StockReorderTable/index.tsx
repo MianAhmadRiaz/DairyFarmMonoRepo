@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import {
   Box,
   Button,
@@ -40,6 +41,7 @@ interface StockReorderTableProps {
 }
 
 const StockReorderTable: React.FC<StockReorderTableProps> = ({ data }) => {
+  const { t } = useTranslation();
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   const [searchTerm, setSearchTerm] = useState('');
@@ -69,7 +71,7 @@ const StockReorderTable: React.FC<StockReorderTableProps> = ({ data }) => {
   };
 
   return (
-    <PageContainer title="Stock Reorder Report">
+    <PageContainer title={t('shared.stockReorderTable.title')}>
       <Paper
         elevation={3}
         sx={{
@@ -117,7 +119,7 @@ const StockReorderTable: React.FC<StockReorderTableProps> = ({ data }) => {
                   mr: 1
                 }}
               >
-                View
+                {t('shared.common.view')}
               </Button>
               <Button
                 variant="outlined"
@@ -125,7 +127,7 @@ const StockReorderTable: React.FC<StockReorderTableProps> = ({ data }) => {
                 sx={{ borderColor: '#005f73', color: '#005f73' }}
                 onClick={handlePrint}
               >
-                Print
+                {t('shared.common.print')}
               </Button>
             </Box>
           </Box>
@@ -154,7 +156,7 @@ const StockReorderTable: React.FC<StockReorderTableProps> = ({ data }) => {
               px: 0.5
             }}
           >
-            Column visibility
+            {t('shared.common.columnVisibility')}
           </Button>
           <IconButton
             size="small"
@@ -181,7 +183,7 @@ const StockReorderTable: React.FC<StockReorderTableProps> = ({ data }) => {
           <Box sx={{ flexGrow: 1 }} />
           <Box sx={{ display: 'flex', alignItems: 'center' }}>
             <Box component="span" sx={{ mr: 1, color: '#666' }}>
-              Search:
+              {t('shared.common.searchLabel')}
             </Box>
             <TextField
               size="small"
@@ -214,31 +216,31 @@ const StockReorderTable: React.FC<StockReorderTableProps> = ({ data }) => {
                     #
                   </TableCell>
                   <TableCell sx={{ color: 'black', fontWeight: 'bold' }}>
-                    Products
+                    {t('shared.stockReorderTable.columns.products')}
                   </TableCell>
                   <TableCell sx={{ color: 'black', fontWeight: 'bold' }}>
-                    Head
+                    {t('shared.stockReorderTable.columns.head')}
                   </TableCell>
                   <TableCell sx={{ color: 'black', fontWeight: 'bold' }}>
-                    Priority
+                    {t('shared.stockReorderTable.columns.priority')}
                   </TableCell>
                   <TableCell
                     align="center"
                     sx={{ color: 'black', fontWeight: 'bold' }}
                   >
-                    Current Qty
+                    {t('shared.stockReorderTable.columns.currentQty')}
                   </TableCell>
                   <TableCell
                     align="center"
                     sx={{ color: 'black', fontWeight: 'bold' }}
                   >
-                    Re-Order/Notify Qty
+                    {t('shared.stockReorderTable.columns.reorderQty')}
                   </TableCell>
                   <TableCell
                     align="center"
                     sx={{ color: 'black', fontWeight: 'bold' }}
                   >
-                    Difference Qty
+                    {t('shared.stockReorderTable.columns.differenceQty')}
                   </TableCell>
                 </TableRow>
               </TableHead>

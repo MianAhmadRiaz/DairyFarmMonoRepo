@@ -16,10 +16,12 @@ import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import PageContainer from '../../shared/components/Layout/PageContainer';
 import { getAllEmployees, addAttendance, Employee, AttendancePayload } from '../../shared/services/EmployeeAPI/attendance.service';
+import { useTranslation } from 'react-i18next';
 import { tokens } from '../../shared/theme/theme';
 
 export default function EmployeeDashboard() {
 
+  const { t } = useTranslation();
  const [employees, setEmployees] = useState<Employee[]>([]);
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
@@ -58,7 +60,7 @@ const handleDateChange = (e: React.ChangeEvent<HTMLInputElement>) => setSelected
 }, []);
 
 const handleSaveAttendance = () => {
-  if (!selectedDate) { alert('Please select a date!'); return; }
+  if (!selectedDate) { alert(t('employee.common.pleaseSelectDate')); return; }
 
   const payload: AttendancePayload = {
     date: selectedDate,
@@ -69,16 +71,16 @@ const handleSaveAttendance = () => {
   };
 
   addAttendance(payload)
-    .then(() => { alert('Attendance saved successfully!'); 
+    .then(() => { alert(t('employee.common.attendanceSaved'));
       setAttendanceData({});
         setSelectedDate('');
    })
-    .catch(err => { console.error(err); alert('Failed to save attendance.'); });
+    .catch(err => { console.error(err); alert(t('employee.common.attendanceSaveFailed')); });
 };
 
 
   return (
-    <PageContainer title="Attendance">
+    <PageContainer title={t('employee.common.attendance')}>
       <Card
         sx={{
           mb: 3,
@@ -108,12 +110,12 @@ const handleSaveAttendance = () => {
               }}
             >
               <label style={{ marginBottom: '4px', fontWeight: 'bold' }}>
-                Date
+                {t('employee.common.date')}
               </label>
               <TextField
                 size="small"
                 type="date"
-                placeholder="Select"
+                placeholder={t('employee.common.select')}
                 variant="outlined"
          value={selectedDate}
            onChange={handleDateChange}
@@ -143,7 +145,7 @@ const handleSaveAttendance = () => {
                   }
                 }}
               >
-                Save
+                {t('common.save')}
               </Button>
             </Box>
           </Box>
@@ -201,9 +203,9 @@ const handleSaveAttendance = () => {
           >
             <thead>
               <tr>
-                <th>Sr#</th>
-                <th>Name</th>
-                <th>Attendance</th>
+                <th>{t('employee.common.srNo')}</th>
+                <th>{t('employee.addNewEmployee.fields.name')}</th>
+                <th>{t('employee.common.attendance')}</th>
               </tr>
             </thead>
             <tbody>
@@ -223,17 +225,17 @@ const handleSaveAttendance = () => {
   <FormControlLabel
     value="present"
     control={<Radio sx={{ '&.Mui-checked': { color: 'green' } }} />}
-    label="Present"
+    label={t('employee.common.attendanceStatus.present')}
   />
   <FormControlLabel
     value="absent"
     control={<Radio sx={{ '&.Mui-checked': { color: 'red' } }} />}
-    label="Absent"
+    label={t('employee.common.attendanceStatus.absent')}
   />
   <FormControlLabel
     value="leave"
     control={<Radio sx={{ '&.Mui-checked': { color: 'orange' } }} />}
-    label="Leave"
+    label={t('employee.common.attendanceStatus.leave')}
   />
 </RadioGroup>
 

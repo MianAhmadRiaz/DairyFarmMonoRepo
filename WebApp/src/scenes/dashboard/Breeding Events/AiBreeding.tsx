@@ -28,6 +28,7 @@ import MoreVertIcon from '@mui/icons-material/MoreVert';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { fetchAiBreedingList } from '../../../shared/services/breeds.services';
 import { fetchAnimals } from '../../../shared/services/herdinfo.services';
 import useLayoutShift from '../../../shared/components/Hooks/useLayoutShift';
@@ -55,6 +56,7 @@ interface AIBreedingRow {
 
 const AIBreeding: React.FC = () => {
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
   const [rows, setRows] = useState<AIBreedingRow[]>([]);
   const [search, setSearch] = useState('');
@@ -191,7 +193,7 @@ const AIBreeding: React.FC = () => {
   };
 
   return (
-    <PageContainer title="AI Breeding">
+    <PageContainer title={t('breeding.aiBreedingList.pageTitle')}>
       {/* Back Button */}
       <Button
         variant="text"
@@ -204,7 +206,7 @@ const AIBreeding: React.FC = () => {
           mb: 2
         }}
       >
-        Back
+        {t('breeding.common.back')}
       </Button>
 
       {/* Add New */}
@@ -219,7 +221,7 @@ const AIBreeding: React.FC = () => {
           }}
           onClick={handleAddNew}
         >
-          Add New
+          {t('breeding.common.addNew')}
         </Button>
       </Box>
 
@@ -229,7 +231,7 @@ const AIBreeding: React.FC = () => {
            boxShadow: "0 4px 12px rgba(0,0,0,0.1)", }}>
                <Box sx={{p: { xs: 2, sm: 3, md: 3 }}}>
         <Typography variant="subtitle1" sx={{ mb: 2, fontWeight: 'bold' }}>
-          Recent Entries (Max 50)
+          {t('breeding.aiBreedingList.recentEntriesMax50')}
         </Typography>
 
         {/* Search & Sort */}
@@ -238,17 +240,17 @@ const AIBreeding: React.FC = () => {
           <TextField
             variant="outlined"
             fullWidth
-            placeholder="Search"
+            placeholder={t('breeding.common.search')}
             value={search}
             onChange={handleSearchChange}
           />
           <FormControl sx={{ width: '150px' }}>
-            <InputLabel>Sort</InputLabel>
-            <Select label="Sort" value={sort} onChange={handleSortChange}>
-              <MenuItem value="">None</MenuItem>
-              <MenuItem value="aiDate">By AI Date</MenuItem>
-              <MenuItem value="tagId">By Tag Name</MenuItem>
-              <MenuItem value="price">By Price</MenuItem>
+            <InputLabel>{t('breeding.common.sort')}</InputLabel>
+            <Select label={t('breeding.common.sort')} value={sort} onChange={handleSortChange}>
+              <MenuItem value="">{t('breeding.common.none')}</MenuItem>
+              <MenuItem value="aiDate">{t('breeding.aiBreedingList.byAiDate')}</MenuItem>
+              <MenuItem value="tagId">{t('breeding.aiBreedingList.byTagName')}</MenuItem>
+              <MenuItem value="price">{t('breeding.common.byPrice')}</MenuItem>
             </Select>
           </FormControl>
         </Box>
@@ -275,13 +277,13 @@ const AIBreeding: React.FC = () => {
                 <TableHead sx={{backgroundColor: "#F8F9FA"}}>
                   <TableRow>
                     <TableCell padding="checkbox"></TableCell>
-                    <TableCell sx={{ fontWeight: 'bold' }}>SR #</TableCell>
-                    <TableCell sx={{ fontWeight: 'bold' }}>AI DATE</TableCell>
-                    <TableCell sx={{ fontWeight: 'bold' }}>TAG NAME</TableCell>
-                    <TableCell sx={{ fontWeight: 'bold' }}>SIRE NAME</TableCell>
-                    <TableCell sx={{ fontWeight: 'bold' }}>STRAW</TableCell>
-                    <TableCell sx={{ fontWeight: 'bold' }}>PRICE</TableCell>
-                    <TableCell sx={{ fontWeight: 'bold' }}>COMMENTS</TableCell>
+                    <TableCell sx={{ fontWeight: 'bold' }}>{t('breeding.common.srNo')}</TableCell>
+                    <TableCell sx={{ fontWeight: 'bold' }}>{t('breeding.aiBreedingList.columns.aiDate')}</TableCell>
+                    <TableCell sx={{ fontWeight: 'bold' }}>{t('breeding.aiBreedingList.columns.tagName')}</TableCell>
+                    <TableCell sx={{ fontWeight: 'bold' }}>{t('breeding.aiBreedingList.columns.sireName')}</TableCell>
+                    <TableCell sx={{ fontWeight: 'bold' }}>{t('breeding.aiBreedingList.columns.straw')}</TableCell>
+                    <TableCell sx={{ fontWeight: 'bold' }}>{t('breeding.aiBreedingList.columns.price')}</TableCell>
+                    <TableCell sx={{ fontWeight: 'bold' }}>{t('breeding.aiBreedingList.columns.comments')}</TableCell>
                     <TableCell align="right">
                       <IconButton onClick={handleHeaderMenuOpen}>
                         <MoreVertIcon />
@@ -291,8 +293,8 @@ const AIBreeding: React.FC = () => {
                         open={Boolean(anchorHeaderEl)}
                         onClose={handleHeaderMenuClose}
                       >
-                        <MenuItem onClick={handleSelectAll}>Select All</MenuItem>
-                        <MenuItem onClick={handleDeleteSelected}>Delete Selected</MenuItem>
+                        <MenuItem onClick={handleSelectAll}>{t('breeding.aiBreedingList.selectAll')}</MenuItem>
+                        <MenuItem onClick={handleDeleteSelected}>{t('breeding.aiBreedingList.deleteSelected')}</MenuItem>
                       </Menu>
                     </TableCell>
                   </TableRow>
@@ -330,7 +332,7 @@ const AIBreeding: React.FC = () => {
                   {currentRows.length === 0 && (
                     <TableRow>
                       <TableCell colSpan={9} align="center">
-                        No data found.
+                        {t('breeding.common.noDataFound')}
                       </TableCell>
                     </TableRow>
                   )}
@@ -349,13 +351,13 @@ const AIBreeding: React.FC = () => {
                 <ListItemIcon>
                   <EditIcon fontSize="small" />
                 </ListItemIcon>
-                <ListItemText>Edit</ListItemText>
+                <ListItemText>{t('breeding.aiBreedingList.edit')}</ListItemText>
               </MenuItem>
               <MenuItem onClick={handleDeleteRow}>
                 <ListItemIcon>
                   <DeleteIcon fontSize="small" />
                 </ListItemIcon>
-                <ListItemText>Delete</ListItemText>
+                <ListItemText>{t('breeding.aiBreedingList.delete')}</ListItemText>
               </MenuItem>
             </Menu>
 
@@ -369,7 +371,7 @@ const AIBreeding: React.FC = () => {
               }}
             >
               <Box sx={{ display: 'flex', alignItems: 'center', gap:1 }}> 
-                <Typography variant="body2" sx={{pl:{xs:1,md:3}}} >Rows per page:</Typography>
+                <Typography variant="body2" sx={{pl:{xs:1,md:3}}} >{t('breeding.common.rowsPerPage')}</Typography>
                 <Select size="small" value={rowsPerPage} onChange={handleRowsPerPageChange}>
                   <MenuItem value={5}>5</MenuItem>
                   <MenuItem value={10}>10</MenuItem>

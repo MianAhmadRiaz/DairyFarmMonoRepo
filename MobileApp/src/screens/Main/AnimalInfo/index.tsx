@@ -12,6 +12,7 @@ import {
   View
 } from 'react-native'
 import FastImage from 'react-native-fast-image'
+import { useTranslation } from 'react-i18next'
 import AnyIcon, { Icons } from 'shared/components/AnyIcon'
 import AppContainer from 'shared/components/AppContainer'
 import AppHeader from 'shared/components/AppHeader'
@@ -24,6 +25,7 @@ import { RF } from 'shared/theme/responsive'
 import { animals } from 'shared/utils/constants/constants'
 
 const AnimalInfo = () => {
+  const { t } = useTranslation()
   const navigation = useNavigation()
   const bottomSheetRef = useRef<BottomSheet>(null)
 
@@ -146,7 +148,7 @@ const AnimalInfo = () => {
           color="primaryMain"
           style={{ marginRight: RF(2) }}
         >
-          Add
+          {t('common.add')}
         </AppText>
         <AnyIcon
           disabled
@@ -160,14 +162,18 @@ const AnimalInfo = () => {
   }
   return (
     <AppContainer>
-      <AppHeader showHam title="Animal Info" rightElement={<AddButton />} />
+      <AppHeader
+        showHam
+        title={t('main.animalInfo.headerTitle')}
+        rightElement={<AddButton />}
+      />
       <View style={styles.container}>
         {/* Search Input */}
 
         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
           <AppInput
             viewStyle={{ flex: 0.8 }}
-            placeholder="Search by Tag ID"
+            placeholder={t('main.animalInfo.searchPlaceholder')}
             value={searchQuery}
             onChangeText={setSearchQuery}
           />
@@ -218,12 +224,14 @@ const AnimalInfo = () => {
           enablePanDownToClose
         >
           <View style={styles.sheetContent}>
-            <Text style={styles.sheetTitle}>Filter Animals</Text>
+            <Text style={styles.sheetTitle}>
+              {t('main.animalInfo.filterAnimals')}
+            </Text>
             {['type', 'gender', 'breed', 'status'].map(filterKey => (
               <TextInput
                 key={filterKey}
                 style={styles.filterInput}
-                placeholder={`Filter by ${filterKey}`}
+                placeholder={t(`main.animalInfo.filterBy.${filterKey}`)}
                 value={filters[filterKey]}
                 onChangeText={text =>
                   setFilters(prev => ({ ...prev, [filterKey]: text }))
@@ -234,7 +242,9 @@ const AnimalInfo = () => {
               style={styles.applyButton}
               onPress={() => bottomSheetRef.current?.close()}
             >
-              <Text style={styles.applyButtonText}>Apply Filters</Text>
+              <Text style={styles.applyButtonText}>
+                {t('main.animalInfo.applyFilters')}
+              </Text>
             </TouchableOpacity>
           </View>
         </BottomSheet>

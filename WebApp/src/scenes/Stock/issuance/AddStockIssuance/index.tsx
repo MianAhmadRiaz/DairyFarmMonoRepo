@@ -26,6 +26,7 @@ import {
 } from '../../../../shared/services/stockModule.services';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { useTranslation } from 'react-i18next';
 
 interface IssuanceItem {
   itemId: string;
@@ -37,6 +38,7 @@ interface IssuanceItem {
 const emptyRow = (): IssuanceItem => ({ itemId: '', currentQty: 0, qtyToIssue: 0, note: '' });
 
 const AddStockIssuance: React.FC = () => {
+  const { t } = useTranslation();
   const [transactionDate, setTransactionDate] = useState<string>('');
   const [items, setItems] = useState<IssuanceItem[]>([emptyRow()]);
   const [stockItems, setStockItems] = useState<StockItemRow[]>([]);
@@ -54,7 +56,7 @@ const AddStockIssuance: React.FC = () => {
         const allItems = await getAllStockItems();
         setStockItems(allItems);
       } catch (error: any) {
-        toast.error(error?.response?.data?.message || 'Failed to fetch stock items.');
+        toast.error(error?.response?.data?.message || t('stock.common.fetchItemsError'));
       } finally {
         setLoading(false);
       }
@@ -96,7 +98,7 @@ const AddStockIssuance: React.FC = () => {
   const handleSubmit = async () => {
     const validRows = items.filter(item => item.itemId && item.qtyToIssue > 0);
     if (validRows.length === 0) {
-      toast.warning('Please select an item and enter a quantity greater than 0.');
+      toast.warning(t('stock.addStockIssuance.selectItemWarning'));
       return;
     }
     try {
@@ -111,20 +113,20 @@ const AddStockIssuance: React.FC = () => {
           date: transactionDate || undefined
         });
       }
-      toast.success('Stock issuance saved successfully!');
+      toast.success(t('stock.addStockIssuance.saveSuccess'));
       setItems([emptyRow()]);
       // refresh current quantities after issuing
       const allItems = await getAllStockItems();
       setStockItems(allItems);
     } catch (error: any) {
-      toast.error(error?.response?.data?.message || 'Failed to save stock issuance.');
+      toast.error(error?.response?.data?.message || t('stock.addStockIssuance.saveError'));
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <PageContainer title="Stock Issuance" subtitle="Add new stock issuance transaction">
+    <PageContainer title={t('stock.addStockIssuance.title')} subtitle={t('stock.addStockIssuance.subtitle')}>
       <Container maxWidth="lg" sx={{ px: isMobile ? '11px' : undefined }}>
         <Paper
           elevation={3}
@@ -154,7 +156,7 @@ const AddStockIssuance: React.FC = () => {
                 fontSize: { xs: '1rem', sm: '1.25rem' }
               }}
             >
-              Stock Issuance
+              {t('stock.addStockIssuance.title')}
             </Typography>
             <Box
               sx={{
@@ -166,7 +168,7 @@ const AddStockIssuance: React.FC = () => {
             >
               <TextField
                 type="date"
-                label="Date"
+                label={t('stock.common.date')}
                 size="small"
                 value={transactionDate}
                 onChange={e => setTransactionDate(e.target.value)}
@@ -190,7 +192,7 @@ const AddStockIssuance: React.FC = () => {
                   }
                 }}
               >
-                Save Changes
+                {t('stock.common.saveChanges')}
               </Button>
               <Button
                 variant="outlined"
@@ -198,7 +200,7 @@ const AddStockIssuance: React.FC = () => {
                 onClick={handleAddItem}
                 disabled={loading}
               >
-                Add Item
+                {t('stock.addStockIssuance.addItem')}
               </Button>
             </Box>
           </Box>
@@ -214,10 +216,10 @@ const AddStockIssuance: React.FC = () => {
               >
                 <TableHead>
                   <TableRow sx={{ backgroundColor: '#f8f9fA' }}>
-                    <TableCell sx={{ fontWeight: 'bold' }}>Item</TableCell>
-                    <TableCell sx={{ fontWeight: 'bold' }}>Current Qty</TableCell>
-                    <TableCell sx={{ fontWeight: 'bold' }}>Qty</TableCell>
-                    <TableCell sx={{ fontWeight: 'bold' }}>Note</TableCell>
+                    <TableCell sx={{ fontWeight: 'bold' }}>{t('stock.common.item')}</TableCell>
+                    <TableCell sx={{ fontWeight: 'bold' }}>{t('stock.addStockIssuance.currentQty')}</TableCell>
+                    <TableCell sx={{ fontWeight: 'bold' }}>{t('stock.common.qty')}</TableCell>
+                    <TableCell sx={{ fontWeight: 'bold' }}>{t('stock.addStockIssuance.note')}</TableCell>
                     <TableCell sx={{ fontWeight: 'bold', width: '60px' }} />
                   </TableRow>
                 </TableHead>
@@ -233,7 +235,7 @@ const AddStockIssuance: React.FC = () => {
                           onChange={e => handleItemChange(index, e.target.value)}
                           disabled={loading}
                         >
-                          <MenuItem value="">Select Item</MenuItem>
+                          <MenuItem value="">{t('stock.addStockIssuance.selectItem')}</MenuItem>
                           {stockItems.map(stockItem => (
                             <MenuItem key={stockItem.uuid} value={stockItem.uuid}>
                               {stockItem.name}
@@ -263,7 +265,7 @@ const AddStockIssuance: React.FC = () => {
                         <TextField
                           size="small"
                           fullWidth
-                          placeholder="Optional note"
+                          placeholder={t('stock.addStockIssuance.optionalNote')}
                           value={item.note}
                           onChange={e => handleNoteChange(index, e.target.value)}
                           disabled={loading}

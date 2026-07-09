@@ -6,6 +6,7 @@ import PageContainer from '../../shared/components/Layout/PageContainer';
 import { addNewEmployee, EmployeeData } from '../../shared/services/EmployeeAPI/addemployee.service';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
+import { useTranslation } from 'react-i18next';
 import { tokens } from '../../shared/theme/theme';
 
 import {
@@ -25,33 +26,34 @@ import {
   useTheme
 } from '@mui/material';
 
-const validationSchema = Yup.object().shape({
-  name: Yup.string().required('Name is required'),
-  father_name: Yup.string().required('Father Name is required'),
-  cnic: Yup.string()
-    .matches(/^\d{5}-\d{7}-\d$/, 'CNIC must be in the format xxxxx-xxxxxxx-x')
-    .nullable(),
-  phone: Yup.string()
-    .matches(/^\d{4}-\d{7}$/, 'Phone must be in format xxxx-xxxxxxx')
-    .required('Phone is required'),
-  city: Yup.string().required('City is required'),
-  gender: Yup.string().required('Gender is required'),
-  dob: Yup.string().required('Date of Birth is required'),
-  marital_status: Yup.string().required('Marital Status is required'),
-  designation: Yup.string().required('Designation is required'),
-  department: Yup.string().required('Department is required'),
-  doj: Yup.string().required('Date of Joining is required'),
-  leave_allow: Yup.number().required('Leave Allow is required'),
-  salary: Yup.number().required('Salary is required'),
-  acc_no: Yup.string(),
-  opening_advance: Yup.number().nullable(),
-  address: Yup.string().required('Address is required')
-});
-
 const EmployeeRegistration = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   const toastId = useRef<Id | null>(null);
+  const { t } = useTranslation();
+
+  const validationSchema = Yup.object().shape({
+    name: Yup.string().required(t('employee.addNewEmployee.validation.nameRequired')),
+    father_name: Yup.string().required(t('employee.addNewEmployee.validation.fatherNameRequired')),
+    cnic: Yup.string()
+      .matches(/^\d{5}-\d{7}-\d$/, t('employee.addNewEmployee.validation.cnicFormat'))
+      .nullable(),
+    phone: Yup.string()
+      .matches(/^\d{4}-\d{7}$/, t('employee.addNewEmployee.validation.phoneFormat'))
+      .required(t('employee.addNewEmployee.validation.phoneRequired')),
+    city: Yup.string().required(t('employee.addNewEmployee.validation.cityRequired')),
+    gender: Yup.string().required(t('employee.addNewEmployee.validation.genderRequired')),
+    dob: Yup.string().required(t('employee.addNewEmployee.validation.dobRequired')),
+    marital_status: Yup.string().required(t('employee.addNewEmployee.validation.maritalStatusRequired')),
+    designation: Yup.string().required(t('employee.addNewEmployee.validation.designationRequired')),
+    department: Yup.string().required(t('employee.addNewEmployee.validation.departmentRequired')),
+    doj: Yup.string().required(t('employee.addNewEmployee.validation.dojRequired')),
+    leave_allow: Yup.number().required(t('employee.addNewEmployee.validation.leaveAllowRequired')),
+    salary: Yup.number().required(t('employee.addNewEmployee.validation.salaryRequired')),
+    acc_no: Yup.string(),
+    opening_advance: Yup.number().nullable(),
+    address: Yup.string().required(t('employee.addNewEmployee.validation.addressRequired'))
+  });
 
   const formik = useFormik({
     initialValues: {
@@ -112,11 +114,11 @@ const EmployeeRegistration = () => {
         };
         console.log("Submitting payload:", payload);
         await addNewEmployee(payload);
-        toast.success('Employee registered successfully!');
+        toast.success(t('employee.addNewEmployee.registeredSuccess'));
         resetForm();
       } catch (error: any) {
         console.error('Error Response:', error.response?.data);
-        toast.error(error.response?.data?.message || 'Something went wrong.');
+        toast.error(error.response?.data?.message || t('employee.common.somethingWentWrong'));
       }
     }
   });
@@ -135,7 +137,7 @@ const EmployeeRegistration = () => {
   };
 
   return (
-    <PageContainer title="Employee Registration">
+    <PageContainer title={t('employee.addNewEmployee.title')}>
       {/* Registration Form */}
       <Box
         component="form"
@@ -160,18 +162,18 @@ const EmployeeRegistration = () => {
             >
               <Box sx={{ backgroundColor: '#E7FFCE', textAlign: 'center', py: 1.5 }}>
                 <Typography variant="h6" fontWeight="bold" sx={{ color: '#313131' }}>
-                  Personal Details
+                  {t('employee.addNewEmployee.personalDetails')}
                 </Typography>
               </Box>
 
               <Box sx={{ p: 3 }}>
                 <Grid container spacing={2}>
                   {[
-                    { label: 'Name', name: 'name', required: true, placeholder: 'Employee Name' },
-                    { label: 'Father Name', name: 'father_name', required: true, placeholder: 'Father Name' },
-                    { label: 'CNIC', name: 'cnic', required: false, placeholder: 'xxxxx-xxxxxxx-x' },
-                    { label: 'Phone', name: 'phone', required: true, placeholder: 'xxxx-xxxxxxx' },
-                    { label: 'City', name: 'city', required: true, placeholder: 'City' }
+                    { label: t('employee.addNewEmployee.fields.name'), name: 'name', required: true, placeholder: t('employee.addNewEmployee.placeholders.employeeName') },
+                    { label: t('employee.addNewEmployee.fields.fatherName'), name: 'father_name', required: true, placeholder: t('employee.addNewEmployee.fields.fatherName') },
+                    { label: t('employee.addNewEmployee.fields.cnic'), name: 'cnic', required: false, placeholder: 'xxxxx-xxxxxxx-x' },
+                    { label: t('employee.addNewEmployee.fields.phone'), name: 'phone', required: true, placeholder: 'xxxx-xxxxxxx' },
+                    { label: t('employee.addNewEmployee.fields.city'), name: 'city', required: true, placeholder: t('employee.addNewEmployee.fields.city') }
                   ].map((field) => (
                     <Grid item xs={12} key={field.name}>
                       <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
@@ -215,7 +217,7 @@ const EmployeeRegistration = () => {
                   <Grid item xs={12}>
                     <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
                       <Typography sx={{ minWidth: 150, fontWeight: 'bold' }}>
-                        Gender<span style={{ color: 'red' }}>*</span>:
+                        {t('employee.addNewEmployee.fields.gender')}<span style={{ color: 'red' }}>*</span>:
                       </Typography>
                       <RadioGroup
                         row
@@ -231,7 +233,7 @@ const EmployeeRegistration = () => {
                             control={
                               <Radio sx={{ '&.Mui-checked': { color: 'green' } }} />
                             }
-                            label={gender.charAt(0).toUpperCase() + gender.slice(1)}
+                            label={t('employee.addNewEmployee.genderOptions.' + gender, gender.charAt(0).toUpperCase() + gender.slice(1))}
                             sx={{
                               mr: 3,
                               '& .MuiFormControlLabel-label': {
@@ -253,7 +255,7 @@ const EmployeeRegistration = () => {
                   <Grid item xs={12}>
                     <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
                       <Typography sx={{ minWidth: 150, fontWeight: 'bold' }}>
-                        Date of Birth<span style={{ color: 'red' }}>*</span>:
+                        {t('employee.addNewEmployee.fields.dob')}<span style={{ color: 'red' }}>*</span>:
                       </Typography>
                       <TextField
                         type="date"
@@ -281,7 +283,7 @@ const EmployeeRegistration = () => {
                   <Grid item xs={12}>
                     <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
                       <Typography sx={{ minWidth: 150, fontWeight: 'bold' }}>
-                        Marital Status<span style={{ color: 'red' }}>*</span>:
+                        {t('employee.addNewEmployee.fields.maritalStatus')}<span style={{ color: 'red' }}>*</span>:
                       </Typography>
                       <FormControl fullWidth size="small">
                         <Select
@@ -296,8 +298,8 @@ const EmployeeRegistration = () => {
                             }
                           }}
                         >
-                          <MenuItem value="single">Single</MenuItem>
-                          <MenuItem value="married">Married</MenuItem>
+                          <MenuItem value="single">{t('employee.addNewEmployee.maritalOptions.single')}</MenuItem>
+                          <MenuItem value="married">{t('employee.addNewEmployee.maritalOptions.married')}</MenuItem>
                         </Select>
                         {formik.touched.marital_status && formik.errors.marital_status && (
                           <Typography color="error" variant="caption" sx={{ mt: 0.5 }}>
@@ -324,7 +326,7 @@ const EmployeeRegistration = () => {
             >
               <Box sx={{ backgroundColor: '#E7FFCE', textAlign: 'center', py: 1.5 }}>
                 <Typography variant="h6" fontWeight="bold" sx={{ color: '#313131' }}>
-                  Official Details
+                  {t('employee.addNewEmployee.officialDetails')}
                 </Typography>
               </Box>
 
@@ -334,7 +336,7 @@ const EmployeeRegistration = () => {
                   <Grid item xs={12}>
                     <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
                       <Typography sx={{ minWidth: 150, fontWeight: 'bold' }}>
-                        Designation<span style={{ color: 'red' }}>*</span>:
+                        {t('employee.addNewEmployee.fields.designation')}<span style={{ color: 'red' }}>*</span>:
                       </Typography>
                       <FormControl fullWidth required size="small">
                         <Select
@@ -349,8 +351,8 @@ const EmployeeRegistration = () => {
                             }
                           }}
                         >
-                          <MenuItem value="manager">Manager</MenuItem>
-                          <MenuItem value="supervisor">Supervisor</MenuItem>
+                          <MenuItem value="manager">{t('employee.addNewEmployee.designationOptions.manager')}</MenuItem>
+                          <MenuItem value="supervisor">{t('employee.addNewEmployee.designationOptions.supervisor')}</MenuItem>
                         </Select>
                         {formik.touched.designation && formik.errors.designation && (
                           <Typography variant="caption" color="error">
@@ -365,7 +367,7 @@ const EmployeeRegistration = () => {
                   <Grid item xs={12}>
                     <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
                       <Typography sx={{ minWidth: 150, fontWeight: 'bold' }}>
-                        Department<span style={{ color: 'red' }}>*</span>:
+                        {t('employee.addNewEmployee.fields.department')}<span style={{ color: 'red' }}>*</span>:
                       </Typography>
                       <FormControl fullWidth required size="small">
                         <Select
@@ -380,8 +382,8 @@ const EmployeeRegistration = () => {
                             }
                           }}
                         >
-                          <MenuItem value="hr">HR</MenuItem>
-                          <MenuItem value="finance">Finance</MenuItem>
+                          <MenuItem value="hr">{t('employee.addNewEmployee.departmentOptions.hr')}</MenuItem>
+                          <MenuItem value="finance">{t('employee.addNewEmployee.departmentOptions.finance')}</MenuItem>
                         </Select>
                         {formik.touched.department && formik.errors.department && (
                           <Typography variant="caption" color="error">
@@ -396,7 +398,7 @@ const EmployeeRegistration = () => {
                   <Grid item xs={12}>
                     <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
                       <Typography sx={{ minWidth: 150, fontWeight: 'bold' }}>
-                        Date of Joining<span style={{ color: 'red' }}>*</span>:
+                        {t('employee.addNewEmployee.fields.doj')}<span style={{ color: 'red' }}>*</span>:
                       </Typography>
                       <TextField
                         type="date"
@@ -424,7 +426,7 @@ const EmployeeRegistration = () => {
                   <Grid item xs={12}>
                     <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
                       <Typography sx={{ minWidth: 150, fontWeight: 'bold' }}>
-                        Leave Allow<span style={{ color: 'red' }}>*</span>:
+                        {t('employee.addNewEmployee.fields.leaveAllow')}<span style={{ color: 'red' }}>*</span>:
                       </Typography>
                       <TextField
                         name="leave_allow"
@@ -440,7 +442,7 @@ const EmployeeRegistration = () => {
                         required
                         fullWidth
                         size="small"
-                        placeholder="Leave Allow"
+                        placeholder={t('employee.addNewEmployee.fields.leaveAllow')}
                           inputProps={{
     inputMode: 'numeric',
     pattern: '[0-9]*'
@@ -459,7 +461,7 @@ const EmployeeRegistration = () => {
                   <Grid item xs={12}>
                     <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
                       <Typography sx={{ minWidth: 150, fontWeight: 'bold' }}>
-                        Salary<span style={{ color: 'red' }}>*</span>:
+                        {t('employee.common.salary')}<span style={{ color: 'red' }}>*</span>:
                       </Typography>
                       <TextField
                         name="salary"
@@ -475,7 +477,7 @@ const EmployeeRegistration = () => {
                         required
                         fullWidth
                         size="small"
-                        placeholder="Salary"
+                        placeholder={t('employee.common.salary')}
                           inputProps={{
     inputMode: 'numeric',
     pattern: '[0-9]*'
@@ -494,7 +496,7 @@ const EmployeeRegistration = () => {
                   <Grid item xs={12}>
                     <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
                       <Typography sx={{ minWidth: 150, fontWeight: 'bold' }}>
-                        Account Number:
+                        {t('employee.addNewEmployee.fields.accountNumber')}:
                       </Typography>
                       <TextField
                         name="acc_no"
@@ -505,7 +507,7 @@ const EmployeeRegistration = () => {
                         helperText={formik.touched.acc_no && formik.errors.acc_no}
                         fullWidth
                         size="small"
-                        placeholder="Bank Account"
+                        placeholder={t('employee.addNewEmployee.placeholders.bankAccount')}
                         sx={{
                           '& .MuiOutlinedInput-root': {
                             borderRadius: 1,
@@ -520,7 +522,7 @@ const EmployeeRegistration = () => {
                   <Grid item xs={12}>
                     <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
                       <Typography sx={{ minWidth: 150, fontWeight: 'bold' }}>
-                        Opening Advance:
+                        {t('employee.addNewEmployee.fields.openingAdvance')}:
                       </Typography>
                       <TextField
                         name="opening_advance"
@@ -535,7 +537,7 @@ const EmployeeRegistration = () => {
                         helperText={formik.touched.opening_advance && formik.errors.opening_advance}
                         fullWidth
                         size="small"
-                        placeholder="Amount"
+                        placeholder={t('employee.common.amount')}
                           inputProps={{
     inputMode: 'numeric',
     pattern: '[0-9]*'
@@ -554,7 +556,7 @@ const EmployeeRegistration = () => {
                   <Grid item xs={12}>
                     <Box sx={{ display: 'flex', alignItems: 'flex-start', gap: 2 }}>
                       <Typography sx={{ minWidth: 150, fontWeight: 'bold', pt: '6px' }}>
-                        Address<span style={{ color: 'red' }}>*</span>:
+                        {t('employee.addNewEmployee.fields.address')}<span style={{ color: 'red' }}>*</span>:
                       </Typography>
                       <TextField
                         name="address"
@@ -565,7 +567,7 @@ const EmployeeRegistration = () => {
                         helperText={formik.touched.address && formik.errors.address}
                         fullWidth
                         size="small"
-                        placeholder="Address"
+                        placeholder={t('employee.addNewEmployee.fields.address')}
                         sx={{
                           '& .MuiOutlinedInput-root': {
                             borderRadius: 1,
@@ -600,7 +602,7 @@ const EmployeeRegistration = () => {
               borderRadius: 2
             }}
           >
-            {formik.isSubmitting ? <CircularProgress size={24} sx={{ color: "#0F7C8F" }} /> : "Register Employee"}
+            {formik.isSubmitting ? <CircularProgress size={24} sx={{ color: "#0F7C8F" }} /> : t('employee.addNewEmployee.registerButton')}
           </Button>
         </Box>
       </Box>

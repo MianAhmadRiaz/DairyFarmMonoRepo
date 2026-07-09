@@ -1,6 +1,7 @@
 // FinanceDashboard.tsx
 import React, { useEffect, useState } from 'react';
 import { Box, Grid, Typography, Chip, useTheme, Divider, CircularProgress } from '@mui/material';
+import { useTranslation } from 'react-i18next';
 import { useScrollToTopOnMount } from '../../shared/components/Hooks/useScrollToTop';
 import AccountBalanceWalletRounded from '@mui/icons-material/AccountBalanceWalletRounded';
 import AccountBalanceRounded from '@mui/icons-material/AccountBalanceRounded';
@@ -57,31 +58,33 @@ const uiTokens = {
   }
 };
 
-/** ----------------- DEMO DATA (fallback before API loads) ----------------- */
+/** ----------------- DEMO DATA (fallback before API loads) -----------------
+ * `title` holds an i18n key translated at render time.
+ */
 const fallbackKpis: Kpi[] = [
   {
-    title: 'Total Cash In Hand',
+    title: 'accounts.financeDashboard.totalCashInHand',
     value: 0,
     badge: 'Live',
     tone: 'emerald',
     icon: <AccountBalanceWalletRounded />
   },
   {
-    title: 'Total Income',
+    title: 'accounts.financeDashboard.totalIncome',
     value: 0,
     badge: 'Live',
     tone: 'violet',
     icon: <AccountBalanceRounded />
   },
   {
-    title: 'Total Expense',
+    title: 'accounts.financeDashboard.totalExpense',
     value: 0,
     badge: 'Live',
     tone: 'green',
     icon: <PaymentsRounded />
   },
   {
-    title: 'Net Profit',
+    title: 'accounts.financeDashboard.netProfit',
     value: 0,
     badge: 'Live',
     tone: 'rose',
@@ -102,6 +105,7 @@ const money = (n: number) => {
 const FinanceDashboard: React.FC = () => {
   // Ensure page starts from top when component mounts
   useScrollToTopOnMount();
+  const { t } = useTranslation();
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   const pageBg =
@@ -130,28 +134,28 @@ const FinanceDashboard: React.FC = () => {
   const kpis: Kpi[] = data
     ? [
         {
-          title: 'Total Cash In Hand',
+          title: 'accounts.financeDashboard.totalCashInHand',
           value: data.summary.cashOnHand,
           badge: 'Live',
           tone: 'emerald',
           icon: <AccountBalanceWalletRounded />
         },
         {
-          title: 'Total Income',
+          title: 'accounts.financeDashboard.totalIncome',
           value: data.summary.totalIncome,
           badge: 'Live',
           tone: 'violet',
           icon: <AccountBalanceRounded />
         },
         {
-          title: 'Total Expense',
+          title: 'accounts.financeDashboard.totalExpense',
           value: data.summary.totalExpense,
           badge: 'Live',
           tone: 'green',
           icon: <PaymentsRounded />
         },
         {
-          title: 'Net Profit',
+          title: 'accounts.financeDashboard.netProfit',
           value: data.summary.netProfit,
           badge: 'Live',
           tone: 'rose',
@@ -174,7 +178,7 @@ const FinanceDashboard: React.FC = () => {
 
   if (loading) {
     return (
-      <PageContainer title="Finance Dashboard" subtitle="Admin">
+      <PageContainer title={t('accounts.financeDashboard.title')} subtitle={t('topbar.admin')}>
         <Box
           sx={{
             bgcolor: pageBg,
@@ -190,7 +194,7 @@ const FinanceDashboard: React.FC = () => {
   }
 
   return (
-    <PageContainer title="Finance Dashboard" subtitle="Admin">
+    <PageContainer title={t('accounts.financeDashboard.title')} subtitle={t('topbar.admin')}>
         {/* KPI ROW */}
         <Grid container spacing={2} sx={{ mb: 3, minHeight: 140 }}>
           {kpis.map((k, i) => {
@@ -225,7 +229,7 @@ const FinanceDashboard: React.FC = () => {
                   </Box>
                   <Box flex={1}>
                     <Typography variant="caption" color="text.secondary">
-                      {k.title}
+                      {t(k.title)}
                     </Typography>
                     <Typography variant="h5" fontWeight={800}>
                       {money(k.value)}
@@ -233,7 +237,7 @@ const FinanceDashboard: React.FC = () => {
                     {k.badge && (
                       <Chip
                         size="small"
-                        label={k.badge}
+                        label={k.badge === 'Live' ? t('accounts.financeDashboard.live') : k.badge}
                         sx={{
                           mt: 1,
                           bgcolor: tone.bg,
@@ -266,7 +270,7 @@ const FinanceDashboard: React.FC = () => {
           }}
         >
           <Typography variant="h6" fontWeight={800}>
-            Profit-Loss, Income & Expense
+            {t('accounts.financeDashboard.profitLossIncomeExpense')}
           </Typography>
 
           <Box sx={{ height: 380, mt: 2 }}>
@@ -279,16 +283,19 @@ const FinanceDashboard: React.FC = () => {
                 <Legend />
                 <Bar
                   dataKey="Income"
+                  name={t('accounts.financeDashboard.income')}
                   fill={uiTokens.chart.income}
                   radius={[8, 8, 0, 0]}
                 />
                 <Bar
                   dataKey="COGS"
+                  name={t('accounts.financeDashboard.cogs')}
                   fill={uiTokens.chart.cogs}
                   radius={[8, 8, 0, 0]}
                 />
                 <Bar
                   dataKey="Expense"
+                  name={t('accounts.financeDashboard.expense')}
                   fill={uiTokens.chart.expense}
                   radius={[8, 8, 0, 0]}
                 />
@@ -313,10 +320,10 @@ const FinanceDashboard: React.FC = () => {
           }}
         >
           <Typography variant="h6" fontWeight={800}>
-            Monthly Profit Loss
+            {t('accounts.financeDashboard.monthlyProfitLoss')}
           </Typography>
           <Typography variant="caption" color="text.secondary">
-            Source: dairycare.website
+            {t('accounts.financeDashboard.source')}
           </Typography>
           <Box sx={{ height: 360, mt: 2 }}>
             <ResponsiveContainer width="100%" height="100%">
@@ -326,12 +333,13 @@ const FinanceDashboard: React.FC = () => {
                 <YAxis tickFormatter={(v: number) => money(v)} />
                 <Tooltip
                   formatter={(v: number) => money(v)}
-                  labelFormatter={(m: number) => `Month ${m}`}
+                  labelFormatter={(m: number) => t('accounts.financeDashboard.monthLabel', { month: m })}
                 />
                 <Legend />
                 <Line
                   type="monotone"
                   dataKey="Net"
+                  name={t('accounts.financeDashboard.net')}
                   stroke={uiTokens.chart.net}
                   dot={{ r: 4, strokeWidth: 2 }}
                   activeDot={{ r: 6 }}

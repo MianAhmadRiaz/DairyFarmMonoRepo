@@ -6,8 +6,10 @@ import { fetchStockCategories, fetchStockItems } from '../../../../../shared/ser
 import ConsumptionTable, { ConsumptionItem } from '../../../../../shared/components/ConsumptionTable';
 import { addMedicineConsumption } from '../../../../../shared/services/feeding.services';
 import { StockItemResponse ,ConsumptionPayload} from '../../types';
+import { useTranslation } from 'react-i18next';
 
 const AddSemenConsumption: React.FC = () => {
+const { t } = useTranslation();
 const theme = useTheme();
 const isMobile = useMediaQuery(theme.breakpoints.down('md'));
 
@@ -31,7 +33,7 @@ const isMobile = useMediaQuery(theme.breakpoints.down('md'));
       const medicineCategory = categories?.find(item => item.name.toLowerCase() === "semen");
       
       if (!medicineCategory?.uuid) {
-        throw new Error('Medicine category not found');
+        throw new Error(t('stock.addSemenConsumption.categoryNotFound'));
       }
 
       const response = await fetchStockItems(pageNumber + 1, limit, medicineCategory.uuid);
@@ -48,7 +50,7 @@ const isMobile = useMediaQuery(theme.breakpoints.down('md'));
       setMedicines(medicineItems);
       setTotalCount(response.data.totalCount);
     } catch (err) {
-      setError('Failed to fetch medicines. Please try again.');
+      setError(t('stock.addMedicineConsumption.fetchError'));
       console.error('Error fetching medicines:', err);
     } finally {
       setLoading(false);
@@ -91,7 +93,7 @@ const isMobile = useMediaQuery(theme.breakpoints.down('md'));
       const selectedMedicines = medicines.filter(medicine => medicine.selected);
       
       if (selectedMedicines.length === 0) {
-        setError('Please select at least one medicine');
+        setError(t('stock.addMedicineConsumption.selectAtLeastOne'));
         return;
       }
 
@@ -105,7 +107,7 @@ const isMobile = useMediaQuery(theme.breakpoints.down('md'));
 
       const invalidItems = payload.items.filter(item => item.quantity <= 0);
       if (invalidItems.length > 0) {
-        setError('Please enter valid quantities for all selected medicines');
+        setError(t('stock.addMedicineConsumption.enterValidQuantities'));
         return;
       }
       console.log('🚀 ~ handleSave ~ payload:', payload)
@@ -128,7 +130,7 @@ const isMobile = useMediaQuery(theme.breakpoints.down('md'));
 
       fetchMedicines(page, rowsPerPage);
     } catch (err) {
-      setError('Failed to save medicine consumption. Please try again.');
+      setError(t('stock.addMedicineConsumption.saveError'));
       console.error('Error saving medicine consumption:', err);
       setSnackbar({
         open: true,
@@ -142,7 +144,7 @@ const isMobile = useMediaQuery(theme.breakpoints.down('md'));
   };
 
   return (
-    <PageContainer title="Semen Consumption" subtitle={`Total Products: ${totalCount}`}>
+    <PageContainer title={t('stock.addSemenConsumption.title')} subtitle={t('stock.common.totalProducts', { count: totalCount })}>
       <Paper
         elevation={3} 
         sx={{ 
@@ -182,7 +184,7 @@ const isMobile = useMediaQuery(theme.breakpoints.down('md'));
           >
             <TextField
               type="date"
-              label="Date"
+              label={t('stock.common.date')}
               size="small"
               value={date}
               onChange={(e) => setDate(e.target.value)}
@@ -205,7 +207,7 @@ const isMobile = useMediaQuery(theme.breakpoints.down('md'));
                 }
               }}
             >
-              Save Consumption
+              {t('stock.common.saveConsumption')}
             </Button>
           </Box>
         </Box>

@@ -19,6 +19,7 @@ import {
 } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import ArticleOutlinedIcon from '@mui/icons-material/ArticleOutlined';
+import { useTranslation } from 'react-i18next';
 
 const weeklyData = [
   {
@@ -71,18 +72,27 @@ const weeklyData = [
   }
 ];
 
-const summary = [
-  { label: 'Total Employees', value: 26, color: 'bg-blue-100 text-blue-700' },
-  { label: 'Presents', value: 20, color: 'bg-green-100 text-green-700' },
-  { label: 'Leaves', value: '0/7', color: 'bg-orange-100 text-orange-700' },
-  { label: 'On Time', value: '0/7', color: 'bg-red-100 text-red-700' }
-];
-
 export default function AttendanceSheet() {
+  const { t } = useTranslation();
   const [searchTerm, setSearchTerm] = useState('');
   const [filter, setFilter] = useState('Month');
 
-  const weekDays = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+  const summary = [
+    { label: t('employee.attendanceSheet.summary.totalEmployees'), value: 26, color: 'bg-blue-100 text-blue-700' },
+    { label: t('employee.attendanceSheet.summary.presents'), value: 20, color: 'bg-green-100 text-green-700' },
+    { label: t('employee.attendanceSheet.summary.leaves'), value: '0/7', color: 'bg-orange-100 text-orange-700' },
+    { label: t('employee.attendanceSheet.summary.onTime'), value: '0/7', color: 'bg-red-100 text-red-700' }
+  ];
+
+  const weekDays = [
+    { key: 'Mon', label: t('employee.attendanceSheet.weekDays.mon') },
+    { key: 'Tue', label: t('employee.attendanceSheet.weekDays.tue') },
+    { key: 'Wed', label: t('employee.attendanceSheet.weekDays.wed') },
+    { key: 'Thu', label: t('employee.attendanceSheet.weekDays.thu') },
+    { key: 'Fri', label: t('employee.attendanceSheet.weekDays.fri') },
+    { key: 'Sat', label: t('employee.attendanceSheet.weekDays.sat') },
+    { key: 'Sun', label: t('employee.attendanceSheet.weekDays.sun') }
+  ];
 
   const getStatusColor = (status: string) => {
     // Added color mapping for statuses
@@ -101,7 +111,7 @@ export default function AttendanceSheet() {
   return (
     <Box p={2}>
       <Typography variant="h6" fontWeight="bold" mb={2}>
-        Attendance
+        {t('employee.common.attendance')}
       </Typography>
       {/* Summary Cards */}
       <Grid container spacing={2} className="mb-4">
@@ -133,8 +143,8 @@ export default function AttendanceSheet() {
             size="small"
             fullWidth
           >
-            <MenuItem value="Week">Week</MenuItem>
-            <MenuItem value="Month">Month</MenuItem>
+            <MenuItem value="Week">{t('employee.attendanceSheet.filter.week')}</MenuItem>
+            <MenuItem value="Month">{t('employee.attendanceSheet.filter.month')}</MenuItem>
           </Select>
         </Grid>
       </Grid>
@@ -150,11 +160,11 @@ export default function AttendanceSheet() {
             gap={2}
           >
             <Typography variant="h6" fontWeight="bold">
-              Attendance
+              {t('employee.common.attendance')}
             </Typography>
             <TextField
               fullWidth
-              placeholder="Search by Employee Name, Id or Designation"
+              placeholder={t('employee.attendanceSheet.searchPlaceholder')}
               variant="outlined"
               size="small"
               className="mb-4 bg-white"
@@ -178,16 +188,16 @@ export default function AttendanceSheet() {
               <TableHead>
                 <TableRow>
                   <TableCell sx={{ minWidth: 160 }}>
-                    <strong>NAME</strong>
+                    <strong>{t('employee.attendanceSheet.nameColumn')}</strong>
                   </TableCell>
                   {filter === 'Week' &&
                     weekDays.map(day => (
                       <TableCell
-                        key={day}
+                        key={day.key}
                         align="center"
                         sx={{ padding: '4px', minWidth: 24 }}
                       >
-                        <strong>{day}</strong>
+                        <strong>{day.label}</strong>
                       </TableCell>
                     ))}
                   {filter === 'Month' &&
@@ -240,7 +250,7 @@ export default function AttendanceSheet() {
                               color: getStatusColor(status)
                             }}
                           >
-                            {status}
+                            {t('employee.attendanceSheet.status.' + status, status)}
                           </TableCell>
                         ))}
                       </TableRow>

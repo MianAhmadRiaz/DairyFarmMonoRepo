@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import {
   Box,
   Typography,
@@ -26,6 +27,7 @@ import {
 } from '../../shared/services/EmployeeAPI/designation.service';
 
 export default function RolesScreen() {
+  const { t } = useTranslation();
   const [designations, setDesignations] = useState<Designation[]>([]);
   const [loading, setLoading] = useState(false);
   const [open, setOpen] = useState(false);
@@ -94,15 +96,15 @@ export default function RolesScreen() {
           mb={3}
         >
           <Typography variant="h6">
-            <strong>Roles / Designations</strong>{' '}
-            <span style={{ color: '#888' }}>({designations.length} Total)</span>
+            <strong>{t('employee.roles.title')}</strong>{' '}
+            <span style={{ color: '#888' }}>{t('employee.common.totalCount', { count: designations.length })}</span>
           </Typography>
           <Button
             variant="contained"
             onClick={() => setOpen(true)}
             sx={{ borderRadius: '8px', backgroundColor: '#045D56' }}
           >
-            New Role
+            {t('employee.roles.newRole')}
           </Button>
         </Box>
 
@@ -111,13 +113,13 @@ export default function RolesScreen() {
             <TableHead>
               <TableRow sx={{ backgroundColor: 'lightgrey' }}>
                 <TableCell>
-                  <strong>DATE</strong>
+                  <strong>{t('employee.common.dateUpper')}</strong>
                 </TableCell>
                 <TableCell>
-                  <strong>ROLE TITLE</strong>
+                  <strong>{t('employee.roles.roleTitleUpper')}</strong>
                 </TableCell>
                 <TableCell>
-                  <strong>DESCRIPTION</strong>
+                  <strong>{t('employee.common.descriptionUpper')}</strong>
                 </TableCell>
                 <TableCell align="right"></TableCell>
               </TableRow>
@@ -132,7 +134,7 @@ export default function RolesScreen() {
               ) : designations.length === 0 ? (
                 <TableRow>
                   <TableCell colSpan={4} align="center">
-                    No roles found. Create one to get started.
+                    {t('employee.roleManagement.noRoles')}
                   </TableCell>
                 </TableRow>
               ) : (
@@ -164,19 +166,19 @@ export default function RolesScreen() {
       </Container>
 
       <Dialog open={open} onClose={() => setOpen(false)} fullWidth maxWidth="sm">
-        <DialogTitle>New Role / Designation</DialogTitle>
+        <DialogTitle>{t('employee.roles.newRoleDesignation')}</DialogTitle>
         <DialogContent>
           <TextField
             autoFocus
             margin="dense"
-            label="Role Title"
+            label={t('employee.roles.roleTitle')}
             fullWidth
             value={name}
             onChange={(e) => setName(e.target.value)}
           />
           <TextField
             margin="dense"
-            label="Description"
+            label={t('employee.common.description')}
             fullWidth
             multiline
             rows={2}
@@ -185,14 +187,14 @@ export default function RolesScreen() {
           />
         </DialogContent>
         <DialogActions>
-          <Button onClick={() => setOpen(false)}>Cancel</Button>
+          <Button onClick={() => setOpen(false)}>{t('employee.common.cancel')}</Button>
           <Button
             variant="contained"
             onClick={handleCreate}
             disabled={saving || !name.trim()}
             sx={{ backgroundColor: '#045D56' }}
           >
-            {saving ? 'Saving...' : 'Create'}
+            {saving ? t('employee.common.saving') : t('employee.common.create')}
           </Button>
         </DialogActions>
       </Dialog>

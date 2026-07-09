@@ -1,4 +1,5 @@
 import React from 'react'
+import { useTranslation } from 'react-i18next'
 import { StyleProp, StyleSheet, TextStyle, View, ViewStyle } from 'react-native'
 import { COLORS, THEME } from 'shared/theme'
 import { RF } from 'shared/theme/responsive'
@@ -11,13 +12,16 @@ interface Props {
 }
 
 const ListEmptyComponent: React.FC<Props> = ({
-  message = 'No Results Found',
+  message,
   style,
   textStyle
 }) => {
+  const { t } = useTranslation()
   return (
     <View style={[styles.container, style]}>
-      <AppText style={[styles.text, textStyle]}>{message}</AppText>
+      <AppText style={[styles.text, textStyle]}>
+        {message || t('shared.listEmpty.message')}
+      </AppText>
     </View>
   )
 }

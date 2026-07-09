@@ -1,5 +1,6 @@
 import { DrawerActions, useNavigation } from '@react-navigation/native'
 import React from 'react'
+import { useTranslation } from 'react-i18next'
 import { View } from 'react-native'
 import { useSelector } from 'react-redux'
 import AnyIcon, { Icons } from 'shared/components/AnyIcon'
@@ -15,6 +16,7 @@ interface Props {
   showUser: boolean
 }
 const HomeHeader = ({ showUser }: Props) => {
+  const { t } = useTranslation()
   const user = useSelector((state: RootState) => state.user.user)
   const navigation = useNavigation()
 
@@ -54,7 +56,7 @@ const HomeHeader = ({ showUser }: Props) => {
                 semiBold
                 style={{ marginRight: RF(3) }}
               >
-                User:
+                {t('main.homeHeader.userLabel')}
               </AppText>
               <AppText
                 fontSize="subtitle"

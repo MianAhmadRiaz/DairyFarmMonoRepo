@@ -1,5 +1,6 @@
 import React from 'react';
 import { Box, Typography, Chip, useMediaQuery, useTheme } from '@mui/material';
+import { useTranslation } from 'react-i18next';
 import { tokens } from '../../theme/theme';
 
 interface HealthAlertProps {
@@ -9,6 +10,7 @@ interface HealthAlertProps {
 }
 
 const HealthAlert: React.FC<HealthAlertProps> = ({ title, cases, status }) => {
+  const { t } = useTranslation();
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
@@ -49,11 +51,11 @@ const HealthAlert: React.FC<HealthAlertProps> = ({ title, cases, status }) => {
             color="textSecondary"
             sx={{ fontSize: '0.7rem' }}
           >
-            {cases} Case{cases > 1 ? 's' : ''}
+            {t('shared.healthAlert.cases', { count: cases })}
           </Typography>
         </Box>
         <Chip
-          label={status}
+          label={t(`shared.healthAlert.status.${status}`, status)}
           color={status === 'TREATED' ? 'success' : 'error'}
           size="small"
           sx={{

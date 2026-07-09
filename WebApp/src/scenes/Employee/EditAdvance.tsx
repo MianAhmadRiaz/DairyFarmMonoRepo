@@ -11,6 +11,7 @@ import {
   Autocomplete,
   useTheme
 } from '@mui/material';
+import { useTranslation } from 'react-i18next';
 import PageContainer from '../../shared/components/Layout/PageContainer';
 import { AdvanceSalaryService, Employee, UpdateAdvancePayload,AddAdvancePayload } from '../../shared/services/EmployeeAPI/advanceSalary.service';
 import { tokens } from '../../shared/theme/theme';
@@ -18,6 +19,7 @@ import { tokens } from '../../shared/theme/theme';
 export default function EmployeeDashboard() {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
+  const { t } = useTranslation();
 
   const [employees, setEmployees] = useState<Employee[]>([]);
   const [selectedEmployee, setSelectedEmployee] = useState<Employee | null>(null);
@@ -79,7 +81,7 @@ export default function EmployeeDashboard() {
         setEmployees(data);
       } catch (error) {
         console.error('Failed to fetch employees:', error);
-        alert('Failed to load employees');
+        alert(t('employee.common.failedToLoadEmployees'));
       }
     };
     fetchEmployees();
@@ -106,7 +108,7 @@ export default function EmployeeDashboard() {
         }
       } catch (error) {
         console.error('Failed to load advance record:', error);
-        alert('Failed to load advance');
+        alert(t('employee.editAdvance.failedToLoad'));
       }
     };
 
@@ -114,7 +116,7 @@ export default function EmployeeDashboard() {
   }, [advanceId, employees]);
 const handleSave = async () => {
   if (!selectedEmployee) {
-    alert('Please select an employee');
+    alert(t('employee.common.pleaseSelectEmployee'));
     return;
   }
 
@@ -131,7 +133,7 @@ const handleSave = async () => {
         naration
       };
       await AdvanceSalaryService.updateAdvanceSalary(payload);
-      alert('Advance updated successfully');
+      alert(t('employee.editAdvance.updatedSuccess'));
     } else {
       // Create new advance
       const payload: AddAdvancePayload = {
@@ -143,29 +145,30 @@ const handleSave = async () => {
         naration
       };
       await AdvanceSalaryService.addAdvanceSalary(payload);
-      alert('Advance added successfully');
+      alert(t('employee.editAdvance.addedSuccess'));
     }
   } catch (error) {
     console.error('Failed to save advance:', error);
-    alert('Failed to save advance');
+    alert(t('employee.addAdvance.saveFailed'));
   }
 };
 
+  const fields = [
+    { label: 'Date', displayLabel: t('employee.common.date'), type: 'date' },
+    { label: 'Employee', displayLabel: t('employee.common.employee'), type: 'text' },
+    { label: 'Account', displayLabel: t('employee.common.account'), type: 'text' },
+    { label: 'Advance Amount', displayLabel: t('employee.common.advanceAmount'), type: 'number' },
+    // { label: 'Naration', displayLabel: t('employee.common.narration'), type: 'text' }
+  ];
 
   return (
-    <PageContainer title="Edit Advance">
+    <PageContainer title={t('employee.editAdvance.title')}>
       <Card sx={{ mb: 3, boxShadow: 3, borderRadius: 4, mt: 4, width: { xs: '100%', md: '880px' } }}>
         <CardContent>
           <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 3 }}>
-            {[
-              { label: 'Date', type: 'date' },
-              { label: 'Employee', type: 'text' },
-              { label: 'Account', type: 'text' },
-              { label: 'Advance Amount', type: 'number' },
-              // { label: 'Naration', type: 'text' }
-            ].map((field, index) => (
+            {fields.map((field, index) => (
               <Box key={index} sx={{ width: { xs: '126px', md: 'calc(33.33% - 16px)' }, display: 'flex', flexDirection: 'column' }}>
-                <label style={{ marginBottom: '4px', fontWeight: 'bold' }}>{field.label}</label>
+                <label style={{ marginBottom: '4px', fontWeight: 'bold' }}>{field.displayLabel}</label>
 
                 {field.label === 'Employee' ? (
                   <Autocomplete
@@ -173,7 +176,7 @@ const handleSave = async () => {
                     getOptionLabel={(option) => option.name}
                     value={selectedEmployee}
                     onChange={(_, value) => handleFieldChange('Employee', value)}
-                    renderInput={(params) => <TextField {...params} size="small" placeholder="Select Employee" />}
+                    renderInput={(params) => <TextField {...params} size="small" placeholder={t('employee.common.selectEmployee')} />}
                   />
                   
                 ) : (
@@ -208,7 +211,7 @@ const handleSave = async () => {
                 '&:hover': { backgroundColor: '#007f91' }
               }}
             >
-              Save Advance Salary
+              {t('employee.addAdvance.saveButton')}
             </Button>
           </Box>
         </CardContent>

@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import {
   Box,
   Button,
@@ -19,6 +20,7 @@ import {
 } from '../../shared/services/EmployeeAPI/advanceSalary.service';
 
 export default function ReceiveAdvance() {
+  const { t } = useTranslation();
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
 
@@ -51,11 +53,11 @@ export default function ReceiveAdvance() {
   const handleSave = async () => {
     setMessage(null);
     if (!selectedEmployee) {
-      setMessage({ type: 'error', text: 'Please select an employee' });
+      setMessage({ type: 'error', text: t('employee.receiveAdvance.selectEmployeeError') });
       return;
     }
     if (!amount || Number(amount) <= 0) {
-      setMessage({ type: 'error', text: 'Please enter a valid amount' });
+      setMessage({ type: 'error', text: t('employee.receiveAdvance.validAmountError') });
       return;
     }
     setSaving(true);
@@ -69,7 +71,7 @@ export default function ReceiveAdvance() {
       });
       setMessage({
         type: 'success',
-        text: 'Advance repayment recorded successfully'
+        text: t('employee.receiveAdvance.recordedSuccess')
       });
       setSelectedEmployee(null);
       setDate('');
@@ -82,7 +84,7 @@ export default function ReceiveAdvance() {
         type: 'error',
         text:
           error?.response?.data?.message ||
-          'Failed to record advance repayment'
+          t('employee.receiveAdvance.recordFailed')
       });
     } finally {
       setSaving(false);
@@ -90,7 +92,7 @@ export default function ReceiveAdvance() {
   };
 
   return (
-    <PageContainer title="Receive Advance">
+    <PageContainer title={t('employee.receiveAdvance.title')}>
       <Card
         sx={{
           mb: 3,
@@ -121,7 +123,7 @@ export default function ReceiveAdvance() {
               }}
             >
               <label style={{ marginBottom: '4px', fontWeight: 'bold' }}>
-                Date
+                {t('employee.common.date')}
               </label>
               <TextField
                 size="small"
@@ -141,7 +143,7 @@ export default function ReceiveAdvance() {
               }}
             >
               <label style={{ marginBottom: '4px', fontWeight: 'bold' }}>
-                Employee
+                {t('employee.common.employee')}
               </label>
               <Autocomplete
                 options={employees}
@@ -152,7 +154,7 @@ export default function ReceiveAdvance() {
                   <TextField
                     {...params}
                     size="small"
-                    placeholder="Select Employee"
+                    placeholder={t('employee.common.selectEmployee')}
                   />
                 )}
               />
@@ -166,12 +168,12 @@ export default function ReceiveAdvance() {
               }}
             >
               <label style={{ marginBottom: '4px', fontWeight: 'bold' }}>
-                Amount
+                {t('employee.common.amount')}
               </label>
               <TextField
                 size="small"
                 type="number"
-                placeholder="Amount"
+                placeholder={t('employee.common.amount')}
                 value={amount}
                 onChange={(e) => setAmount(e.target.value)}
                 sx={{ '& .MuiOutlinedInput-root': { borderRadius: 2 } }}
@@ -186,7 +188,7 @@ export default function ReceiveAdvance() {
               }}
             >
               <label style={{ marginBottom: '4px', fontWeight: 'bold' }}>
-                Payment Method
+                {t('employee.receiveAdvance.paymentMethod')}
               </label>
               <TextField
                 size="small"
@@ -195,11 +197,11 @@ export default function ReceiveAdvance() {
                 onChange={(e) => setPaymentMethod(e.target.value)}
                 sx={{ '& .MuiOutlinedInput-root': { borderRadius: 2 } }}
               >
-                <MenuItem value="cash">Cash</MenuItem>
-                <MenuItem value="bank_transfer">Bank Transfer</MenuItem>
-                <MenuItem value="cheque">Cheque</MenuItem>
-                <MenuItem value="mobile_payment">Mobile Payment</MenuItem>
-                <MenuItem value="other">Other</MenuItem>
+                <MenuItem value="cash">{t('employee.receiveAdvance.paymentMethods.cash')}</MenuItem>
+                <MenuItem value="bank_transfer">{t('employee.receiveAdvance.paymentMethods.bankTransfer')}</MenuItem>
+                <MenuItem value="cheque">{t('employee.receiveAdvance.paymentMethods.cheque')}</MenuItem>
+                <MenuItem value="mobile_payment">{t('employee.receiveAdvance.paymentMethods.mobilePayment')}</MenuItem>
+                <MenuItem value="other">{t('employee.receiveAdvance.paymentMethods.other')}</MenuItem>
               </TextField>
             </Box>
 
@@ -211,12 +213,12 @@ export default function ReceiveAdvance() {
               }}
             >
               <label style={{ marginBottom: '4px', fontWeight: 'bold' }}>
-                Narration
+                {t('employee.receiveAdvance.narration')}
               </label>
               <TextField
                 size="small"
                 type="text"
-                placeholder="Narration"
+                placeholder={t('employee.receiveAdvance.narration')}
                 value={remarks}
                 onChange={(e) => setRemarks(e.target.value)}
                 sx={{ '& .MuiOutlinedInput-root': { borderRadius: 2 } }}
@@ -240,7 +242,7 @@ export default function ReceiveAdvance() {
                 }
               }}
             >
-              {saving ? 'Saving...' : 'Receive Advance'}
+              {saving ? t('employee.common.saving') : t('employee.receiveAdvance.receiveAdvance')}
             </Button>
           </Box>
         </CardContent>

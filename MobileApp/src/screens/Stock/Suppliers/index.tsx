@@ -1,4 +1,5 @@
 import React, { useCallback, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { useFocusEffect } from '@react-navigation/native'
 import { Modal, View } from 'react-native'
 import Toast from 'react-native-toast-message'
@@ -16,6 +17,7 @@ import { COLORS } from 'shared/theme'
 import { RF } from 'shared/theme/responsive'
 
 const Suppliers = () => {
+  const { t } = useTranslation()
   const { can } = usePermissions()
   const canManage = can(PERMISSIONS.STOCK_PURCHASE)
   const [suppliers, setSuppliers] = useState<any[]>([])
@@ -33,7 +35,7 @@ const Suppliers = () => {
       const res = await getSuppliers()
       setSuppliers(res?.data?.data?.suppliers || [])
     } catch (e) {
-      Toast.show({ type: 'error', text1: 'Error', text2: getNormalizedError(e) })
+      Toast.show({ type: 'error', text1: t('stock.common.error'), text2: getNormalizedError(e) })
     } finally {
       setLoading(false)
       setRefreshing(false)
@@ -44,18 +46,18 @@ const Suppliers = () => {
 
   const onAdd = async () => {
     if (!name.trim()) {
-      Toast.show({ type: 'error', text1: 'Validation', text2: 'Supplier name is required' })
+      Toast.show({ type: 'error', text1: t('stock.common.validation'), text2: t('stock.suppliers.nameRequired') })
       return
     }
     try {
       setSaving(true)
       await addSupplier({ name: name.trim(), contact: contact ? [contact] : [], address })
-      Toast.show({ type: 'success', text1: 'Success', text2: 'Supplier added' })
+      Toast.show({ type: 'success', text1: t('stock.common.success'), text2: t('stock.suppliers.supplierAdded') })
       setModal(false)
       setName(''); setContact(''); setAddress('')
       load()
     } catch (e) {
-      Toast.show({ type: 'error', text1: 'Error', text2: getNormalizedError(e) })
+      Toast.show({ type: 'error', text1: t('stock.common.error'), text2: getNormalizedError(e) })
     } finally {
       setSaving(false)
     }
@@ -64,33 +66,33 @@ const Suppliers = () => {
   return (
     <>
       <ListScreen
-        title="Suppliers"
+        title={t('stock.suppliers.title')}
         data={suppliers}
         loading={loading}
         refreshing={refreshing}
         onRefresh={() => { setRefreshing(true); load() }}
         keyExtractor={(item: any, i) => item.uuid || String(i)}
-        emptyText="No suppliers yet."
+        emptyText={t('stock.suppliers.empty')}
         onPressAdd={canManage ? () => setModal(true) : undefined}
         renderItem={({ item }: any) => (
           <InfoCard
             title={item.name}
             subtitle={Array.isArray(item.contact) ? item.contact.join(', ') : item.contact}
             leftIcon={{ type: Icons.MaterialCommunityIcons, name: 'account-tie' }}
-            rows={[{ label: 'Address', value: item.address }]}
+            rows={[{ label: t('stock.suppliers.address'), value: item.address }]}
           />
         )}
       />
       <Modal visible={modal} transparent animationType="slide" onRequestClose={() => setModal(false)}>
         <View style={styles.backdrop}>
           <View style={styles.sheet}>
-            <AppText fontSize="h6" semiBold style={{ marginBottom: RF(12) }}>Add Supplier</AppText>
-            <AppInput label="Name" value={name} onChangeText={setName} placeholder="Supplier name" />
-            <AppInput label="Contact" value={contact} onChangeText={setContact} placeholder="Phone / email" />
-            <AppInput label="Address" value={address} onChangeText={setAddress} placeholder="Optional" />
+            <AppText fontSize="h6" semiBold style={{ marginBottom: RF(12) }}>{t('stock.suppliers.addSupplier')}</AppText>
+            <AppInput label={t('stock.suppliers.name')} value={name} onChangeText={setName} placeholder={t('stock.suppliers.namePlaceholder')} />
+            <AppInput label={t('stock.suppliers.contact')} value={contact} onChangeText={setContact} placeholder={t('stock.suppliers.contactPlaceholder')} />
+            <AppInput label={t('stock.suppliers.address')} value={address} onChangeText={setAddress} placeholder={t('stock.common.optional')} />
             <View style={{ flexDirection: 'row', gap: RF(10), marginTop: RF(10) }}>
-              <PrimaryButton title="Cancel" onPress={() => setModal(false)} buttonStyle={{ flex: 1, backgroundColor: COLORS.mediumGrey }} textStyle={{ color: COLORS.primaryDark }} />
-              <PrimaryButton title="Add" loading={saving} loaderColor={COLORS.white} onPress={onAdd} buttonStyle={{ flex: 1 }} />
+              <PrimaryButton title={t('common.cancel')} onPress={() => setModal(false)} buttonStyle={{ flex: 1, backgroundColor: COLORS.mediumGrey }} textStyle={{ color: COLORS.primaryDark }} />
+              <PrimaryButton title={t('common.add')} loading={saving} loaderColor={COLORS.white} onPress={onAdd} buttonStyle={{ flex: 1 }} />
             </View>
           </View>
         </View>

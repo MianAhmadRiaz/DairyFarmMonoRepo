@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { useNavigation } from '@react-navigation/native'
 import { ScrollView, View } from 'react-native'
 import Toast from 'react-native-toast-message'
@@ -16,6 +17,7 @@ import { COLORS } from 'shared/theme'
 import { RF } from 'shared/theme/responsive'
 
 const Consumption = () => {
+  const { t } = useTranslation()
   const navigation = useNavigation<any>()
   const { can } = usePermissions()
   const canManage = can(PERMISSIONS.STOCK_MANAGE)
@@ -33,20 +35,20 @@ const Consumption = () => {
   const onSubmit = async () => {
     const item = items.find(i => i.name === itemLabel)
     if (!item) {
-      Toast.show({ type: 'error', text1: 'Validation', text2: 'Select an item' })
+      Toast.show({ type: 'error', text1: t('stock.common.validation'), text2: t('stock.consumption.selectItem') })
       return
     }
     if (!(Number(quantity) > 0)) {
-      Toast.show({ type: 'error', text1: 'Validation', text2: 'Enter a quantity' })
+      Toast.show({ type: 'error', text1: t('stock.common.validation'), text2: t('stock.consumption.enterQuantity') })
       return
     }
     try {
       setLoading(true)
       await addStockTransaction({ itemId: item.uuid, quantity: Number(quantity), transaction_type: 'usage', note })
-      Toast.show({ type: 'success', text1: 'Success', text2: 'Consumption recorded' })
+      Toast.show({ type: 'success', text1: t('stock.common.success'), text2: t('stock.consumption.consumptionRecorded') })
       navigation.goBack()
     } catch (e) {
-      Toast.show({ type: 'error', text1: 'Error', text2: getNormalizedError(e) })
+      Toast.show({ type: 'error', text1: t('stock.common.error'), text2: getNormalizedError(e) })
     } finally {
       setLoading(false)
     }
@@ -55,9 +57,9 @@ const Consumption = () => {
   if (!canManage) {
     return (
       <AppContainer>
-        <AppHeader title="Consumption" showBack />
+        <AppHeader title={t('stock.consumption.title')} showBack />
         <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-          <AppText color="error">You do not have permission to issue stock.</AppText>
+          <AppText color="error">{t('stock.consumption.noPermission')}</AppText>
         </View>
       </AppContainer>
     )
@@ -65,12 +67,12 @@ const Consumption = () => {
 
   return (
     <AppContainer>
-      <AppHeader title="Stock Consumption" showBack />
+      <AppHeader title={t('stock.consumption.headerTitle')} showBack />
       <ScrollView contentContainerStyle={{ padding: RF(16) }}>
-        <Dropdown label="Item" options={items.map(i => i.name)} value={itemLabel} onChange={setItemLabel} />
-        <AppInput label="Quantity Used" value={quantity} onChangeText={setQuantity} keyboardType="numeric" placeholder="0" />
-        <AppInput label="Note" value={note} onChangeText={setNote} placeholder="Optional" />
-        <PrimaryButton title="Record Consumption" loading={loading} loaderColor={COLORS.white} onPress={onSubmit} buttonStyle={{ marginTop: RF(16) }} />
+        <Dropdown label={t('stock.common.item')} options={items.map(i => i.name)} value={itemLabel} onChange={setItemLabel} />
+        <AppInput label={t('stock.consumption.quantityUsed')} value={quantity} onChangeText={setQuantity} keyboardType="numeric" placeholder="0" />
+        <AppInput label={t('stock.common.note')} value={note} onChangeText={setNote} placeholder={t('stock.common.optional')} />
+        <PrimaryButton title={t('stock.consumption.recordConsumption')} loading={loading} loaderColor={COLORS.white} onPress={onSubmit} buttonStyle={{ marginTop: RF(16) }} />
       </ScrollView>
     </AppContainer>
   )

@@ -1,4 +1,5 @@
 import React, {useState} from 'react';
+import {useTranslation} from 'react-i18next';
 import {Image, SafeAreaView, View} from 'react-native';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import Toast from 'react-native-toast-message';
@@ -17,23 +18,24 @@ import AppInput from 'shared/components/AppInput';
 import PrimaryButton from 'shared/components/PrimaryButton';
 interface Props extends GenericNavigation {}
 const ForgotPassword = (props: Props) => {
+  const {t} = useTranslation();
   const [loading, setLoading] = useState(false);
-  const [email, setEmail] = useState(__DEV__ ? 'danyal.ahmer@yopmail.com' : '');
+  const [email, setEmail] = useState(__DEV__ ? 'owner@riverdale.com' : '');
 
   const onPressSend = async () => {
     try {
       if (!/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email)) {
         Toast.show({
-          text1: 'Error',
-          text2: 'Invalid Email',
+          text1: t('auth.common.error'),
+          text2: t('auth.forgotPassword.invalidEmail'),
           type: 'error',
         });
       }
       setLoading(true);
       await forgotPassword({email: email});
       Toast.show({
-        text1: 'Success',
-        text2: 'OTP Code Sent to Your Email',
+        text1: t('auth.common.success'),
+        text2: t('auth.forgotPassword.otpSent'),
         type: 'success',
       });
       props.navigation?.navigate(NavRoutes.OTP_SCREEN, {email});
@@ -41,8 +43,8 @@ const ForgotPassword = (props: Props) => {
     } catch (e: any) {
       const error = getNormalizedError(e);
       Toast.show({
-        text1: 'Error',
-        text2: error ? error : 'Error Sending Code',
+        text1: t('auth.common.error'),
+        text2: error ? error : t('auth.forgotPassword.errorSendingCode'),
         type: 'error',
       });
       setLoading(false);
@@ -66,19 +68,19 @@ const ForgotPassword = (props: Props) => {
           <AppText
           fontSize='h7'
 semiBold
-          style={styles.bottomHeader}>Forgot Password</AppText>
+          style={styles.bottomHeader}>{t('auth.forgotPassword.title')}</AppText>
           <View style={styles.inputView}>
             <AppInput
               value={email}
               onChangeText={setEmail}
               
-              label="Email"
-              placeholder="Enter Email"
+              label={t('auth.forgotPassword.email')}
+              placeholder={t('auth.forgotPassword.emailPlaceholder')}
               icon="mail"
             />
           </View>
           <PrimaryButton
-            title="Send"
+            title={t('auth.forgotPassword.send')}
             buttonStyle={styles.sendButton}
             textStyle={styles.buttonText}
             onPress={onPressSend}
@@ -86,7 +88,7 @@ semiBold
             loaderColor={COLORS.white}
           />
           <PrimaryButton
-            title="Back"
+            title={t('auth.forgotPassword.back')}
             buttonStyle={styles.backbuttonStyle}
             textStyle={[
               styles.buttonText,

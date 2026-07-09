@@ -24,6 +24,7 @@ import PrintOutlinedIcon from '@mui/icons-material/PrintOutlined';
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined';
 import CloseIcon from '@mui/icons-material/Close';
+import { useTranslation } from 'react-i18next';
 import { tokens } from '../../shared/theme/theme';
 import {
   fetchChartOfAccounts,
@@ -87,6 +88,7 @@ const toCsv = (headers: string[], rows: (string | number)[][]) =>
   [headers.join(','), ...rows.map(r => r.map(v => `"${String(v).replace(/"/g, '""')}"`).join(','))].join('\n');
 
 export default function ChartOfAccounts() {
+  const { t } = useTranslation();
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   const pageBg = theme.palette.mode === 'dark' ? colors.primary[500] : '#F5FAF7';
@@ -135,16 +137,16 @@ export default function ChartOfAccounts() {
   // toolbar actions
   const handleCopy = async () => {
     const csv = toCsv(
-      ['#', 'Code', 'Name', 'Type', 'Status'],
+      ['#', t('accounts.common.code'), t('accounts.common.name'), t('accounts.common.type'), t('accounts.common.status')],
       filtered.map(r => [r.id, r.code, r.name, r.type, r.status])
     );
     await navigator.clipboard.writeText(csv);
-    alert('Copied table (CSV) to clipboard');
+    alert(t('accounts.common.copiedCsv'));
   };
 
   const downloadCsv = (filename: string) => {
     const csv = toCsv(
-      ['#', 'Code', 'Name', 'Type', 'Status'],
+      ['#', t('accounts.common.code'), t('accounts.common.name'), t('accounts.common.type'), t('accounts.common.status')],
       filtered.map(r => [r.id, r.code, r.name, r.type, r.status])
     );
     const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
@@ -191,7 +193,7 @@ export default function ChartOfAccounts() {
 
   const saveEdit = async () => {
     if (!form.name.trim()) {
-      alert('Account Name is required.');
+      alert(t('accounts.chartOfAccounts.nameRequired'));
       return;
     }
     if (!editingRow) return;
@@ -206,23 +208,23 @@ export default function ChartOfAccounts() {
       setOpen(false);
     } catch (e) {
       console.error('Failed to update account', e);
-      alert('Failed to update account.');
+      alert(t('accounts.chartOfAccounts.updateError'));
     }
   };
 
   const handleDelete = async (row: AccountRow) => {
-    if (!window.confirm(`Delete account "${row.name}"?`)) return;
+    if (!window.confirm(t('accounts.chartOfAccounts.confirmDelete', { name: row.name }))) return;
     try {
       await deleteAccount(row.id);
       await loadAccounts();
     } catch (e) {
       console.error('Failed to delete account', e);
-      alert('Failed to delete account. It may be a system account or have transactions.');
+      alert(t('accounts.chartOfAccounts.deleteError'));
     }
   };
 
   return (
-    <PageContainer title="Chart of Accounts">
+    <PageContainer title={t('accounts.chartOfAccounts.title')}>
         {/* Title Row */}
         <Stack direction="row" alignItems="center" justifyContent="flex-end" sx={{ mb: 1 }}>
           <Stack direction="row" spacing={1} alignItems="center" flexWrap="wrap">
@@ -233,7 +235,7 @@ export default function ChartOfAccounts() {
               variant="outlined"
               sx={{ textTransform: 'none', borderColor: '#d6d6d6', color: '#6a757d', background: '#fff' }}
             >
-              Copy
+              {t('accounts.common.copy')}
             </Button>
             <Button
               size="small"
@@ -266,7 +268,7 @@ export default function ChartOfAccounts() {
             {/* Search */}
             <TextField
               size="small"
-              placeholder="Search"
+              placeholder={t('common.search')}
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               InputProps={{
@@ -284,11 +286,11 @@ export default function ChartOfAccounts() {
               <thead>
                 <tr>
                   <th style={th} onClick={() => toggleSort('id')}>#</th>
-                  <th style={th} onClick={() => toggleSort('code')}>Code</th>
-                  <th style={{ ...th, minWidth: 420 }} onClick={() => toggleSort('name')}>Name</th>
-                  <th style={{ ...th, minWidth: 220 }} onClick={() => toggleSort('type')}>Type</th>
-                  <th style={th} onClick={() => toggleSort('status')}>Status</th>
-                  <th style={th}>Edit/Delete</th>
+                  <th style={th} onClick={() => toggleSort('code')}>{t('accounts.common.code')}</th>
+                  <th style={{ ...th, minWidth: 420 }} onClick={() => toggleSort('name')}>{t('accounts.common.name')}</th>
+                  <th style={{ ...th, minWidth: 220 }} onClick={() => toggleSort('type')}>{t('accounts.common.type')}</th>
+                  <th style={th} onClick={() => toggleSort('status')}>{t('accounts.common.status')}</th>
+                  <th style={th}>{t('accounts.chartOfAccounts.editDelete')}</th>
                 </tr>
                 {/* filter row under headers (Type selector like screenshot) */}
                 <tr>
@@ -303,7 +305,13 @@ export default function ChartOfAccounts() {
                       onChange={(e) => setTypeFilter(e.target.value)}
                       sx={{ minWidth: 200, bgcolor: '#fff' }}
                     >
-                      {TYPES.map(t => <MenuItem value={t} key={t}>{t}</MenuItem>)}
+                      {TYPES.map(ty => (
+                        <MenuItem value={ty} key={ty}>
+                          {ty === 'All'
+                            ? t('accounts.common.all')
+                            : t(`accounts.common.accountTypes.${ty.toLowerCase()}`, ty)}
+                        </MenuItem>
+                      ))}
                     </TextField>
                   </th>
                   <th style={filterTh}></th>
@@ -317,11 +325,11 @@ export default function ChartOfAccounts() {
                     <td style={td}>{r.id}</td>
                     <td style={td}>{r.code}</td>
                     <td style={{ ...td, color: '#0a66c2', cursor: 'pointer' /* link-like */ }}>{r.name}</td>
-                    <td style={td}>{r.type}</td>
+                    <td style={td}>{t(`accounts.common.accountTypes.${r.type.toLowerCase()}`, r.type)}</td>
                     <td style={td}>
                       <Chip
                         size="small"
-                        label={r.status}
+                        label={t(`accounts.common.statusValues.${r.status.toLowerCase()}`, r.status)}
                         sx={{
                           bgcolor: r.status === 'Enabled' ? '#E6F4EF' : '#FFF1F1',
                           color:  r.status === 'Enabled' ? '#1B5E20' : '#C62828',
@@ -330,12 +338,12 @@ export default function ChartOfAccounts() {
                       />
                     </td>
                     <td style={td}>
-                      <Tooltip title="Edit">
+                      <Tooltip title={t('common.edit')}>
                         <IconButton size="small" onClick={() => launchEdit(r)}>
                           <EditOutlinedIcon fontSize="small" />
                         </IconButton>
                       </Tooltip>
-                      <Tooltip title="Delete">
+                      <Tooltip title={t('common.delete')}>
                         <IconButton size="small" onClick={() => handleDelete(r)}>
                           <DeleteOutlineOutlinedIcon fontSize="small" />
                         </IconButton>
@@ -345,7 +353,7 @@ export default function ChartOfAccounts() {
                 ))}
                 {filtered.length === 0 && (
                   <tr>
-                    <td style={{ ...td, padding: 24 }} colSpan={6}>No data</td>
+                    <td style={{ ...td, padding: 24 }} colSpan={6}>{t('accounts.common.noData')}</td>
                   </tr>
                 )}
               </tbody>
@@ -357,7 +365,7 @@ export default function ChartOfAccounts() {
       <Dialog open={open} onClose={closeEdit} fullWidth maxWidth="sm">
         <DialogTitle sx={{ pr: 5 }}>
           <Stack direction="row" alignItems="center" justifyContent="space-between">
-            <Typography variant="subtitle1" fontWeight={800}>Edit Account</Typography>
+            <Typography variant="subtitle1" fontWeight={800}>{t('accounts.chartOfAccounts.editAccount')}</Typography>
             <IconButton onClick={closeEdit} size="small"><CloseIcon /></IconButton>
           </Stack>
         </DialogTitle>
@@ -366,20 +374,20 @@ export default function ChartOfAccounts() {
           <Stack spacing={1.5}>
             <TextField
               size="small"
-              label="Edit Account Code"
+              label={t('accounts.chartOfAccounts.editAccountCode')}
               value={form.code}
               onChange={(e) => setForm(f => ({ ...f, code: e.target.value }))}
             />
             <TextField
               size="small"
-              label="Edit Account Name"
+              label={t('accounts.chartOfAccounts.editAccountName')}
               value={form.name}
               onChange={(e) => setForm(f => ({ ...f, name: e.target.value }))}
             />
             <TextField
               size="small"
               type="number"
-              label="Edit Opening Balance"
+              label={t('accounts.chartOfAccounts.editOpeningBalance')}
               value={form.openingBalance}
               onChange={(e) => setForm(f => ({ ...f, openingBalance: e.target.value }))}
               inputProps={{ step: 0.01, min: 0 }}
@@ -387,33 +395,37 @@ export default function ChartOfAccounts() {
             <TextField
               select
               size="small"
-              label="Under"
+              label={t('accounts.chartOfAccounts.under')}
               value={form.under}
               onChange={(e) => setForm(f => ({ ...f, under: e.target.value }))}
             >
-              {underOptions.map(opt => <MenuItem key={opt} value={opt}>{opt}</MenuItem>)}
+              {underOptions.map(opt => (
+                <MenuItem key={opt} value={opt}>
+                  {opt === 'None' ? t('accounts.common.none') : opt}
+                </MenuItem>
+              ))}
             </TextField>
             <TextField
               size="small"
-              label="Edit Name"
+              label={t('accounts.chartOfAccounts.editName')}
               value={form.editName}
               onChange={(e) => setForm(f => ({ ...f, editName: e.target.value }))}
             />
             <TextField
               size="small"
-              label="Edit Contact No"
+              label={t('accounts.chartOfAccounts.editContactNo')}
               value={form.contactNo}
               onChange={(e) => setForm(f => ({ ...f, contactNo: e.target.value }))}
             />
             <TextField
               size="small"
-              label="Edit Address"
+              label={t('accounts.chartOfAccounts.editAddress')}
               value={form.address}
               onChange={(e) => setForm(f => ({ ...f, address: e.target.value }))}
             />
             <TextField
               size="small"
-              label="Edit Email"
+              label={t('accounts.chartOfAccounts.editEmail')}
               type="email"
               value={form.email}
               onChange={(e) => setForm(f => ({ ...f, email: e.target.value }))}
@@ -428,14 +440,14 @@ export default function ChartOfAccounts() {
             variant="outlined"
             sx={{ color: '#6a757d', borderColor: '#d6d6d6', textTransform: 'none', backgroundColor: '#CECECE' }}
           >
-            Close
+            {t('common.close')}
           </Button>
           <Button
             onClick={saveEdit}
             variant="contained"
             sx={{ backgroundColor: '#005f73', color: '#fff', textTransform: 'none' }}
           >
-            Save Changes
+            {t('accounts.common.saveChanges')}
           </Button>
         </DialogActions>
       </Dialog>

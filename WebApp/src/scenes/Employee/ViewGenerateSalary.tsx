@@ -1,4 +1,5 @@
 import React, { useState,useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import {
   Box,
   Typography,
@@ -19,6 +20,7 @@ import PageContainer from '../../shared/components/Layout/PageContainer';
 import { getSalaryRecords, SalaryRecord,updateSalaryRecord} from '../../shared/services/EmployeeAPI/salary.service';
 
 export default function ViewEmployee() {
+  const { t } = useTranslation();
   const [isModalOpen, setModalOpen] = useState(false);
   const [isEditModalOpen, setisEditModalOpen] = useState(false);
   const [recordToEdit, setRecordToEdit] = useState<SalaryRecord | undefined>(undefined);
@@ -56,10 +58,10 @@ useEffect(() => {
    console.log("API response full data:", JSON.stringify(response, null, 2));
 
 const headLabelMap: Record<string, string> = {
-  'salary exp': 'Salary',
-  'bonus': 'Bonus',
-  'overtime': 'Overtime',
-  'misc': 'Miscellaneous',
+  'salary exp': t('employee.viewGenerateSalary.heads.salary'),
+  'bonus': t('employee.viewGenerateSalary.heads.bonus'),
+  'overtime': t('employee.viewGenerateSalary.heads.overtime'),
+  'misc': t('employee.viewGenerateSalary.heads.miscellaneous'),
 
 };
    
@@ -96,7 +98,7 @@ const headLabelMap: Record<string, string> = {
     }
   }
   fetchSalary();
-}, []);
+}, [t]);
 
 const formatDate = (dateStr: string | undefined): string => {
   if (!dateStr) return '';
@@ -129,7 +131,7 @@ const formatYearMonth = (yearMonth: string | undefined): string => {
 };
 
   return (
-    <PageContainer title="View Generate Salary">
+    <PageContainer title={t('employee.viewGenerateSalary.title')}>
        <Box sx={{backgroundColor:'white',
                 borderRadius: 2,
                 boxShadow: '0 4px 12px rgba(0,0,0,0.05)'
@@ -147,7 +149,7 @@ const formatYearMonth = (yearMonth: string | undefined): string => {
         }}
       >
         <TextField
-          placeholder="Search by Name or Salary"
+          placeholder={t('employee.common.searchByNameOrSalary')}
           size="small"
           sx={{
             width: '100%',
@@ -194,13 +196,13 @@ const formatYearMonth = (yearMonth: string | undefined): string => {
         >
           <thead>
             <tr>
-              <th>Sr#</th>
-              <th>Date</th>
-              <th>Salary Month</th>
-              <th>Employee</th>
-              <th>Head</th>
-              <th>Amount</th>
-              <th>Edit</th>
+              <th>{t('employee.common.srNo')}</th>
+              <th>{t('employee.common.date')}</th>
+              <th>{t('employee.common.salaryMonth')}</th>
+              <th>{t('employee.common.employee')}</th>
+              <th>{t('employee.viewGenerateSalary.head')}</th>
+              <th>{t('employee.common.amount')}</th>
+              <th>{t('employee.common.edit')}</th>
             </tr>
           </thead>
           <tbody>
@@ -231,7 +233,7 @@ const formatYearMonth = (yearMonth: string | undefined): string => {
                       }}
                       onClick={() => setModalOpen(true)}
                     >
-                      View Details
+                      {t('employee.viewGenerateSalary.viewDetails')}
                     </Button>
 
                     <IconButton size="small" color="primary"
@@ -290,6 +292,7 @@ const EditEmployeeModal: React.FC<EditDetails> = ({
   onCloseUpdate,
   recordToEdit,
 }) => {
+  const { t } = useTranslation();
   const handleCancel = () => {
     onCloseUpdate();
   };
@@ -326,17 +329,17 @@ const handleChange = (field: keyof SalaryRecord, value: any) => {
 const handleSubmit = async () => {
   try {
     if (!formData) {
-      alert('No data to update.');
+      alert(t('employee.viewGenerateSalary.noData'));
       return;
     }
     await updateSalaryRecord({ ...formData, uuid: formData.invoiceId });
-    alert('Record updated successfully!');
+    alert(t('employee.viewGenerateSalary.updateSuccess'));
     // close modal or refresh data
   } catch (error: any) {
     if (error.response?.data?.message) {
-      alert(`Update failed: ${error.response.data.message}`);
+      alert(t('employee.viewGenerateSalary.updateFailedMsg', { message: error.response.data.message }));
     } else {
-      alert('Failed to update record.');
+      alert(t('employee.viewGenerateSalary.updateFailed'));
     }
     console.error('Update failed:', error);
   }
@@ -359,7 +362,7 @@ const handleSubmit = async () => {
     }
     }}
     >
-      <DialogTitle sx={{ fontWeight: 'bold' , textAlign: 'center'}}>Edit Employee Details</DialogTitle>
+      <DialogTitle sx={{ fontWeight: 'bold' , textAlign: 'center'}}>{t('employee.viewGenerateSalary.editEmployeeDetails')}</DialogTitle>
       <Box
         sx={{
           display: 'flex',
@@ -371,11 +374,11 @@ const handleSubmit = async () => {
       >
         {/* Salary Month */}
         <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-          <label style={{ marginBottom: '4px' , fontWeight: 'bold' }}>Salary Month</label>
+          <label style={{ marginBottom: '4px' , fontWeight: 'bold' }}>{t('employee.generateSalary.salaryMonth')}</label>
           <TextField
             size="small"
              type="month"
-            placeholder="Select"
+            placeholder={t('employee.common.select')}
              value={formData.month}
   onChange={e => setFormData({ ...formData, month: e.target.value })}
          
@@ -384,11 +387,11 @@ const handleSubmit = async () => {
       
         {/* Date */}
         <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-          <label style={{ marginBottom: '4px' , fontWeight: 'bold' }}>Date</label>
+          <label style={{ marginBottom: '4px' , fontWeight: 'bold' }}>{t('employee.common.date')}</label>
           <TextField
             size="small"
             type="date"
-            placeholder="Select"
+            placeholder={t('employee.common.select')}
              value={formData.date}
   onChange={e => setFormData({ ...formData, date: e.target.value })}
           
@@ -397,23 +400,23 @@ const handleSubmit = async () => {
       
         {/* Expense Head - Combo Box */}
         <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-          <label style={{ marginBottom: '4px' , fontWeight: 'bold' }}>Expense Head</label>
+          <label style={{ marginBottom: '4px' , fontWeight: 'bold' }}>{t('employee.generateSalary.expenseHead')}</label>
           <TextField
             select
             size="small"
             value={formData.expense_head || ''}
   onChange={e => setFormData({ ...formData, expense_head: e.target.value })}
           >
-            <MenuItem value="Salary">Salary</MenuItem>
-            <MenuItem value="Bonus">Bonus</MenuItem>
-            <MenuItem value="Overtime">Overtime</MenuItem>
-            <MenuItem value="Misc">Misc</MenuItem>
+            <MenuItem value="Salary">{t('employee.generateSalary.expenseHeads.salary')}</MenuItem>
+            <MenuItem value="Bonus">{t('employee.generateSalary.expenseHeads.bonus')}</MenuItem>
+            <MenuItem value="Overtime">{t('employee.generateSalary.expenseHeads.overtime')}</MenuItem>
+            <MenuItem value="Misc">{t('employee.generateSalary.expenseHeads.misc')}</MenuItem>
           </TextField>
         </Box>
       
         {/* Working Days */}
         <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-          <label style={{ marginBottom: '4px' , fontWeight: 'bold' }}>Working Days</label>
+          <label style={{ marginBottom: '4px' , fontWeight: 'bold' }}>{t('employee.generateSalary.workingDays')}</label>
           <TextField size="small" type="number"
            value={formData.total_days}
   onChange={e => setFormData({ ...formData, total_days: Number(e.target.value) })}
@@ -453,14 +456,14 @@ const handleSubmit = async () => {
         >
           <thead>
             <tr>
-              <th>Sr#</th>
-              <th>Employee</th>
-              <th>Present</th>
-              <th>Absent</th>
-              <th>Salary Day</th>
-              <th>Deduction</th>
-              <th>Bonus</th>
-              <th>Gross Salary</th>
+              <th>{t('employee.common.srNo')}</th>
+              <th>{t('employee.common.employee')}</th>
+              <th>{t('employee.common.present')}</th>
+              <th>{t('employee.common.absent')}</th>
+              <th>{t('employee.generateSalary.columns.salaryDay')}</th>
+              <th>{t('employee.common.deduction')}</th>
+              <th>{t('employee.common.bonus')}</th>
+              <th>{t('employee.common.grossSalary')}</th>
             </tr>
           </thead>
           <tbody>
@@ -591,7 +594,7 @@ const handleSubmit = async () => {
           }}
           onClick={handleCancel}
         >
-          Cancel
+          {t('employee.common.cancel')}
         </Button>
       
         <Button
@@ -609,7 +612,7 @@ const handleSubmit = async () => {
           }}
           onClick={handleSubmit}
         >
-         Update
+         {t('employee.common.update')}
         </Button>
       </Box>
     </Dialog>
@@ -630,6 +633,7 @@ const ViewEmployeeModal: React.FC<ViewDetails> = ({
   openModal,
   onCloseUpdate
 }) => {
+  const { t } = useTranslation();
   const handleCancel = () => {
     onCloseUpdate();
   };
@@ -668,7 +672,7 @@ const ViewEmployeeModal: React.FC<ViewDetails> = ({
     }
     }}
     >
-      <DialogTitle sx={{ fontWeight: 'bold' , textAlign:  'center'}}>Employee Details</DialogTitle>
+      <DialogTitle sx={{ fontWeight: 'bold' , textAlign:  'center'}}>{t('employee.viewGenerateSalary.employeeDetails')}</DialogTitle>
       <Box sx={{ overflowX: 'auto' }}>
         <Box
           component="table"
@@ -701,14 +705,14 @@ const ViewEmployeeModal: React.FC<ViewDetails> = ({
         >
           <thead>
             <tr>
-              <th>Sr#</th>
-              <th>Employee</th>
-              <th>Present</th>
-              <th>Absent</th>
-              <th>Salary Day</th>
-              <th>Deduction</th>
-              <th>Bonus</th>
-              <th>Gross Salary</th>
+              <th>{t('employee.common.srNo')}</th>
+              <th>{t('employee.common.employee')}</th>
+              <th>{t('employee.common.present')}</th>
+              <th>{t('employee.common.absent')}</th>
+              <th>{t('employee.generateSalary.columns.salaryDay')}</th>
+              <th>{t('employee.common.deduction')}</th>
+              <th>{t('employee.common.bonus')}</th>
+              <th>{t('employee.common.grossSalary')}</th>
             </tr>
           </thead>
         <tbody>
@@ -751,7 +755,7 @@ const ViewEmployeeModal: React.FC<ViewDetails> = ({
           }}
           onClick={handleCancel}
         >
-          Cancel
+          {t('employee.common.cancel')}
         </Button>
       
         <Button
@@ -769,7 +773,7 @@ const ViewEmployeeModal: React.FC<ViewDetails> = ({
           }}
           onClick={handleCancel}
         >
-          🖨️ Print
+          🖨️ {t('employee.viewGenerateSalary.print')}
         </Button>
       </Box>
     </Dialog>

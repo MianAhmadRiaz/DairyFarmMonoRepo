@@ -16,6 +16,7 @@ import {
 } from 'recharts';
 
 import PageContainer from '../../shared/components/Layout/PageContainer';
+import { useTranslation } from 'react-i18next';
 
 interface DataRecord {
   date: string;
@@ -64,6 +65,7 @@ interface Tag {
 }
 
 const CowMilkingGraph = () => {
+  const { t } = useTranslation();
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
@@ -111,11 +113,11 @@ const CowMilkingGraph = () => {
       if(!startDate){return;}
       setLoading(true);
       const response = await cowGraph(startDate);
-      if(!(response?.data?.data?.milks)){alert("No data available"); return;}
+      if(!(response?.data?.data?.milks)){alert(t('milking.common.noDataAvailable')); return;}
       const final: DataRecord[] = response.data.data.milks.map((item: any) => ({
-        date: item.milkDate, 
-        value: item.totalMilk, 
-      })); 
+        date: item.milkDate,
+        value: item.totalMilk,
+      }));
       console.log(final);
       setLoading(false);
       setGraphData(final);
@@ -137,13 +139,13 @@ const CowMilkingGraph = () => {
       setLoading(true);
 
       const animalResponse = await getanimal();
-      if(!(animalResponse?.data?.data?.animals)){alert("No data found"); return;}
+      if(!(animalResponse?.data?.data?.animals)){alert(t('milking.common.noDataFound')); return;}
       const all_animals: Animal[] = animalResponse.data.data.animals;
       const animalId: string | null = findAnimalIdByTagName(all_animals , tag);
       if(!animalId){return}
 
       const response = await cowGraph(startDate , 'animalId', animalId);
-      if(!(response?.data?.data?.milks)){alert("No data available"); return;}
+      if(!(response?.data?.data?.milks)){alert(t('milking.common.noDataAvailable')); return;}
 
       const final: DataRecord[] = response.data.data.milks.map((item: any) => ({
         date: item.milkDate, 
@@ -170,16 +172,16 @@ const CowMilkingGraph = () => {
       setLoading(true);
       const penResponse = await getPen();
 
-      if(!(penResponse?.data?.data?.pens)){alert("No data Found"); return;}
+      if(!(penResponse?.data?.data?.pens)){alert(t('milking.common.noDataFound')); return;}
       
       const penData: Pen[] = penResponse.data.data.pens;
       const Id:string | null = findAnimalIdByPenName(penData , pen);
 
-      if(!Id){alert("No animal found within this pen"); return};
+      if(!Id){alert(t('milking.cowMilkingGraph.noAnimalInPen')); return};
 
       const response = await cowGraph(startDate , 'penId', Id);
 
-      if(!(response?.data?.data?.milks)){alert("No data available"); return;}
+      if(!(response?.data?.data?.milks)){alert(t('milking.common.noDataAvailable')); return;}
 
       const final: DataRecord[] = response.data.data.milks.map((item: any) => ({
         date: item.milkDate, 
@@ -229,7 +231,7 @@ const CowMilkingGraph = () => {
   
   return (
 
-    <PageContainer title="Cow Milking Graph" maxWidth="1200px">
+    <PageContainer title={t('milking.cowMilkingGraph.title')} maxWidth="1200px">
     <Box sx={{ p: { xs: 2, sm: 3, md: 4 } }}>
     <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 2, mb: { xs: 2, md: 3 } }}>
       {startDate && (
@@ -242,15 +244,15 @@ const CowMilkingGraph = () => {
             borderRadius: 2
           }}
         >
-          <MenuItem value="feed">By Pen Id</MenuItem>
-          <MenuItem value="milk">By Tag Id</MenuItem>
-          <MenuItem value="weight">All Animals Milk</MenuItem>
+          <MenuItem value="feed">{t('milking.cowMilkingGraph.byPenId')}</MenuItem>
+          <MenuItem value="milk">{t('milking.cowMilkingGraph.byTagId')}</MenuItem>
+          <MenuItem value="weight">{t('milking.cowMilkingGraph.allAnimalsMilk')}</MenuItem>
         </Select>
       )}
   
       <TextField
         type="date"
-        label="Start Date"
+        label={t('milking.common.startDate')}
         value={startDate}
         onChange={e => setStartDate(e.target.value)}
         InputLabelProps={{ shrink: true }}
@@ -268,7 +270,7 @@ const CowMilkingGraph = () => {
         onChange={e => handleTagChange(e)}
         sx={{ width: { xs: '100%', sm: 200 }, mb: 2, backgroundColor: '#fff' }}
       >
-        <MenuItem value="Select Tag ID">Select Tag ID</MenuItem>
+        <MenuItem value="Select Tag ID">{t('milking.cowMilkingGraph.selectTagId')}</MenuItem>
         {tags.map((t, idx) => (
           <MenuItem key={idx} value={t.name}>
             {t.name}
@@ -284,7 +286,7 @@ const CowMilkingGraph = () => {
         sx={{ width: { xs: '100%', sm: 200 }, mb: 2, backgroundColor: '#fff' }}
       >
         <MenuItem value="Select Pen ID" disabled>
-          Select Pen ID
+          {t('milking.cowMilkingGraph.selectPenId')}
         </MenuItem>
         {pen.map((p, idx) => (
           <MenuItem key={idx} value={p.name}>
@@ -309,10 +311,10 @@ const CowMilkingGraph = () => {
         <LineChart data={graphData}>
           <XAxis
             dataKey="date"
-            label={{ value: "Date", position: "insideBottom", offset: -5 }}
+            label={{ value: t('milking.common.date'), position: "insideBottom", offset: -5 }}
           />
           <YAxis
-            label={{ value: "Milk (Liters)", angle: -90, position: "insideLeft" }}
+            label={{ value: t('milking.common.milkLiters'), angle: -90, position: "insideLeft" }}
           />
           <Tooltip />
           <Line

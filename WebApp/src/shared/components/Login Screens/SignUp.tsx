@@ -12,6 +12,7 @@ import {
 } from '@mui/material';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
+import { useTranslation } from 'react-i18next';
 import { register } from '../../services/auth.services'; // Import the register function
 
 
@@ -19,6 +20,7 @@ import { register } from '../../services/auth.services'; // Import the register 
 
 const SignUp = () => {
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const [formData, setFormData] = useState({
     firstname: '',
     lastname: '',
@@ -87,7 +89,7 @@ const handleSignUp = async () => {
     navigate('/login');
   } catch (error: any) {
     const errorMessage =
-      error?.response?.data?.message || 'Something went wrong, please try again.';
+      error?.response?.data?.message || t('auth.signUpScreen.errorGeneric');
     setError(errorMessage);
     console.error('Sign-up failed:', errorMessage);
   } finally {
@@ -145,7 +147,7 @@ const handleSignUp = async () => {
           <Box
             component="img"
             src="/assets/Logo.png"
-            alt="Logo"
+            alt={t('auth.common.logoAlt')}
             sx={{
               width: { xs: '220px', md: '280px' },
               height: { xs: '230px', md: '270px' },
@@ -165,7 +167,7 @@ const handleSignUp = async () => {
             color: '#333'
           }}
         >
-          Create Account
+          {t('auth.signUpScreen.title')}
         </Typography>
 
         <Box
@@ -180,7 +182,7 @@ const handleSignUp = async () => {
             <TextField
               fullWidth
               variant="outlined"
-              placeholder="First Name"
+              placeholder={t('auth.signUpScreen.firstNamePlaceholder')}
               name="firstname"
               value={formData.firstname}
               onChange={handleChange}
@@ -201,7 +203,7 @@ const handleSignUp = async () => {
             <TextField
               fullWidth
               variant="outlined"
-              placeholder="Last Name"
+              placeholder={t('auth.signUpScreen.lastNamePlaceholder')}
               name="lastname"
               value={formData.lastname}
               onChange={handleChange}
@@ -222,7 +224,7 @@ const handleSignUp = async () => {
             <TextField
               fullWidth
               variant="outlined"
-              placeholder="Phone Number"
+              placeholder={t('auth.signUpScreen.phoneNumberPlaceholder')}
               name="phoneNumber"
               value={formData.phoneNumber}
               onChange={handleChange}
@@ -247,7 +249,7 @@ const handleSignUp = async () => {
             <TextField
               fullWidth
               variant="outlined"
-              placeholder="Farm Name"
+              placeholder={t('auth.signUpScreen.farmNamePlaceholder')}
               name="name"
               value={formData.name}
               onChange={handleChange}
@@ -268,7 +270,7 @@ const handleSignUp = async () => {
             <TextField
               fullWidth
               variant="outlined"
-              placeholder="Email"
+              placeholder={t('auth.email')}
               name="email"
               type="email"
               value={formData.email}
@@ -290,7 +292,7 @@ const handleSignUp = async () => {
             <TextField
               fullWidth
               variant="outlined"
-              placeholder="Password"
+              placeholder={t('auth.password')}
               name="password"
               type={showPassword ? 'text' : 'password'}
               value={formData.password}
@@ -321,7 +323,7 @@ const handleSignUp = async () => {
             <TextField
               fullWidth
               variant="outlined"
-              placeholder="Confirm Password"
+              placeholder={t('auth.common.confirmPassword')}
               name="confirmpassword"
               type={showPassword ? 'text' : 'password'}
               value={formData.confirmpassword}
@@ -377,7 +379,7 @@ const handleSignUp = async () => {
             onClick={handleSignUp}
             disabled={loading}
           >
-            {loading ? 'Signing Up...' : 'Sign Up'}
+            {loading ? t('auth.signUpScreen.signingUp') : t('auth.signUp')}
           </Button>
         </Box>
 
@@ -390,7 +392,7 @@ const handleSignUp = async () => {
             mb: 1
           }}
         >
-          Already have an account?{' '}
+          {t('auth.signUpScreen.haveAccount')}{' '}
           <Typography
             component="span"
             sx={{ 
@@ -404,7 +406,7 @@ const handleSignUp = async () => {
             }}
             onClick={() => navigate('/login')}
           >
-            Log in
+            {t('auth.logIn')}
           </Typography>
         </Typography>
       </Box>

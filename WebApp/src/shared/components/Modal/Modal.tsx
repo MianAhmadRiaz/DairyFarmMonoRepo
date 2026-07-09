@@ -9,6 +9,7 @@ import {
   Typography,
   useTheme
 } from '@mui/material';
+import { useTranslation } from 'react-i18next';
 import { tokens } from '../../theme/theme.jsx';
 
 interface ModalProps {
@@ -27,9 +28,10 @@ const Modal: React.FC<ModalProps> = ({
   title,
   children,
   onSubmit,
-  submitText = 'Submit',
+  submitText,
   maxWidth = 'sm'
 }) => {
+  const { t } = useTranslation();
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   return (
@@ -63,7 +65,7 @@ const Modal: React.FC<ModalProps> = ({
             px: 3
           }}
         >
-          Cancel
+          {t('common.cancel')}
         </Button>
         {onSubmit && (
           <Button
@@ -77,7 +79,7 @@ const Modal: React.FC<ModalProps> = ({
               px: 3
             }}
           >
-            {submitText}
+            {submitText || t('common.submit')}
           </Button>
         )}
       </DialogActions>

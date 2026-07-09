@@ -22,6 +22,7 @@ import {
   Typography,
 } from '@mui/material';
 import { ToastContainer, toast } from 'react-toastify';
+import { useTranslation } from 'react-i18next';
 import 'react-toastify/dist/ReactToastify.css';
 import {
   FeedFormulation,
@@ -40,6 +41,7 @@ const todayStr = () => new Date().toISOString().split('T')[0];
 
 /* =================================================================== */
 const ConductFeedVandaFormulation: React.FC = () => {
+  const { t } = useTranslation();
   /* ───── data ───── */
   const [formulations, setFormulations] = useState<FeedFormulation[]>([]);
   const [ingredientNames, setIngredientNames] = useState<Map<string, string>>(
@@ -86,7 +88,7 @@ const ConductFeedVandaFormulation: React.FC = () => {
         );
         setPens(penData?.pens || []);
       } catch (error: any) {
-        toast.error(error?.response?.data?.message || "Can't load formulations");
+        toast.error(error?.response?.data?.message || t('feeding.common.cantLoadFormulations'));
       } finally {
         setLoading(false);
       }
@@ -104,7 +106,7 @@ const ConductFeedVandaFormulation: React.FC = () => {
     () =>
       (selectedFormulation?.items || []).map((item, idx) => ({
         id: idx + 1,
-        name: ingredientNames.get(item.itemId) || 'Unknown ingredient',
+        name: ingredientNames.get(item.itemId) || t('feeding.common.unknownIngredient'),
         perUnit: Number(item.quantity || 0),
         total: Number(item.quantity || 0) * Number(qty || 0),
       })),
@@ -121,11 +123,11 @@ const ConductFeedVandaFormulation: React.FC = () => {
 
   const handleSave = async () => {
     if (!formulationId) {
-      toast.warning('Please choose a formulation (vanda)');
+      toast.warning(t('feeding.conductFeedVandaFormulation.chooseFormulationWarning'));
       return;
     }
     if (!(Number(qty) > 0)) {
-      toast.warning('Quantity must be greater than 0');
+      toast.warning(t('feeding.conductFeedVandaFormulation.qtyWarning'));
       return;
     }
     try {
@@ -137,11 +139,11 @@ const ConductFeedVandaFormulation: React.FC = () => {
         penId: penId || undefined,
         remarks: remarks.trim() || undefined,
       });
-      setSuccessMsg('Feed formulation conducted successfully!');
+      setSuccessMsg(t('feeding.conductFeedVandaFormulation.conductedSuccess'));
       handleReset();
     } catch (error: any) {
       toast.error(
-        error?.response?.data?.message || "Can't conduct feed formulation!"
+        error?.response?.data?.message || t('feeding.conductFeedVandaFormulation.cantConduct')
       );
     } finally {
       setSaving(false);
@@ -150,7 +152,7 @@ const ConductFeedVandaFormulation: React.FC = () => {
 
   /* ─────────────────────────────────────────────────────────────── */
   return (
-    <PageContainer title="Conduct Feed/Vanda Formulation" maxWidth="1200px">
+    <PageContainer title={t('feeding.conductFeedVandaFormulation.title')} maxWidth="1200px">
       {/* =============== 1. TOP CARD =============== */}
       <Paper elevation={1} sx={{
         p:3, borderRadius:2, mb:4, display:'flex', flexWrap:'wrap', gap:3,
@@ -160,7 +162,7 @@ const ConductFeedVandaFormulation: React.FC = () => {
       }}>
         {/* formulation */}
         <Box sx={{ minWidth: 260 }}>
-          <Typography fontWeight={600} mb={0.5}>Choose Vanda</Typography>
+          <Typography fontWeight={600} mb={0.5}>{t('feeding.conductFeedVandaFormulation.chooseVanda')}</Typography>
           <Select
             fullWidth
             size="small"
@@ -169,7 +171,7 @@ const ConductFeedVandaFormulation: React.FC = () => {
             onChange={e => setFormulationId(e.target.value)}
           >
             <MenuItem value="">
-              <em>Select formulation</em>
+              <em>{t('feeding.conductFeedVandaFormulation.selectFormulation')}</em>
             </MenuItem>
             {formulations.map(f => (
               <MenuItem key={f.uuid} value={f.uuid}>
@@ -181,7 +183,7 @@ const ConductFeedVandaFormulation: React.FC = () => {
 
         {/* date */}
         <Box sx={{ minWidth: 200 }}>
-          <Typography fontWeight={600} mb={0.5}>Date</Typography>
+          <Typography fontWeight={600} mb={0.5}>{t('feeding.common.date')}</Typography>
           <TextField
             fullWidth
             size="small"
@@ -193,7 +195,7 @@ const ConductFeedVandaFormulation: React.FC = () => {
 
         {/* quantity (batch multiplier) */}
         <Box sx={{ minWidth: 180 }}>
-          <Typography fontWeight={600} mb={0.5}>Quantity (Batches)</Typography>
+          <Typography fontWeight={600} mb={0.5}>{t('feeding.conductFeedVandaFormulation.quantityBatches')}</Typography>
           <TextField
             fullWidth
             size="small"
@@ -206,7 +208,7 @@ const ConductFeedVandaFormulation: React.FC = () => {
 
         {/* optional pen */}
         <Box sx={{ minWidth: 220 }}>
-          <Typography fontWeight={600} mb={0.5}>Pen (optional)</Typography>
+          <Typography fontWeight={600} mb={0.5}>{t('feeding.conductFeedVandaFormulation.penOptional')}</Typography>
           <Select
             fullWidth
             size="small"
@@ -215,7 +217,7 @@ const ConductFeedVandaFormulation: React.FC = () => {
             onChange={e => setPenId(e.target.value)}
           >
             <MenuItem value="">
-              <em>None</em>
+              <em>{t('feeding.conductFeedVandaFormulation.none')}</em>
             </MenuItem>
             {pens.map(p => (
               <MenuItem key={p.uuid} value={p.uuid}>
@@ -227,7 +229,7 @@ const ConductFeedVandaFormulation: React.FC = () => {
 
         {/* remarks */}
         <Box sx={{ minWidth: 260, flexGrow: 1 }}>
-          <Typography fontWeight={600} mb={0.5}>Remarks (optional)</Typography>
+          <Typography fontWeight={600} mb={0.5}>{t('feeding.conductFeedVandaFormulation.remarksOptional')}</Typography>
           <TextField
             fullWidth
             size="small"
@@ -248,7 +250,7 @@ const ConductFeedVandaFormulation: React.FC = () => {
             {saving ? (
               <CircularProgress size={20} sx={{ color: '#fff' }} />
             ) : (
-              'Save Changes'
+              t('feeding.common.saveChanges')
             )}
           </Button>
           <Button
@@ -258,7 +260,7 @@ const ConductFeedVandaFormulation: React.FC = () => {
             disabled={saving}
             sx={{bgcolor:'#d4d4d4',px:5,textTransform:'none'}}
           >
-            Reset
+            {t('feeding.common.reset')}
           </Button>
         </Box>
       </Paper>
@@ -271,9 +273,9 @@ const ConductFeedVandaFormulation: React.FC = () => {
           <Table stickyHeader size="small">
             <TableHead>
               <TableRow sx={{'& th':{fontWeight:600,bgcolor: "#F8F9FA"}}}>
-                <TableCell>#Sr</TableCell><TableCell>Ingredients</TableCell>
-                <TableCell>Qty / Batch</TableCell>
-                <TableCell>Total Qty</TableCell>
+                <TableCell>{t('feeding.common.srNo')}</TableCell><TableCell>{t('feeding.common.ingredients')}</TableCell>
+                <TableCell>{t('feeding.conductFeedVandaFormulation.qtyPerBatch')}</TableCell>
+                <TableCell>{t('feeding.conductFeedVandaFormulation.totalQty')}</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -296,18 +298,18 @@ const ConductFeedVandaFormulation: React.FC = () => {
                 <TableRow>
                   <TableCell colSpan={4} align="center" sx={{ py: 3 }}>
                     {formulationId
-                      ? 'No ingredients found for this formulation.'
-                      : 'Choose a vanda formulation to see its ingredients.'}
+                      ? t('feeding.conductFeedVandaFormulation.noIngredientsFound')
+                      : t('feeding.conductFeedVandaFormulation.chooseToSeeIngredients')}
                   </TableCell>
                 </TableRow>
               )}
               {!loading && ingredients.length > 0 && (
                 <TableRow>
-                  <TableCell colSpan={3} sx={{fontWeight:700}}>TOTAL:</TableCell>
+                  <TableCell colSpan={3} sx={{fontWeight:700}}>{t('feeding.common.totalColon')}</TableCell>
                   <TableCell sx={{fontWeight:700}}>
                     {ingredients
                       .reduce((s,r)=>s+r.total,0)
-                      .toLocaleString(undefined, { maximumFractionDigits: 2 })}KG
+                      .toLocaleString(undefined, { maximumFractionDigits: 2 })}{t('feeding.common.kgUpper')}
                   </TableCell>
                 </TableRow>
               )}
@@ -326,7 +328,7 @@ const ConductFeedVandaFormulation: React.FC = () => {
           <CheckIcon sx={{fontSize:72,color:'#18B66F'}}/>
           <Typography fontWeight={700}>{successMsg}</Typography>
           <Button variant="contained" sx={{bgcolor:'#005f73',px:6}}
-                  onClick={()=>setSuccessMsg(null)}>Close</Button>
+                  onClick={()=>setSuccessMsg(null)}>{t('common.close')}</Button>
         </DialogContent>
       </Dialog>
 

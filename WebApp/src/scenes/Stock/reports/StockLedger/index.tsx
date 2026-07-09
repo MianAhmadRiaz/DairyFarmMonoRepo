@@ -32,6 +32,7 @@ import {
 } from '../../../../shared/services/stockModule.services';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { useTranslation } from 'react-i18next';
 
 interface LedgerRow {
   id: number;
@@ -62,6 +63,7 @@ const toLedgerRow = (tx: StockTransaction, index: number): LedgerRow => {
 };
 
 const StockLedger: React.FC = () => {
+  const { t } = useTranslation();
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
@@ -85,7 +87,7 @@ const StockLedger: React.FC = () => {
       setTransactions(data.transactions || []);
       setTotalCount(data.totalCount || 0);
     } catch (error: any) {
-      toast.error(error?.response?.data?.message || 'Failed to fetch stock transactions.');
+      toast.error(error?.response?.data?.message || t('stock.stockLedger.fetchError'));
     } finally {
       setLoading(false);
     }
@@ -114,13 +116,13 @@ const StockLedger: React.FC = () => {
 
   const [columns, setColumns] = useState([
     { id: 'id', label: '#', visible: true },
-    { id: 'date', label: 'Date', visible: true },
-    { id: 'itemName', label: 'Item Name', visible: true },
-    { id: 'type', label: 'Type', visible: true },
-    { id: 'qty', label: 'Quantity', visible: true },
-    { id: 'rate', label: 'Rate', visible: true },
-    { id: 'amount', label: 'Amount', visible: true },
-    { id: 'balance', label: 'Balance After', visible: true }
+    { id: 'date', label: t('stock.common.date'), visible: true },
+    { id: 'itemName', label: t('stock.common.itemName'), visible: true },
+    { id: 'type', label: t('stock.stockLedger.type'), visible: true },
+    { id: 'qty', label: t('stock.common.quantity'), visible: true },
+    { id: 'rate', label: t('stock.common.rate'), visible: true },
+    { id: 'amount', label: t('stock.common.amount'), visible: true },
+    { id: 'balance', label: t('stock.stockLedger.balanceAfter'), visible: true }
   ]);
 
   const handleColumnVisibilityChange = (columnId: string) => {
@@ -134,7 +136,7 @@ const StockLedger: React.FC = () => {
   const noop = () => undefined;
 
   return (
-    <PageContainer title="Stock Ledger" subtitle="Stock transaction history">
+    <PageContainer title={t('stock.stockLedger.title')} subtitle={t('stock.stockLedger.subtitle')}>
       <Paper
         elevation={3}
         sx={{
@@ -153,7 +155,7 @@ const StockLedger: React.FC = () => {
               <Grid item xs={12} md={4}>
                 <TextField
                   type="date"
-                  label="Start Date"
+                  label={t('stock.common.startDate')}
                   size="small"
                   fullWidth
                   value={localStartDate}
@@ -164,7 +166,7 @@ const StockLedger: React.FC = () => {
               <Grid item xs={12} md={4}>
                 <TextField
                   type="date"
-                  label="End Date"
+                  label={t('stock.common.endDate')}
                   size="small"
                   fullWidth
                   value={localEndDate}
@@ -189,13 +191,13 @@ const StockLedger: React.FC = () => {
           }}
         >
           <FormControl size="small" sx={{ width: { xs: '84%', sm: '20%' }, ml: { xs: 2, md: 4 } }}>
-            <InputLabel>Item Name</InputLabel>
+            <InputLabel>{t('stock.common.itemName')}</InputLabel>
             <Select
               value={itemNameFilter}
-              label="Item Name"
+              label={t('stock.common.itemName')}
               onChange={e => setItemNameFilter(e.target.value)}
             >
-              <MenuItem value="">All</MenuItem>
+              <MenuItem value="">{t('stock.common.all')}</MenuItem>
               {uniqueItemNames.map(name => (
                 <MenuItem key={name} value={name}>
                   {name}
@@ -204,12 +206,12 @@ const StockLedger: React.FC = () => {
             </Select>
           </FormControl>
           <FormControl size="small" sx={{ width: { xs: '84%', sm: '20%' }, ml: { xs: 2, md: 0 } }}>
-            <InputLabel>Type</InputLabel>
-            <Select value={typeFilter} label="Type" onChange={e => setTypeFilter(e.target.value)}>
-              <MenuItem value="">All</MenuItem>
-              <MenuItem value="purchase">Purchase</MenuItem>
-              <MenuItem value="usage">Usage</MenuItem>
-              <MenuItem value="sale">Sale</MenuItem>
+            <InputLabel>{t('stock.stockLedger.type')}</InputLabel>
+            <Select value={typeFilter} label={t('stock.stockLedger.type')} onChange={e => setTypeFilter(e.target.value)}>
+              <MenuItem value="">{t('stock.common.all')}</MenuItem>
+              <MenuItem value="purchase">{t('stock.stockLedger.transactionType.purchase')}</MenuItem>
+              <MenuItem value="usage">{t('stock.stockLedger.transactionType.usage')}</MenuItem>
+              <MenuItem value="sale">{t('stock.stockLedger.transactionType.sale')}</MenuItem>
             </Select>
           </FormControl>
         </Box>
@@ -249,13 +251,13 @@ const StockLedger: React.FC = () => {
                 display: { xs: 'none', sm: 'block' }
               }}
             >
-              Search:
+              {t('stock.common.searchLabel')}
             </Box>
             <TextField
               size="small"
               value={searchTerm}
               onChange={e => setSearchTerm(e.target.value)}
-              placeholder="Search..."
+              placeholder={t('stock.common.searchPlaceholder')}
               fullWidth
               sx={{
                 '& .MuiOutlinedInput-root': {
@@ -302,7 +304,7 @@ const StockLedger: React.FC = () => {
               {ledgerRows.length === 0 && !loading ? (
                 <TableRow>
                   <TableCell colSpan={columns.filter(c => c.visible).length} align="center">
-                    No transactions found.
+                    {t('stock.stockLedger.noTransactions')}
                   </TableCell>
                 </TableRow>
               ) : (
@@ -324,7 +326,7 @@ const StockLedger: React.FC = () => {
                           <TableCell key={column.id}>
                             {column.id === 'type' ? (
                               <Chip
-                                label={row.type}
+                                label={t('stock.stockLedger.transactionType.' + row.type, row.type)}
                                 size="small"
                                 color={
                                   row.type === 'purchase'

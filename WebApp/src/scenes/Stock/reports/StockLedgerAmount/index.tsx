@@ -36,6 +36,7 @@ import PageContainer from '../../../../shared/components/Layout/PageContainer';
 import TableControls from '../../../../shared/components/TableControls';
 import { exportToCSV } from '../../../../shared/utils/exportUtils';
 import { tokens } from '../../../../shared/theme/theme';
+import { useTranslation } from 'react-i18next';
 interface StockLedgerItem {
   id?: number;
   type: string;
@@ -56,6 +57,7 @@ interface AnimalWiseCostTableProps {
 }
 
 const StockLedgerAmount: React.FC = () => {
+  const { t } = useTranslation();
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
@@ -155,14 +157,14 @@ const StockLedgerAmount: React.FC = () => {
 
   const [columns, setColumns] = useState([
     { id: 'id', label: '#', visible: true },
-    { id: 'type', label: 'Type', visible: true },
-    { id: 'date', label: 'Date', visible: true },
-    { id: 'in', label: 'In', visible: true },
-    { id: 'out', label: 'Out', visible: true },
-    { id: 'balance', label: 'Balance', visible: true },
-    { id: 'rateUnit', label: 'Rate/Unit', visible: true },
-    { id: 'assetAmount', label: 'Asset Amount', visible: true },
-    { id: 'assetBalance', label: 'Asset Balance', visible: true }
+    { id: 'type', label: t('stock.stockLedger.type'), visible: true },
+    { id: 'date', label: t('stock.common.date'), visible: true },
+    { id: 'in', label: t('stock.stockLedgerAmount.in'), visible: true },
+    { id: 'out', label: t('stock.stockLedgerAmount.out'), visible: true },
+    { id: 'balance', label: t('stock.stockLedgerAmount.balance'), visible: true },
+    { id: 'rateUnit', label: t('stock.stockLedgerAmount.rateUnit'), visible: true },
+    { id: 'assetAmount', label: t('stock.stockLedgerAmount.assetAmount'), visible: true },
+    { id: 'assetBalance', label: t('stock.stockLedgerAmount.assetBalance'), visible: true }
   ]);
 
   const handleColumnVisibilityChange = (columnId: string) => {
@@ -188,9 +190,9 @@ const StockLedgerAmount: React.FC = () => {
   };
 
   return (
-    <PageContainer title="Stock Ledger Amount">
+    <PageContainer title={t('stock.stockLedgerAmount.title')}>
       <Alert severity="warning" sx={{ mb: 2 }}>
-        This report is not yet connected to live data.
+        {t('stock.common.reportNotConnected')}
       </Alert>
 
   <Box sx={{ overflowX: 'auto' }}>
@@ -203,7 +205,7 @@ const StockLedgerAmount: React.FC = () => {
       width: 'max-content'
     }}
   >
-    {`Report Period: ${localStartDate} to ${localEndDate}`}
+    {t('stock.stockLedgerAmount.reportPeriod', { start: localStartDate, end: localEndDate })}
   </Typography>
 </Box>
       <Paper
@@ -227,7 +229,7 @@ const StockLedgerAmount: React.FC = () => {
               <Grid item xs={12} md={4}>
                 <TextField
                   type="date"
-                  label="Start Date"
+                  label={t('stock.common.startDate')}
                   size="small"
                   fullWidth
                   value={localStartDate}
@@ -238,7 +240,7 @@ const StockLedgerAmount: React.FC = () => {
               <Grid item xs={12} md={4}>
                 <TextField
                   type="date"
-                  label="End Date"
+                  label={t('stock.common.endDate')}
                   size="small"
                   fullWidth
                   value={localEndDate}
@@ -258,7 +260,7 @@ const StockLedgerAmount: React.FC = () => {
                     flex: 1
                   }}
                 >
-                  Get Result
+                  {t('stock.stockLedgerAmount.getResult')}
                 </Button>
                 <Button
                   variant="outlined"
@@ -271,7 +273,7 @@ const StockLedgerAmount: React.FC = () => {
                     display: { xs: 'none', sm: 'flex' }
                   }}
                 >
-                  Print
+                  {t('stock.common.print')}
                 </Button>
               </Grid>
             </Grid>
@@ -288,13 +290,13 @@ const StockLedgerAmount: React.FC = () => {
           }}
         >
           <FormControl size="small" sx={{  width: { xs: '84%', sm: '20%' }, ml:{xs:2,md:4}}}>
-            <InputLabel>Item Name</InputLabel>
+            <InputLabel>{t('stock.common.itemName')}</InputLabel>
             <Select
               value={itemNameFilter}
-              label="Item Name"
+              label={t('stock.common.itemName')}
               onChange={e => setItemNameFilter(e.target.value)}
             >
-              <MenuItem value="">All</MenuItem>
+              <MenuItem value="">{t('stock.common.all')}</MenuItem>
               {uniqueItemNames.map(name => (
                 <MenuItem key={name} value={name}>
                   {name}
@@ -339,13 +341,13 @@ const StockLedgerAmount: React.FC = () => {
                 display: { xs: 'none', sm: 'block' }
               }}
             >
-              Search:
+              {t('stock.common.searchLabel')}
             </Box>
             <TextField
               size="small"
               value={searchTerm}
               onChange={e => setSearchTerm(e.target.value)}
-              placeholder="Search..."
+              placeholder={t('stock.common.searchPlaceholder')}
               fullWidth
               sx={{
                 '& .MuiOutlinedInput-root': {

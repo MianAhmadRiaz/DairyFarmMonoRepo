@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import {
   Box,
   Button,
@@ -34,6 +35,7 @@ const ACCENT = '#0f7c8f';
 const ACCENT_DARK = '#0a5768';
 
 const Login = () => {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { rememberMe, user, authToken } = useSelector((state: RootState) => state.user);
@@ -71,7 +73,7 @@ const Login = () => {
       navigate('/after-login', { replace: true });
     } catch (e: any) {
       console.log('login error', { e });
-      setError(e?.response?.data?.message || 'Unable to sign in. Please try again.');
+      setError(e?.response?.data?.message || t('auth.signInError'));
     } finally {
       setSubmitting(false);
     }
@@ -149,19 +151,19 @@ const Login = () => {
             textAlign="center"
             sx={{ fontSize: { xs: '1.4rem', md: '1.6rem' }, color: '#0d2b2f', mb: 0.5 }}
           >
-            Welcome back
+            {t('auth.welcomeBack')}
           </Typography>
           <Typography textAlign="center" sx={{ color: '#7c8d8c', fontSize: 13.5, mb: 3.5 }}>
-            Sign in to manage your herd, milk records &amp; more.
+            {t('auth.subtitle')}
           </Typography>
 
           <Typography variant="body2" sx={{ mb: 0.75, fontWeight: 600, color: '#22403f', fontSize: '0.85rem' }}>
-            Email
+            {t('auth.email')}
           </Typography>
           <TextField
             fullWidth
             variant="outlined"
-            placeholder="you@farm.com"
+            placeholder={t('auth.emailPlaceholder')}
             type="email"
             value={email}
             onChange={e => setEmail(e.target.value)}
@@ -181,12 +183,12 @@ const Login = () => {
           />
 
           <Typography variant="body2" sx={{ mb: 0.75, fontWeight: 600, color: '#22403f', fontSize: '0.85rem' }}>
-            Password
+            {t('auth.password')}
           </Typography>
           <TextField
             fullWidth
             variant="outlined"
-            placeholder="Enter password"
+            placeholder={t('auth.passwordPlaceholder')}
             type={showPassword ? 'text' : 'password'}
             value={password}
             onChange={e => setPassword(e.target.value)}
@@ -234,7 +236,7 @@ const Login = () => {
               }
               label={
                 <Typography variant="body2" sx={{ fontSize: '0.83rem', color: '#4c5a59' }}>
-                  Remember me
+                  {t('auth.rememberMe')}
                 </Typography>
               }
             />
@@ -249,7 +251,7 @@ const Login = () => {
               }}
               onClick={() => navigate('/forgot-password')}
             >
-              Forgot password?
+              {t('auth.forgotPassword')}
             </Typography>
           </Box>
 
@@ -301,11 +303,11 @@ const Login = () => {
               )
             }
           >
-            {submitting ? 'Signing in…' : 'Log in'}
+            {submitting ? t('auth.signingIn') : t('auth.logIn')}
           </Button>
 
           <Typography variant="body2" textAlign="center" sx={{ fontSize: '0.83rem', color: '#7c8d8c' }}>
-            Don't have an account?{' '}
+            {t('auth.noAccount')}{' '}
             <Typography
               component="span"
               variant="body2"
@@ -318,7 +320,7 @@ const Login = () => {
               }}
               onClick={() => navigate('/sign-up')}
             >
-              Sign Up
+              {t('auth.signUp')}
             </Typography>
           </Typography>
 
@@ -336,7 +338,7 @@ const Login = () => {
             }}
             onClick={() => navigate('/software-admin/login')}
           >
-            Software Owner Login
+            {t('auth.softwareOwnerLogin')}
           </Typography>
         </Box>
       </Box>

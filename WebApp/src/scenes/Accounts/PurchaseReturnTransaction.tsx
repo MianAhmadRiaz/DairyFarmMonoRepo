@@ -25,6 +25,7 @@ import {
   ChartAccount
 } from '../../shared/services/finance.service';
 import PageContainer from '../../shared/components/Layout/PageContainer';
+import { useTranslation } from 'react-i18next';
 
 interface StockRow {
   id: number;
@@ -38,6 +39,7 @@ interface StockRow {
 }
 
 export default function PurchaseReturnTransaction() {
+  const { t } = useTranslation();
   const theme = useTheme();
   const pageBg = '#F5FAF7';
 
@@ -154,12 +156,12 @@ export default function PurchaseReturnTransaction() {
   // Handle save
   const handleSave = async () => {
     if (!transactionDate) {
-      setSnackbar({ open: true, message: 'Please fill in Transaction Date', severity: 'error' });
+      setSnackbar({ open: true, message: t('accounts.common.fillTransactionDate'), severity: 'error' });
       return;
     }
 
     if (stockRows.some(row => !row.selectType || !row.selectProduct || !row.rate || !row.qty)) {
-      setSnackbar({ open: true, message: 'Please fill in all stock information', severity: 'error' });
+      setSnackbar({ open: true, message: t('accounts.common.fillAllStockInfo'), severity: 'error' });
       return;
     }
 
@@ -167,7 +169,7 @@ export default function PurchaseReturnTransaction() {
       const cash = accounts.find(a => a.account_code === '1110') || accounts.find(a => a.account_type === 'asset');
       const expense = accounts.find(a => a.account_code === '5700') || accounts.find(a => a.account_type === 'expense');
       if (!cash || !expense) {
-        setSnackbar({ open: true, message: 'Cash or expense account not configured.', severity: 'error' });
+        setSnackbar({ open: true, message: t('accounts.common.cashOrExpenseNotConfigured'), severity: 'error' });
         return;
       }
       // Purchase return reverses a purchase: Dr Cash, Cr Expense
@@ -180,11 +182,11 @@ export default function PurchaseReturnTransaction() {
         description: narration || `Purchase Return ${invoiceNo}`.trim(),
         payment_method: 'cash'
       });
-      setSnackbar({ open: true, message: 'Purchase return transaction saved successfully!', severity: 'success' });
+      setSnackbar({ open: true, message: t('accounts.purchaseReturnTransaction.saveSuccess'), severity: 'success' });
       handleReset();
     } catch (e) {
       console.error('Failed to save purchase return', e);
-      setSnackbar({ open: true, message: 'Failed to save purchase return.', severity: 'error' });
+      setSnackbar({ open: true, message: t('accounts.purchaseReturnTransaction.saveError'), severity: 'error' });
     }
   };
 
@@ -205,7 +207,7 @@ export default function PurchaseReturnTransaction() {
     const printContent = `
       <html>
         <head>
-          <title>Purchase Return Transaction</title>
+          <title>${t('accounts.purchaseReturnTransaction.title')}</title>
           <style>
             body { font-family: Arial, sans-serif; padding: 20px; }
             .header { text-align: center; margin-bottom: 30px; border-bottom: 2px solid #005f73; padding-bottom: 10px; }
@@ -223,26 +225,26 @@ export default function PurchaseReturnTransaction() {
         </head>
         <body>
           <div class="header">
-            <h2>Purchase Return Transaction</h2>
-            <p>Sr #: ${Math.floor(Math.random() * 100000)}</p>
-            <p>Generated on ${new Date().toLocaleDateString()}</p>
+            <h2>${t('accounts.purchaseReturnTransaction.title')}</h2>
+            <p>${t('accounts.common.srNoValue', { value: Math.floor(Math.random() * 100000) })}</p>
+            <p>${t('accounts.common.generatedOn', { date: new Date().toLocaleDateString() })}</p>
           </div>
           <div class="details">
-            <div class="row"><span class="label">Invoice No:</span><span class="value">${invoiceNo}</span></div>
-            <div class="row"><span class="label">Transaction Date:</span><span class="value">${transactionDate}</span></div>
-            <div class="row"><span class="label">Vendor/Customer:</span><span class="value">${vendorCustomer}</span></div>
-            <div class="row"><span class="label">Narration:</span><span class="value">${narration}</span></div>
+            <div class="row"><span class="label">${t('accounts.common.invoiceNo')}:</span><span class="value">${invoiceNo}</span></div>
+            <div class="row"><span class="label">${t('accounts.common.transactionDate')}:</span><span class="value">${transactionDate}</span></div>
+            <div class="row"><span class="label">${t('accounts.common.vendorCustomer')}:</span><span class="value">${vendorCustomer}</span></div>
+            <div class="row"><span class="label">${t('accounts.common.narration')}:</span><span class="value">${narration}</span></div>
           </div>
           <table>
             <thead>
               <tr>
-                <th>Type</th>
-                <th>Product</th>
-                <th>Current Qty</th>
-                <th>Unit</th>
-                <th>Rate</th>
-                <th>Return Qty</th>
-                <th>Total</th>
+                <th>${t('accounts.common.type')}</th>
+                <th>${t('accounts.common.product')}</th>
+                <th>${t('accounts.common.currentQty')}</th>
+                <th>${t('accounts.common.unit')}</th>
+                <th>${t('accounts.common.rate')}</th>
+                <th>${t('accounts.common.returnQty')}</th>
+                <th>${t('accounts.common.total')}</th>
               </tr>
             </thead>
             <tbody>
@@ -260,9 +262,9 @@ export default function PurchaseReturnTransaction() {
             </tbody>
           </table>
           <div class="totals">
-            <div class="total-row">Subtotal: ${subtotal}</div>
-            <div class="total-row">Discount (${discount}%): ${discountAmount.toFixed(2)}</div>
-            <div class="total-row grand-total">Grand Total: ${grandTotal.toFixed(2)}</div>
+            <div class="total-row">${t('accounts.common.subtotalValue', { value: subtotal })}</div>
+            <div class="total-row">${t('accounts.common.discountValue', { percent: discount, value: discountAmount.toFixed(2) })}</div>
+            <div class="total-row grand-total">${t('accounts.common.grandTotalValue', { value: grandTotal.toFixed(2) })}</div>
           </div>
         </body>
       </html>
@@ -281,7 +283,7 @@ export default function PurchaseReturnTransaction() {
   };
 
   return (
-    <PageContainer title="Purchase Return Transaction">
+    <PageContainer title={t('accounts.purchaseReturnTransaction.title')}>
         {/* Main Card */}
         <Paper elevation={0} sx={{ p: 0, borderRadius: 2, border: `1px solid ${theme.palette.divider}`, bgcolor: 'background.paper' }}>
           
@@ -300,11 +302,11 @@ export default function PurchaseReturnTransaction() {
           >
             <Typography variant="h6" fontWeight={600} sx={{ display: 'flex', alignItems: 'center' }}>
               <Box component="span" sx={{ mr: 1 }}>↩️</Box>
-              Purchase Return Transaction
+              {t('accounts.purchaseReturnTransaction.title')}
             </Typography>
             <Stack direction="row" spacing={1} alignItems="center">
               <Typography variant="body2" sx={{ color: '#005f73', fontWeight: 600 }}>
-                Sr #: {Math.floor(Math.random() * 100)}
+                {t('accounts.common.srNoValue', { value: Math.floor(Math.random() * 100) })}
               </Typography>
               <IconButton size="small" onClick={handlePrint} sx={{ color: '#005f73' }}>
                 <PrintIcon />
@@ -320,14 +322,14 @@ export default function PurchaseReturnTransaction() {
             {/* Top Row Fields */}
             <Stack direction={{ xs: 'column', md: 'row' }} spacing={3} sx={{ mb: 3 }}>
               <TextField
-                label="Invoice No"
+                label={t('accounts.common.invoiceNo')}
                 value={invoiceNo}
                 onChange={(e) => setInvoiceNo(e.target.value)}
                 size="small"
                 sx={{ flex: 1 }}
               />
               <TextField
-                label="Transaction Date"
+                label={t('accounts.common.transactionDate')}
                 type="date"
                 value={transactionDate}
                 onChange={(e) => setTransactionDate(e.target.value)}
@@ -341,7 +343,7 @@ export default function PurchaseReturnTransaction() {
             {/* Second Row */}
             <Stack direction={{ xs: 'column', md: 'row' }} spacing={3} sx={{ mb: 3 }}>
               <TextField
-                label="Narration"
+                label={t('accounts.common.narration')}
                 value={narration}
                 onChange={(e) => setNarration(e.target.value)}
                 multiline
@@ -350,14 +352,14 @@ export default function PurchaseReturnTransaction() {
                 sx={{ flex: 2 }}
               />
               <FormControl size="small" sx={{ flex: 1 }}>
-                <InputLabel>Vendor/Customer</InputLabel>
+                <InputLabel>{t('accounts.common.vendorCustomer')}</InputLabel>
                 <Select
                   value={vendorCustomer}
                   onChange={(e) => setVendorCustomer(e.target.value)}
-                  label="Vendor/Customer"
+                  label={t('accounts.common.vendorCustomer')}
                 >
                   {vendorOptions.map((vendor, index) => (
-                    <MenuItem key={index} value={vendor}>{vendor}</MenuItem>
+                    <MenuItem key={index} value={vendor}>{t(`accounts.common.vendors.${vendor}`, vendor)}</MenuItem>
                   ))}
                 </Select>
               </FormControl>
@@ -366,7 +368,7 @@ export default function PurchaseReturnTransaction() {
             {/* Stock Information Section */}
             <Box sx={{ mb: 3 }}>
               <Typography variant="h6" sx={{ color: '#005f73', mb: 2, display: 'flex', alignItems: 'center', fontWeight: 'bold' }}>
-                📦 Stock Information
+                📦 {t('accounts.common.stockInformation')}
               </Typography>
 
               {/* Add More Items Button */}
@@ -387,19 +389,19 @@ export default function PurchaseReturnTransaction() {
                     }
                   }}
                 >
-                  Add more items...
+                  {t('accounts.common.addMoreItems')}
                 </Button>
               </Box>
 
               {/* Table Header */}
               <Box sx={{ display: 'flex', bgcolor: '#F5F5F5', p: 1, borderRadius: '4px 4px 0 0', border: '1px solid #E0E0E0' }}>
-                <Typography variant="body2" fontWeight={600} sx={{ flex: 1, px: 1 }}>Select Type</Typography>
-                <Typography variant="body2" fontWeight={600} sx={{ flex: 2, px: 1 }}>Select Product</Typography>
-                <Typography variant="body2" fontWeight={600} sx={{ flex: 1, px: 1 }}>Cur Qty</Typography>
-                <Typography variant="body2" fontWeight={600} sx={{ flex: 1, px: 1 }}>Unit</Typography>
-                <Typography variant="body2" fontWeight={600} sx={{ flex: 1, px: 1 }}>Rate</Typography>
-                <Typography variant="body2" fontWeight={600} sx={{ flex: 1, px: 1 }}>Qty</Typography>
-                <Typography variant="body2" fontWeight={600} sx={{ flex: 1, px: 1 }}>Total</Typography>
+                <Typography variant="body2" fontWeight={600} sx={{ flex: 1, px: 1 }}>{t('accounts.common.selectType')}</Typography>
+                <Typography variant="body2" fontWeight={600} sx={{ flex: 2, px: 1 }}>{t('accounts.common.selectProduct')}</Typography>
+                <Typography variant="body2" fontWeight={600} sx={{ flex: 1, px: 1 }}>{t('accounts.common.curQty')}</Typography>
+                <Typography variant="body2" fontWeight={600} sx={{ flex: 1, px: 1 }}>{t('accounts.common.unit')}</Typography>
+                <Typography variant="body2" fontWeight={600} sx={{ flex: 1, px: 1 }}>{t('accounts.common.rate')}</Typography>
+                <Typography variant="body2" fontWeight={600} sx={{ flex: 1, px: 1 }}>{t('accounts.common.qty')}</Typography>
+                <Typography variant="body2" fontWeight={600} sx={{ flex: 1, px: 1 }}>{t('accounts.common.total')}</Typography>
                 <Box sx={{ width: 40 }}></Box>
               </Box>
 
@@ -412,9 +414,9 @@ export default function PurchaseReturnTransaction() {
                       onChange={(e) => updateStockRow(row.id, 'selectType', e.target.value)}
                       displayEmpty
                     >
-                      <MenuItem value="">Select Type</MenuItem>
+                      <MenuItem value="">{t('accounts.common.selectType')}</MenuItem>
                       {productTypes.map((type, index) => (
-                        <MenuItem key={index} value={type}>{type}</MenuItem>
+                        <MenuItem key={index} value={type}>{t(`accounts.common.productTypes.${type}`, type)}</MenuItem>
                       ))}
                     </Select>
                   </FormControl>
@@ -425,9 +427,9 @@ export default function PurchaseReturnTransaction() {
                       onChange={(e) => updateStockRow(row.id, 'selectProduct', e.target.value)}
                       displayEmpty
                     >
-                      <MenuItem value="">Select Product</MenuItem>
+                      <MenuItem value="">{t('accounts.common.selectProduct')}</MenuItem>
                       {row.selectType && products[row.selectType as keyof typeof products]?.map((product, index) => (
-                        <MenuItem key={index} value={product}>{product}</MenuItem>
+                        <MenuItem key={index} value={product}>{t(`accounts.common.products.${product}`, product)}</MenuItem>
                       ))}
                     </Select>
                   </FormControl>
@@ -446,9 +448,9 @@ export default function PurchaseReturnTransaction() {
                       onChange={(e) => updateStockRow(row.id, 'unit', e.target.value)}
                       displayEmpty
                     >
-                      <MenuItem value="">Unit</MenuItem>
+                      <MenuItem value="">{t('accounts.common.unit')}</MenuItem>
                       {units.map((unit, index) => (
-                        <MenuItem key={index} value={unit}>{unit}</MenuItem>
+                        <MenuItem key={index} value={unit}>{t(`accounts.common.units.${unit}`, unit)}</MenuItem>
                       ))}
                     </Select>
                   </FormControl>
@@ -491,11 +493,11 @@ export default function PurchaseReturnTransaction() {
               <Box sx={{ mt: 3, p: 2, bgcolor: '#F9F9F9', borderRadius: 1 }}>
                 <Stack direction="row" spacing={4} alignItems="center" justifyContent="flex-end">
                   <Typography variant="h6" fontWeight={700}>
-                    Total: {subtotal}
+                    {t('accounts.common.totalValue', { value: subtotal })}
                   </Typography>
                   
                   <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                    <Typography variant="body2">Discount:</Typography>
+                    <Typography variant="body2">{t('accounts.common.discountLabel')}</Typography>
                     <TextField
                       size="small"
                       type="number"
@@ -509,7 +511,7 @@ export default function PurchaseReturnTransaction() {
                   </Box>
                   
                   <Typography variant="h6" fontWeight={700}>
-                    Grand Total: {grandTotal.toFixed(2)}
+                    {t('accounts.common.grandTotalValue', { value: grandTotal.toFixed(2) })}
                   </Typography>
                 </Stack>
               </Box>
@@ -527,7 +529,7 @@ export default function PurchaseReturnTransaction() {
                   textTransform: 'none'
                 }}
               >
-                💾 Save Changes
+                💾 {t('accounts.common.saveChanges')}
               </Button>
               <Button
                 variant="contained"
@@ -543,7 +545,7 @@ export default function PurchaseReturnTransaction() {
                   }
                 }}
               >
-                🔄 Reset
+                🔄 {t('accounts.common.reset')}
               </Button>
             </Box>
           </Box>

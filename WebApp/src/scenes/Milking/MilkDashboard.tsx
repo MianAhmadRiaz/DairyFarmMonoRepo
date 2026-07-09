@@ -44,6 +44,7 @@ import { CircularProgress, Backdrop } from '@mui/material';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import PageContainer from '../../shared/components/Layout/PageContainer';
+import { useTranslation } from 'react-i18next';
 
 ChartJS.register(
   CategoryScale,
@@ -128,6 +129,7 @@ interface MergedLactationInfo {
 
 
 const MilkingDashbaord: React.FC = () => {
+   const { t } = useTranslation();
    const theme = useTheme();
    const colors = tokens(theme.palette.mode);
 
@@ -161,7 +163,7 @@ const MilkingDashbaord: React.FC = () => {
       labels: [] as string[],
       datasets: [
         {
-          label: 'Milk in Liters',
+          label: t('milking.common.milkInLiters'),
           data: [] as number[],
           borderColor: '#77B255',
           backgroundColor: 'rgba(119, 178, 85, 0.2)',
@@ -175,7 +177,7 @@ const MilkingDashbaord: React.FC = () => {
         }
       ]
     });
-    
+
     //Milking Cows Tags
     const [tags, setTags] = useState<Tag[]>([]);
     //Selected Tag Id
@@ -191,7 +193,7 @@ const MilkingDashbaord: React.FC = () => {
       labels: [] as string[],
       datasets: [
         {
-          label: 'Milk in Liters',
+          label: t('milking.common.milkInLiters'),
           data: [] as number[],
           borderColor: '#77B255',
           backgroundColor: 'rgba(119, 178, 85, 0.2)',
@@ -205,13 +207,13 @@ const MilkingDashbaord: React.FC = () => {
         }
       ]
     });
-     
+
     //Dohnut Graph Data For Per Lactation
     const [lactationDonutData, setLactationDonutData] = useState({
       labels: [] as string[],
       datasets: [
         {
-          label: 'Milk (Liters)',
+          label: t('milking.common.milkLiters'),
           data: [] as number[],
           backgroundColor: [] as string[],
         },
@@ -255,7 +257,7 @@ const MilkingDashbaord: React.FC = () => {
       const Get_Production_Graph_Milk_Variables = async () => {
       if (!selectedFilterValue || !startDate || !endDate) { return;}
       else if (new Date(startDate) >= new Date(endDate)) {
-         toast.warning("Start date must be before end date");
+         toast.warning(t('milking.common.startBeforeEnd'));
          return
       }
       try {
@@ -481,12 +483,12 @@ const MilkingDashbaord: React.FC = () => {
 
 
   return (
-    <PageContainer title="Milking Dashboard" subtitle="Track and manage milk production data">
+    <PageContainer title={t('milking.milkDashboard.title')} subtitle={t('milking.milkDashboard.subtitle')}>
 
       <Box sx={{ display: 'flex', gap: 2 , mb:4}}>
         <TextField
           size="small"
-          label="Start Date"
+          label={t('milking.common.startDate')}
           type="date"
           value={startDate}
           onChange={(e) => setStartDate(e.target.value as string)}
@@ -494,7 +496,7 @@ const MilkingDashbaord: React.FC = () => {
         />
         <TextField
           size="small"
-          label="End Date"
+          label={t('milking.common.endDate')}
           type="date"
           value={endDate}
           onChange={(e) => setEndDate(e.target.value as string)}
@@ -700,7 +702,7 @@ const MilkingDashbaord: React.FC = () => {
               <Select
                 labelId="lactation-label"
                 value={SelectedLactation}
-                label="Lactation Count"
+                label={t('milking.milkDashboard.lactationCount')}
                 onChange={(e) => setSelectedLactation(Number(e.target.value))}
               >
                 {CurrentLactation > 0 &&

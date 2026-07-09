@@ -27,9 +27,11 @@ import PageContainer from '../../../../../shared/components/Layout/PageContainer
 import { fetchDayWiseConsumption } from '../../../../../shared/services/feeding.services';
 import * as XLSX from 'xlsx';
 import { ConsumptionData } from './type';
+import { useTranslation } from 'react-i18next';
 
 
 const DayWiseConsumeReport: React.FC = () => {
+  const { t } = useTranslation();
   const [data, setData] = useState<ConsumptionData>({});
   const [dateColumns, setDateColumns] = useState<string[]>([]);
   const [loading, setLoading] = useState(false);
@@ -56,7 +58,7 @@ const DayWiseConsumeReport: React.FC = () => {
       });
       setDateColumns(Array.from(dates).sort());
     } catch (err) {
-      setError('Failed to fetch consumption data. Please try again.');
+      setError(t('stock.dayWiseConsumeReport.fetchError'));
       console.error('Error fetching consumption data:', err);
     } finally {
       setLoading(false);
@@ -114,20 +116,20 @@ const DayWiseConsumeReport: React.FC = () => {
       ws['!cols'] = wscols;
 
       const wb = XLSX.utils.book_new();
-      XLSX.utils.book_append_sheet(wb, ws, "Day Wise Consumption Report");
+      XLSX.utils.book_append_sheet(wb, ws, t('stock.dayWiseConsumeReport.sheetName'));
 
       XLSX.writeFile(wb, `Day_Wise_Consumption_Report_${startDate}_to_${endDate}.xlsx`);
 
       setSnackbar({
         open: true,
-        message: "Excel file downloaded successfully",
+        message: t('stock.common.excelDownloadSuccess'),
         severity: 'success'
       });
     } catch (error) {
       console.error('Error exporting to Excel:', error);
       setSnackbar({
         open: true,
-        message: "Failed to export Excel file",
+        message: t('stock.common.excelDownloadError'),
         severity: 'error'
       });
     }
@@ -152,7 +154,7 @@ const DayWiseConsumeReport: React.FC = () => {
   };
 
   return (
-    <PageContainer title="Feed Consumption Day-Wise" subtitle="View daily consumption of items">
+    <PageContainer title={t('stock.dayWiseConsumeReport.title')} subtitle={t('stock.dayWiseConsumeReport.subtitle')}>
       <Container maxWidth="lg"  sx={{
     px: isMobile ? '11px' : undefined,
   }}>
@@ -178,7 +180,7 @@ const DayWiseConsumeReport: React.FC = () => {
                 <Grid item xs={12} md={4}>
                   <TextField
                     type="date"
-                    label="Start Date"
+                    label={t('stock.common.startDate')}
                     size="small"
                     fullWidth
                     value={startDate}
@@ -189,7 +191,7 @@ const DayWiseConsumeReport: React.FC = () => {
                 <Grid item xs={12} md={4}>
                   <TextField
                     type="date"
-                    label="End Date"
+                    label={t('stock.common.endDate')}
                     size="small"
                     fullWidth
                     value={endDate}
@@ -210,7 +212,7 @@ const DayWiseConsumeReport: React.FC = () => {
                       flex: 1
                     }}
                   >
-                    Go!
+                    {t('stock.common.go')}
                   </Button>
                   <IconButton 
                     onClick={handleCopy}
@@ -264,7 +266,7 @@ sx={{
                           py: 1.5
                         }}
                       >
-                        Item Name
+                        {t('stock.common.itemName')}
                       </TableCell>
                       {dateColumns.map(date => (
                         <TableCell
@@ -291,7 +293,7 @@ sx={{
                             textAlign:'center',
                         }}
                       >
-                        Total
+                        {t('stock.common.total')}
                       </TableCell>
                     </TableRow>
                   </TableHead>
@@ -300,7 +302,7 @@ sx={{
                     Object.keys(data).length === 0 ? (
                       <TableRow>
                         <TableCell colSpan={dateColumns.length + 2} align="center" sx={{ py: 1 }}>
-                          No data available
+                          {t('stock.common.noDataAvailable')}
                         </TableCell>
                       </TableRow>
                     ) :

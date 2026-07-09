@@ -1,5 +1,6 @@
 import { useNavigation } from '@react-navigation/native'
-import React from 'react'
+import React, { useMemo } from 'react'
+import { useTranslation } from 'react-i18next'
 import { ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native'
 import AppContainer from 'shared/components/AppContainer'
 import AppHeader from 'shared/components/AppHeader'
@@ -18,24 +19,28 @@ type Action = {
   permission: PermissionName
 }
 
-const ACTIONS: Action[] = [
-  { label: 'Recipes', desc: 'Feed formulations & ingredients', screen: 'Recipes', icon: { type: Icons.MaterialCommunityIcons, name: 'book-open-variant' }, permission: PERMISSIONS.FEED_VIEW },
-  { label: 'Apply Feed to Shed', desc: 'Schedule feeding for a shed', screen: 'ApplyFeed', icon: { type: Icons.MaterialCommunityIcons, name: 'silo' }, permission: PERMISSIONS.FEED_MANAGE },
-  { label: 'Feed Report', desc: 'Feeding schedules & history', screen: 'FeedReport', icon: { type: Icons.MaterialCommunityIcons, name: 'chart-box-outline' }, permission: PERMISSIONS.FEED_VIEW }
-]
-
 const FeedingHome = () => {
+  const { t } = useTranslation()
   const navigation = useNavigation<any>()
   const { can } = usePermissions()
+
+  const ACTIONS: Action[] = useMemo(
+    () => [
+      { label: t('feeding.feedingHome.recipes'), desc: t('feeding.feedingHome.recipesDesc'), screen: 'Recipes', icon: { type: Icons.MaterialCommunityIcons, name: 'book-open-variant' }, permission: PERMISSIONS.FEED_VIEW },
+      { label: t('feeding.feedingHome.applyFeed'), desc: t('feeding.feedingHome.applyFeedDesc'), screen: 'ApplyFeed', icon: { type: Icons.MaterialCommunityIcons, name: 'silo' }, permission: PERMISSIONS.FEED_MANAGE },
+      { label: t('feeding.feedingHome.feedReport'), desc: t('feeding.feedingHome.feedReportDesc'), screen: 'FeedReport', icon: { type: Icons.MaterialCommunityIcons, name: 'chart-box-outline' }, permission: PERMISSIONS.FEED_VIEW }
+    ],
+    [t]
+  )
 
   const visible = ACTIONS.filter(a => can(a.permission))
 
   return (
     <AppContainer>
-      <AppHeader title="Feeding" showHam onPressHam={() => navigation.openDrawer?.()} />
+      <AppHeader title={t('feeding.feedingHome.title')} showHam onPressHam={() => navigation.openDrawer?.()} />
       <ScrollView contentContainerStyle={{ padding: RF(16), paddingBottom: RF(40) }}>
         <AppText fontSize="h7" semiBold style={{ marginBottom: RF(12) }}>
-          Actions
+          {t('feeding.feedingHome.actions')}
         </AppText>
         {visible.map((a, i) => (
           <TouchableOpacity key={i} style={styles.actionCard} onPress={() => navigation.navigate(a.screen)} activeOpacity={0.85}>

@@ -1,4 +1,5 @@
 import React, { useCallback, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { useFocusEffect } from '@react-navigation/native'
 import { StyleSheet, TouchableOpacity, View } from 'react-native'
 import Toast from 'react-native-toast-message'
@@ -16,6 +17,7 @@ import { COLORS } from 'shared/theme'
 import { RF } from 'shared/theme/responsive'
 
 const Salaries = () => {
+  const { t } = useTranslation()
   const { can } = usePermissions()
   const canView = can([PERMISSIONS.SALARY_MANAGE, PERMISSIONS.SALARY_PAY])
   const canPay = can(PERMISSIONS.SALARY_PAY)
@@ -35,12 +37,12 @@ const Salaries = () => {
         []
       setInvoices(Array.isArray(rows) ? rows : [])
     } catch (e) {
-      Toast.show({ type: 'error', text1: 'Error', text2: getNormalizedError(e) })
+      Toast.show({ type: 'error', text1: t('employee.common.error'), text2: getNormalizedError(e) })
     } finally {
       setLoading(false)
       setRefreshing(false)
     }
-  }, [])
+  }, [t])
 
   useFocusEffect(useCallback(() => { load() }, [load]))
 
@@ -48,10 +50,10 @@ const Salaries = () => {
     try {
       setPayingId(item.uuid)
       await markInvoicePaid(item.uuid)
-      Toast.show({ type: 'success', text1: 'Paid', text2: 'Invoice marked paid' })
+      Toast.show({ type: 'success', text1: t('employee.salaries.paid'), text2: t('employee.salaries.invoiceMarkedPaid') })
       load()
     } catch (e) {
-      Toast.show({ type: 'error', text1: 'Error', text2: getNormalizedError(e) })
+      Toast.show({ type: 'error', text1: t('employee.common.error'), text2: getNormalizedError(e) })
     } finally {
       setPayingId(null)
     }
@@ -62,11 +64,11 @@ const Salaries = () => {
     return (
       <View>
         <InfoCard
-          title={item.name || 'Employee'}
+          title={item.name || t('employee.common.employee')}
           subtitle={item.month}
           leftIcon={{ type: Icons.MaterialCommunityIcons, name: 'cash-multiple' }}
-          badge={{ text: unpaid ? 'UNPAID' : 'PAID', color: unpaid ? 'warning' : 'success' }}
-          rows={[{ label: 'Gross Salary', value: item.gross_salary }]}
+          badge={{ text: unpaid ? t('employee.salaries.unpaid') : t('employee.salaries.paidBadge'), color: unpaid ? 'warning' : 'success' }}
+          rows={[{ label: t('employee.salaries.grossSalary'), value: item.gross_salary }]}
         />
         {unpaid && canPay ? (
           <TouchableOpacity
@@ -76,7 +78,7 @@ const Salaries = () => {
             activeOpacity={0.85}
           >
             <AppText fontSize="caption" medium color="white">
-              Mark Paid
+              {t('employee.salaries.markPaid')}
             </AppText>
           </TouchableOpacity>
         ) : null}
@@ -87,9 +89,9 @@ const Salaries = () => {
   if (!canView) {
     return (
       <AppContainer>
-        <AppHeader title="Salaries" showBack />
+        <AppHeader title={t('employee.salaries.title')} showBack />
         <View style={styles.center}>
-          <AppText color="error">You do not have permission to view salaries.</AppText>
+          <AppText color="error">{t('employee.salaries.noPermission')}</AppText>
         </View>
       </AppContainer>
     )
@@ -97,7 +99,7 @@ const Salaries = () => {
 
   return (
     <AppContainer>
-      <AppHeader title="Salaries" showBack />
+      <AppHeader title={t('employee.salaries.title')} showBack />
       <FlatList
         data={invoices}
         keyExtractor={(item: any, i) => item.uuid || String(i)}
@@ -108,7 +110,7 @@ const Salaries = () => {
         ListEmptyComponent={
           !loading ? (
             <AppText color="descriptionColor" style={{ textAlign: 'center', marginTop: RF(40) }}>
-              No salary invoices found.
+              {t('employee.salaries.noInvoices')}
             </AppText>
           ) : null
         }

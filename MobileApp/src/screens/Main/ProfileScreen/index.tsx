@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { SafeAreaView, StyleSheet, View } from 'react-native';
 import AppHeader from 'shared/components/AppHeader';
 import { COLORS, THEME } from 'shared/theme';
@@ -7,11 +8,12 @@ import { RF } from 'shared/theme/responsive';
 import { GenericNavigation } from 'shared/utils/models/types';
 
 function ProfileScreen(props: GenericNavigation) {
+  const { t } = useTranslation();
   return (
     <>
       <SafeAreaView style={styles.container} />
       {/* {loading && <AppLoader isVisible />} */}
-      <AppHeader showBack title="Help" />
+      <AppHeader showBack title={t('main.profileScreen.headerTitle')} />
       <View
         style={{ flex: 1, backgroundColor: 'white', padding: RF(10) }}
       ></View>

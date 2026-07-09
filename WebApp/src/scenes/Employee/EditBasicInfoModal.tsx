@@ -8,6 +8,7 @@ import {
   IconButton
 } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
+import { useTranslation } from 'react-i18next';
 
 export interface BasicInfoValues {
   name: string;
@@ -29,6 +30,7 @@ const EditBasicInfoModal: React.FC<EditBasicInfoModalProps> = ({
   initialValues,
   onSave
 }) => {
+  const { t } = useTranslation();
   const [values, setValues] = useState<BasicInfoValues>({
     name: '',
     phone: '',
@@ -83,7 +85,7 @@ const EditBasicInfoModal: React.FC<EditBasicInfoModalProps> = ({
       >
         <Box display="flex" justifyContent="space-between" mb={3}>
           <Typography variant="h6" fontWeight="bold">
-            Edit Basic Info
+            {t('employee.editBasicInfo.title')}
           </Typography>
           <IconButton onClick={onClose}>
             <CloseIcon />
@@ -92,25 +94,25 @@ const EditBasicInfoModal: React.FC<EditBasicInfoModalProps> = ({
 
         <Box display="grid" gridTemplateColumns="repeat(2, 1fr)" gap={2}>
           <TextField
-            label="Employee Name"
+            label={t('employee.addNewEmployee.placeholders.employeeName')}
             value={values.name}
             onChange={(e) => handleChange('name', e.target.value)}
             fullWidth
           />
           <TextField
-            label="Phone Number"
+            label={t('employee.common.phoneNumber')}
             value={values.phone}
             onChange={(e) => handleChange('phone', e.target.value)}
             fullWidth
           />
           <TextField
-            label="City"
+            label={t('employee.addNewEmployee.fields.city')}
             value={values.city}
             onChange={(e) => handleChange('city', e.target.value)}
             fullWidth
           />
           <TextField
-            label="Address"
+            label={t('employee.addNewEmployee.fields.address')}
             value={values.address}
             onChange={(e) => handleChange('address', e.target.value)}
             fullWidth
@@ -127,7 +129,7 @@ const EditBasicInfoModal: React.FC<EditBasicInfoModalProps> = ({
               fontWeight: 'bold'
             }}
           >
-            Cancel
+            {t('common.cancel')}
           </Button>
           <Button
             variant="contained"
@@ -144,7 +146,7 @@ const EditBasicInfoModal: React.FC<EditBasicInfoModalProps> = ({
               }
             }}
           >
-            {saving ? 'Updating...' : 'Update'}
+            {saving ? t('employee.common.updating') : t('employee.common.update')}
           </Button>
         </Box>
       </Box>

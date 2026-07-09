@@ -21,6 +21,7 @@ import { CircularProgress, Backdrop } from '@mui/material';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import PageContainer from '../../shared/components/Layout/PageContainer';
+import { useTranslation } from 'react-i18next';
 
 
 interface MilkEntry {
@@ -89,6 +90,7 @@ interface MilkRecord {
 
 
 const DailyMilkReport = () => {
+  const { t } = useTranslation();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
   const colors = tokens(theme.palette.mode);
@@ -153,7 +155,7 @@ const DailyMilkReport = () => {
                   shed: Penresponses[index].data.data.name,
                   lac: record.animal_curr_lactation,
                   type: record.animal.animalType,
-                  calvingDate: record.animal.calving_date || "No Date Found",
+                  calvingDate: record.animal.calving_date || t('milking.dailyMilkReport.noDateFound'),
                   dim: calculateDIM(milkdata, record.animalId),
                   milk1: record.milk1,
                   milk2: record.milk2,
@@ -189,7 +191,7 @@ const DailyMilkReport = () => {
   }
 
   return (
-    <PageContainer title="Daily Milk Report" maxWidth="1200px">
+    <PageContainer title={t('milking.dailyMilkReport.title')} maxWidth="1200px">
     {/* Date Picker */}
     <Box sx={{ 
       display: 'flex', 
@@ -199,7 +201,7 @@ const DailyMilkReport = () => {
          ml: {xs:0,md:9},
     }}>
       <TextField
-        label="Select Date"
+        label={t('milking.common.selectDate')}
         type="date"
         value={selectedDate}
         onChange={handleDate}
@@ -222,7 +224,7 @@ const DailyMilkReport = () => {
            p: { xs: 2, sm: 3, md: 3 },
       }}>
         <TextField
-          placeholder="Search"
+          placeholder={t('common.search')}
           size="small"
           value={searchValue}
           onChange={(e) => setSearchValue(e.target.value)}
@@ -232,14 +234,14 @@ const DailyMilkReport = () => {
         />
 
         <FormControl size="small" sx={{ width: { xs: '100%', md: 180 } }}>
-          <InputLabel>Filter</InputLabel>
+          <InputLabel>{t('milking.common.filter')}</InputLabel>
           <Select
             value={filterOption}
             onChange={(e) => setFilterOption(e.target.value)}
           >
-            <MenuItem value="Sort">Sort</MenuItem>
-            <MenuItem value="High Yielders">High Yielders</MenuItem>
-            <MenuItem value="Low Yielders">Low Yielders</MenuItem>
+            <MenuItem value="Sort">{t('milking.common.sort')}</MenuItem>
+            <MenuItem value="High Yielders">{t('milking.dailyMilkReport.highYielders')}</MenuItem>
+            <MenuItem value="Low Yielders">{t('milking.dailyMilkReport.lowYielders')}</MenuItem>
           </Select>
         </FormControl>
       </Box>
@@ -280,17 +282,17 @@ const DailyMilkReport = () => {
           <Box component="thead" sx={{backgroundColor: theme.palette.mode === 'dark' ? colors.primary[400] : '#F8F9FA',}}>
             <Box component="tr">
               {[
-                'SR#',
-                'TAG ID',
-                'SHED',
-                'LAC #',
-                'TYPE',
-                'CALVING DATE',
-                'DIM',
-                'MILK 1',
-                'MILK 2',
-                'MILK 3',
-                'TOTAL'
+                t('milking.common.columns.srNo'),
+                t('milking.common.columns.tagId'),
+                t('milking.dailyMilkReport.columns.shed'),
+                t('milking.dailyMilkReport.columns.lacNo'),
+                t('milking.dailyMilkReport.columns.type'),
+                t('milking.dailyMilkReport.columns.calvingDate'),
+                t('milking.dailyMilkReport.columns.dim'),
+                t('milking.common.columns.milk1'),
+                t('milking.common.columns.milk2'),
+                t('milking.common.columns.milk3'),
+                t('milking.common.columns.total')
               ].map((header) => (
                 <Box component="th" key={header}>
                   {header}
@@ -334,7 +336,7 @@ const DailyMilkReport = () => {
         colSpan={11}
         sx={{ textAlign: 'center', py: 2, color: '#7d7d7d' }}
       >
-        No data available.
+        {t('milking.common.noDataAvailable')}
       </Box>
     </Box>
   )}

@@ -9,12 +9,14 @@ import {
   InputBase
 } from '@mui/material';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import { useTranslation } from 'react-i18next';
 
 // Import local images
 
 const VerifyCode = () => {
   const navigate = useNavigate();
   const location = useLocation();
+  const { t } = useTranslation();
   const [code, setCode] = useState(['', '', '', '']);
   const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
 
@@ -52,7 +54,7 @@ const VerifyCode = () => {
         } 
       });
     } else {
-      alert('Invalid code, please try again.');
+      alert(t('auth.verifyCodeScreen.invalidCode'));
     }
   };
 
@@ -120,7 +122,7 @@ const VerifyCode = () => {
           <Box
             component="img"
             src="/assets/Logo.png"
-            alt="Logo"
+            alt={t('auth.common.logoAlt')}
             sx={{
               width: { xs: '220px', md: '280px' },
               height: { xs: '230px', md: '270px' },
@@ -140,7 +142,7 @@ const VerifyCode = () => {
             color: '#333'
           }}
         >
-          Verify OTP
+          {t('auth.verifyCodeScreen.title')}
         </Typography>
         <Typography
           variant="body2"
@@ -153,8 +155,7 @@ const VerifyCode = () => {
             mx: 'auto'
           }}
         >
-          We sent a reset link to dummy.....com. Enter the 4-digit code that was
-          mentioned in the email.
+          {t('auth.verifyCodeScreen.subtitle')}
         </Typography>
 
         {/* Code Input Fields */}
@@ -227,7 +228,7 @@ const VerifyCode = () => {
             }}
             onClick={handleVerify}
           >
-            Verify Code
+            {t('auth.verifyCodeScreen.verifyButton')}
           </Button>
         </Box>
       </Box>

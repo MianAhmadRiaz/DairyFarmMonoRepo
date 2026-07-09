@@ -16,6 +16,7 @@ import {
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import AddIcon from '@mui/icons-material/Add';
 import { ToastContainer, toast } from 'react-toastify';
+import { useTranslation } from 'react-i18next';
 import 'react-toastify/dist/ReactToastify.css';
 import PageContainer from '../../shared/components/Layout/PageContainer';
 import { tokens } from '../../shared/theme/theme';
@@ -35,6 +36,7 @@ interface IngredientRow {
 
 /* ---------- component ---------- */
 const CreateFeedFormulation: React.FC = () => {
+  const { t } = useTranslation();
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
 
@@ -55,7 +57,7 @@ const CreateFeedFormulation: React.FC = () => {
         const data: FeedIngredientsListData = res?.data?.data;
         setIngredientOptions(data?.ingredients || []);
       } catch (error: any) {
-        toast.error(error?.response?.data?.message || "Can't load ingredients");
+        toast.error(error?.response?.data?.message || t('feeding.common.cantLoadIngredients'));
       } finally {
         setIsFetching(false);
       }
@@ -98,11 +100,11 @@ const CreateFeedFormulation: React.FC = () => {
 
     // basic validation
     if (!name.trim()) {
-      toast.warn('Please enter a formulation name');
+      toast.warn(t('feeding.createFeedFormulation.nameWarning'));
       return;
     }
     if (rows.some((r) => !r.ingredientId || !(Number(r.quantity) > 0))) {
-      toast.warn('Please fill all ingredient rows');
+      toast.warn(t('feeding.common.fillAllIngredientRows'));
       return;
     }
 
@@ -116,10 +118,10 @@ const CreateFeedFormulation: React.FC = () => {
         })),
       });
 
-      toast.success('Feed formulation saved successfully!');
+      toast.success(t('feeding.createFeedFormulation.savedSuccess'));
       handleReset();
     } catch (error: any) {
-      toast.error(error?.response?.data?.message || 'Failed to save feed formulation');
+      toast.error(error?.response?.data?.message || t('feeding.createFeedFormulation.saveFailed'));
     } finally {
       setIsLoading(false);
     }
@@ -127,7 +129,7 @@ const CreateFeedFormulation: React.FC = () => {
 
   /* ---------- UI ---------- */
   return (
-    <PageContainer title="Make Feed / Vanda Formulation" maxWidth="1050px">
+    <PageContainer title={t('feeding.createFeedFormulation.title')} maxWidth="1050px">
       {/* global loading overlay */}
       {(isLoading || isFetching) && (
         <Box
@@ -148,7 +150,7 @@ const CreateFeedFormulation: React.FC = () => {
       {/* Formulation name */}
       <TextField
         fullWidth
-        label="Vanda / Formulation Name"
+        label={t('feeding.createFeedFormulation.nameLabel')}
         value={name}
         onChange={(e) => setName(e.target.value)}
         sx={{ mb: 4, backgroundColor: theme.palette.background.paper,
@@ -171,7 +173,7 @@ const CreateFeedFormulation: React.FC = () => {
 
         >
           <Typography variant="h6" fontWeight={600}>
-            Select Ingredients
+            {t('feeding.common.selectIngredients')}
           </Typography>
           <Button
             startIcon={<AddIcon />}
@@ -180,7 +182,7 @@ const CreateFeedFormulation: React.FC = () => {
             onClick={handleAddRow}
             disabled={isLoading}
           >
-            Add Ingredient
+            {t('feeding.common.addIngredient')}
           </Button>
         </Box>
 
@@ -190,13 +192,13 @@ const CreateFeedFormulation: React.FC = () => {
 }}>
         <Grid container spacing={2} sx={{ fontWeight: 600, mb: 1, }}>
           <Grid item xs={1}>
-            #Sr
+            {t('feeding.common.srNo')}
           </Grid>
           <Grid item xs={7}>
-            Ingredients
+            {t('feeding.common.ingredients')}
           </Grid>
           <Grid item xs={3}>
-            Quantity (Kg)
+            {t('feeding.common.quantityKg')}
           </Grid>
           <Grid item xs={1} />
         </Grid>
@@ -233,7 +235,7 @@ const CreateFeedFormulation: React.FC = () => {
                   <MenuItem key={ing.uuid} value={ing.uuid}>
                     {ing.name}
                     {ing.unit_of_measure ? ` (${ing.unit_of_measure})` : ''}
-                    {` — stock: ${ing.currentStock}`}
+                    {` — ${t('feeding.common.stockLabel', { stock: ing.currentStock })}`}
                   </MenuItem>
                 ))}
               </TextField>
@@ -257,7 +259,7 @@ const CreateFeedFormulation: React.FC = () => {
             {/* Delete */}
             <Grid item xs={1}>
               <IconButton
-                aria-label="delete"
+                aria-label={t('common.delete')}
                 onClick={() => handleDeleteRow(row.id)}
                 disabled={isLoading || rows.length === 1}
               >
@@ -286,7 +288,7 @@ const CreateFeedFormulation: React.FC = () => {
               onClick={handleSaveRecipe}
               disabled={isLoading}
             >
-              {isLoading ? 'Saving…' : 'Save Formulation'}
+              {isLoading ? t('feeding.common.saving') : t('feeding.createFeedFormulation.saveFormulation')}
             </Button>
 
             <Button
@@ -295,7 +297,7 @@ const CreateFeedFormulation: React.FC = () => {
               onClick={handleReset}
               disabled={isLoading}
             >
-              Reset
+              {t('feeding.common.reset')}
             </Button>
           </Box>
 
@@ -309,7 +311,7 @@ const CreateFeedFormulation: React.FC = () => {
               fontWeight: 600,
             }}
           >
-            TOTAL:&nbsp;&nbsp;{totalQtyKg || 0} KG
+            {t('feeding.common.totalColon')}&nbsp;&nbsp;{totalQtyKg || 0} {t('feeding.common.kgUpper')}
           </Box>
         </Box>
         </Box>

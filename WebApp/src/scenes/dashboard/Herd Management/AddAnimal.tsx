@@ -1,5 +1,6 @@
 import React, { ChangeEvent, useEffect, useState,useRef } from "react";
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import {
   Box,
   Button,
@@ -44,7 +45,7 @@ interface DropdownObject {
 
 
 const AddAnimal = () => {
-  
+  const { t } = useTranslation();
   // Ensure page starts from top when component mounts
   useScrollToTopOnMount();
   const theme = useTheme();
@@ -97,10 +98,10 @@ const AddAnimal = () => {
   const heiferOnly = ["Non-Pregnant Heifer", "Pregnant Heifer"].includes(formData.type);
 
   const categoryOptions: Option[] = heiferOnly
-    ? [{ value: "heifers", label: "Heifer" }]
+    ? [{ value: "heifers", label: t("herd.addAnimal.categoryHeifer") }]
     : [
-        { value: "milk", label: "Milking" },
-        { value: "dry", label: "Dry" }
+        { value: "milk", label: t("herd.addAnimal.categoryMilking") },
+        { value: "dry", label: t("herd.addAnimal.categoryDry") }
       ];
   // Whether to show the Pedigree Info fields
   const [showPedigree, setShowPedigree] = useState(false);
@@ -327,7 +328,7 @@ const handleSubmit = async () => {
 
   if (missingFields.length > 0) {
     if (toastId.current === null || !toast.isActive(toastId.current)) {
-    toastId.current = toast.warn("Please fill all the missing required fields.");
+    toastId.current = toast.warn(t("herd.addAnimal.warnRequired"));
 }
     return;
   }
@@ -335,7 +336,7 @@ const handleSubmit = async () => {
 if (formData.type === "Pregnant Cow") {
   if (!formData.inseminated_dates || !formData.lactation || !formData.lastCalvingDate) {
     if (toastId.current === null || !toast.isActive(toastId.current)) {
-      toastId.current = toast.warn("Please fill all the missing required fields.");
+      toastId.current = toast.warn(t("herd.addAnimal.warnRequired"));
     }
     return;
   }
@@ -344,7 +345,7 @@ if (formData.type === "Pregnant Cow") {
 if (formData.type === "Cow") {
   if (!formData.lactation || !formData.lastCalvingDate) {
     if (toastId.current === null || !toast.isActive(toastId.current)) {
-      toastId.current = toast.warn("Please fill all the missing required fields.");
+      toastId.current = toast.warn(t("herd.addAnimal.warnRequired"));
     }
     return;
   }
@@ -353,7 +354,7 @@ if (formData.type === "Cow") {
 if (formData.type === "Pregnant Heifer") {
   if (!formData.pregnancyDays) {
     if (toastId.current === null || !toast.isActive(toastId.current)) {
-      toastId.current = toast.warn("Please fill all the missing required fields.");
+      toastId.current = toast.warn(t("herd.addAnimal.warnRequired"));
     }
     return;
   }
@@ -364,7 +365,7 @@ if (showPedigree) {
 
   if (!sireTagId || !damTagId) {
     if (toastId.current === null || !toast.isActive(toastId.current)) {
-      toastId.current = toast.warn("Please fill all the missing required fields.");
+      toastId.current = toast.warn(t("herd.addAnimal.warnRequired"));
     }
     return;
   }
@@ -377,7 +378,7 @@ if (showPedigree) {
 
   if (invalidNumbers.length > 0) {
     if (toastId.current === null || !toast.isActive(toastId.current)) {
-      toastId.current = toast.warn(`Invalid numbers in: ${invalidNumbers.join(', ')}`);
+      toastId.current = toast.warn(t("herd.addAnimal.invalidNumbers", { fields: invalidNumbers.join(', ') }));
     }
     return;
   }
@@ -405,7 +406,7 @@ if (showPedigree) {
     await addanimal(finalPayload);
 
     toast.dismiss();
-    toast.success("Animal added successfully!");
+    toast.success(t("herd.addAnimal.addSuccess"));
    
      setTimeout(() => {
       window.location.reload();
@@ -415,7 +416,7 @@ if (showPedigree) {
   } catch (error) {
     console.error("AddAnimal => error in handleSubmit =>", error);
     if (toastId.current === null || !toast.isActive(toastId.current)) {
-      toastId.current = toast.error("Failed to add animal. Please try again.");
+      toastId.current = toast.error(t("herd.addAnimal.addError"));
     }
    
   }finally {
@@ -432,7 +433,7 @@ if (showPedigree) {
 
   return (
 
-  <PageContainer title="Add Animal" maxWidth={1200}>
+  <PageContainer title={t("herd.addAnimal.title")} maxWidth={1200}>
        <Box sx={{
                backgroundColor: theme.palette.background.paper,
                p: { xs: 2, sm: 4, md: 3 },
@@ -448,7 +449,7 @@ if (showPedigree) {
           <TextField
             fullWidth
             select
-            label="Pen ID"
+            label={t("herd.addAnimal.penId")}
             name="penId"
             variant="outlined"
             value={formData.penId}
@@ -469,7 +470,7 @@ if (showPedigree) {
                 borderTop: "1px solid #ddd"
               }}
             >
-              + Add New Pen 
+              {t("herd.addAnimal.addNewPen")}
             </MenuItem>
           </TextField>
         </Grid>
@@ -479,7 +480,7 @@ if (showPedigree) {
           <TextField
             fullWidth
             select
-            label="Tag ID"
+            label={t("herd.addAnimal.tagId")}
             name="tagId"
             variant="outlined"
             value={formData.tagId}
@@ -499,7 +500,7 @@ if (showPedigree) {
               borderTop: "1px solid #ddd"
             }}
           >
-            + Add New Tag
+            {t("herd.addAnimal.addNewTag")}
           </MenuItem>
           </TextField>
         </Grid>
@@ -508,7 +509,7 @@ if (showPedigree) {
         <Grid item xs={12} md={4}>
           <TextField
             fullWidth
-            label="Electronic ID"
+            label={t("herd.addAnimal.electronicId")}
             name="electronicId"
             variant="outlined"
             value={formData.electronicId}
@@ -520,7 +521,7 @@ if (showPedigree) {
         <Grid item xs={12} md={4}>
           <TextField
             fullWidth
-            label="Animal Name"
+            label={t("herd.addAnimal.animalName")}
             name="name"
             variant="outlined"
             value={formData.name}
@@ -533,7 +534,7 @@ if (showPedigree) {
           <TextField
             fullWidth
             select
-            label="Animal Type"
+            label={t("herd.addAnimal.animalType")}
             name="animalType"
             variant="outlined"
             value={formData.animalType || ""}
@@ -552,7 +553,7 @@ if (showPedigree) {
                 borderTop: "1px solid #ddd"
               }}
             >
-              + Add New Animal Type
+              {t("herd.addAnimal.addNewAnimalType")}
             </MenuItem>
           </TextField>
         </Grid>
@@ -562,7 +563,7 @@ if (showPedigree) {
           <TextField
             fullWidth
             select
-            label="Breed Type"
+            label={t("herd.addAnimal.breedType")}
             name="breedType"
             variant="outlined"
             value={formData.breedType}
@@ -581,7 +582,7 @@ if (showPedigree) {
         borderTop: "1px solid #ddd"
       }}
     >
-      + Add New Breed Type
+      {t("herd.addAnimal.addNewBreedType")}
     </MenuItem>
           </TextField>
         </Grid>
@@ -591,15 +592,15 @@ if (showPedigree) {
           <TextField
             fullWidth
             select
-            label="Purchased From"
+            label={t("herd.addAnimal.purchasedFrom")}
             name="purchase_from"
             variant="outlined"
             value={formData.purchase_from}
             onChange={handleInputChange}
           >
-            <MenuItem value="australia">Australia</MenuItem>
-            <MenuItem value="america">America</MenuItem>
-            <MenuItem value="canada">Canada</MenuItem>
+            <MenuItem value="australia">{t("herd.addAnimal.countryAustralia")}</MenuItem>
+            <MenuItem value="america">{t("herd.addAnimal.countryAmerica")}</MenuItem>
+            <MenuItem value="canada">{t("herd.addAnimal.countryCanada")}</MenuItem>
           </TextField>
         </Grid>
 
@@ -607,7 +608,7 @@ if (showPedigree) {
         <Grid item xs={12} md={4}>
           <TextField
             fullWidth
-            label="Country"
+            label={t("herd.addAnimal.country")}
             name="country"
             variant="outlined"
             value={formData.country}
@@ -620,14 +621,14 @@ if (showPedigree) {
           <TextField
             fullWidth
             select
-            label="Gender"
+            label={t("herd.addAnimal.gender")}
             name="gender"
             variant="outlined"
             value={formData.gender}
             onChange={handleInputChange}
           >
-            <MenuItem value="male">Male</MenuItem>
-            <MenuItem value="female">Female</MenuItem>
+            <MenuItem value="male">{t("herd.addAnimal.male")}</MenuItem>
+            <MenuItem value="female">{t("herd.addAnimal.female")}</MenuItem>
           </TextField>
         </Grid>
 
@@ -636,7 +637,7 @@ if (showPedigree) {
           <TextField
             fullWidth
             select
-            label="Type"
+            label={t("herd.addAnimal.type")}
             name="type"
             variant="outlined"
             value={formData.type}
@@ -646,7 +647,7 @@ if (showPedigree) {
             {["Non-Pregnant Heifer", "Pregnant Heifer", "Cow", "Pregnant Cow"].map(
               (option) => (
                 <MenuItem key={option} value={option}>
-                  {option}
+                  {t("herd.addAnimal.types." + option, option)}
                 </MenuItem>
               )
             )}
@@ -656,7 +657,7 @@ if (showPedigree) {
 <Grid item xs={12} md={4}>
         {formData.gender !== "male" && (
           <Dropdown
-            label="Animal Category"
+            label={t("herd.addAnimal.animalCategory")}
             name="animalCategory"
             value={formData.animalCategory}
             options={categoryOptions}
@@ -671,7 +672,7 @@ if (showPedigree) {
       {/* SUBSECTION: Type-specific info */}
       <Grid item xs={12}>
         <Typography variant="h6" fontWeight="bold" sx={{ mt: "20px", mb: "10px" }}>
-          Type
+          {t("herd.addAnimal.typeSection")}
         </Typography>
       </Grid>
 
@@ -688,7 +689,7 @@ if (showPedigree) {
           <Grid item xs={12} md={4}>
             <TextField
               fullWidth
-              label="Arrival Date"
+              label={t("herd.addAnimal.arrivalDate")}
               type="date"
               name="arrivalDate"
               variant="outlined"
@@ -702,7 +703,7 @@ if (showPedigree) {
           <Grid item xs={12} md={4}>
             <TextField
               fullWidth
-              label="Birthdate"
+              label={t("herd.addAnimal.birthdate")}
               type="date"
               name="birthdate"
               variant="outlined"
@@ -716,7 +717,7 @@ if (showPedigree) {
           <Grid item xs={12} md={4}>
             <TextField
               fullWidth
-              label="Price"
+              label={t("herd.addAnimal.price")}
               name="price"
               variant="outlined"
               value={formData.price}
@@ -728,7 +729,7 @@ if (showPedigree) {
           <Grid item xs={12} md={4}>
             <TextField
               fullWidth
-              label="Animal Weight"
+              label={t("herd.addAnimal.animalWeight")}
               name="animalWeight"
               variant="outlined"
               value={formData.animalWeight}
@@ -740,7 +741,7 @@ if (showPedigree) {
           <Grid item xs={12} md={4}>
             <TextField
               fullWidth
-              label="Weight Date"
+              label={t("herd.addAnimal.weightDate")}
               type="date"
               name="weightDate"
               variant="outlined"
@@ -754,7 +755,7 @@ if (showPedigree) {
           <Grid item xs={12} md={4}>
             <TextField
               fullWidth
-              label="Picture"
+              label={t("herd.addAnimal.picture")}
               type="file"
               name="picture"
               InputLabelProps={{ shrink: true }}
@@ -768,7 +769,7 @@ if (showPedigree) {
             <TextField
               fullWidth
               select
-              label="SubCategory"
+              label={t("herd.addAnimal.subCategory")}
               name="subcategory"
               variant="outlined"
               value={formData.subcategory}
@@ -787,7 +788,7 @@ if (showPedigree) {
         borderTop: "1px solid #ddd"
       }}
     >
-      + Add New Subcategory
+      {t("herd.addAnimal.addNewSubcategory")}
     </MenuItem>
             </TextField>
           </Grid>
@@ -797,7 +798,7 @@ if (showPedigree) {
             <TextField
               fullWidth
               select
-              label="Pedigree Info"
+              label={t("herd.addAnimal.pedigreeInfo")}
               name="pedigreeCheck"
               variant="outlined"
               value={showPedigree ? "Yes" : "No"}
@@ -805,7 +806,7 @@ if (showPedigree) {
             >
               {["Yes", "No"].map((option) => (
                 <MenuItem key={option} value={option}>
-                  {option}
+                  {option === "Yes" ? t("herd.addAnimal.yes") : t("herd.addAnimal.no")}
                 </MenuItem>
               ))}
             </TextField>
@@ -817,7 +818,7 @@ if (showPedigree) {
                 <TextField
                   fullWidth
                   select
-                  label="Bull"
+                  label={t("herd.addAnimal.bull")}
                   name="sireTagId"
                   variant="outlined"
                   value={formData.pedigreeInfo.sireTagId}
@@ -834,7 +835,7 @@ if (showPedigree) {
                 <TextField
                 select
                   fullWidth
-                  label="Mother Tag"
+                  label={t("herd.addAnimal.motherTag")}
                   name="damTagId"
                   variant="outlined"
                   value={formData.pedigreeInfo.damTagId}
@@ -842,7 +843,7 @@ if (showPedigree) {
                  >
     {femaleAnimals.map((animal) => (
       <MenuItem key={animal.tagId} value={animal.tagId}>
-        {animal.tag?.name || 'Unnamed Tag'}
+        {animal.tag?.name || t("herd.addAnimal.unnamedTag")}
       </MenuItem>
     ))}
   </TextField>
@@ -855,7 +856,7 @@ if (showPedigree) {
               <Grid item xs={12} md={4}>
                 <TextField
                   fullWidth
-                  label="No of Lactations"
+                  label={t("herd.addAnimal.noOfLactations")}
                   name="lactation"
                   variant="outlined"
                   value={formData.lactation}
@@ -865,7 +866,7 @@ if (showPedigree) {
               <Grid item xs={12} md={4}>
                 <TextField
                   fullWidth
-                  label="Last Calving Date"
+                  label={t("herd.addAnimal.lastCalvingDate")}
                   type="date"
                   name="lastCalvingDate"
                   variant="outlined"
@@ -882,7 +883,7 @@ if (showPedigree) {
             <Grid item xs={12} md={4}>
               <TextField
                 fullWidth
-                label="AI Date"
+                label={t("herd.addAnimal.aiDate")}
                 type="date"
                 name="inseminated_dates"
                 variant="outlined"
@@ -898,7 +899,7 @@ if (showPedigree) {
             <Grid item xs={12} md={4}>
               <TextField
                 fullWidth
-                label="Pregnancy Days"
+                label={t("herd.addAnimal.pregnancyDays")}
                 name="pregnancyDays"
                 variant="outlined"
                 value={formData.pregnancyDays}
@@ -916,9 +917,9 @@ if (showPedigree) {
   >
      {isSubmitting ? (
       <CircularProgress size={24} sx={{ color: "#0F7C8F" }} /> // Show spinner
-    ) : ( 
-      "Add"
-     )} 
+    ) : (
+      t("herd.addAnimal.add")
+     )}
   </Button>
   <Button
   variant="contained"
@@ -961,7 +962,7 @@ if (showPedigree) {
     setShowPedigree(false);
   }}
 >
-  Cancel
+  {t("common.cancel")}
 </Button>
 
 
@@ -970,28 +971,28 @@ if (showPedigree) {
        * This reuses your existing AddItemModal component.
        */}
       <AddItemModal
-        label="Pen ID"
+        label={t("herd.addAnimal.modalPenId")}
         isOpen={isAddPenModalOpen}
         onClose={() => setIsAddPenModalOpen(false)}
         onAdd={handleAddNewPen}
       />
  {/* Add New Tag Modal */}
       <AddItemModal
-        label="Tag ID"
+        label={t("herd.addAnimal.modalTagId")}
         isOpen={isAddTagModalOpen}
         onClose={() => setIsAddTagModalOpen(false)}
         onAdd={handleAddNewTag}
       />
       
 <AddItemModal
-  label="Animal Type"
+  label={t("herd.addAnimal.modalAnimalType")}
   isOpen={isAddAnimalTypeModalOpen}
   onClose={() => setIsAddAnimalTypeModalOpen(false)}
   onAdd={handleAddNewAnimalType}
 />
 
 <AddItemModal
-  label="Breed Type"
+  label={t("herd.addAnimal.modalBreedType")}
   isOpen={isAddBreedTypeModalOpen}
   onClose={() => setIsAddBreedTypeModalOpen(false)}
   onAdd={handleAddNewBreedType}
@@ -1000,7 +1001,7 @@ if (showPedigree) {
 
 
 <AddItemModal
-  label="Subcategory"
+  label={t("herd.addAnimal.modalSubcategory")}
   isOpen={isAddSubCategoryModalOpen}
   onClose={() => setIsAddSubCategoryModalOpen(false)}
   onAdd={handleAddNewSubCategory}

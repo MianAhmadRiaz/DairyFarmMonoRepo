@@ -29,8 +29,10 @@ import {
 } from '../../../../shared/services/stockModule.services';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { useTranslation } from 'react-i18next';
 
 const ViewStockissuance = () => {
+  const { t } = useTranslation();
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
   const [searchQuery, setSearchQuery] = useState('');
@@ -54,7 +56,7 @@ const ViewStockissuance = () => {
       setTransactions(data.transactions || []);
       setTotalCount(data.totalCount || 0);
     } catch (error: any) {
-      toast.error(error?.response?.data?.message || 'Failed to fetch stock issuances.');
+      toast.error(error?.response?.data?.message || t('stock.viewStockIssuance.fetchError'));
     } finally {
       setLoading(false);
     }
@@ -78,7 +80,7 @@ const ViewStockissuance = () => {
     (Number(tx.quantity) || 0) * (Number(tx.price) || 0);
 
   return (
-    <PageContainer title="View Stock Issuance" subtitle="Stock usage transactions">
+    <PageContainer title={t('stock.viewStockIssuance.title')} subtitle={t('stock.viewStockIssuance.subtitle')}>
       <Container maxWidth="lg" sx={{ px: isMobile ? '11px' : undefined }}>
         {isMobile ? (
           <Box sx={{ width: '100%' }}>
@@ -87,23 +89,23 @@ const ViewStockissuance = () => {
                 <CardContent>
                   <Stack spacing={1}>
                     <Typography variant="subtitle1">{tx.item_name || '-'}</Typography>
-                    <Typography variant="body2">Date: {tx.date}</Typography>
+                    <Typography variant="body2">{t('stock.common.date')}: {tx.date}</Typography>
                     <Typography variant="body2">
-                      Qty: {Number(tx.quantity).toFixed(2)}
+                      {t('stock.common.qty')}: {Number(tx.quantity).toFixed(2)}
                     </Typography>
                     <Typography variant="body2">
-                      Rate: {Number(tx.price || 0).toFixed(2)}
+                      {t('stock.common.rate')}: {Number(tx.price || 0).toFixed(2)}
                     </Typography>
                     <Typography variant="body2">
-                      Amount: {rowAmount(tx).toFixed(2)}
+                      {t('stock.common.amount')}: {rowAmount(tx).toFixed(2)}
                     </Typography>
-                    {tx.note && <Typography variant="body2">Note: {tx.note}</Typography>}
+                    {tx.note && <Typography variant="body2">{t('stock.addStockIssuance.note')}: {tx.note}</Typography>}
                   </Stack>
                 </CardContent>
               </Card>
             ))}
             {filteredData.length === 0 && !loading && (
-              <Typography sx={{ p: 2, color: '#666' }}>No issuances found.</Typography>
+              <Typography sx={{ p: 2, color: '#666' }}>{t('stock.viewStockIssuance.noIssuances')}</Typography>
             )}
           </Box>
         ) : (
@@ -120,7 +122,7 @@ const ViewStockissuance = () => {
                   <Grid item xs={12} md={3}>
                     <TextField
                       type="date"
-                      label="Starting Date"
+                      label={t('stock.viewStockIssuance.startingDate')}
                       size="small"
                       fullWidth
                       value={startDate}
@@ -131,7 +133,7 @@ const ViewStockissuance = () => {
                   <Grid item xs={12} md={3}>
                     <TextField
                       type="date"
-                      label="Ending Date"
+                      label={t('stock.viewStockIssuance.endingDate')}
                       size="small"
                       fullWidth
                       value={endDate}
@@ -143,7 +145,7 @@ const ViewStockissuance = () => {
                     <TextField
                       fullWidth
                       size="small"
-                      placeholder="Search item or note..."
+                      placeholder={t('stock.viewStockIssuance.searchPlaceholder')}
                       value={searchQuery}
                       onChange={e => setSearchQuery(e.target.value)}
                       InputProps={{
@@ -170,7 +172,7 @@ const ViewStockissuance = () => {
                 <Table size={isMobile ? 'small' : 'medium'}>
                   <TableHead>
                     <TableRow>
-                      {['Date', 'Item', 'Qty', 'Rate', 'Amount', 'Note'].map(label => (
+                      {[t('stock.common.date'), t('stock.common.item'), t('stock.common.qty'), t('stock.common.rate'), t('stock.common.amount'), t('stock.addStockIssuance.note')].map(label => (
                         <TableCell
                           key={label}
                           sx={{
@@ -190,7 +192,7 @@ const ViewStockissuance = () => {
                     {filteredData.length === 0 && !loading ? (
                       <TableRow>
                         <TableCell colSpan={6} align="center">
-                          No issuances found.
+                          {t('stock.viewStockIssuance.noIssuances')}
                         </TableCell>
                       </TableRow>
                     ) : (

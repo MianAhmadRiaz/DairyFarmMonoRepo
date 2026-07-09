@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { Box, Grid, Typography, Chip, useTheme } from '@mui/material';
 import GlassCard from '../../../../../shared/components/charts/GlassCard';
 import StatTile from '../../../../../shared/components/charts/StatTile';
@@ -9,8 +10,9 @@ const formatDate = (d?: string) => (d ? new Date(d).toLocaleDateString() : '—'
 type EventRow = { date: string; label: string; detail: string; color: string };
 
 const Timeline: React.FC<{ events: EventRow[] }> = ({ events }) => {
+  const { t } = useTranslation();
   const theme = useTheme();
-  if (!events.length) return <EmptyState title="No breeding events recorded yet" icon="💛" />;
+  if (!events.length) return <EmptyState title={t('herd.cowProfile.reproduction.noBreedingEvents')} icon="💛" />;
   const sorted = [...events].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
   return (
     <Box>
@@ -31,41 +33,42 @@ const Timeline: React.FC<{ events: EventRow[] }> = ({ events }) => {
 };
 
 const ReproductionTab: React.FC<{ profile: any }> = ({ profile }) => {
+  const { t } = useTranslation();
   const { reproduction } = profile;
 
   const events: EventRow[] = [
-    ...(reproduction?.heatEvents || []).map((h: any) => ({ date: h.date, label: 'Heat Detected', detail: h.reason || '—', color: '#e2a23b' })),
-    ...(reproduction?.aiEvents || []).map((a: any) => ({ date: a.date, label: 'AI Breeding', detail: `${a.semen || 'Semen N/A'} · Tech: ${a.tech || '—'}`, color: '#6870fa' })),
-    ...(reproduction?.bullEvents || []).map((b: any) => ({ date: b.date, label: 'Bull Breeding', detail: b.comments || '—', color: '#6870fa' })),
+    ...(reproduction?.heatEvents || []).map((h: any) => ({ date: h.date, label: t('herd.cowProfile.reproduction.heatDetected'), detail: h.reason || '—', color: '#e2a23b' })),
+    ...(reproduction?.aiEvents || []).map((a: any) => ({ date: a.date, label: t('herd.cowProfile.reproduction.aiBreeding'), detail: `${a.semen || t('herd.cowProfile.reproduction.semenNA')} · ${t('herd.cowProfile.reproduction.tech', { name: a.tech || '—' })}`, color: '#6870fa' })),
+    ...(reproduction?.bullEvents || []).map((b: any) => ({ date: b.date, label: t('herd.cowProfile.reproduction.bullBreeding'), detail: b.comments || '—', color: '#6870fa' })),
     ...(reproduction?.pregnancyEvents || []).map((p: any) => ({
       date: p.date,
-      label: `Pregnancy Check — ${p.result}`,
-      detail: `${p.technique || ''} · Tech: ${p.tech || '—'}`,
+      label: t('herd.cowProfile.reproduction.pregnancyCheck', { result: p.result }),
+      detail: `${p.technique || ''} · ${t('herd.cowProfile.reproduction.tech', { name: p.tech || '—' })}`,
       color: p.result === 'positive' ? '#4cceac' : '#db4f4a',
     })),
-    ...(reproduction?.calvingEvents || []).map((c: any) => ({ date: c.date, label: `Calving (Lactation ${c.lactation ?? '—'})`, detail: c.problems || 'Routine calving', color: '#4cceac' })),
-    ...(reproduction?.abortionEvents || []).map((ab: any) => ({ date: ab.date, label: 'Abortion', detail: ab.comments || '—', color: '#db4f4a' })),
-    ...(reproduction?.dryOffEvents || []).map((d: any) => ({ date: d.date, label: `Dry Off (${d.category})`, detail: d.reason || '—', color: '#e2a23b' })),
+    ...(reproduction?.calvingEvents || []).map((c: any) => ({ date: c.date, label: t('herd.cowProfile.reproduction.calving', { lactation: c.lactation ?? '—' }), detail: c.problems || t('herd.cowProfile.reproduction.routineCalving'), color: '#4cceac' })),
+    ...(reproduction?.abortionEvents || []).map((ab: any) => ({ date: ab.date, label: t('herd.cowProfile.reproduction.abortion'), detail: ab.comments || '—', color: '#db4f4a' })),
+    ...(reproduction?.dryOffEvents || []).map((d: any) => ({ date: d.date, label: t('herd.cowProfile.reproduction.dryOff', { category: d.category }), detail: d.reason || '—', color: '#e2a23b' })),
   ];
 
   return (
     <Grid container spacing={2.5}>
       <Grid item xs={6} sm={3}>
-        <StatTile label="Calving Interval" value={reproduction?.calvingIntervalDays ?? '—'} sublabel="days" icon="🔁" delay={0} />
+        <StatTile label={t('herd.cowProfile.reproduction.calvingInterval')} value={reproduction?.calvingIntervalDays ?? '—'} sublabel={t('herd.cowProfile.reproduction.days')} icon="🔁" delay={0} />
       </Grid>
       <Grid item xs={6} sm={3}>
-        <StatTile label="Avg Days Open" value={reproduction?.avgDaysOpen ?? '—'} sublabel={reproduction?.openCycles ? `${reproduction.openCycles} cycle(s) still open` : undefined} icon="📆" delay={0.05} />
+        <StatTile label={t('herd.cowProfile.reproduction.avgDaysOpen')} value={reproduction?.avgDaysOpen ?? '—'} sublabel={reproduction?.openCycles ? t('herd.cowProfile.reproduction.cyclesStillOpen', { count: reproduction.openCycles }) : undefined} icon="📆" delay={0.05} />
       </Grid>
       <Grid item xs={6} sm={3}>
-        <StatTile label="Services / Conception" value={reproduction?.servicesPerConception ?? '—'} icon="💉" delay={0.1} />
+        <StatTile label={t('herd.cowProfile.reproduction.servicesPerConception')} value={reproduction?.servicesPerConception ?? '—'} icon="💉" delay={0.1} />
       </Grid>
       <Grid item xs={6} sm={3}>
-        <StatTile label="Calvings on Record" value={(reproduction?.calvingEvents || []).length} icon="🐄" delay={0.15} />
+        <StatTile label={t('herd.cowProfile.reproduction.calvingsOnRecord')} value={(reproduction?.calvingEvents || []).length} icon="🐄" delay={0.15} />
       </Grid>
 
       <Grid item xs={12}>
         <GlassCard delay={0.2}>
-          <Typography sx={{ fontWeight: 700, mb: 1.5 }}>Breeding Timeline</Typography>
+          <Typography sx={{ fontWeight: 700, mb: 1.5 }}>{t('herd.cowProfile.reproduction.breedingTimeline')}</Typography>
           <Timeline events={events} />
         </GlassCard>
       </Grid>

@@ -25,6 +25,7 @@ import {
 } from '@mui/icons-material';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { useTranslation } from 'react-i18next';
 import CustomPagination from '../../shared/components/Custom Pagination/CustomPagination';
 import PageContainer from '../../shared/components/Layout/PageContainer';
 import useLayoutShift from '../../shared/components/Hooks/useLayoutShift';
@@ -61,6 +62,7 @@ const statusColors: Record<string, { bg: string; fg: string }> = {
 const ShedFeedReport: React.FC = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
+  const { t } = useTranslation();
 
   /* filters */
   const [shedId, setShedId] = useState('');
@@ -91,7 +93,7 @@ const ShedFeedReport: React.FC = () => {
         const data: ShedsListData = res?.data?.data;
         setSheds(data?.sheds || []);
       } catch (error: any) {
-        toast.error(error?.response?.data?.message || "Can't load sheds");
+        toast.error(error?.response?.data?.message || t('feeding.common.cantLoadSheds'));
       }
     };
     loadSheds();
@@ -119,7 +121,7 @@ const ShedFeedReport: React.FC = () => {
       setPage(1);
       setFetchedOnce(true);
     } catch (error: any) {
-      toast.error(error?.response?.data?.message || "Can't load shed feed report");
+      toast.error(error?.response?.data?.message || t('feeding.shedFeedReport.cantLoadReport'));
     } finally {
       setLoading(false);
     }
@@ -129,7 +131,7 @@ const ShedFeedReport: React.FC = () => {
   const handleRecordActual = async (row: FeedScheduleRow) => {
     const value = Number(actuals[row.uuid]);
     if (!(value >= 0)) {
-      toast.warning('Actual quantity must be a number >= 0');
+      toast.warning(t('feeding.shedFeedReport.actualQtyWarning'));
       return;
     }
     try {
@@ -138,10 +140,10 @@ const ShedFeedReport: React.FC = () => {
         scheduleId: row.uuid,
         actual_quantity: value,
       });
-      toast.success('Feeding actuals recorded!');
+      toast.success(t('feeding.shedFeedReport.actualsRecorded'));
       await loadReport();
     } catch (error: any) {
-      toast.error(error?.response?.data?.message || "Can't record feeding actuals");
+      toast.error(error?.response?.data?.message || t('feeding.shedFeedReport.cantRecordActuals'));
     } finally {
       setSavingId(null);
     }
@@ -165,17 +167,17 @@ const ShedFeedReport: React.FC = () => {
 
   const summaryCards = summary
     ? [
-        { label: 'Schedules', value: fmt(summary.totalSchedules) },
-        { label: 'Animals', value: fmt(summary.totalAnimals) },
-        { label: 'Planned Qty (Kg)', value: fmt(summary.totalPlannedQuantity) },
-        { label: 'Actual Qty (Kg)', value: fmt(summary.totalActualQuantity) },
-        { label: 'Total Cost', value: fmt(summary.totalCost) },
-        { label: 'Completion', value: `${summary.completionRate}%` },
+        { label: t('feeding.shedFeedReport.schedules'), value: fmt(summary.totalSchedules) },
+        { label: t('feeding.common.animals'), value: fmt(summary.totalAnimals) },
+        { label: t('feeding.shedFeedReport.plannedQtyKg'), value: fmt(summary.totalPlannedQuantity) },
+        { label: t('feeding.shedFeedReport.actualQtyKg'), value: fmt(summary.totalActualQuantity) },
+        { label: t('feeding.shedFeedReport.totalCost'), value: fmt(summary.totalCost) },
+        { label: t('feeding.shedFeedReport.completion'), value: `${summary.completionRate}%` },
       ]
     : [];
 
   return (
-    <PageContainer title="Shed Feeding Report" maxWidth="1100px">
+    <PageContainer title={t('feeding.shedFeedReport.title')} maxWidth="1100px">
       {/* ───────── filter bar ───────── */}
       <Paper
         elevation={1}
@@ -190,7 +192,7 @@ const ShedFeedReport: React.FC = () => {
         }}
       >
         <Box sx={{ minWidth: 220 }}>
-          <Typography fontWeight={600} mb={0.5}>Shed</Typography>
+          <Typography fontWeight={600} mb={0.5}>{t('feeding.common.shed')}</Typography>
           <TextField
             select
             size="small"
@@ -198,7 +200,7 @@ const ShedFeedReport: React.FC = () => {
             value={shedId}
             onChange={e => setShedId(e.target.value)}
           >
-            <MenuItem value="">All sheds</MenuItem>
+            <MenuItem value="">{t('feeding.shedFeedReport.allSheds')}</MenuItem>
             {sheds.map(s => (
               <MenuItem key={s.uuid} value={s.uuid}>
                 {s.name}
@@ -207,7 +209,7 @@ const ShedFeedReport: React.FC = () => {
           </TextField>
         </Box>
         <Box sx={{ minWidth: 180 }}>
-          <Typography fontWeight={600} mb={0.5}>Start Date</Typography>
+          <Typography fontWeight={600} mb={0.5}>{t('feeding.common.startDate')}</Typography>
           <TextField
             size="small"
             fullWidth
@@ -217,7 +219,7 @@ const ShedFeedReport: React.FC = () => {
           />
         </Box>
         <Box sx={{ minWidth: 180 }}>
-          <Typography fontWeight={600} mb={0.5}>End Date</Typography>
+          <Typography fontWeight={600} mb={0.5}>{t('feeding.common.endDate')}</Typography>
           <TextField
             size="small"
             fullWidth
@@ -227,7 +229,7 @@ const ShedFeedReport: React.FC = () => {
           />
         </Box>
         <Box sx={{ minWidth: 160 }}>
-          <Typography fontWeight={600} mb={0.5}>Meal Time</Typography>
+          <Typography fontWeight={600} mb={0.5}>{t('feeding.common.mealTime')}</Typography>
           <TextField
             select
             size="small"
@@ -235,10 +237,10 @@ const ShedFeedReport: React.FC = () => {
             value={mealTime}
             onChange={e => setMealTime(e.target.value)}
           >
-            <MenuItem value="">All</MenuItem>
+            <MenuItem value="">{t('feeding.shedFeedReport.all')}</MenuItem>
             {MEAL_TIMES.map(m => (
               <MenuItem key={m} value={m}>
-                {m.charAt(0).toUpperCase() + m.slice(1)}
+                {t(`feeding.common.mealTimes.${m}`, m.charAt(0).toUpperCase() + m.slice(1))}
               </MenuItem>
             ))}
           </TextField>
@@ -248,7 +250,7 @@ const ShedFeedReport: React.FC = () => {
           sx={{ bgcolor: '#005f73', px: 5, ml: { xs: 0, md: 'auto' } }}
           onClick={loadReport}
         >
-          Get
+          {t('feeding.common.get')}
         </Button>
       </Paper>
 
@@ -285,7 +287,7 @@ const ShedFeedReport: React.FC = () => {
         >
           <SearchIcon sx={{ mr: 1.2 }} />
           <TextField
-            placeholder="Search shed / pen / recipe"
+            placeholder={t('feeding.shedFeedReport.searchPlaceholder')}
             variant="standard"
             fullWidth
             value={query}
@@ -313,11 +315,11 @@ const ShedFeedReport: React.FC = () => {
         </Box>
       ) : !fetchedOnce ? (
         <Typography align="center" sx={{ mt: 6, fontWeight: 600 }}>
-          Choose filters and press “Get” to load the report.
+          {t('feeding.shedFeedReport.choosePrompt')}
         </Typography>
       ) : filtered.length === 0 ? (
         <Typography align="center" sx={{ mt: 6, fontWeight: 600 }}>
-          No&nbsp;Result&nbsp;Found&nbsp;!
+          {t('feeding.common.noResultFound')}
         </Typography>
       ) : (
         <Paper elevation={1} sx={{ borderRadius: 2 }}>
@@ -335,17 +337,17 @@ const ShedFeedReport: React.FC = () => {
                     },
                   }}
                 >
-                  <TableCell>#Sr</TableCell>
-                  <TableCell>Date</TableCell>
-                  <TableCell>Meal</TableCell>
-                  <TableCell>Shed</TableCell>
-                  <TableCell>Pen</TableCell>
-                  <TableCell>Recipe</TableCell>
-                  <TableCell>Animals</TableCell>
-                  <TableCell>Scheduled&nbsp;(Kg)</TableCell>
-                  <TableCell>Cost</TableCell>
-                  <TableCell>Status</TableCell>
-                  <TableCell width={190}>Actual&nbsp;(Kg)</TableCell>
+                  <TableCell>{t('feeding.common.srNo')}</TableCell>
+                  <TableCell>{t('feeding.common.date')}</TableCell>
+                  <TableCell>{t('feeding.shedFeedReport.meal')}</TableCell>
+                  <TableCell>{t('feeding.common.shed')}</TableCell>
+                  <TableCell>{t('feeding.common.pen')}</TableCell>
+                  <TableCell>{t('feeding.common.recipe')}</TableCell>
+                  <TableCell>{t('feeding.common.animals')}</TableCell>
+                  <TableCell>{t('feeding.shedFeedReport.scheduledKg')}</TableCell>
+                  <TableCell>{t('feeding.shedFeedReport.cost')}</TableCell>
+                  <TableCell>{t('feeding.common.status')}</TableCell>
+                  <TableCell width={190}>{t('feeding.shedFeedReport.actualKg')}</TableCell>
                 </TableRow>
               </TableHead>
 
@@ -361,7 +363,7 @@ const ShedFeedReport: React.FC = () => {
                       <TableCell sx={{ whiteSpace: 'nowrap' }}>
                         {row.feeding_date}
                       </TableCell>
-                      <TableCell>{row.meal_time}</TableCell>
+                      <TableCell>{t(`feeding.common.mealTimes.${row.meal_time}`, row.meal_time)}</TableCell>
                       <TableCell sx={{ whiteSpace: 'nowrap' }}>
                         {row.shed?.name || '-'}
                       </TableCell>
@@ -376,7 +378,10 @@ const ShedFeedReport: React.FC = () => {
                       <TableCell>{fmt(row.estimatedCost)}</TableCell>
                       <TableCell>
                         <Chip
-                          label={row.feeding_status.replace(/_/g, ' ')}
+                          label={t(
+                            `feeding.shedFeedReport.status.${row.feeding_status}`,
+                            row.feeding_status.replace(/_/g, ' ')
+                          )}
                           size="small"
                           sx={{
                             fontWeight: 600,
@@ -422,7 +427,7 @@ const ShedFeedReport: React.FC = () => {
                 {/* ───────── summary row ───────── */}
                 {summary && (
                   <TableRow sx={{ '& td': { fontWeight: 700 }, bgcolor: '#F9F9F9' }}>
-                    <TableCell colSpan={6}>TOTAL:</TableCell>
+                    <TableCell colSpan={6}>{t('feeding.common.totalColon')}</TableCell>
                     <TableCell>{fmt(summary.totalAnimals)}</TableCell>
                     <TableCell>{fmt(summary.totalPlannedQuantity)}</TableCell>
                     <TableCell>{fmt(summary.totalCost)}</TableCell>

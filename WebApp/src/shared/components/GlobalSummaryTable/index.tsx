@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import {
   Box,
   Button,
@@ -74,7 +75,6 @@ interface GlobalSummaryTableProps {
 
 interface Column {
   id: string;
-  label: string;
   visible: boolean;
 }
 
@@ -85,6 +85,7 @@ const GlobalSummaryTable: React.FC<GlobalSummaryTableProps> = ({
   data,
   onDateChange
 }) => {
+  const { t } = useTranslation();
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
     const { isMobile } = useLayoutShift();
@@ -93,23 +94,26 @@ const GlobalSummaryTable: React.FC<GlobalSummaryTableProps> = ({
   const [localEndDate, setLocalEndDate] = useState(endDate);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [columns, setColumns] = useState<Column[]>([
-    { id: 'id', label: '#', visible: true },
-    { id: 'code', label: 'Code', visible: true },
-    { id: 'products', label: 'Products', visible: true },
-    { id: 'type', label: 'Type', visible: true },
-    { id: 'openingQty', label: 'Opening Qty', visible: true },
-    { id: 'openingAmount', label: 'Opening Amount', visible: true },
-    { id: 'purchaseQty', label: 'Purchase Qty', visible: true },
-    { id: 'purchaseRate', label: 'Purchase Rate', visible: true },
-    { id: 'purchaseAmount', label: 'Purchase Amount', visible: true },
-    { id: 'consumptionQty', label: 'Consumption Qty', visible: true },
-    { id: 'consumptionRate', label: 'Consumption Rate', visible: true },
-    { id: 'consumptionAmount', label: 'Consumption Amount', visible: true },
-    { id: 'saleReturnQty', label: 'Sale Return Qty', visible: true },
-    { id: 'saleReturnAmount', label: 'Sale Return Amount', visible: true },
-    { id: 'closingQty', label: 'Closing Qty', visible: true },
-    { id: 'closingAmount', label: 'Closing Amount', visible: true }
+    { id: 'id', visible: true },
+    { id: 'code', visible: true },
+    { id: 'products', visible: true },
+    { id: 'type', visible: true },
+    { id: 'openingQty', visible: true },
+    { id: 'openingAmount', visible: true },
+    { id: 'purchaseQty', visible: true },
+    { id: 'purchaseRate', visible: true },
+    { id: 'purchaseAmount', visible: true },
+    { id: 'consumptionQty', visible: true },
+    { id: 'consumptionRate', visible: true },
+    { id: 'consumptionAmount', visible: true },
+    { id: 'saleReturnQty', visible: true },
+    { id: 'saleReturnAmount', visible: true },
+    { id: 'closingQty', visible: true },
+    { id: 'closingAmount', visible: true }
   ]);
+
+  const getColumnLabel = (columnId: string) =>
+    t(`shared.globalSummaryTable.columns.${columnId}`);
 
   const filteredData = data.filter(item =>
     item.products.toLowerCase().includes(searchTerm.toLowerCase())
@@ -133,52 +137,52 @@ const GlobalSummaryTable: React.FC<GlobalSummaryTableProps> = ({
         if (column.visible) {
           switch (column.id) {
             case 'id':
-              row[column.label] = item.id;
+              row[getColumnLabel(column.id)] = item.id;
               break;
             case 'code':
-              row[column.label] = item.code;
+              row[getColumnLabel(column.id)] = item.code;
               break;
             case 'products':
-              row[column.label] = item.products;
+              row[getColumnLabel(column.id)] = item.products;
               break;
             case 'type':
-              row[column.label] = item.type;
+              row[getColumnLabel(column.id)] = item.type;
               break;
             case 'openingQty':
-              row[column.label] = item.opening.qty;
+              row[getColumnLabel(column.id)] = item.opening.qty;
               break;
             case 'openingAmount':
-              row[column.label] = item.opening.amount;
+              row[getColumnLabel(column.id)] = item.opening.amount;
               break;
             case 'purchaseQty':
-              row[column.label] = item.purchase.qty;
+              row[getColumnLabel(column.id)] = item.purchase.qty;
               break;
             case 'purchaseRate':
-              row[column.label] = item.purchase.rate;
+              row[getColumnLabel(column.id)] = item.purchase.rate;
               break;
             case 'purchaseAmount':
-              row[column.label] = item.purchase.amount;
+              row[getColumnLabel(column.id)] = item.purchase.amount;
               break;
             case 'consumptionQty':
-              row[column.label] = item.consumption.qty;
+              row[getColumnLabel(column.id)] = item.consumption.qty;
               break;
             case 'consumptionRate':
-              row[column.label] = item.consumption.rate;
+              row[getColumnLabel(column.id)] = item.consumption.rate;
               break;
             case 'consumptionAmount':
-              row[column.label] = item.consumption.amount;
+              row[getColumnLabel(column.id)] = item.consumption.amount;
               break;
             case 'saleReturnQty':
-              row[column.label] = item.saleReturn.qty;
+              row[getColumnLabel(column.id)] = item.saleReturn.qty;
               break;
             case 'saleReturnAmount':
-              row[column.label] = item.saleReturn.amount;
+              row[getColumnLabel(column.id)] = item.saleReturn.amount;
               break;
             case 'closingQty':
-              row[column.label] = item.closing.qty;
+              row[getColumnLabel(column.id)] = item.closing.qty;
               break;
             case 'closingAmount':
-              row[column.label] = item.closing.amount;
+              row[getColumnLabel(column.id)] = item.closing.amount;
               break;
           }
         }
@@ -215,7 +219,10 @@ const GlobalSummaryTable: React.FC<GlobalSummaryTableProps> = ({
   return (
     <PageContainer
       title={title}
-      subtitle={`Report Period: ${localStartDate} to ${localEndDate}`}
+      subtitle={t('shared.common.reportPeriod', {
+        startDate: localStartDate,
+        endDate: localEndDate
+      })}
     >
       <Paper
         elevation={3}
@@ -237,7 +244,7 @@ const GlobalSummaryTable: React.FC<GlobalSummaryTableProps> = ({
               <Grid item xs={12} md={4}>
                 <TextField
                   type="date"
-                  label="Start Date"
+                  label={t('shared.common.startDate')}
                   size="small"
                   fullWidth
                   value={localStartDate}
@@ -248,7 +255,7 @@ const GlobalSummaryTable: React.FC<GlobalSummaryTableProps> = ({
               <Grid item xs={12} md={4}>
                 <TextField
                   type="date"
-                  label="End Date"
+                  label={t('shared.common.endDate')}
                   size="small"
                   fullWidth
                   value={localEndDate}
@@ -269,7 +276,7 @@ const GlobalSummaryTable: React.FC<GlobalSummaryTableProps> = ({
                     flex: 1
                   }}
                 >
-                  View Report
+                  {t('shared.common.viewReport')}
                 </Button>
                 <Button
                   variant="outlined"
@@ -282,7 +289,7 @@ const GlobalSummaryTable: React.FC<GlobalSummaryTableProps> = ({
                     display: { xs: 'none', sm: 'flex' }
                   }}
                 >
-                  Print
+                  {t('shared.common.print')}
                 </Button>
               </Grid>
             </Grid>
@@ -321,7 +328,7 @@ const GlobalSummaryTable: React.FC<GlobalSummaryTableProps> = ({
                 flex: { xs: 1, sm: 'none' }
               }}
             >
-              Column visibility
+              {t('shared.common.columnVisibility')}
             </Button>
             <Menu
               anchorEl={anchorEl}
@@ -334,7 +341,7 @@ const GlobalSummaryTable: React.FC<GlobalSummaryTableProps> = ({
                     checked={column.visible}
                     onChange={() => handleColumnVisibilityChange(column.id)}
                   />
-                  {column.label}
+                  {getColumnLabel(column.id)}
                 </MenuItem>
               ))}
             </Menu>
@@ -372,7 +379,7 @@ const GlobalSummaryTable: React.FC<GlobalSummaryTableProps> = ({
           >
             <TextField
               size="small"
-              placeholder="Search Products..."
+              placeholder={t('shared.globalSummaryTable.searchProducts')}
               value={searchTerm}
               onChange={e => setSearchTerm(e.target.value)}
               fullWidth
@@ -413,7 +420,7 @@ const GlobalSummaryTable: React.FC<GlobalSummaryTableProps> = ({
                         minWidth: { xs: '80px', sm: 'auto' }
                       }}
                     >
-                      {column.label}
+                      {getColumnLabel(column.id)}
                     </TableCell>
                   )
                 ))}

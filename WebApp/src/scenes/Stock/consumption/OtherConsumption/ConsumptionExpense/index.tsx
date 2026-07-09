@@ -27,6 +27,7 @@ import {
   Delete as DeleteIcon
 } from '@mui/icons-material';
 import PageContainer from '../../../../../shared/components/Layout/PageContainer';
+import { useTranslation } from 'react-i18next';
 
 const dummyData = [
   {
@@ -52,6 +53,7 @@ const dummyData = [
 ];
 
 const ConsumptionExpense = () => {
+  const { t } = useTranslation();
   const [startDate, setStartDate] = useState('2025-04-08');
   const [endDate, setEndDate] = useState('2025-04-26');
   const [searchQuery, setSearchQuery] = useState('');
@@ -82,7 +84,7 @@ const ConsumptionExpense = () => {
             <Grid container spacing={2}>
               <Grid item xs={12}>
                 <TextField
-                  label="Date"
+                  label={t('stock.common.date')}
                   value={formData.date}
                   fullWidth
                   size="small"
@@ -91,7 +93,7 @@ const ConsumptionExpense = () => {
               </Grid>
               <Grid item xs={12}>
                 <TextField
-                  label="Current Quantity"
+                  label={t('stock.consumptionExpense.currentQuantity')}
                   value={formData.currentQuantity}
                   fullWidth
                   size="small"
@@ -106,7 +108,7 @@ const ConsumptionExpense = () => {
               </Grid>
               <Grid item xs={12}>
                 <TextField
-                  label="Quantity"
+                  label={t('stock.common.quantity')}
                   type="number"
                   value={formData.quantity}
                   fullWidth
@@ -118,7 +120,7 @@ const ConsumptionExpense = () => {
               </Grid>
               <Grid item xs={12}>
                 <TextField
-                  label="Expense Account"
+                  label={t('stock.consumptionExpense.expenseAccount')}
                   value={formData.expenseAccount}
                   fullWidth
                   size="small"
@@ -132,7 +134,7 @@ const ConsumptionExpense = () => {
             <Grid container spacing={2}>
               <Grid item xs={12}>
                 <TextField
-                  label="Stock Item"
+                  label={t('stock.consumptionExpense.stockItem')}
                   value={formData.stockItem}
                   fullWidth
                   size="small"
@@ -141,7 +143,7 @@ const ConsumptionExpense = () => {
               </Grid>
               <Grid item xs={12}>
                 <TextField
-                  label="Rate"
+                  label={t('stock.common.rate')}
                   value={formData.rate}
                   fullWidth
                   size="small"
@@ -153,7 +155,7 @@ const ConsumptionExpense = () => {
               </Grid>
               <Grid item xs={12}>
                 <TextField
-                  label="Amount"
+                  label={t('stock.common.amount')}
                   value={formData.amount}
                   fullWidth
                   size="small"
@@ -169,7 +171,7 @@ const ConsumptionExpense = () => {
                 variant="outlined"
                 sx={{ color: '#005f73', borderColor: '#005f73' }}
               >
-                Reset
+                {t('stock.common.reset')}
               </Button>
 
               <Button
@@ -179,7 +181,7 @@ const ConsumptionExpense = () => {
                   '&:hover': { backgroundColor: '#003844' }
                 }}
               >
-                Save Changes
+                {t('stock.common.saveChanges')}
               </Button>
             </Box>
           </Grid>
@@ -188,7 +190,7 @@ const ConsumptionExpense = () => {
     </Card>
   );
   return (
-    <PageContainer title="Stock Asset Consumption" subtitle="Customized Expense Wise">
+    <PageContainer title={t('stock.consumptionExpense.title')} subtitle={t('stock.consumptionExpense.subtitle')}>
       <Container maxWidth="lg"  sx={{
     px: isMobile ? '11px' : undefined,
   }}>
@@ -208,7 +210,7 @@ const ConsumptionExpense = () => {
                 <Grid item xs={12} md={3}>
                   <TextField
                     type="date"
-                    label="Start Date"
+                    label={t('stock.common.startDate')}
                     size="small"
                     fullWidth
                     value={startDate}
@@ -219,7 +221,7 @@ const ConsumptionExpense = () => {
                 <Grid item xs={12} md={3}>
                   <TextField
                     type="date"
-                    label="End Date"
+                    label={t('stock.common.endDate')}
                     size="small"
                     fullWidth
                     value={endDate}
@@ -231,7 +233,7 @@ const ConsumptionExpense = () => {
                   <TextField
                     fullWidth
                     size="small"
-                    placeholder="Search..."
+                    placeholder={t('stock.common.searchPlaceholder')}
                     value={searchQuery}
                     onChange={e => setSearchQuery(e.target.value)}
                     InputProps={{
@@ -252,7 +254,7 @@ const ConsumptionExpense = () => {
                       '&:hover': { backgroundColor: '#003844' }
                     }}
                   >
-                    Filter
+                    {t('stock.common.filter')}
                   </Button>
                 </Grid>
               </Grid>
@@ -266,16 +268,16 @@ const ConsumptionExpense = () => {
                   <CardContent>
                     <Stack spacing={1}>
                       <Typography variant="subtitle1">{item.date}</Typography>
-                      <Typography variant="body2">Item: {item.item}</Typography>
-                      <Typography variant="body2">Qty: {item.qty}</Typography>
-                      <Typography variant="body2">Rate: {item.rate}</Typography>
+                      <Typography variant="body2">{t('stock.common.item')}: {item.item}</Typography>
+                      <Typography variant="body2">{t('stock.common.qty')}: {item.qty}</Typography>
+                      <Typography variant="body2">{t('stock.common.rate')}: {item.rate}</Typography>
                       <Typography variant="body2">
-                        Amount: {item.amount.toFixed(2)}
+                        {t('stock.common.amount')}: {item.amount.toFixed(2)}
                       </Typography>
                       <Typography variant="body2">
-                        Income: {item.income}
+                        {t('stock.consumptionExpense.income')}: {item.income}
                       </Typography>
-                      <Typography variant="body2">Use: {item.use}</Typography>
+                      <Typography variant="body2">{t('stock.consumptionExpense.use')}: {item.use}</Typography>
                       <Box sx={{ display: 'flex', gap: 1, mt: 1 }}>
                         <IconButton size="small">
                           <EditIcon fontSize="small" />
@@ -298,14 +300,14 @@ const ConsumptionExpense = () => {
                 <Table size="small">
                   <TableHead>
                     <TableRow sx={{ bgcolor: '#f8f9fA' }}>
-                      <TableCell sx={{ fontWeight: 600 }}>Date</TableCell>
-                      <TableCell sx={{ fontWeight: 600 }}>Item</TableCell>
-                      <TableCell sx={{ fontWeight: 600 }}>Qty</TableCell>
-                      <TableCell sx={{ fontWeight: 600 }}>Rate</TableCell>
-                      <TableCell sx={{ fontWeight: 600 }}>Amount</TableCell>
-                      <TableCell sx={{ fontWeight: 600 }}>Income</TableCell>
-                      <TableCell sx={{ fontWeight: 600 }}>Use</TableCell>
-                      <TableCell sx={{ fontWeight: 600 }}>Actions</TableCell>
+                      <TableCell sx={{ fontWeight: 600 }}>{t('stock.common.date')}</TableCell>
+                      <TableCell sx={{ fontWeight: 600 }}>{t('stock.common.item')}</TableCell>
+                      <TableCell sx={{ fontWeight: 600 }}>{t('stock.common.qty')}</TableCell>
+                      <TableCell sx={{ fontWeight: 600 }}>{t('stock.common.rate')}</TableCell>
+                      <TableCell sx={{ fontWeight: 600 }}>{t('stock.common.amount')}</TableCell>
+                      <TableCell sx={{ fontWeight: 600 }}>{t('stock.consumptionExpense.income')}</TableCell>
+                      <TableCell sx={{ fontWeight: 600 }}>{t('stock.consumptionExpense.use')}</TableCell>
+                      <TableCell sx={{ fontWeight: 600 }}>{t('stock.common.actions')}</TableCell>
                     </TableRow>
                   </TableHead>
                   <TableBody>

@@ -31,6 +31,7 @@ import {
   PictureAsPdf as PictureAsPdfIcon,
   CalendarToday as CalendarTodayIcon
 } from '@mui/icons-material';
+import { useTranslation } from 'react-i18next';
 import { tokens } from '../../shared/theme/theme';
 import {
   fetchChartOfAccounts,
@@ -59,6 +60,7 @@ interface SnackbarState {
 }
 
 const LedgerReport: React.FC = () => {
+  const { t } = useTranslation();
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   const pageBg = theme.palette.mode === 'dark' ? colors.primary[500] : '#F5FAF7';
@@ -227,12 +229,12 @@ const LedgerReport: React.FC = () => {
   // Handle GET Result
   const handleGetResult = async () => {
     if (!selectedHead) {
-      setSnackbar({ open: true, message: 'Please select a head first', severity: 'error' });
+      setSnackbar({ open: true, message: t('accounts.ledgerReport.selectHeadError'), severity: 'error' });
       return;
     }
-    
+
     if (!startingDate || !endingDate) {
-      setSnackbar({ open: true, message: 'Please select both starting and ending dates', severity: 'error' });
+      setSnackbar({ open: true, message: t('accounts.common.selectDatesError'), severity: 'error' });
       return;
     }
     
@@ -251,10 +253,10 @@ const LedgerReport: React.FC = () => {
       }));
       setFilteredLedgerData(entries);
       setShowData(true);
-      setSnackbar({ open: true, message: 'Ledger report generated successfully!', severity: 'success' });
+      setSnackbar({ open: true, message: t('accounts.ledgerReport.reportSuccess'), severity: 'success' });
     } catch (err) {
       console.error('Failed to load ledger', err);
-      setSnackbar({ open: true, message: 'Failed to load ledger report.', severity: 'error' });
+      setSnackbar({ open: true, message: t('accounts.ledgerReport.reportError'), severity: 'error' });
     }
   };
 
@@ -263,7 +265,7 @@ const LedgerReport: React.FC = () => {
     const printContent = `
       <html>
         <head>
-          <title>Ledger Report - ${selectedHead}</title>
+          <title>${t('accounts.ledgerReport.titleWithHead', { head: selectedHead })}</title>
           <style>
             body { font-family: Arial, sans-serif; padding: 20px; }
             .header { text-align: center; margin-bottom: 30px; border-bottom: 2px solid #005f73; padding-bottom: 10px; }
@@ -278,28 +280,28 @@ const LedgerReport: React.FC = () => {
         </head>
         <body>
           <div class="header">
-            <h2>Ledger Report</h2>
+            <h2>${t('accounts.ledgerReport.title')}</h2>
             <h3>${selectedHead}</h3>
           </div>
           <div class="date-range">
-            <p><strong>Period:</strong> ${startingDate} to ${endingDate}</p>
+            <p>${t('accounts.common.period', { start: startingDate, end: endingDate })}</p>
           </div>
           <table>
             <thead>
               <tr>
-                <th>Sr.#</th>
-                <th>Date</th>
-                <th>Narration</th>
-                <th>Type</th>
-                <th>Voc #</th>
-                <th>Debit</th>
-                <th>Credit</th>
-                <th>Balance</th>
+                <th>${t('accounts.common.columns.srNo')}</th>
+                <th>${t('accounts.common.columns.date')}</th>
+                <th>${t('accounts.common.columns.narration')}</th>
+                <th>${t('accounts.common.columns.type')}</th>
+                <th>${t('accounts.common.columns.vocNo')}</th>
+                <th>${t('accounts.common.columns.debit')}</th>
+                <th>${t('accounts.common.columns.credit')}</th>
+                <th>${t('accounts.common.columns.balance')}</th>
               </tr>
             </thead>
             <tbody>
               <tr class="opening-balance">
-                <td colspan="7" style="text-align: center;"><strong>Opening Balance</strong></td>
+                <td colspan="7" style="text-align: center;"><strong>${t('accounts.common.openingBalance')}</strong></td>
                 <td><strong>${openingBalance.toLocaleString()}</strong></td>
               </tr>
               ${filteredLedgerData.map((entry: LedgerEntry) => `
@@ -331,7 +333,7 @@ const LedgerReport: React.FC = () => {
   // Handle CSV export
   const handleCsvExport = () => {
     const csvContent = [
-      ['Sr#', 'Date', 'Narration', 'Type', 'Voc #', 'Debit', 'Credit', 'Balance'],
+      [t('accounts.common.columns.srNo'), t('accounts.common.columns.date'), t('accounts.common.columns.narration'), t('accounts.common.columns.type'), t('accounts.common.columns.vocNo'), t('accounts.common.columns.debit'), t('accounts.common.columns.credit'), t('accounts.common.columns.balance')],
       ...filteredLedgerData.map((entry: LedgerEntry) => [
         entry.srNo,
         entry.date,
@@ -360,7 +362,7 @@ const LedgerReport: React.FC = () => {
   // Handle Excel export
   const handleExcelExport = () => {
     const xlsContent = [
-      'Sr#\tDate\tNarration\tType\tVoc #\tDebit\tCredit\tBalance',
+      [t('accounts.common.columns.srNo'), t('accounts.common.columns.date'), t('accounts.common.columns.narration'), t('accounts.common.columns.type'), t('accounts.common.columns.vocNo'), t('accounts.common.columns.debit'), t('accounts.common.columns.credit'), t('accounts.common.columns.balance')].join('\t'),
       ...filteredLedgerData.map((entry: LedgerEntry) => 
         `${entry.srNo}\t${entry.date}\t${entry.narration}\t${entry.type}\t${entry.vocNo}\t${entry.debit}\t${entry.credit}\t${entry.balance}`
       )
@@ -382,16 +384,16 @@ const LedgerReport: React.FC = () => {
   // Handle Copy to clipboard
   const handleCopy = () => {
     const textContent = [
-      'Sr#\tDate\tNarration\tType\tVoc #\tDebit\tCredit\tBalance',
+      [t('accounts.common.columns.srNo'), t('accounts.common.columns.date'), t('accounts.common.columns.narration'), t('accounts.common.columns.type'), t('accounts.common.columns.vocNo'), t('accounts.common.columns.debit'), t('accounts.common.columns.credit'), t('accounts.common.columns.balance')].join('\t'),
       ...filteredLedgerData.map((entry: LedgerEntry) => 
         `${entry.srNo}\t${entry.date}\t${entry.narration}\t${entry.type}\t${entry.vocNo}\t${entry.debit}\t${entry.credit}\t${entry.balance}`
       )
     ].join('\n');
 
     navigator.clipboard.writeText(textContent).then(() => {
-      setSnackbar({ open: true, message: 'Data copied to clipboard!', severity: 'success' });
+      setSnackbar({ open: true, message: t('accounts.common.copiedToClipboard'), severity: 'success' });
     }).catch(() => {
-      setSnackbar({ open: true, message: 'Failed to copy data', severity: 'error' });
+      setSnackbar({ open: true, message: t('accounts.common.copyFailed'), severity: 'error' });
     });
   };
 
@@ -402,7 +404,7 @@ const LedgerReport: React.FC = () => {
       pdfWindow.document.write(`
         <html>
           <head>
-            <title>Ledger Report PDF - ${selectedHead}</title>
+            <title>${t('accounts.ledgerReport.pdfTitleWithHead', { head: selectedHead })}</title>
             <style>
               body { font-family: Arial, sans-serif; padding: 20px; }
               table { width: 100%; border-collapse: collapse; margin: 20px 0; font-size: 10px; }
@@ -413,20 +415,20 @@ const LedgerReport: React.FC = () => {
           </head>
           <body>
             <div class="header">
-              <h2>Ledger Report - ${selectedHead}</h2>
-              <p>Period: ${startingDate} to ${endingDate}</p>
+              <h2>${t('accounts.ledgerReport.titleWithHead', { head: selectedHead })}</h2>
+              <p>${t('accounts.common.period', { start: startingDate, end: endingDate })}</p>
             </div>
             <table>
               <thead>
                 <tr>
-                  <th>Sr#</th>
-                  <th>Date</th>
-                  <th>Narration</th>
-                  <th>Type</th>
-                  <th>Voc #</th>
-                  <th>Debit</th>
-                  <th>Credit</th>
-                  <th>Balance</th>
+                  <th>${t('accounts.common.columns.srNo')}</th>
+                  <th>${t('accounts.common.columns.date')}</th>
+                  <th>${t('accounts.common.columns.narration')}</th>
+                  <th>${t('accounts.common.columns.type')}</th>
+                  <th>${t('accounts.common.columns.vocNo')}</th>
+                  <th>${t('accounts.common.columns.debit')}</th>
+                  <th>${t('accounts.common.columns.credit')}</th>
+                  <th>${t('accounts.common.columns.balance')}</th>
                 </tr>
               </thead>
               <tbody>
@@ -454,7 +456,7 @@ const LedgerReport: React.FC = () => {
 
   // Handle Column Visibility
   const handleColumnVisibility = () => {
-    setSnackbar({ open: true, message: 'Column visibility options would open here', severity: 'success' });
+    setSnackbar({ open: true, message: t('accounts.common.columnVisibilityInfo'), severity: 'success' });
   };
 
   // Handle export functions
@@ -473,7 +475,7 @@ const LedgerReport: React.FC = () => {
         handleCopy();
         break;
       default:
-        setSnackbar({ open: true, message: `Exporting to ${format.toUpperCase()}...`, severity: 'success' });
+        setSnackbar({ open: true, message: t('accounts.common.exportingTo', { format: format.toUpperCase() }), severity: 'success' });
     }
   };
 
@@ -489,18 +491,18 @@ const LedgerReport: React.FC = () => {
   };
 
   return (
-    <PageContainer title="Ledger Report">
+    <PageContainer title={t('accounts.ledgerReport.title')}>
         {/* Selection Controls */}
         <Paper elevation={0} sx={{ p: 3, mb: 2, borderRadius: 2, border: `1px solid ${theme.palette.divider}`, bgcolor: 'background.paper' }}>
           <Stack direction={{ xs: 'column', md: 'row' }} spacing={3} alignItems="center" justifyContent="space-between">
             <Stack direction={{ xs: 'column', sm: 'row' }} spacing={3} alignItems="center">
               {/* Select Head Dropdown */}
               <FormControl sx={{ minWidth: 200 }}>
-                <InputLabel>Select Head:</InputLabel>
+                <InputLabel>{t('accounts.ledgerReport.selectHead')}</InputLabel>
                 <Select
                   value={selectedHead}
                   onChange={(e) => setSelectedHead(e.target.value)}
-                  label="Select Head:"
+                  label={t('accounts.ledgerReport.selectHead')}
                   size="small"
                 >
                   {accounts.map((a) => (
@@ -513,7 +515,7 @@ const LedgerReport: React.FC = () => {
               
               <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                 <CalendarTodayIcon sx={{ color: '#005f73' }} />
-                <Typography variant="body2" fontWeight={600}>Starting Date:</Typography>
+                <Typography variant="body2" fontWeight={600}>{t('accounts.common.startingDate')}</Typography>
                 <TextField
                   type="date"
                   size="small"
@@ -525,7 +527,7 @@ const LedgerReport: React.FC = () => {
               
               <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                 <CalendarTodayIcon sx={{ color: '#005f73' }} />
-                <Typography variant="body2" fontWeight={600}>Ending Date:</Typography>
+                <Typography variant="body2" fontWeight={600}>{t('accounts.common.endingDate')}</Typography>
                 <TextField
                   type="date"
                   size="small"
@@ -549,7 +551,7 @@ const LedgerReport: React.FC = () => {
                 }
               }}
             >
-              GET Result
+              {t('accounts.common.getResult')}
             </Button>
           </Stack>
         </Paper>
@@ -571,7 +573,7 @@ const LedgerReport: React.FC = () => {
               }}
             >
               <Typography variant="h6" fontWeight={600} sx={{ display: 'flex', alignItems: 'center' }}>
-                📊 Ledger Report
+                📊 {t('accounts.ledgerReport.title')}
               </Typography>
               <IconButton onClick={handlePrint} sx={{ color: 'white' }}>
                 <PrintIcon />
@@ -589,7 +591,7 @@ const LedgerReport: React.FC = () => {
                     onClick={handleColumnVisibility}
                     sx={{ textTransform: 'none', fontSize: '0.75rem' }}
                   >
-                    Column visibility
+                    {t('accounts.common.columnVisibility')}
                   </Button>
                   <Button 
                     size="small" 
@@ -598,7 +600,7 @@ const LedgerReport: React.FC = () => {
                     onClick={() => handleExport('copy')}
                     sx={{ textTransform: 'none', fontSize: '0.75rem' }}
                   >
-                    Copy
+                    {t('accounts.common.copy')}
                   </Button>
                   <Button 
                     size="small" 
@@ -631,7 +633,7 @@ const LedgerReport: React.FC = () => {
                 
                 <TextField
                   size="small"
-                  placeholder="Search:"
+                  placeholder={t('common.search')}
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
                   InputProps={{
@@ -651,21 +653,21 @@ const LedgerReport: React.FC = () => {
               <Table size="small" stickyHeader>
                 <TableHead>
                   <TableRow>
-                    <TableCell sx={{ fontWeight: 600, bgcolor: theme.palette.mode === 'dark' ? colors.primary[400] : '#f5f5f5', border: `1px solid ${theme.palette.divider}` }}>Sr.#</TableCell>
-                    <TableCell sx={{ fontWeight: 600, bgcolor: theme.palette.mode === 'dark' ? colors.primary[400] : '#f5f5f5', border: `1px solid ${theme.palette.divider}` }}>Date</TableCell>
-                    <TableCell sx={{ fontWeight: 600, bgcolor: theme.palette.mode === 'dark' ? colors.primary[400] : '#f5f5f5', border: `1px solid ${theme.palette.divider}` }}>Narration</TableCell>
-                    <TableCell sx={{ fontWeight: 600, bgcolor: theme.palette.mode === 'dark' ? colors.primary[400] : '#f5f5f5', border: `1px solid ${theme.palette.divider}` }}>Type</TableCell>
-                    <TableCell sx={{ fontWeight: 600, bgcolor: theme.palette.mode === 'dark' ? colors.primary[400] : '#f5f5f5', border: `1px solid ${theme.palette.divider}` }}>Voc #</TableCell>
-                    <TableCell sx={{ fontWeight: 600, bgcolor: theme.palette.mode === 'dark' ? colors.primary[400] : '#f5f5f5', border: `1px solid ${theme.palette.divider}`, textAlign: 'right' }}>Debit</TableCell>
-                    <TableCell sx={{ fontWeight: 600, bgcolor: theme.palette.mode === 'dark' ? colors.primary[400] : '#f5f5f5', border: `1px solid ${theme.palette.divider}`, textAlign: 'right' }}>Credit</TableCell>
-                    <TableCell sx={{ fontWeight: 600, bgcolor: theme.palette.mode === 'dark' ? colors.primary[400] : '#f5f5f5', border: `1px solid ${theme.palette.divider}`, textAlign: 'right' }}>Balance</TableCell>
+                    <TableCell sx={{ fontWeight: 600, bgcolor: theme.palette.mode === 'dark' ? colors.primary[400] : '#f5f5f5', border: `1px solid ${theme.palette.divider}` }}>{t('accounts.common.columns.srNo')}</TableCell>
+                    <TableCell sx={{ fontWeight: 600, bgcolor: theme.palette.mode === 'dark' ? colors.primary[400] : '#f5f5f5', border: `1px solid ${theme.palette.divider}` }}>{t('accounts.common.columns.date')}</TableCell>
+                    <TableCell sx={{ fontWeight: 600, bgcolor: theme.palette.mode === 'dark' ? colors.primary[400] : '#f5f5f5', border: `1px solid ${theme.palette.divider}` }}>{t('accounts.common.columns.narration')}</TableCell>
+                    <TableCell sx={{ fontWeight: 600, bgcolor: theme.palette.mode === 'dark' ? colors.primary[400] : '#f5f5f5', border: `1px solid ${theme.palette.divider}` }}>{t('accounts.common.columns.type')}</TableCell>
+                    <TableCell sx={{ fontWeight: 600, bgcolor: theme.palette.mode === 'dark' ? colors.primary[400] : '#f5f5f5', border: `1px solid ${theme.palette.divider}` }}>{t('accounts.common.columns.vocNo')}</TableCell>
+                    <TableCell sx={{ fontWeight: 600, bgcolor: theme.palette.mode === 'dark' ? colors.primary[400] : '#f5f5f5', border: `1px solid ${theme.palette.divider}`, textAlign: 'right' }}>{t('accounts.common.columns.debit')}</TableCell>
+                    <TableCell sx={{ fontWeight: 600, bgcolor: theme.palette.mode === 'dark' ? colors.primary[400] : '#f5f5f5', border: `1px solid ${theme.palette.divider}`, textAlign: 'right' }}>{t('accounts.common.columns.credit')}</TableCell>
+                    <TableCell sx={{ fontWeight: 600, bgcolor: theme.palette.mode === 'dark' ? colors.primary[400] : '#f5f5f5', border: `1px solid ${theme.palette.divider}`, textAlign: 'right' }}>{t('accounts.common.columns.balance')}</TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
                   {/* Opening Balance Row */}
                   <TableRow sx={{ bgcolor: theme.palette.mode === 'dark' ? colors.primary[400] : '#f9f9f9' }}>
                     <TableCell colSpan={7} sx={{ textAlign: 'center', fontWeight: 600, border: `1px solid ${theme.palette.divider}` }}>
-                      Opening Balance
+                      {t('accounts.common.openingBalance')}
                     </TableCell>
                     <TableCell sx={{ textAlign: 'right', fontWeight: 600, border: `1px solid ${theme.palette.divider}` }}>
                       {openingBalance.toLocaleString()}

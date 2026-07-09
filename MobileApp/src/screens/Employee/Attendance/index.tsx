@@ -1,4 +1,5 @@
 import React, { useCallback, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { useFocusEffect } from '@react-navigation/native'
 import { FlatList, StyleSheet, TouchableOpacity, View } from 'react-native'
 import Toast from 'react-native-toast-message'
@@ -18,6 +19,7 @@ type Status = (typeof STATUSES)[number]
 const today = new Date().toISOString().split('T')[0]
 
 const Attendance = () => {
+  const { t } = useTranslation()
   const { can } = usePermissions()
   const canManage = can(PERMISSIONS.EMPLOYEE_MANAGE)
   const [date] = useState(today)
@@ -37,11 +39,11 @@ const Attendance = () => {
       list.forEach((e: any) => { initial[e.uuid] = 'present' })
       setMarks(initial)
     } catch (e) {
-      Toast.show({ type: 'error', text1: 'Error', text2: getNormalizedError(e) })
+      Toast.show({ type: 'error', text1: t('employee.common.error'), text2: getNormalizedError(e) })
     } finally {
       setLoading(false)
     }
-  }, [])
+  }, [t])
 
   useFocusEffect(useCallback(() => { load() }, [load]))
 
@@ -50,9 +52,9 @@ const Attendance = () => {
       setSaving(true)
       const data = employees.map(e => ({ userId: e.uuid, status: marks[e.uuid] || 'present' }))
       await markAttendance({ date, data })
-      Toast.show({ type: 'success', text1: 'Saved', text2: 'Attendance recorded' })
+      Toast.show({ type: 'success', text1: t('employee.common.saved'), text2: t('employee.attendance.recorded') })
     } catch (e) {
-      Toast.show({ type: 'error', text1: 'Error', text2: getNormalizedError(e) })
+      Toast.show({ type: 'error', text1: t('employee.common.error'), text2: getNormalizedError(e) })
     } finally {
       setSaving(false)
     }
@@ -63,7 +65,7 @@ const Attendance = () => {
     return (
       <View style={styles.card}>
         <AppText semiBold color="darkestGrey" numberOfLines={1} style={{ marginBottom: RF(8) }}>
-          {item.name || 'Employee'}
+          {item.name || t('employee.common.employee')}
         </AppText>
         <View style={styles.statusRow}>
           {STATUSES.map(s => {
@@ -76,7 +78,7 @@ const Attendance = () => {
                 activeOpacity={0.85}
               >
                 <AppText fontSize="caption" medium color={active ? 'white' : 'primaryDark'}>
-                  {s.charAt(0).toUpperCase() + s.slice(1)}
+                  {t('employee.attendance.status.' + s, s.charAt(0).toUpperCase() + s.slice(1))}
                 </AppText>
               </TouchableOpacity>
             )
@@ -88,11 +90,11 @@ const Attendance = () => {
 
   return (
     <AppContainer>
-      <AppHeader title="Attendance" showBack />
+      <AppHeader title={t('employee.attendance.title')} showBack />
       <View style={{ flex: 1, padding: RF(16) }}>
         <View style={styles.dateBar}>
           <AppText color="descriptionColor" fontSize="caption">
-            Attendance for
+            {t('employee.attendance.attendanceFor')}
           </AppText>
           <AppText semiBold color="primaryMain">
             {date}
@@ -106,14 +108,14 @@ const Attendance = () => {
           ListEmptyComponent={
             !loading ? (
               <AppText color="descriptionColor" style={{ textAlign: 'center', marginTop: RF(20) }}>
-                No employees found.
+                {t('employee.common.noEmployees')}
               </AppText>
             ) : null
           }
         />
         {canManage && employees.length > 0 ? (
           <PrimaryButton
-            title="Save Attendance"
+            title={t('employee.attendance.saveAttendance')}
             loading={saving}
             loaderColor={COLORS.white}
             onPress={onSave}
@@ -123,7 +125,7 @@ const Attendance = () => {
         {!canManage ? (
           <View style={styles.noPerm}>
             <AppText fontSize="caption" color="error">
-              You do not have permission to mark attendance.
+              {t('employee.attendance.noPermission')}
             </AppText>
           </View>
         ) : null}

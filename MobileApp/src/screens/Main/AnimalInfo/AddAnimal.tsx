@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { SafeAreaView, StyleSheet, View } from 'react-native'
 import { Formik } from 'formik'
+import { useTranslation } from 'react-i18next'
 
 import AppHeader from 'shared/components/AppHeader'
 import { COLORS, THEME } from 'shared/theme'
@@ -17,6 +18,7 @@ import { animalValidationSchema } from 'shared/utils/validations/animal.validati
 import { conditionsType } from 'shared/utils/constants/constants'
 
 function AddAnimal(props: GenericNavigation) {
+  const { t } = useTranslation()
   const initialValues = {
     penID: '',
     tagId: '',
@@ -43,7 +45,7 @@ function AddAnimal(props: GenericNavigation) {
 
   return (
     <AppContainer>
-      <AppHeader showBack title="Animal Management" />
+      <AppHeader showBack title={t('main.addAnimal.headerTitle')} />
       <KeyboardAwareScrollView
         showsVerticalScrollIndicator={false}
         keyboardShouldPersistTaps="always"
@@ -67,8 +69,8 @@ function AddAnimal(props: GenericNavigation) {
             <View style={styles.main}>
               <View style={styles.inputView}>
                 <DropDown
-                  label="Pen ID"
-                  placeholder="Select"
+                  label={t('main.addAnimal.penId')}
+                  placeholder={t('main.common.select')}
                   options={['Option 1', 'Option 2']}
                   value={values.penID}
                   onChange={value => setFieldValue('penID', value)}
@@ -80,8 +82,8 @@ function AddAnimal(props: GenericNavigation) {
                   onChangeText={handleChange('tagId')}
                   onBlur={handleBlur('tagId')}
                   inputStyle={styles.inputStyle}
-                  label="Tag ID"
-                  placeholder="Enter Tag ID"
+                  label={t('main.addAnimal.tagId')}
+                  placeholder={t('main.addAnimal.tagIdPlaceholder')}
                   error={touched.tagId && errors.tagId}
                 />
                 <AppInput
@@ -89,8 +91,8 @@ function AddAnimal(props: GenericNavigation) {
                   onChangeText={handleChange('eId')}
                   onBlur={handleBlur('eId')}
                   inputStyle={styles.inputStyle}
-                  label="Electronic ID"
-                  placeholder="Enter Electronic ID"
+                  label={t('main.addAnimal.electronicId')}
+                  placeholder={t('main.addAnimal.electronicIdPlaceholder')}
                   error={touched.eId && errors.eId}
                 />
                 <AppInput
@@ -98,14 +100,14 @@ function AddAnimal(props: GenericNavigation) {
                   onChangeText={handleChange('animalName')}
                   onBlur={handleBlur('animalName')}
                   inputStyle={styles.inputStyle}
-                  label="Animal Name"
-                  placeholder="Enter Animal Name"
+                  label={t('main.addAnimal.animalName')}
+                  placeholder={t('main.addAnimal.animalNamePlaceholder')}
                   error={touched.animalName && errors.animalName}
                 />
 
                 <DropDown
-                  label="Animal Type"
-                  placeholder="Select"
+                  label={t('main.addAnimal.animalType')}
+                  placeholder={t('main.common.select')}
                   options={['Option 1', 'Option 2']}
                   value={values.animalType}
                   onChange={value => setFieldValue('animalType', value)}
@@ -113,8 +115,8 @@ function AddAnimal(props: GenericNavigation) {
                 />
 
                 <DropDown
-                  label="Breed Type"
-                  placeholder="Select"
+                  label={t('main.addAnimal.breedType')}
+                  placeholder={t('main.common.select')}
                   options={['Option 1', 'Option 2']}
                   value={values.breedType}
                   onChange={value => setFieldValue('breedType', value)}
@@ -126,14 +128,14 @@ function AddAnimal(props: GenericNavigation) {
                   onChangeText={handleChange('purchasedFrom')}
                   onBlur={handleBlur('purchasedFrom')}
                   inputStyle={styles.inputStyle}
-                  label="Purchased From"
-                  placeholder="Enter Purchased From"
+                  label={t('main.addAnimal.purchasedFrom')}
+                  placeholder={t('main.addAnimal.purchasedFromPlaceholder')}
                   error={touched.purchasedFrom && errors.purchasedFrom}
                 />
 
                 <DropDown
-                  label="Country"
-                  placeholder="Select Country"
+                  label={t('main.addAnimal.country')}
+                  placeholder={t('main.addAnimal.countryPlaceholder')}
                   options={['Pakistan', 'Australia', 'America']}
                   value={values.country}
                   onChange={value => setFieldValue('country', value)}
@@ -141,8 +143,8 @@ function AddAnimal(props: GenericNavigation) {
                 />
 
                 <DropDown
-                  label="Gender"
-                  placeholder="Select Gender"
+                  label={t('main.addAnimal.gender')}
+                  placeholder={t('main.addAnimal.genderPlaceholder')}
                   options={['Male', 'Female']}
                   value={values.gender}
                   onChange={value => setFieldValue('gender', value)}
@@ -150,8 +152,8 @@ function AddAnimal(props: GenericNavigation) {
                 />
 
                 <DropDown
-                  label="Condition Type"
-                  placeholder="Select Type"
+                  label={t('main.addAnimal.conditionType')}
+                  placeholder={t('main.addAnimal.conditionTypePlaceholder')}
                   options={conditionsType}
                   value={values.type}
                   onChange={value => setFieldValue('type', value)}
@@ -173,8 +175,8 @@ function AddAnimal(props: GenericNavigation) {
                         onChangeText={handleChange('pgDays')}
                         onBlur={handleBlur('pgDays')}
                         inputStyle={styles.inputStyle}
-                        label="PG Days"
-                        placeholder="Enter Days"
+                        label={t('main.addAnimal.pgDays')}
+                        placeholder={t('main.addAnimal.pgDaysPlaceholder')}
                         error={touched.pgDays && errors.pgDays}
                       />
                     </>
@@ -186,21 +188,21 @@ function AddAnimal(props: GenericNavigation) {
                         onChangeText={handleChange('price')}
                         onBlur={handleBlur('price')}
                         inputStyle={styles.inputStyle}
-                        label="No. of Lactations"
-                        placeholder="Enter Lactation No."
+                        label={t('main.addAnimal.lactations')}
+                        placeholder={t('main.addAnimal.lactationsPlaceholder')}
                         error={touched.price && errors.price}
                       />
                       <DatePicker
-                        label="Last Calving Date"
-                        placeholder="Select"
+                        label={t('main.addAnimal.lastCalvingDate')}
+                        placeholder={t('main.common.select')}
                         value={values.calvingDate}
                         onChange={val => setFieldValue('calvingDate', val)}
                         error={touched.calvingDate && errors.calvingDate}
                       />
 
                       <DatePicker
-                        label="AI Date"
-                        placeholder="Select"
+                        label={t('main.addAnimal.aiDate')}
+                        placeholder={t('main.common.select')}
                         value={values.aiDate}
                         onChange={val => setFieldValue('aiDate', val)}
                         error={touched.aiDate && errors.aiDate}
@@ -208,16 +210,16 @@ function AddAnimal(props: GenericNavigation) {
                     </>
                   )}
                   <DatePicker
-                    label="Arrival Date"
-                    placeholder="Select"
+                    label={t('main.addAnimal.arrivalDate')}
+                    placeholder={t('main.common.select')}
                     value={values.arrivalDate}
                     onChange={val => setFieldValue('arrivalDate', val)}
                     error={touched.arrivalDate && errors.arrivalDate}
                   />
 
                   <DatePicker
-                    label="Birth Date"
-                    placeholder="Select"
+                    label={t('main.addAnimal.birthDate')}
+                    placeholder={t('main.common.select')}
                     value={values.birthDate}
                     onChange={val => setFieldValue('birthDate', val)}
                     error={touched.birthDate && errors.birthDate}
@@ -228,8 +230,8 @@ function AddAnimal(props: GenericNavigation) {
                     onChangeText={handleChange('price')}
                     onBlur={handleBlur('price')}
                     inputStyle={styles.inputStyle}
-                    label="Price"
-                    placeholder="Enter Price"
+                    label={t('main.addAnimal.price')}
+                    placeholder={t('main.addAnimal.pricePlaceholder')}
                     error={touched.price && errors.price}
                   />
 
@@ -238,21 +240,21 @@ function AddAnimal(props: GenericNavigation) {
                     onChangeText={handleChange('weight')}
                     onBlur={handleBlur('weight')}
                     inputStyle={styles.inputStyle}
-                    label="Weight"
-                    placeholder="Enter In Kgs"
+                    label={t('main.addAnimal.weight')}
+                    placeholder={t('main.addAnimal.weightPlaceholder')}
                     error={touched.weight && errors.weight}
                   />
                   <DatePicker
-                    label="Weight Date"
-                    placeholder="Select"
+                    label={t('main.addAnimal.weightDate')}
+                    placeholder={t('main.common.select')}
                     value={values.weightDate}
                     onChange={val => setFieldValue('weightDate', val)}
                     error={touched.weightDate && errors.weightDate}
                   />
 
                   <DropDown
-                    label="Animal Subcategory"
-                    placeholder="Select Category"
+                    label={t('main.addAnimal.subcategory')}
+                    placeholder={t('main.addAnimal.subcategoryPlaceholder')}
                     options={conditionsType}
                     value={values.subcategory}
                     onChange={value => setFieldValue('subcategory', value)}
@@ -260,8 +262,8 @@ function AddAnimal(props: GenericNavigation) {
                   />
 
                   <DropDown
-                    label="Pedigree Info"
-                    placeholder="Select"
+                    label={t('main.addAnimal.pedigreeInfo')}
+                    placeholder={t('main.common.select')}
                     options={['Yes', 'No']}
                     value={showPedigreeInfo ? 'Yes' : 'No'}
                     onChange={value =>
@@ -276,8 +278,8 @@ function AddAnimal(props: GenericNavigation) {
                         onChangeText={handleChange('sireId')}
                         onBlur={handleBlur('sireId')}
                         inputStyle={styles.inputStyle}
-                        label="Sire Tag ID"
-                        placeholder="Enter ID"
+                        label={t('main.addAnimal.sireTagId')}
+                        placeholder={t('main.addAnimal.idPlaceholder')}
                         error={touched.sireId && errors.sireId}
                       />
                       <AppInput
@@ -285,8 +287,8 @@ function AddAnimal(props: GenericNavigation) {
                         onChangeText={handleChange('damId')}
                         onBlur={handleBlur('damId')}
                         inputStyle={styles.inputStyle}
-                        label="Dam Tag ID"
-                        placeholder="Enter ID"
+                        label={t('main.addAnimal.damTagId')}
+                        placeholder={t('main.addAnimal.idPlaceholder')}
                         error={touched.damId && errors.damId}
                       />
                     </>
@@ -295,7 +297,7 @@ function AddAnimal(props: GenericNavigation) {
               </View>
 
               <PrimaryButton
-                title="Add"
+                title={t('common.add')}
                 buttonStyle={styles.addButton}
                 textStyle={styles.addText}
                 onPress={handleSubmit}

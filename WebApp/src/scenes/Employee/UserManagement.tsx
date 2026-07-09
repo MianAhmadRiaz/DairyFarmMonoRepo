@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import {
   Box,
   Typography,
@@ -52,6 +53,7 @@ const emptyForm: CreateFarmUserPayload = {
 };
 
 export default function UserManagement() {
+  const { t } = useTranslation();
   const { can } = usePermissions();
   const canManage = can(PERMISSIONS.USER_MANAGE);
   const canView = can([PERMISSIONS.USER_VIEW, PERMISSIONS.USER_MANAGE]);
@@ -88,17 +90,17 @@ export default function UserManagement() {
       await updateUserRole(user.uuid, roleId);
       await load();
     } catch (e: any) {
-      alert(e?.response?.data?.message || 'Failed to update user role.');
+      alert(e?.response?.data?.message || t('employee.userManagement.updateRoleFailed'));
     }
   };
 
   const handleCreate = async () => {
     if (!form.email.trim() || !form.password || !form.roleId) {
-      setError('Email, password and role are required.');
+      setError(t('employee.userManagement.requiredFields'));
       return;
     }
     if (form.password !== form.confirmpassword) {
-      setError('Passwords do not match.');
+      setError(t('employee.userManagement.passwordMismatch'));
       return;
     }
     setSaving(true);
@@ -109,19 +111,19 @@ export default function UserManagement() {
       setForm(emptyForm);
       await load();
     } catch (e: any) {
-      setError(e?.response?.data?.message || 'Failed to create user.');
+      setError(e?.response?.data?.message || t('employee.userManagement.createFailed'));
     } finally {
       setSaving(false);
     }
   };
 
   const handleDelete = async (user: FarmUser) => {
-    if (!window.confirm(`Delete user "${user.email}"?`)) return;
+    if (!window.confirm(t('employee.userManagement.deleteConfirm', { email: user.email }))) return;
     try {
       await deleteFarmUser(user.uuid);
       await load();
     } catch (e: any) {
-      alert(e?.response?.data?.message || 'Failed to delete user.');
+      alert(e?.response?.data?.message || t('employee.userManagement.deleteFailed'));
     }
   };
 
@@ -130,7 +132,7 @@ export default function UserManagement() {
       <Box sx={{ minHeight: '100vh', py: 6, marginLeft: '200px' }}>
         <Container maxWidth="sm">
           <Alert severity="warning">
-            You don't have permission to view users.
+            {t('employee.userManagement.noPermissionView')}
           </Alert>
         </Container>
       </Box>
@@ -154,8 +156,8 @@ export default function UserManagement() {
           mb={3}
         >
           <Typography variant="h6">
-            <strong>User Management</strong>{' '}
-            <span style={{ color: '#888' }}>({users.length} Total)</span>
+            <strong>{t('employee.userManagement.title')}</strong>{' '}
+            <span style={{ color: '#888' }}>{t('employee.common.totalCount', { count: users.length })}</span>
           </Typography>
           {canManage && (
             <Button
@@ -167,7 +169,7 @@ export default function UserManagement() {
               }}
               sx={{ borderRadius: '8px', backgroundColor: PRIMARY }}
             >
-              Add User
+              {t('employee.userManagement.addUser')}
             </Button>
           )}
         </Box>
@@ -177,16 +179,16 @@ export default function UserManagement() {
             <TableHead>
               <TableRow sx={{ backgroundColor: 'lightgrey' }}>
                 <TableCell>
-                  <strong>NAME</strong>
+                  <strong>{t('employee.common.nameUpper')}</strong>
                 </TableCell>
                 <TableCell>
-                  <strong>EMAIL</strong>
+                  <strong>{t('employee.userManagement.emailUpper')}</strong>
                 </TableCell>
                 <TableCell>
-                  <strong>PHONE</strong>
+                  <strong>{t('employee.userManagement.phoneUpper')}</strong>
                 </TableCell>
                 <TableCell>
-                  <strong>ROLE</strong>
+                  <strong>{t('employee.userManagement.roleUpper')}</strong>
                 </TableCell>
                 <TableCell align="right"></TableCell>
               </TableRow>
@@ -201,7 +203,7 @@ export default function UserManagement() {
               ) : users.length === 0 ? (
                 <TableRow>
                   <TableCell colSpan={5} align="center">
-                    No users found.
+                    {t('employee.userManagement.noUsers')}
                   </TableCell>
                 </TableRow>
               ) : (
@@ -224,7 +226,7 @@ export default function UserManagement() {
                           }
                         >
                           <MenuItem value="" disabled>
-                            <em>Unassigned</em>
+                            <em>{t('employee.userManagement.unassigned')}</em>
                           </MenuItem>
                           {roles.map((role) => (
                             <MenuItem
@@ -240,7 +242,7 @@ export default function UserManagement() {
                     </TableCell>
                     <TableCell align="right">
                       <Tooltip
-                        title={canManage ? 'Delete user' : 'No permission'}
+                        title={canManage ? t('employee.userManagement.deleteUser') : t('employee.common.noPermission')}
                       >
                         <span>
                           <IconButton
@@ -262,7 +264,7 @@ export default function UserManagement() {
       </Container>
 
       <Dialog open={open} onClose={() => setOpen(false)} fullWidth maxWidth="sm">
-        <DialogTitle>Add User</DialogTitle>
+        <DialogTitle>{t('employee.userManagement.addUser')}</DialogTitle>
         <DialogContent>
           {error && (
             <Alert severity="error" sx={{ mb: 2 }}>
@@ -272,14 +274,14 @@ export default function UserManagement() {
           <Box display="flex" gap={1}>
             <TextField
               margin="dense"
-              label="First Name"
+              label={t('employee.userManagement.firstName')}
               fullWidth
               value={form.firstname}
               onChange={(e) => setForm({ ...form, firstname: e.target.value })}
             />
             <TextField
               margin="dense"
-              label="Last Name"
+              label={t('employee.userManagement.lastName')}
               fullWidth
               value={form.lastname}
               onChange={(e) => setForm({ ...form, lastname: e.target.value })}
@@ -287,7 +289,7 @@ export default function UserManagement() {
           </Box>
           <TextField
             margin="dense"
-            label="Email"
+            label={t('employee.userManagement.email')}
             type="email"
             fullWidth
             value={form.email}
@@ -295,7 +297,7 @@ export default function UserManagement() {
           />
           <TextField
             margin="dense"
-            label="Phone Number"
+            label={t('employee.userManagement.phoneNumber')}
             fullWidth
             value={form.phoneNumber}
             onChange={(e) => setForm({ ...form, phoneNumber: e.target.value })}
@@ -303,7 +305,7 @@ export default function UserManagement() {
           <Box display="flex" gap={1}>
             <TextField
               margin="dense"
-              label="Password"
+              label={t('employee.userManagement.password')}
               type="password"
               fullWidth
               value={form.password}
@@ -311,7 +313,7 @@ export default function UserManagement() {
             />
             <TextField
               margin="dense"
-              label="Confirm Password"
+              label={t('employee.userManagement.confirmPassword')}
               type="password"
               fullWidth
               value={form.confirmpassword}
@@ -321,10 +323,10 @@ export default function UserManagement() {
             />
           </Box>
           <FormControl fullWidth margin="dense">
-            <InputLabel id="user-role-label">Role</InputLabel>
+            <InputLabel id="user-role-label">{t('employee.userManagement.role')}</InputLabel>
             <Select
               labelId="user-role-label"
-              label="Role"
+              label={t('employee.userManagement.role')}
               value={form.roleId}
               onChange={(e) =>
                 setForm({ ...form, roleId: e.target.value as string })
@@ -343,14 +345,14 @@ export default function UserManagement() {
           </FormControl>
         </DialogContent>
         <DialogActions>
-          <Button onClick={() => setOpen(false)}>Cancel</Button>
+          <Button onClick={() => setOpen(false)}>{t('employee.common.cancel')}</Button>
           <Button
             variant="contained"
             onClick={handleCreate}
             disabled={saving}
             sx={{ backgroundColor: PRIMARY }}
           >
-            {saving ? 'Saving...' : 'Create'}
+            {saving ? t('employee.common.saving') : t('employee.common.create')}
           </Button>
         </DialogActions>
       </Dialog>

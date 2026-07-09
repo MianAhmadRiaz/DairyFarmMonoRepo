@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { StyleSheet, View } from 'react-native';
 import { PieChart } from 'react-native-svg-charts';
 import AppText from 'shared/components/AppText/AppText';
@@ -6,6 +7,7 @@ import { COLORS } from 'shared/theme';
 import { RF } from 'shared/theme/responsive';
 
 const PieChartView = () => {
+  const { t } = useTranslation();
   // Data for the pie chart
   const data = [
     {
@@ -26,7 +28,7 @@ const PieChartView = () => {
   return (
     <View style={styles.container}>
       <AppText semiBold fontSize="h7" style={styles.header}>
-        Feed Stock
+        {t('main.inventory.feedStock')}
       </AppText>
       <PieChart
         style={{ height: RF(150), width: RF(150), marginBottom: RF(20) }}
@@ -35,7 +37,9 @@ const PieChartView = () => {
         outerRadius="100%"
       />
 
-      <AppText fontSize="caption">60% (3,000 kg remaining)</AppText>
+      <AppText fontSize="caption">
+        {t('main.inventory.feedRemaining', { percent: 60, amount: '3,000' })}
+      </AppText>
     </View>
   );
 };

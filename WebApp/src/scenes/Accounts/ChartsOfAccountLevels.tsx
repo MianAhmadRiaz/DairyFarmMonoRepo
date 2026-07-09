@@ -14,6 +14,7 @@ import SearchIcon from '@mui/icons-material/Search';
 import ContentCopyOutlinedIcon from '@mui/icons-material/ContentCopyOutlined';
 import FileDownloadOutlinedIcon from '@mui/icons-material/FileDownloadOutlined';
 import PrintOutlinedIcon from '@mui/icons-material/PrintOutlined';
+import { useTranslation } from 'react-i18next';
 import { tokens } from '../../shared/theme/theme';
 import PageContainer from '../../shared/components/Layout/PageContainer';
 
@@ -57,6 +58,7 @@ const toCsv = (headers: string[], rows: (string | number)[][]) =>
   [headers.join(','), ...rows.map(r => r.map(v => `"${String(v).replace(/"/g, '""')}"`).join(','))].join('\n');
 
 export default function ChartsOfAccountLevels() {
+  const { t } = useTranslation();
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   const pageBg = theme.palette.mode === 'dark' ? colors.primary[500] : '#F5FAF7';
@@ -84,16 +86,16 @@ export default function ChartsOfAccountLevels() {
   // Toolbar actions
   const handleCopy = async () => {
     const csv = toCsv(
-      ['#', '1st Level', '2nd Level', '3rd Level', '4th Level'],
+      ['#', t('accounts.chartsOfAccountLevels.firstLevel'), t('accounts.chartsOfAccountLevels.secondLevel'), t('accounts.chartsOfAccountLevels.thirdLevel'), t('accounts.chartsOfAccountLevels.fourthLevel')],
       filtered.map(r => [r.id, r.firstLevel, r.secondLevel, r.thirdLevel, r.fourthLevel])
     );
     await navigator.clipboard.writeText(csv);
-    alert('Copied table (CSV) to clipboard');
+    alert(t('accounts.common.copiedCsv'));
   };
 
   const downloadCsv = (filename: string) => {
     const csv = toCsv(
-      ['#', '1st Level', '2nd Level', '3rd Level', '4th Level'],
+      ['#', t('accounts.chartsOfAccountLevels.firstLevel'), t('accounts.chartsOfAccountLevels.secondLevel'), t('accounts.chartsOfAccountLevels.thirdLevel'), t('accounts.chartsOfAccountLevels.fourthLevel')],
       filtered.map(r => [r.id, r.firstLevel, r.secondLevel, r.thirdLevel, r.fourthLevel])
     );
     const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
@@ -106,7 +108,7 @@ export default function ChartsOfAccountLevels() {
   };
 
   return (
-    <PageContainer title="Chart of Accounts Levels">
+    <PageContainer title={t('accounts.chartsOfAccountLevels.title')}>
         {/* Title Row */}
         <Stack direction="row" alignItems="center" justifyContent="flex-end" sx={{ mb: 1 }}>
           <Stack direction="row" spacing={1} alignItems="center" flexWrap="wrap">
@@ -117,7 +119,7 @@ export default function ChartsOfAccountLevels() {
               variant="outlined"
               sx={{ textTransform: 'none', borderColor: '#d6d6d6', color: '#6a757d', background: '#fff' }}
             >
-              Copy
+              {t('accounts.common.copy')}
             </Button>
             <Button
               size="small"
@@ -150,7 +152,7 @@ export default function ChartsOfAccountLevels() {
             {/* Search */}
             <TextField
               size="small"
-              placeholder="Search"
+              placeholder={t('common.search')}
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               InputProps={{
@@ -168,10 +170,10 @@ export default function ChartsOfAccountLevels() {
               <thead>
                 <tr>
                   <th style={th}>#</th>
-                  <th style={{ ...th, minWidth: 150 }}>1st Level</th>
-                  <th style={{ ...th, minWidth: 150 }}>2nd Level</th>
-                  <th style={{ ...th, minWidth: 200 }}>3rd Level</th>
-                  <th style={{ ...th, minWidth: 200 }}>4th Level</th>
+                  <th style={{ ...th, minWidth: 150 }}>{t('accounts.chartsOfAccountLevels.firstLevel')}</th>
+                  <th style={{ ...th, minWidth: 150 }}>{t('accounts.chartsOfAccountLevels.secondLevel')}</th>
+                  <th style={{ ...th, minWidth: 200 }}>{t('accounts.chartsOfAccountLevels.thirdLevel')}</th>
+                  <th style={{ ...th, minWidth: 200 }}>{t('accounts.chartsOfAccountLevels.fourthLevel')}</th>
                 </tr>
                 {/* Filter row under headers */}
                 <tr>
@@ -184,7 +186,9 @@ export default function ChartsOfAccountLevels() {
                       onChange={(e) => setFirstLevelFilter(e.target.value)}
                       sx={{ minWidth: 120, bgcolor: '#fff' }}
                     >
-                      {FIRST_LEVEL_OPTIONS.map(t => <MenuItem value={t} key={t}>{t}</MenuItem>)}
+                      {FIRST_LEVEL_OPTIONS.map(opt => (
+                        <MenuItem value={opt} key={opt}>{opt === 'All' ? t('accounts.common.all') : opt}</MenuItem>
+                      ))}
                     </TextField>
                   </th>
                   <th style={{ ...filterTh, padding: 6 }}>
@@ -195,7 +199,9 @@ export default function ChartsOfAccountLevels() {
                       onChange={(e) => setSecondLevelFilter(e.target.value)}
                       sx={{ minWidth: 120, bgcolor: '#fff' }}
                     >
-                      {SECOND_LEVEL_OPTIONS.map(t => <MenuItem value={t} key={t}>{t}</MenuItem>)}
+                      {SECOND_LEVEL_OPTIONS.map(opt => (
+                        <MenuItem value={opt} key={opt}>{opt === 'All' ? t('accounts.common.all') : opt}</MenuItem>
+                      ))}
                     </TextField>
                   </th>
                   <th style={{ ...filterTh, padding: 6 }}>
@@ -206,7 +212,9 @@ export default function ChartsOfAccountLevels() {
                       onChange={(e) => setThirdLevelFilter(e.target.value)}
                       sx={{ minWidth: 120, bgcolor: '#fff' }}
                     >
-                      {THIRD_LEVEL_OPTIONS.map(t => <MenuItem value={t} key={t}>{t}</MenuItem>)}
+                      {THIRD_LEVEL_OPTIONS.map(opt => (
+                        <MenuItem value={opt} key={opt}>{opt === 'All' ? t('accounts.common.all') : opt}</MenuItem>
+                      ))}
                     </TextField>
                   </th>
                   <th style={filterTh}></th>
@@ -225,7 +233,7 @@ export default function ChartsOfAccountLevels() {
                 ))}
                 {filtered.length === 0 && (
                   <tr>
-                    <td style={{ ...td, padding: 24 }} colSpan={5}>No data found</td>
+                    <td style={{ ...td, padding: 24 }} colSpan={5}>{t('accounts.common.noDataFound')}</td>
                   </tr>
                 )}
               </tbody>

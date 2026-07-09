@@ -1,5 +1,6 @@
 import { useNavigation } from '@react-navigation/native'
 import React from 'react'
+import { useTranslation } from 'react-i18next'
 import { Image, StyleSheet, View } from 'react-native'
 import NavRoutes from 'routes/NavRoutes'
 import AppText from 'shared/components/AppText/AppText'
@@ -11,11 +12,12 @@ export type BreedingEventType = (typeof breedingEvents)[number]
 
 export const BreedingEventItem = ({ item }: { item: BreedingEventType }) => {
   const navigation = useNavigation()
+  const { t } = useTranslation()
   return (
     <View style={styles.card}>
       <Image source={item.image} style={styles.image} />
       <AppText fontSize="subtitle" isInter bold color={'primaryDark'}>
-        {item.title}
+        {t(`breeding.mainScreen.events.${item.id}.title`, item.title)}
       </AppText>
 
       <AppText
@@ -25,11 +27,14 @@ export const BreedingEventItem = ({ item }: { item: BreedingEventType }) => {
         color={'grey'}
         style={styles.description}
       >
-        {item.description}
+        {t(
+          `breeding.mainScreen.events.${item.id}.description`,
+          item.description
+        )}
       </AppText>
 
       <PrimaryButton
-        title="View Details"
+        title={t('breeding.mainScreen.viewDetails')}
         small
         buttonStyle={styles.button}
         textStyle={styles.buttonText}

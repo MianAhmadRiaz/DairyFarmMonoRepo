@@ -13,6 +13,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { fetchAnimals } from '../../../shared/services/animalinfo.service';
 import { addHeatDetection } from '../../../shared/services/breeds.services';
 import CircularProgress from '@mui/material/CircularProgress';
@@ -23,6 +24,7 @@ import PageContainer from '../../../shared/components/Layout/PageContainer';
 
 const HeatDetection = () => {
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const [date, setDate] = useState('');
   const [reason, setReason] = useState('');
   const [animalId, setAnimalId] = useState('');
@@ -69,7 +71,7 @@ const HeatDetection = () => {
       setReasons([...reasons, newReason.trim()]);
       setNewReason('');
       setOpenModal(false);
-      toast.success('Reason added successfully!', {
+      toast.success(t('breeding.heatDetection.reasonAddSuccess'), {
         position: 'top-right',
         autoClose: 3000,
      //   theme: 'colored'
@@ -80,7 +82,7 @@ const HeatDetection = () => {
  
   const handleSaveChanges = async () => {
   if (!animalId || !date || !reason) {
-    const warningMsg = "Please fill all the missing required fields";
+    const warningMsg = t('breeding.common.fillMissingFields');
     if (toastId.current === null || !toast.isActive(toastId.current)) {
       toastId.current = toast.warning(warningMsg);
     }
@@ -93,15 +95,15 @@ const HeatDetection = () => {
 
   try {
     await addHeatDetection(params);
-    toast.success('New event added successfully!', {
-       
+    toast.success(t('breeding.heatDetection.addSuccess'), {
+
         onClose: () => window.location.reload()
     })
-   
+
   } catch (error) {
     console.error('Failed to add new event:', error);
     if (toastId.current === null || !toast.isActive(toastId.current)) {
-      toastId.current = toast.error('Failed to add new event!');
+      toastId.current = toast.error(t('breeding.heatDetection.addError'));
     }
   } finally {
     setIsLoading(false);
@@ -109,7 +111,7 @@ const HeatDetection = () => {
 };
 
   return (
-    <PageContainer title="Heat Detection">
+    <PageContainer title={t('breeding.heatDetection.pageTitle')}>
       {/* Back Button */}
       <Typography
          variant="body2" 
@@ -126,7 +128,7 @@ const HeatDetection = () => {
         }}
         onClick={() => navigate(-1)}
       >
-        ← Back
+        ← {t('breeding.common.back')}
       </Typography>
 
       {/* Form Section */}
@@ -143,7 +145,7 @@ const HeatDetection = () => {
           <Grid item xs={12} sm={6} md={3.5}>
             <TextField
               fullWidth
-              label="Tag Id"
+              label={t('breeding.common.tagId')}
               select
               value={animalId}
               onChange={handleTagChange}
@@ -161,7 +163,7 @@ const HeatDetection = () => {
           <Grid item xs={12} sm={4}>
             <TextField
               fullWidth
-              label="Date"
+              label={t('breeding.common.date')}
               type="date"
               value={date}
               onChange={e => setDate(e.target.value)}
@@ -173,7 +175,7 @@ const HeatDetection = () => {
           <Grid item xs={12} sm={4}>
             <TextField
               fullWidth
-              label="Choose Reason"
+              label={t('breeding.heatDetection.chooseReason')}
               select
               value={reason || ''}
               onChange={handleReasonChange} // ✅ Correct placement
@@ -194,7 +196,7 @@ const HeatDetection = () => {
                 onChange={handleReasonChange} // Handle selection change
                 sx={{ fontWeight: 'bold', color: '#005f73' }}
               >
-                Add New
+                {t('breeding.common.addNew')}
               </MenuItem>
               {reasons.map((reason, index) => (
                 <MenuItem key={index} value={reason}>
@@ -229,7 +231,7 @@ const HeatDetection = () => {
             {isLoading ? (
               <CircularProgress size={24} sx={{ color: "#0F7C8F" }} />
             ) : (
-              'Save Changes'
+              t('breeding.common.saveChanges')
             )}
           </Button>
           <Button
@@ -243,7 +245,7 @@ const HeatDetection = () => {
               border: '1px solid #d6d6d6'
             }}
           >
-            Cancel
+            {t('breeding.common.cancel')}
           </Button>
         </Box>
       </Box>
@@ -269,7 +271,7 @@ const HeatDetection = () => {
             alignItems="center"
           >
             <Typography variant="h6" fontWeight="bold">
-              Add Reason
+              {t('breeding.heatDetection.addReason')}
             </Typography>
             <IconButton onClick={handleCloseModal}>
               <CloseIcon />
@@ -286,7 +288,7 @@ const HeatDetection = () => {
             <ReactQuill
               value={newReason}
               onChange={setNewReason}
-              placeholder="Reason"
+              placeholder={t('breeding.common.reason')}
               style={{ height: '120px', marginBottom: '20px' }}
             />
           </Box>
@@ -310,7 +312,7 @@ const HeatDetection = () => {
                 border: '1px solid #d6d6d6'
               }}
             >
-              Cancel
+              {t('breeding.common.cancel')}
             </Button>
             <Button
               variant="contained"
@@ -323,7 +325,7 @@ const HeatDetection = () => {
                 borderRadius: '12px'
               }}
             >
-              Add Reason
+              {t('breeding.heatDetection.addReason')}
             </Button>
           </Box>
         </Box>

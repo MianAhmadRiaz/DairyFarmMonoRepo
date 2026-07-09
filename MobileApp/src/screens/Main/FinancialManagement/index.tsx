@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { SafeAreaView, StyleSheet, View } from 'react-native';
 import AppHeader from 'shared/components/AppHeader';
 import { COLORS, THEME } from 'shared/theme';
@@ -8,11 +9,12 @@ import { GenericNavigation } from 'shared/utils/models/types';
 import HelpScreen from '../ProfileScreen';
 
 function FinancialManagement(props: GenericNavigation) {
+  const { t } = useTranslation();
   return (
     <>
       <SafeAreaView style={styles.container} />
       {/* {loading && <AppLoader isVisible />} */}
-      <AppHeader showBack title="Financial Management" />
+      <AppHeader showBack title={t('main.financialManagement.headerTitle')} />
       <View
         style={{ flex: 1, backgroundColor: 'white', padding: RF(10) }}
       ></View>

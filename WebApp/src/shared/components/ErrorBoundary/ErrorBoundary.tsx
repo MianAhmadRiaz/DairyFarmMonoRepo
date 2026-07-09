@@ -1,6 +1,7 @@
 import React, { Component, ReactNode } from 'react';
 import { Box, Typography, Button, Paper, Alert } from '@mui/material';
 import { ErrorOutline, Refresh } from '@mui/icons-material';
+import i18n from '../../../i18n';
 
 interface Props {
   children: ReactNode;
@@ -71,12 +72,11 @@ class ErrorBoundary extends Component<Props, State> {
             />
 
             <Typography variant="h5" gutterBottom color="error">
-              Oops! Something went wrong
+              {i18n.t('shared.errorBoundary.title')}
             </Typography>
 
             <Typography variant="body1" color="text.secondary" paragraph>
-              We encountered an unexpected error. Please try refreshing the page
-              or contact support if the problem persists.
+              {i18n.t('shared.errorBoundary.message')}
             </Typography>
 
             {process.env.NODE_ENV === 'development' && this.state.error && (
@@ -102,14 +102,14 @@ class ErrorBoundary extends Component<Props, State> {
                 onClick={this.handleRetry}
                 color="primary"
               >
-                Try Again
+                {i18n.t('shared.errorBoundary.tryAgain')}
               </Button>
 
               <Button
                 variant="outlined"
                 onClick={() => window.location.reload()}
               >
-                Reload Page
+                {i18n.t('shared.errorBoundary.reloadPage')}
               </Button>
             </Box>
           </Paper>

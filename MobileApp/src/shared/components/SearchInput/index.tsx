@@ -1,4 +1,5 @@
 import React from 'react'
+import { useTranslation } from 'react-i18next'
 import {
   StyleProp,
   StyleSheet,
@@ -19,6 +20,7 @@ interface Props {
 }
 
 const SearchInput = ({ value, onChangeText, viewStyle, inputStyle }: Props) => {
+  const { t } = useTranslation()
   return (
     <View style={[styles.searchContainer, viewStyle]}>
       <AnyIcon
@@ -30,7 +32,7 @@ const SearchInput = ({ value, onChangeText, viewStyle, inputStyle }: Props) => {
       />
       <TextInput
         style={[styles.searchInput, inputStyle]}
-        placeholder="Search..."
+        placeholder={t('shared.common.searchPlaceholder')}
         placeholderTextColor={COLORS.placeholder}
         value={value}
         onChangeText={onChangeText}

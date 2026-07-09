@@ -1,0 +1,1014 @@
+{
+  "common": {
+    "appName": "Cattle's Care",
+    "loading": "Loading…",
+    "save": "Save",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "edit": "Edit",
+    "add": "Add",
+    "search": "Search",
+    "submit": "Submit",
+    "close": "Close",
+    "yes": "Yes",
+    "no": "No"
+  },
+  "language": {
+    "label": "Language",
+    "english": "English",
+    "urdu": "اردو",
+    "restartTitle": "Restart required",
+    "restartMessage": "The app needs to reload to apply the new layout direction."
+  },
+  "auth": {
+    "brand": "Cattle's Care",
+    "tagline": "Smart herd & farm management",
+    "welcomeBack": "Welcome back 👋",
+    "signInSubtitle": "Sign in to manage your farm",
+    "email": "Email",
+    "emailPlaceholder": "you@example.com",
+    "password": "Password",
+    "passwordPlaceholder": "Your password",
+    "forgotPassword": {
+      "title": "Forgot Password",
+      "invalidEmail": "Invalid Email",
+      "otpSent": "OTP Code Sent to Your Email",
+      "errorSendingCode": "Error Sending Code",
+      "email": "Email",
+      "emailPlaceholder": "Enter Email",
+      "send": "Send",
+      "back": "Back"
+    },
+    "signIn": "Sign In",
+    "emailInvalid": "Enter a valid email address",
+    "emailRequired": "Email is required",
+    "passwordRequired": "Password is required",
+    "welcomeToastTitle": "Welcome back!",
+    "welcomeToastMessage": "Signed in successfully",
+    "signInFailedTitle": "Sign in failed",
+    "signInFailedMessage": "Please check your credentials and try again",
+    "common": {
+      "error": "Error",
+      "success": "Success"
+    },
+    "setPassword": {
+      "title": "Set Your Password",
+      "subtitle": "Your account uses a temporary password. Set a new one to continue.",
+      "validation": "Validation",
+      "fillAllFields": "Fill all fields",
+      "passwordsDoNotMatch": "Passwords do not match",
+      "passwordUpdated": "Password updated",
+      "temporaryPassword": "Temporary Password",
+      "temporaryPasswordPlaceholder": "Enter temporary password",
+      "newPassword": "New Password",
+      "newPasswordPlaceholder": "Min 8 chars, upper/lower/number/special",
+      "confirmNewPassword": "Confirm New Password",
+      "confirmNewPasswordPlaceholder": "Re-enter new password",
+      "setPassword": "Set Password"
+    }
+  },
+  "nav": {
+    "home": "Home",
+    "breedingEvents": "Breeding Events",
+    "milking": "Milking",
+    "feeding": "Feeding",
+    "stock": "Stock",
+    "finance": "Finance",
+    "health": "Health",
+    "employee": "Employee",
+    "settings": "Settings",
+    "animalsInfo": "Animals Info",
+    "healthTreatments": "Health & Treatments",
+    "milk": "Milk",
+    "stockInventory": "Stock & Inventory",
+    "employees": "Employees"
+  },
+  "main": {
+    "common": {
+      "select": "Select"
+    },
+    "addAnimal": {
+      "headerTitle": "Animal Management",
+      "penId": "Pen ID",
+      "tagId": "Tag ID",
+      "tagIdPlaceholder": "Enter Tag ID",
+      "electronicId": "Electronic ID",
+      "electronicIdPlaceholder": "Enter Electronic ID",
+      "animalName": "Animal Name",
+      "animalNamePlaceholder": "Enter Animal Name",
+      "animalType": "Animal Type",
+      "breedType": "Breed Type",
+      "purchasedFrom": "Purchased From",
+      "purchasedFromPlaceholder": "Enter Purchased From",
+      "country": "Country",
+      "countryPlaceholder": "Select Country",
+      "gender": "Gender",
+      "genderPlaceholder": "Select Gender",
+      "conditionType": "Condition Type",
+      "conditionTypePlaceholder": "Select Type",
+      "pgDays": "PG Days",
+      "pgDaysPlaceholder": "Enter Days",
+      "lactations": "No. of Lactations",
+      "lactationsPlaceholder": "Enter Lactation No.",
+      "lastCalvingDate": "Last Calving Date",
+      "aiDate": "AI Date",
+      "arrivalDate": "Arrival Date",
+      "birthDate": "Birth Date",
+      "price": "Price",
+      "pricePlaceholder": "Enter Price",
+      "weight": "Weight",
+      "weightPlaceholder": "Enter In Kgs",
+      "weightDate": "Weight Date",
+      "subcategory": "Animal Subcategory",
+      "subcategoryPlaceholder": "Select Category",
+      "pedigreeInfo": "Pedigree Info",
+      "sireTagId": "Sire Tag ID",
+      "damTagId": "Dam Tag ID",
+      "idPlaceholder": "Enter ID"
+    },
+    "animalInfo": {
+      "headerTitle": "Animal Info",
+      "searchPlaceholder": "Search by Tag ID",
+      "filterAnimals": "Filter Animals",
+      "filterBy": {
+        "type": "Filter by type",
+        "gender": "Filter by gender",
+        "breed": "Filter by breed",
+        "status": "Filter by status"
+      },
+      "applyFilters": "Apply Filters"
+    },
+    "dashboard": {
+      "common": {
+        "animals": "animals",
+        "pregnant": "Pregnant",
+        "herdComposition": "Herd Composition",
+        "milkSeries": "Milk (L)",
+        "todaysMilk": "Today's Milk",
+        "avgPerCow": "Avg / Cow",
+        "pregnancyRate": "Pregnancy Rate",
+        "treatmentCost": "Treatment Cost",
+        "heatWatch": "Heat Watch",
+        "dryOffDue": "Dry-Off Due"
+      },
+      "alertsCard": {
+        "title": "Today's Alerts",
+        "needAttention_one": "{{count}} animal needs attention",
+        "needAttention_other": "{{count}} animals need attention",
+        "viewAll": "View all",
+        "allClear": "All clear — no alerts today",
+        "unknown": "Unknown",
+        "pregnancyCheck": "Pregnancy Check",
+        "calvingExpected": "Calving Expected"
+      },
+      "alertsTab": {
+        "pregnancyChecksDue": "Pregnancy Checks Due",
+        "calvingsExpected": "Calvings Expected (14 days)",
+        "inseminated30": "Inseminated 30+ days ago",
+        "due": "Due: {{date}}",
+        "expected": "Expected: {{date}}",
+        "empty": "Nothing here right now",
+        "unnamed": "Unnamed"
+      },
+      "herdComposition": {
+        "milking": "Milking",
+        "dry": "Dry",
+        "heifers": "Heifers"
+      },
+      "milkTrend": {
+        "title": "30-Day Milk Trend",
+        "subtitle": "Total litres per day",
+        "empty": "No milk records yet"
+      },
+      "compositionTab": {
+        "pregnancyStatus": "Pregnancy Status",
+        "pregnantLower": "pregnant",
+        "open": "Open",
+        "categories": {
+          "milk": "Milk",
+          "dry": "Dry",
+          "heifers": "Heifers",
+          "calves": "Calves"
+        },
+        "noAnimals": "No animals recorded yet",
+        "noPregnancyData": "No pregnancy data yet"
+      },
+      "financialsTab": {
+        "title": "Cull / Keep Signal",
+        "subtitle": "Bottom performers",
+        "subtitleEstimate": "Bottom performers • estimate",
+        "noFeedData": "Feed cost per litre isn't shown — no feeding schedule data has been logged yet for this farm.",
+        "milk": "Milk",
+        "costOfCare": "Cost of Care",
+        "milkIncome": "Milk Income",
+        "empty": "Not enough data to estimate profitability yet"
+      },
+      "healthTab": {
+        "sickAnimals": "Sick Animals",
+        "activeWithdrawals": "Active Withdrawals",
+        "topDiagnosis": "Top Diagnosis",
+        "cases_one": "{{count}} case",
+        "cases_other": "{{count}} cases",
+        "treatmentsByType": "Treatments by Type",
+        "noTreatments": "No treatments recorded yet",
+        "topDiagnoses": "Top Diagnoses",
+        "noDiagnoses": "No diagnoses recorded yet",
+        "activeMilkWithdrawals": "Active Milk Withdrawals",
+        "meatUntil": "meat until {{date}}",
+        "milkUntil": "milk until {{date}}",
+        "noWithdrawals": "No animals under withdrawal right now",
+        "vaccinationTitle": "Days Since Last Vaccination / Deworming",
+        "daysShort": "{{count}}d",
+        "noVaccinations": "No vaccination/deworming records yet"
+      },
+      "overviewTab": {
+        "serverError": "Couldn't reach the server",
+        "checkConnection": "Check your connection and try again",
+        "retry": "Retry",
+        "totalAnimals": "Total Animals",
+        "milkingCows": "Milking Cows",
+        "pregnantCount": "{{value}} pregnant",
+        "yesterdayValue": "Yesterday {{value}}",
+        "calvingInterval": "Calving Interval"
+      },
+      "productionTab": {
+        "yesterday": "Yesterday",
+        "rangeTotal": "Range Total",
+        "trendTitle": "Milk Production Trend",
+        "filters": {
+          "week": "Week",
+          "month": "Month",
+          "year": "Year"
+        },
+        "empty": "No milk records in this range"
+      },
+      "reproductionTab": {
+        "avgCalvingInterval": "Avg Calving Interval",
+        "days": "days",
+        "avgDaysOpen": "Avg Days Open",
+        "servicesPerConception": "Services / Conception",
+        "breedingFunnel": "Breeding Funnel",
+        "stages": {
+          "heat": "Heat",
+          "aiBull": "AI/Bull",
+          "pregnant": "Pregnant",
+          "calved": "Calved"
+        },
+        "empty": "No breeding events recorded yet"
+      },
+      "yearOverYearTab": {
+        "unableToLoad": "Unable to load year-over-year comparison",
+        "notEnoughData": "Not enough data to compare years yet",
+        "totalMilk": "Total Milk",
+        "avgMilkPerCow": "Avg Milk / Cow",
+        "calvings": "Calvings",
+        "treatments": "Treatments",
+        "mortality": "Mortality",
+        "vsYear": "{{change}}% vs {{year}}",
+        "monthlyMilkTitle": "Monthly Milk — {{current}} vs {{compare}}",
+        "noMonthlyData": "No monthly data to compare"
+      }
+    },
+    "cowMonitoring": {
+      "headerTitle": "Cow Monitoring"
+    },
+    "deliveryManagement": {
+      "headerTitle": "Delivery Management"
+    },
+    "financialManagement": {
+      "headerTitle": "Financial Management"
+    },
+    "profileScreen": {
+      "headerTitle": "Help"
+    },
+    "home": {
+      "title": "Herd Dashboard",
+      "subtitle": "Your farm, at a glance — production, health, breeding & more",
+      "tabs": {
+        "overview": "Overview",
+        "production": "Production",
+        "reproduction": "Reproduction",
+        "health": "Health & Disease",
+        "composition": "Composition",
+        "financials": "Financials",
+        "yearOverYear": "Year-over-Year",
+        "alerts": "Alerts & Tasks"
+      }
+    },
+    "healthAlerts": {
+      "title": "Health Alerts",
+      "cases_one": "{{count}} Case",
+      "cases_other": "{{count}} Cases",
+      "status": {
+        "TREATED": "TREATED",
+        "UNTREATED": "UNTREATED"
+      }
+    },
+    "herdInfo": {
+      "title": "Herd Information",
+      "currentAnimals": "Current Animals",
+      "pregnantAnimals": "Pregnant Animals",
+      "nonPregnantAnimals": "Non-Pregnant Animals",
+      "unjoinedHeifers": "Unjoined Heifers",
+      "milkingCows": "Milking Cows",
+      "dryCows": "Dry Cows"
+    },
+    "herdPieChart": {
+      "open": "{{percent}}% Open",
+      "pregnant": "{{percent}}% Pregnant"
+    },
+    "homeHeader": {
+      "userLabel": "User:"
+    },
+    "inventory": {
+      "title": "Inventory And Supplies",
+      "feedStock": "Feed Stock",
+      "feedRemaining": "{{percent}}% ({{amount}} kg remaining)"
+    },
+    "milkTrend": {
+      "title": "Milk Production Trend ({{period}})",
+      "yAxis": "Milk in Liters",
+      "xAxis": "Months"
+    },
+    "productionStats": {
+      "title": "Production Stats",
+      "todaysMilk": "Today's Milk (L)",
+      "yesterdaysMilk": "Yesterday's Milk (L)",
+      "avgPerCow": "Avg/Cow (L)",
+      "trend": "Trend"
+    },
+    "additionalKpis": {
+      "title": "Additional KPIs",
+      "conceptionRate": "Conception Rate",
+      "ageAtFirstCalving": "Age at 1st Calving",
+      "mortalityRate": "Mortality Rate",
+      "abortionRatio": "Abortion Ration",
+      "costPerLiter": "Cost / Liter"
+    },
+    "upcomingTasks": {
+      "title": "Upcoming Tasks",
+      "cardTitle": "Upcoming Tasks/ Additional KPIs",
+      "tomorrow": "TOMORROW"
+    }
+  },
+  "breeding": {
+    "common": {
+      "tagId": "Tag ID",
+      "tagIdPlaceholder": "Tag ID",
+      "select": "Select",
+      "date": "Date",
+      "aiType": "AI Type",
+      "semen": "Semen",
+      "dose": "Dose",
+      "cost": "Cost",
+      "time": "Time",
+      "weight": "Weight",
+      "addNew": "Add New",
+      "recentEntries": "Recent Entries",
+      "loadMore": "Load More",
+      "search": "Search",
+      "breedType": "Breed Type",
+      "sex": "Sex",
+      "shed": "Shed",
+      "reason": "Reason",
+      "success": "Success",
+      "failed": "Failed",
+      "recordedSuccessfully": "Recorded Successfully",
+      "cols": {
+        "srNo": "SR #",
+        "aiDate": "AI DATE",
+        "tagId": "TAG ID",
+        "price": "PRICE"
+      }
+    },
+    "aiBreeding": {
+      "headerTitle": "AI Breeding",
+      "cancel": "Cancel",
+      "addError": "Error adding new AI Breeding"
+    },
+    "bullBreeding": {
+      "headerTitle": "Bull Breeding",
+      "cancel": "Cancel"
+    },
+    "entriesBullBreeding": {
+      "headerTitle": "Bull Breeding"
+    },
+    "heatDetection": {
+      "headerTitle": "Heat Detection"
+    },
+    "tagIdHeatDetection": {
+      "aiDate": "AI date",
+      "sireName": "Sire Name",
+      "straw": "Straw",
+      "price": "Price ($)",
+      "comments": "Comments",
+      "delete": "Delete",
+      "edit": "Edit"
+    },
+    "addHeatDetection": {
+      "headerTitle": "Heat Detection",
+      "commentsLabel": "Comments",
+      "chooseReason": "Choose Reason",
+      "cancel": "Cancel",
+      "saveChanges": "Save Changes",
+      "missingFieldsTitle": "Missing Fields",
+      "missingFieldsMessage": "Please fill all required fields.",
+      "recordedSuccessfully": "Heat detection event recorded Successfully"
+    },
+    "pregnancyTestDate": {
+      "headerTitle": "Pregnancy Test Date",
+      "cols": {
+        "pregnancyTestDate": "PREGNANCY TEST DATE",
+        "status": "STATUS"
+      }
+    },
+    "abortion": {
+      "headerTitle": "Abortion",
+      "cancel": "Cancel"
+    },
+    "calving": {
+      "headerTitle": "Calving",
+      "child": "Child",
+      "addNewChild": "Add New Child",
+      "addChild": "Add Child",
+      "aliveChild": "Alive Child",
+      "delete": "Delete",
+      "cancel": "Cancel"
+    },
+    "dryOff": {
+      "headerTitle": "Dry Off",
+      "company": "Company",
+      "add": "Add",
+      "cancel": "Cancel"
+    },
+    "protocol": {
+      "headerTitle": "Protocols",
+      "protocolDate": "Protocol Date",
+      "protocols": "Protocols",
+      "startTime": "Start Time",
+      "addProtocol": "Add Protocol",
+      "cancel": "Cancel",
+      "cols": {
+        "particulars": "PARTICULARS",
+        "hours": "HOURS",
+        "date": "DATE",
+        "time": "TIME"
+      }
+    },
+    "reasonModal": {
+      "title": "Add Reason",
+      "reasonLabel": "Reason",
+      "reasonPlaceholder": "Reason here",
+      "cancel": "Cancel",
+      "add": "Add"
+    },
+    "mainScreen": {
+      "headerTitle": "Breeding Events",
+      "viewDetails": "View Details",
+      "events": {
+        "1": {
+          "title": "PROTOCOL",
+          "description": "Setting Schedule of Cows Injection before AI Breeding."
+        },
+        "2": {
+          "title": "AI BREEDING",
+          "description": "Artificial insemination of cows through injection."
+        },
+        "3": {
+          "title": "BULL BREEDING",
+          "description": "Natural breeding of cow through bull."
+        },
+        "4": {
+          "title": "HEAT DETECTION",
+          "description": "Detect heat of animals for insemination."
+        },
+        "5": {
+          "title": "PREGNANCY CHECK",
+          "description": "Check Cow Pregnancy After Breeding."
+        },
+        "6": {
+          "title": "ABORTION",
+          "description": "Abortion of Cattle."
+        },
+        "7": {
+          "title": "CALVING",
+          "description": "After 270 days, it's time for Calving."
+        },
+        "8": {
+          "title": "DRY OFF",
+          "description": "Remove Cow from Milking."
+        }
+      }
+    }
+  },
+  "employee": {
+    "common": {
+      "validation": "Validation",
+      "success": "Success",
+      "error": "Error",
+      "saved": "Saved",
+      "done": "Done",
+      "employee": "Employee",
+      "description": "Description",
+      "phone": "Phone",
+      "noEmployees": "No employees found."
+    },
+    "addTask": {
+      "title": "Add Task",
+      "taskLabel": "Task",
+      "taskPlaceholder": "Task title",
+      "descriptionPlaceholder": "Optional details",
+      "priorityLabel": "Priority",
+      "deadlineLabel": "Deadline (YYYY-MM-DD)",
+      "assignDateLabel": "Assign Date (YYYY-MM-DD)",
+      "saveTask": "Save Task",
+      "enterTaskTitle": "Enter a task title",
+      "taskAdded": "Task added"
+    },
+    "attendance": {
+      "title": "Attendance",
+      "attendanceFor": "Attendance for",
+      "saveAttendance": "Save Attendance",
+      "recorded": "Attendance recorded",
+      "noPermission": "You do not have permission to mark attendance.",
+      "status": {
+        "present": "Present",
+        "absent": "Absent",
+        "leave": "Leave"
+      }
+    },
+    "employeeHome": {
+      "title": "Employees & HR",
+      "actions": "Actions",
+      "employeesLabel": "Employees",
+      "employeesDesc": "View staff directory",
+      "attendanceLabel": "Attendance",
+      "attendanceDesc": "Mark daily attendance",
+      "tasksLabel": "Tasks",
+      "tasksDesc": "Assign and track tasks",
+      "requestsLabel": "Requests",
+      "requestsDesc": "Approve staff requests",
+      "salariesLabel": "Salaries",
+      "salariesDesc": "Salary invoices & payments"
+    },
+    "employees": {
+      "title": "Employees"
+    },
+    "requests": {
+      "title": "Requests",
+      "request": "Request",
+      "noRequests": "No requests found.",
+      "approve": "Approve",
+      "reject": "Reject",
+      "responded": "Request {{status}}",
+      "status": {
+        "pending": "pending",
+        "review": "review",
+        "hold": "hold",
+        "completed": "completed",
+        "rejected": "rejected"
+      }
+    },
+    "salaries": {
+      "title": "Salaries",
+      "paid": "Paid",
+      "invoiceMarkedPaid": "Invoice marked paid",
+      "unpaid": "UNPAID",
+      "paidBadge": "PAID",
+      "grossSalary": "Gross Salary",
+      "markPaid": "Mark Paid",
+      "noPermission": "You do not have permission to view salaries.",
+      "noInvoices": "No salary invoices found."
+    },
+    "tasks": {
+      "title": "Tasks",
+      "task": "Task",
+      "noTasks": "No tasks found.",
+      "deadline": "Deadline",
+      "assigned": "Assigned",
+      "priority": {
+        "low": "low",
+        "medium": "medium",
+        "high": "high"
+      }
+    }
+  },
+  "feeding": {
+    "common": {
+      "validation": "Validation",
+      "success": "Success",
+      "error": "Error"
+    },
+    "status": {
+      "completed": "Completed",
+      "pending": "Pending"
+    },
+    "addRecipe": {
+      "title": "Add Recipe",
+      "noPermission": "You do not have permission to create recipes.",
+      "nameRequired": "Recipe name is required",
+      "ingredientRequired": "Add at least one ingredient",
+      "recipeCreated": "Recipe created",
+      "recipeName": "Recipe Name",
+      "recipeNamePlaceholder": "e.g. Lactating TMR",
+      "description": "Description",
+      "descriptionPlaceholder": "Optional",
+      "recipeGroup": "Recipe Group",
+      "ingredients": "Ingredients",
+      "ingredientN": "Ingredient {{count}}",
+      "quantityKg": "Quantity (kg)",
+      "addIngredient": "Add Ingredient",
+      "createRecipe": "Create Recipe"
+    },
+    "applyFeed": {
+      "title": "Apply Feed",
+      "headerTitle": "Apply Feed to Shed",
+      "noPermission": "You do not have permission to apply feed.",
+      "selectShedRecipe": "Select shed and recipe",
+      "feedApplied": "Feed Applied",
+      "appliedSummary": "Total {{total}} kg, cost {{cost}}",
+      "applied": "Applied",
+      "shed": "Shed",
+      "recipe": "Recipe",
+      "mealTime": "Meal Time",
+      "quantityPerAnimal": "Quantity per Animal (kg)",
+      "quantityPerAnimalPlaceholder": "Auto (default 5)",
+      "applyFeedBtn": "Apply Feed"
+    },
+    "feedReport": {
+      "title": "Feed Report",
+      "empty": "No feeding schedules yet.",
+      "feedingFallback": "Feeding",
+      "shed": "Shed",
+      "pen": "Pen",
+      "animals": "Animals",
+      "scheduledKg": "Scheduled (kg)",
+      "actualKg": "Actual (kg)"
+    },
+    "feedingHome": {
+      "title": "Feeding",
+      "actions": "Actions",
+      "recipes": "Recipes",
+      "recipesDesc": "Feed formulations & ingredients",
+      "applyFeed": "Apply Feed to Shed",
+      "applyFeedDesc": "Schedule feeding for a shed",
+      "feedReport": "Feed Report",
+      "feedReportDesc": "Feeding schedules & history"
+    },
+    "recipes": {
+      "title": "Recipes",
+      "empty": "No recipes found.",
+      "recipeFallback": "Recipe",
+      "ingredients": "Ingredients",
+      "costPerKg": "Cost / kg"
+    }
+  },
+  "finance": {
+    "common": {
+      "error": "Error",
+      "noPermission": "You do not have permission to view finance.",
+      "income": "Income",
+      "expenses": "Expenses",
+      "netProfit": "Net Profit",
+      "total": "Total"
+    },
+    "type": {
+      "income": "INCOME",
+      "expense": "EXPENSE"
+    },
+    "financeHome": {
+      "title": "Finance",
+      "actions": "Actions",
+      "cash": "Cash",
+      "transactions": "Transactions",
+      "transactionsDesc": "Income & expense entries",
+      "profitLoss": "Profit & Loss",
+      "profitLossDesc": "Revenue vs expenses"
+    },
+    "profitLoss": {
+      "title": "Profit & Loss",
+      "revenue": "Revenue",
+      "noRecords": "No records.",
+      "noData": "No profit & loss data available.",
+      "account": "Account"
+    },
+    "transactions": {
+      "title": "Transactions",
+      "transaction": "Transaction",
+      "amount": "Amount",
+      "empty": "No transactions found.",
+      "noPermission": "You do not have permission to view transactions."
+    }
+  },
+  "health": {
+    "common": {
+      "error": "Error",
+      "success": "Success",
+      "validation": "Validation",
+      "animal": "Animal",
+      "unnamed": "Unnamed",
+      "noTag": "No Tag",
+      "medicine": "Medicine",
+      "milkWithdrawalUntil": "Milk withdrawal until",
+      "activeWithdrawals": "Active Withdrawals"
+    },
+    "addTreatment": {
+      "title": "Add Treatment",
+      "noPermission": "You do not have permission to record treatments.",
+      "selectAnimal": "Select an animal",
+      "selectTreatmentType": "Select a treatment type",
+      "treatmentRecorded": "Treatment recorded",
+      "animal": "Animal",
+      "treatmentType": "Treatment Type",
+      "diagnosis": "Diagnosis",
+      "diagnosisPlaceholder": "e.g. mastitis",
+      "medicineName": "Medicine Name",
+      "medicineNamePlaceholder": "Medicine used",
+      "dosage": "Dosage",
+      "dosagePlaceholder": "e.g. 10ml",
+      "vetName": "Vet Name",
+      "vetNamePlaceholder": "Attending vet",
+      "cost": "Cost",
+      "milkWithdrawalDays": "Milk Withdrawal (days)",
+      "meatWithdrawalDays": "Meat Withdrawal (days)",
+      "deductStockLabel": "Deduct medicine from stock (optional)",
+      "medicineFromStock": "Medicine from Stock",
+      "quantityUsed": "Quantity Used",
+      "comments": "Comments",
+      "commentsPlaceholder": "Additional notes",
+      "markSick": "Mark this animal as sick",
+      "saveTreatment": "Save Treatment"
+    },
+    "healthHome": {
+      "title": "Health & Treatments",
+      "herdAlerts": "Herd Alerts",
+      "herdAlertsDesc": "Checks, dry-offs, calvings & heats due",
+      "treatments": "Treatments",
+      "treatmentsDesc": "Vet visits, vaccinations & medicines",
+      "withdrawals": "Withdrawals",
+      "withdrawalsDesc": "Animals whose milk must not be sold",
+      "pregnancyChecksDue": "Pregnancy Checks Due",
+      "dryOffsDue": "Dry-Offs Due",
+      "activeWithdrawals": "Active Withdrawals",
+      "actions": "Actions"
+    },
+    "herdAlerts": {
+      "title": "Herd Alerts",
+      "pregnancyCheckDue": "Pregnancy Check Due",
+      "category": "Category",
+      "inseminated": "Inseminated",
+      "dryOffDue": "Dry-Off Due",
+      "dryOffDueLabel": "Dry-off due",
+      "expectedCalving": "Expected calving",
+      "calvingExpected": "Calving Expected",
+      "heatWatch": "Heat Watch",
+      "reason": "Reason",
+      "nothingDue": "Nothing due."
+    },
+    "treatments": {
+      "title": "Treatments",
+      "deleteTreatment": "Delete Treatment",
+      "deleteConfirm": "Are you sure you want to delete this treatment record?",
+      "treatmentDeleted": "Treatment deleted",
+      "type": "Type",
+      "diagnosis": "Diagnosis",
+      "vet": "Vet",
+      "withdrawalUntil": "Withdrawal until {{date}}",
+      "emptyText": "No treatments recorded yet."
+    },
+    "withdrawals": {
+      "meatWithdrawalUntil": "Meat withdrawal until",
+      "until": "Until {{date}}",
+      "emptyText": "No animals are currently under withdrawal."
+    }
+  },
+  "milk": {
+    "common": {
+      "validation": "Validation",
+      "success": "Success",
+      "error": "Error",
+      "animal": "Animal",
+      "sessions": "Sessions",
+      "morning": "Morning",
+      "afternoon": "Afternoon",
+      "evening": "Evening",
+      "optional": "Optional"
+    },
+    "addMilkSession": {
+      "title": "Add Milking Session",
+      "animal": "Animal",
+      "milkingTime": "Milking Time",
+      "milkL": "Milk (L)",
+      "saveSession": "Save Session",
+      "unnamed": "Unnamed",
+      "noTag": "No Tag",
+      "selectAnimal": "Select an animal",
+      "enterMilkQuantity": "Enter milk quantity",
+      "withdrawalWarningTitle": "Recorded — Withdrawal Warning",
+      "withdrawalWarningBody": "This animal is under withdrawal until {{date}}. Do not tank its milk.",
+      "sessionRecorded": "Session recorded"
+    },
+    "milkApproval": {
+      "title": "Approve Milk",
+      "pendingDates": "Pending approval dates",
+      "noDatesPending": "No dates pending approval.",
+      "noSessionsToApprove": "No sessions to approve.",
+      "approveIntoTank": "Approve into Tank",
+      "noPermission": "You do not have permission to approve milk.",
+      "approvedTitle": "Approved",
+      "approvedBody": "Milk approved into the tank"
+    },
+    "milkHome": {
+      "title": "Milk",
+      "todaysMilk": "Today's Milk (L)",
+      "dispatched": "Dispatched (L)",
+      "inTank": "In Tank (L)",
+      "actionsHeading": "Actions",
+      "actions": {
+        "milkingSessions": {
+          "label": "Milking Sessions",
+          "desc": "Record AM/PM/evening milk"
+        },
+        "approveMilk": {
+          "label": "Approve Milk",
+          "desc": "Approve sessions into the tank"
+        },
+        "milkOut": {
+          "label": "Milk Out / Dispatch",
+          "desc": "Sell or dispatch milk"
+        }
+      }
+    },
+    "milkOut": {
+      "title": "Milk Out / Dispatch",
+      "shortTitle": "Milk Out",
+      "noPermission": "You do not have permission to dispatch milk.",
+      "remainingInTank": "Remaining in tank",
+      "outType": "Out Type",
+      "company": "Company",
+      "pricePerLitre": "Price / Litre",
+      "fat": "Fat %",
+      "snf": "SNF %",
+      "volume": "Volume (L)",
+      "recordMilkOut": "Record Milk Out",
+      "enterVolume": "Enter a volume greater than 0",
+      "priceRequired": "Price per litre is required for a sale",
+      "milkOutRecorded": "Milk out recorded",
+      "outTypes": {
+        "sell": "Company (Sale)",
+        "suckler": "Suckler (Calves)",
+        "employee": "Employee",
+        "dumped": "Dumped / Withheld",
+        "other": "Other"
+      }
+    },
+    "milkSessions": {
+      "title": "Milking Sessions",
+      "emptyText": "No milking sessions for {{date}}.",
+      "showingSessionsFor": "Showing sessions for"
+    }
+  },
+  "stock": {
+    "common": {
+      "validation": "Validation",
+      "success": "Success",
+      "error": "Error",
+      "supplier": "Supplier",
+      "item": "Item",
+      "quantity": "Quantity",
+      "note": "Note",
+      "optional": "Optional",
+      "reorderLevel": "Reorder level"
+    },
+    "addPurchase": {
+      "title": "Add Purchase",
+      "noPermission": "You do not have permission to record purchases.",
+      "selectSupplierItem": "Select supplier and item",
+      "invalidQuantityCost": "Enter valid quantity and cost",
+      "purchaseRecorded": "Purchase recorded",
+      "costPerUnit": "Cost per Unit",
+      "batchNumber": "Batch Number",
+      "expiryDateLabel": "Expiry Date (YYYY-MM-DD)",
+      "recordPurchase": "Record Purchase"
+    },
+    "consumption": {
+      "title": "Consumption",
+      "headerTitle": "Stock Consumption",
+      "noPermission": "You do not have permission to issue stock.",
+      "selectItem": "Select an item",
+      "enterQuantity": "Enter a quantity",
+      "consumptionRecorded": "Consumption recorded",
+      "quantityUsed": "Quantity Used",
+      "recordConsumption": "Record Consumption"
+    },
+    "purchases": {
+      "title": "Purchases",
+      "empty": "No purchases recorded.",
+      "costPerUnit": "Cost / unit",
+      "total": "Total",
+      "batch": "Batch",
+      "expiry": "Expiry"
+    },
+    "stockHome": {
+      "title": "Stock & Inventory",
+      "actions": "Actions",
+      "totalItems": "Total Items",
+      "lowStock": "Low Stock",
+      "expiring": "Expiring",
+      "stockItems": "Stock Items",
+      "stockItemsDesc": "View inventory & levels",
+      "purchases": "Purchases",
+      "purchasesDesc": "Record & view purchases",
+      "consumption": "Consumption",
+      "consumptionDesc": "Issue stock usage",
+      "suppliers": "Suppliers",
+      "suppliersDesc": "Manage suppliers",
+      "reports": "Reports",
+      "reportsDesc": "Reorder & expiry alerts"
+    },
+    "stockItems": {
+      "title": "Stock Items",
+      "empty": "No stock items.",
+      "low": "Low"
+    },
+    "stockReports": {
+      "title": "Stock Reports",
+      "reorderNeeded": "Reorder Needed",
+      "nothingToReorder": "Nothing to reorder.",
+      "reorder": "Reorder",
+      "expired": "Expired",
+      "expiringSoon": "Expiring Soon",
+      "batch": "Batch {{value}}",
+      "expiredOn": "Expired {{value}}",
+      "until": "Until {{value}}"
+    },
+    "suppliers": {
+      "title": "Suppliers",
+      "empty": "No suppliers yet.",
+      "nameRequired": "Supplier name is required",
+      "supplierAdded": "Supplier added",
+      "address": "Address",
+      "addSupplier": "Add Supplier",
+      "name": "Name",
+      "namePlaceholder": "Supplier name",
+      "contact": "Contact",
+      "contactPlaceholder": "Phone / email"
+    }
+  },
+  "shared": {
+    "status": {
+      "active": "Active",
+      "inactive": "InActive"
+    },
+    "drawer": {
+      "logout": "Logout",
+      "loggedOut": "Logged out",
+      "version": "Version: {{version}}"
+    },
+    "common": {
+      "searchPlaceholder": "Search..."
+    },
+    "dropdown": {
+      "select": "Select",
+      "noResults": "No results found"
+    },
+    "timePicker": {
+      "select": "Select Time"
+    },
+    "datePicker": {
+      "select": "Select Date"
+    },
+    "listScreen": {
+      "empty": "No records found."
+    },
+    "listEmpty": {
+      "message": "No Results Found"
+    },
+    "tagsDropdown": {
+      "label": "Choose Tag Id",
+      "placeholder": "Select Tag"
+    }
+  },
+  "services": {
+    "toast": {
+      "successTitle": "Success",
+      "errorTitle": "Error",
+      "validationTitle": "Validation Error",
+      "unexpectedError": "An unexpected error occurred",
+      "copiedSuccess": "Copied Successfully"
+    },
+    "validation": {
+      "nameRequired": "Name is required",
+      "emailRequired": "Email is required",
+      "passwordRequired": "Password is required",
+      "passwordsMismatch": "Passwords do not match"
+    },
+    "registration": {
+      "success": "Your account was registered successfully!",
+      "error": "Error creating account"
+    },
+    "error": {
+      "requestFailed": "Request Failed!"
+    }
+  }
+}

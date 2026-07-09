@@ -15,6 +15,7 @@
      TableContainer, TableHead, TableRow, TextField, Typography, useTheme,
    } from '@mui/material';
    import { ToastContainer, toast } from 'react-toastify';
+   import { useTranslation } from 'react-i18next';
    import 'react-toastify/dist/ReactToastify.css';
    import CustomPagination from '../../shared/components/Custom Pagination/CustomPagination';
   import PageContainer from '../../shared/components/Layout/PageContainer';
@@ -38,10 +39,7 @@
 
    /* ------------------------------------------------------------------ */
    type ColKey = 'sr'|'date'|'vanda'|'qty'|'pen'|'remarks';
-   const COLS: Record<ColKey,string> = {
-     sr:'Sr#', date:'Date', vanda:'Vanda', qty:'Quantity (Batches)',
-     pen:'Pen', remarks:'Remarks',
-   };
+   const COL_KEYS: ColKey[] = ['sr','date','vanda','qty','pen','remarks'];
 
    const ExportBtn = (lbl:string, ico:React.ReactNode, arrow=false)=>(
      <Paper component={Button} key={lbl} elevation={3}
@@ -56,6 +54,16 @@
    const ViewConductedProcess:React.FC = () =>{
      const theme = useTheme();
      const colors = tokens(theme.palette.mode);
+     const { t } = useTranslation();
+
+     const COLS: Record<ColKey,string> = useMemo(()=>({
+       sr: t('feeding.viewConductedVandaFormulation.columns.sr'),
+       date: t('feeding.common.date'),
+       vanda: t('feeding.viewConductedVandaFormulation.columns.vanda'),
+       qty: t('feeding.viewConductedVandaFormulation.columns.qtyBatches'),
+       pen: t('feeding.common.pen'),
+       remarks: t('feeding.viewConductedVandaFormulation.columns.remarks'),
+     }),[t]);
 
      /* filters */
      const [brand,setBrand]=useState<string>('All');
@@ -86,7 +94,7 @@
          setRows(mapped);
          setPage(1);
        } catch (error: any) {
-         toast.error(error?.response?.data?.message || "Can't load feed usage history");
+         toast.error(error?.response?.data?.message || t('feeding.viewConductedVandaFormulation.cantLoadUsageHistory'));
        } finally {
          setLoading(false);
        }
@@ -97,7 +105,7 @@
      /* column visibility */
      const [filterAnchor,setFilterAnchor]=useState<null|HTMLElement>(null);
      const [visible,setVisible]=useState<Record<ColKey,boolean>>(
-       Object.fromEntries(Object.keys(COLS).map(k=>[k,true])) as Record<ColKey,boolean>);
+       Object.fromEntries(COL_KEYS.map(k=>[k,true])) as Record<ColKey,boolean>);
      const toggleCol=(k:ColKey)=>setVisible(p=>({...p,[k]:!p[k]}));
 
      /* distinct vanda names for the brand filter */
@@ -119,20 +127,20 @@
 
      /* ------------------------------------------------------------ */
      return(
-     <PageContainer title="Conducted Process" maxWidth="1200px">
+     <PageContainer title={t('feeding.viewConductedVandaFormulation.title')} maxWidth="1200px">
        {/* top card */}
        <Paper elevation={1} sx={{p:3,mb:3,borderRadius:2,display:'flex',flexWrap:'wrap',gap:3,alignItems:'flex-end',
          boxShadow: "0 4px 12px rgba(0,0,0,0.1)",}}>
          <Box sx={{minWidth:220}}>
-           <Typography fontWeight={600} mb={.5}>Choose Vanda</Typography>
+           <Typography fontWeight={600} mb={.5}>{t('feeding.viewConductedVandaFormulation.chooseVanda')}</Typography>
            <Select size="small" fullWidth value={brand} onChange={e=>setBrand(e.target.value)}>
-             <MenuItem value="All">All</MenuItem>
+             <MenuItem value="All">{t('feeding.viewConductedVandaFormulation.all')}</MenuItem>
              {brandOptions.map(b=>(
                <MenuItem key={b} value={b}>{b}</MenuItem>
              ))}
            </Select>
          </Box>
-         {([['Start Date',from,setFrom],['End Date',to,setTo]] as
+         {([[t('feeding.common.startDate'),from,setFrom],[t('feeding.common.endDate'),to,setTo]] as
            [string,string,React.Dispatch<React.SetStateAction<string>>][]).map(([l,v,s])=>(
            <Box key={l} sx={{minWidth:200}}>
              <Typography fontWeight={600} mb={.5}>{l}</Typography>
@@ -140,12 +148,12 @@
            </Box>
          ))}
          <Button variant="contained" sx={{bgcolor:'#005f73',ml:{xs:0,md:'auto'},px:5,mt:{xs:2,md:0}}}
-           onClick={handleGet}>Get</Button>
+           onClick={handleGet}>{t('feeding.common.get')}</Button>
        </Paper>
 
        {/* search/export */}
        <Box sx={{display:'flex',flexWrap:'wrap',gap:1.5,mb:2,alignItems:'center'}}>
-         <TextField size="small" placeholder="Search" value={searchQ}
+         <TextField size="small" placeholder={t('common.search')} value={searchQ}
            onChange={e=>{setSearchQ(e.target.value);setPage(1);}}
            sx={{flexGrow:1,maxWidth:760, backgroundColor: theme.palette.background.paper,
     borderRadius: "8px",
@@ -157,18 +165,18 @@
            sx={{textTransform:'none',p:1,px:2, backgroundColor: theme.palette.background.paper,
     borderRadius: "4px",
     boxShadow: "0 4px 12px rgba(0,0,0,0.1)",
-}}>Filter</Button>
+}}>{t('feeding.common.filter')}</Button>
          <Box sx={{ml:'auto',display:'flex',gap:2,flexWrap:'wrap'}}>
-           {ExportBtn('Copy',<CopyIcon/>)}
-           {ExportBtn('Excel',<ExcelIcon/>)}
-           {ExportBtn('CSV',<CsvIcon/>)}
-           {ExportBtn('PDF',<PdfIcon/>)}
-           {ExportBtn('Print',<PrintIcon/>,true)}
+           {ExportBtn(t('feeding.viewConductedVandaFormulation.export.copy'),<CopyIcon/>)}
+           {ExportBtn(t('feeding.viewConductedVandaFormulation.export.excel'),<ExcelIcon/>)}
+           {ExportBtn(t('feeding.viewConductedVandaFormulation.export.csv'),<CsvIcon/>)}
+           {ExportBtn(t('feeding.viewConductedVandaFormulation.export.pdf'),<PdfIcon/>)}
+           {ExportBtn(t('feeding.viewConductedVandaFormulation.export.print'),<PrintIcon/>,true)}
          </Box>
        </Box>
 
        <Menu anchorEl={filterAnchor} open={!!filterAnchor} onClose={()=>setFilterAnchor(null)}>
-         {(Object.keys(COLS) as ColKey[]).map(k=>(
+         {COL_KEYS.map(k=>(
            <MenuItem key={k} onClick={()=>toggleCol(k)}>
              <Checkbox checked={visible[k]}/><ListItemText primary={COLS[k]}/>
            </MenuItem>
@@ -194,19 +202,19 @@
             }} />
             </Box>
        ) : rows.length===0 ? (
-         <Typography align="center" sx={{mt:6,fontWeight:600}}>No&nbsp;Result&nbsp;Found&nbsp;!</Typography>
+         <Typography align="center" sx={{mt:6,fontWeight:600}}>{t('feeding.common.noResultFound')}</Typography>
        ) : (
          <Paper elevation={1} sx={{borderRadius:2}}>
            <TableContainer sx={{maxHeight:520}}>
              <Table stickyHeader size="small">
                <TableHead>
                  <TableRow sx={{'& th':{bgcolor: theme.palette.mode === 'dark' ? colors.primary[400] : "#F8F9FA", fontWeight:600}}}>
-                   {visible.sr&&<TableCell>Sr#</TableCell>}
-                   {visible.date&&<TableCell>Date</TableCell>}
-                   {visible.vanda&&<TableCell>Vanda</TableCell>}
-                   {visible.qty&&<TableCell>Quantity (Batches)</TableCell>}
-                   {visible.pen&&<TableCell>Pen</TableCell>}
-                   {visible.remarks&&<TableCell>Remarks</TableCell>}
+                   {visible.sr&&<TableCell>{COLS.sr}</TableCell>}
+                   {visible.date&&<TableCell>{COLS.date}</TableCell>}
+                   {visible.vanda&&<TableCell>{COLS.vanda}</TableCell>}
+                   {visible.qty&&<TableCell>{COLS.qty}</TableCell>}
+                   {visible.pen&&<TableCell>{COLS.pen}</TableCell>}
+                   {visible.remarks&&<TableCell>{COLS.remarks}</TableCell>}
                  </TableRow>
                </TableHead>
                <TableBody>
@@ -225,7 +233,7 @@
                  <TableRow sx={{'& td':{fontWeight:700}}}>
                    {visible.sr&&<TableCell/>}
                    {visible.date&&<TableCell/>}
-                   {visible.vanda&&<TableCell align="right">TOTAL</TableCell>}
+                   {visible.vanda&&<TableCell align="right">{t('feeding.viewConductedVandaFormulation.totalUpper')}</TableCell>}
                    {visible.qty&&<TableCell>{totalQty.toLocaleString()}</TableCell>}
                    {visible.pen&&<TableCell/>}
                    {visible.remarks&&<TableCell/>}

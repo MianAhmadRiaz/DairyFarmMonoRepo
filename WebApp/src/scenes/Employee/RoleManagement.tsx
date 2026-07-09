@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import {
   Box,
   Typography,
@@ -45,6 +46,7 @@ import { PERMISSIONS } from '../../shared/rbac/permissions';
 const PRIMARY = '#045D56';
 
 export default function RoleManagement() {
+  const { t } = useTranslation();
   const { can } = usePermissions();
   const canManage = can(PERMISSIONS.ROLE_MANAGE);
 
@@ -128,7 +130,7 @@ export default function RoleManagement() {
 
   const handleSave = async () => {
     if (!name.trim()) {
-      setError('Role name is required.');
+      setError(t('employee.roleManagement.roleNameRequired'));
       return;
     }
     setSaving(true);
@@ -151,7 +153,7 @@ export default function RoleManagement() {
       setOpen(false);
       await load();
     } catch (e: any) {
-      setError(e?.response?.data?.message || 'Failed to save role.');
+      setError(e?.response?.data?.message || t('employee.roleManagement.saveFailed'));
     } finally {
       setSaving(false);
     }
@@ -159,12 +161,12 @@ export default function RoleManagement() {
 
   const handleDelete = async (role: Role) => {
     if (role.isSystem || role.isOwner) return;
-    if (!window.confirm(`Delete role "${role.name}"?`)) return;
+    if (!window.confirm(t('employee.roleManagement.deleteConfirm', { name: role.name }))) return;
     try {
       await deleteRole(role.uuid);
       await load();
     } catch (e: any) {
-      alert(e?.response?.data?.message || 'Failed to delete role.');
+      alert(e?.response?.data?.message || t('employee.roleManagement.deleteFailed'));
     }
   };
 
@@ -178,7 +180,7 @@ export default function RoleManagement() {
       <Box sx={{ minHeight: '100vh', py: 6, marginLeft: '200px' }}>
         <Container maxWidth="sm">
           <Alert severity="warning">
-            You don't have permission to manage roles.
+            {t('employee.roleManagement.noPermissionManage')}
           </Alert>
         </Container>
       </Box>
@@ -202,15 +204,15 @@ export default function RoleManagement() {
           mb={3}
         >
           <Typography variant="h6">
-            <strong>Role Management</strong>{' '}
-            <span style={{ color: '#888' }}>({roles.length} Total)</span>
+            <strong>{t('employee.roleManagement.title')}</strong>{' '}
+            <span style={{ color: '#888' }}>{t('employee.common.totalCount', { count: roles.length })}</span>
           </Typography>
           <Button
             variant="contained"
             onClick={openCreate}
             sx={{ borderRadius: '8px', backgroundColor: PRIMARY }}
           >
-            Add Role
+            {t('employee.roleManagement.addRole')}
           </Button>
         </Box>
 
@@ -219,16 +221,16 @@ export default function RoleManagement() {
             <TableHead>
               <TableRow sx={{ backgroundColor: 'lightgrey' }}>
                 <TableCell>
-                  <strong>NAME</strong>
+                  <strong>{t('employee.common.nameUpper')}</strong>
                 </TableCell>
                 <TableCell>
-                  <strong>DESCRIPTION</strong>
+                  <strong>{t('employee.common.descriptionUpper')}</strong>
                 </TableCell>
                 <TableCell align="center">
-                  <strong>PERMISSIONS</strong>
+                  <strong>{t('employee.roleManagement.permissionsUpper')}</strong>
                 </TableCell>
                 <TableCell align="center">
-                  <strong>TYPE</strong>
+                  <strong>{t('employee.roleManagement.typeUpper')}</strong>
                 </TableCell>
                 <TableCell align="right"></TableCell>
               </TableRow>
@@ -243,7 +245,7 @@ export default function RoleManagement() {
               ) : roles.length === 0 ? (
                 <TableRow>
                   <TableCell colSpan={5} align="center">
-                    No roles found. Create one to get started.
+                    {t('employee.roleManagement.noRoles')}
                   </TableCell>
                 </TableRow>
               ) : (
@@ -254,23 +256,23 @@ export default function RoleManagement() {
                     </TableCell>
                     <TableCell>{role.description || '-'}</TableCell>
                     <TableCell align="center">
-                      {role.isOwner ? 'All' : role.permissions?.length ?? 0}
+                      {role.isOwner ? t('employee.roleManagement.all') : role.permissions?.length ?? 0}
                     </TableCell>
                     <TableCell align="center">
                       {role.isOwner ? (
-                        <Chip label="Owner" color="primary" size="small" />
+                        <Chip label={t('employee.roleManagement.owner')} color="primary" size="small" />
                       ) : role.isSystem ? (
-                        <Chip label="System" color="default" size="small" />
+                        <Chip label={t('employee.roleManagement.system')} color="default" size="small" />
                       ) : (
-                        <Chip label="Custom" variant="outlined" size="small" />
+                        <Chip label={t('employee.roleManagement.custom')} variant="outlined" size="small" />
                       )}
                     </TableCell>
                     <TableCell align="right">
                       <Tooltip
                         title={
                           role.isOwner
-                            ? 'Owner role cannot be edited'
-                            : 'Edit role'
+                            ? t('employee.roleManagement.ownerCannotEdit')
+                            : t('employee.roleManagement.editRole')
                         }
                       >
                         <span>
@@ -285,8 +287,8 @@ export default function RoleManagement() {
                       <Tooltip
                         title={
                           role.isSystem || role.isOwner
-                            ? 'System/Owner roles cannot be deleted'
-                            : 'Delete role'
+                            ? t('employee.roleManagement.systemOwnerCannotDelete')
+                            : t('employee.roleManagement.deleteRole')
                         }
                       >
                         <span>
@@ -309,7 +311,7 @@ export default function RoleManagement() {
       </Container>
 
       <Dialog open={open} onClose={() => setOpen(false)} fullWidth maxWidth="md">
-        <DialogTitle>{editingRole ? 'Edit Role' : 'Add Role'}</DialogTitle>
+        <DialogTitle>{editingRole ? t('employee.roleManagement.editRole') : t('employee.roleManagement.addRole')}</DialogTitle>
         <DialogContent>
           {error && (
             <Alert severity="error" sx={{ mb: 2 }}>
@@ -319,14 +321,14 @@ export default function RoleManagement() {
           <TextField
             autoFocus
             margin="dense"
-            label="Role Name"
+            label={t('employee.roleManagement.roleName')}
             fullWidth
             value={name}
             onChange={(e) => setName(e.target.value)}
           />
           <TextField
             margin="dense"
-            label="Description"
+            label={t('employee.common.description')}
             fullWidth
             multiline
             rows={2}
@@ -342,17 +344,17 @@ export default function RoleManagement() {
             mb={1}
           >
             <Typography variant="subtitle1" fontWeight="bold">
-              Permissions
+              {t('employee.roleManagement.permissions')}
             </Typography>
             <Typography variant="body2" color="text.secondary">
-              {selectedPerms.length} / {totalPermsInCatalog} selected
+              {t('employee.roleManagement.selectedCount', { selected: selectedPerms.length, total: totalPermsInCatalog })}
             </Typography>
           </Box>
           <Divider sx={{ mb: 1 }} />
 
           {catalog.length === 0 ? (
             <Typography variant="body2" color="text.secondary">
-              No permission catalog available.
+              {t('employee.roleManagement.noCatalog')}
             </Typography>
           ) : (
             catalog.map((mod) => {
@@ -445,14 +447,14 @@ export default function RoleManagement() {
           )}
         </DialogContent>
         <DialogActions>
-          <Button onClick={() => setOpen(false)}>Cancel</Button>
+          <Button onClick={() => setOpen(false)}>{t('employee.common.cancel')}</Button>
           <Button
             variant="contained"
             onClick={handleSave}
             disabled={saving || !name.trim()}
             sx={{ backgroundColor: PRIMARY }}
           >
-            {saving ? 'Saving...' : editingRole ? 'Update' : 'Create'}
+            {saving ? t('employee.common.saving') : editingRole ? t('employee.common.update') : t('employee.common.create')}
           </Button>
         </DialogActions>
       </Dialog>

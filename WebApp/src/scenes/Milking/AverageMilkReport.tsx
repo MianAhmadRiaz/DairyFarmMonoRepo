@@ -15,6 +15,7 @@ import { Averagemilk } from '../../shared/services/averageMilk.service';
 import { CircularProgress, Backdrop } from '@mui/material';
 import { ToastContainer, toast } from 'react-toastify';
 import PageContainer from '../../shared/components/Layout/PageContainer';
+import { useTranslation } from 'react-i18next';
 
 interface MilkReport {
   date: string;
@@ -36,6 +37,7 @@ interface TableDataInterface{
 }
 
 const AverageMilkReport = () => {
+  const { t } = useTranslation();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
   const colors = tokens(theme.palette.mode);
@@ -51,14 +53,14 @@ const AverageMilkReport = () => {
       const fetchData = async function(){
       if(!startDate || !endDate){return;}
       else if(new Date(startDate) >= new Date(endDate)){
-        toast.warning("Start date must be before end date");
+        toast.warning(t('milking.common.startBeforeEnd'));
         return;
       }
        try {
        setLoading(true);
        const averageMilkResponse = await Averagemilk(startDate , endDate);
 
-       if(!(averageMilkResponse?.data?.data?.milks)){alert("No data has been found for given interval"); return}
+       if(!(averageMilkResponse?.data?.data?.milks)){alert(t('milking.common.noDataForInterval')); return}
        
        const data: MilkReport[] = averageMilkResponse.data.data.milks;
        const formattedData: TableDataInterface[] = data.map((record: any , index: number)=>{
@@ -117,7 +119,7 @@ const AverageMilkReport = () => {
   
 
   return (
-   <PageContainer title="Average Milk Report" maxWidth="1200px">
+   <PageContainer title={t('milking.averageMilkReport.title')} maxWidth="1200px">
   {/* Date Picker Row */}
   <Box
     sx={{
@@ -130,7 +132,7 @@ const AverageMilkReport = () => {
     }}
   >
     <TextField
-      label="Start Date"
+      label={t('milking.common.startDate')}
       type="date"
       value={startDate}
       onChange={e => setStartDate(e.target.value)}
@@ -138,7 +140,7 @@ const AverageMilkReport = () => {
       InputLabelProps={{ shrink: true }}
     />
     <TextField
-      label="End Date"
+      label={t('milking.common.endDate')}
       type="date"
       value={endDate}
       onChange={e => setEndDate(e.target.value)}
@@ -165,7 +167,7 @@ const AverageMilkReport = () => {
       }}
     >
       <TextField
-        placeholder="Search"
+        placeholder={t('common.search')}
         size="small"
         value={searchValue}
         onChange={e => setSearchValue(e.target.value)}
@@ -179,14 +181,14 @@ const AverageMilkReport = () => {
       />
 
       <FormControl size="small" sx={{ width: { xs: '100%', sm: 180 } }}>
-        <InputLabel>Filter</InputLabel>
+        <InputLabel>{t('milking.common.filter')}</InputLabel>
         <Select
           value={filterOption}
           onChange={e => setFilterOption(e.target.value)}
         >
-          <MenuItem value="Sort">Sort</MenuItem>
-          <MenuItem value="High Production">High Production</MenuItem>
-          <MenuItem value="Low Production">Low Production</MenuItem>
+          <MenuItem value="Sort">{t('milking.common.sort')}</MenuItem>
+          <MenuItem value="High Production">{t('milking.common.highProduction')}</MenuItem>
+          <MenuItem value="Low Production">{t('milking.common.lowProduction')}</MenuItem>
         </Select>
       </FormControl>
     </Box>
@@ -229,13 +231,13 @@ const AverageMilkReport = () => {
         <Box component="thead">
           <Box component="tr">
             {[
-              'SR#',
-              'DATE',
-              'PRODUCTION',
-              'ANIMALS',
-              'AVERAGE',
-              'MAX',
-              'MIN'
+              t('milking.common.columns.srNo'),
+              t('milking.common.columns.date'),
+              t('milking.common.columns.production'),
+              t('milking.common.columns.animals'),
+              t('milking.averageMilkReport.columns.average'),
+              t('milking.averageMilkReport.columns.max'),
+              t('milking.averageMilkReport.columns.min')
             ].map(header => (
               <Box component="th" key={header}>
                 {header}
@@ -281,7 +283,7 @@ const AverageMilkReport = () => {
         colSpan={7}
         sx={{ textAlign: 'center', py: 2, color: '#7d7d7d' }}
       >
-        No data available for selected filters.
+        {t('milking.common.noDataForFilters')}
       </Box>
     </Box>
   )}

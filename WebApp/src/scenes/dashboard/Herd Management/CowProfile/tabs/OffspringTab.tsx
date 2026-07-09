@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { Grid, Box, Typography, Chip, useTheme } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import GlassCard from '../../../../../shared/components/charts/GlassCard';
@@ -7,6 +8,7 @@ import EmptyState from '../../../../../shared/components/charts/EmptyState';
 const formatDate = (d?: string) => (d ? new Date(d).toLocaleDateString() : '—');
 
 const OffspringTab: React.FC<{ profile: any }> = ({ profile }) => {
+  const { t } = useTranslation();
   const theme = useTheme();
   const navigate = useNavigate();
   const offspring = profile?.offspring || [];
@@ -15,7 +17,7 @@ const OffspringTab: React.FC<{ profile: any }> = ({ profile }) => {
     <Grid container spacing={2.5}>
       <Grid item xs={12}>
         <GlassCard delay={0}>
-          <Typography sx={{ fontWeight: 700, mb: 1.5 }}>Offspring ({offspring.length})</Typography>
+          <Typography sx={{ fontWeight: 700, mb: 1.5 }}>{t('herd.cowProfile.offspring.title', { count: offspring.length })}</Typography>
           {offspring.length ? (
             <Grid container spacing={1.5}>
               {offspring.map((o: any) => (
@@ -32,19 +34,19 @@ const OffspringTab: React.FC<{ profile: any }> = ({ profile }) => {
                     }}
                   >
                     <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                      <Typography sx={{ fontWeight: 700, fontSize: 13.5 }}>{o.name || 'Unnamed'}</Typography>
+                      <Typography sx={{ fontWeight: 700, fontSize: 13.5 }}>{o.name || t('herd.cowProfile.offspring.unnamed')}</Typography>
                       <Chip size="small" label={o.gender} sx={{ textTransform: 'capitalize' }} />
                     </Box>
                     <Typography sx={{ fontSize: 12, color: theme.palette.text.secondary }}>{o.tagName || '—'}</Typography>
                     <Typography sx={{ fontSize: 11.5, color: theme.palette.text.secondary, mt: 0.5 }}>
-                      Born: {formatDate(o.calving_date)}
+                      {t('herd.cowProfile.offspring.born', { date: formatDate(o.calving_date) })}
                     </Typography>
                   </Box>
                 </Grid>
               ))}
             </Grid>
           ) : (
-            <EmptyState title="No offspring on record" subtitle="Calves linked to this animal as dam will appear here." icon="👶" />
+            <EmptyState title={t('herd.cowProfile.offspring.noOffspring')} subtitle={t('herd.cowProfile.offspring.noOffspringSub')} icon="👶" />
           )}
         </GlassCard>
       </Grid>

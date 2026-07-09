@@ -1,5 +1,6 @@
 import { useNavigation } from '@react-navigation/native'
-import React from 'react'
+import React, { useMemo } from 'react'
+import { useTranslation } from 'react-i18next'
 import { ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native'
 import AppContainer from 'shared/components/AppContainer'
 import AppHeader from 'shared/components/AppHeader'
@@ -18,26 +19,27 @@ type Action = {
   permission: PermissionName | PermissionName[]
 }
 
-const ACTIONS: Action[] = [
-  { label: 'Employees', desc: 'View staff directory', screen: 'Employees', icon: { type: Icons.MaterialCommunityIcons, name: 'account-group' }, permission: PERMISSIONS.EMPLOYEE_VIEW },
-  { label: 'Attendance', desc: 'Mark daily attendance', screen: 'Attendance', icon: { type: Icons.MaterialCommunityIcons, name: 'calendar-check' }, permission: PERMISSIONS.EMPLOYEE_MANAGE },
-  { label: 'Tasks', desc: 'Assign and track tasks', screen: 'Tasks', icon: { type: Icons.MaterialCommunityIcons, name: 'clipboard-list-outline' }, permission: PERMISSIONS.EMPLOYEE_VIEW },
-  { label: 'Requests', desc: 'Approve staff requests', screen: 'Requests', icon: { type: Icons.MaterialCommunityIcons, name: 'inbox-arrow-down' }, permission: PERMISSIONS.EMPLOYEE_VIEW },
-  { label: 'Salaries', desc: 'Salary invoices & payments', screen: 'Salaries', icon: { type: Icons.MaterialCommunityIcons, name: 'cash-multiple' }, permission: PERMISSIONS.SALARY_MANAGE }
-]
-
 const EmployeeHome = () => {
+  const { t } = useTranslation()
   const navigation = useNavigation<any>()
   const { can } = usePermissions()
+
+  const ACTIONS: Action[] = useMemo(() => [
+    { label: t('employee.employeeHome.employeesLabel'), desc: t('employee.employeeHome.employeesDesc'), screen: 'Employees', icon: { type: Icons.MaterialCommunityIcons, name: 'account-group' }, permission: PERMISSIONS.EMPLOYEE_VIEW },
+    { label: t('employee.employeeHome.attendanceLabel'), desc: t('employee.employeeHome.attendanceDesc'), screen: 'Attendance', icon: { type: Icons.MaterialCommunityIcons, name: 'calendar-check' }, permission: PERMISSIONS.EMPLOYEE_MANAGE },
+    { label: t('employee.employeeHome.tasksLabel'), desc: t('employee.employeeHome.tasksDesc'), screen: 'Tasks', icon: { type: Icons.MaterialCommunityIcons, name: 'clipboard-list-outline' }, permission: PERMISSIONS.EMPLOYEE_VIEW },
+    { label: t('employee.employeeHome.requestsLabel'), desc: t('employee.employeeHome.requestsDesc'), screen: 'Requests', icon: { type: Icons.MaterialCommunityIcons, name: 'inbox-arrow-down' }, permission: PERMISSIONS.EMPLOYEE_VIEW },
+    { label: t('employee.employeeHome.salariesLabel'), desc: t('employee.employeeHome.salariesDesc'), screen: 'Salaries', icon: { type: Icons.MaterialCommunityIcons, name: 'cash-multiple' }, permission: PERMISSIONS.SALARY_MANAGE }
+  ], [t])
 
   const visible = ACTIONS.filter(a => can(a.permission))
 
   return (
     <AppContainer>
-      <AppHeader title="Employees & HR" showHam onPressHam={() => navigation.openDrawer?.()} />
+      <AppHeader title={t('employee.employeeHome.title')} showHam onPressHam={() => navigation.openDrawer?.()} />
       <ScrollView contentContainerStyle={{ padding: RF(16), paddingBottom: RF(40) }}>
         <AppText fontSize="h7" semiBold style={{ marginBottom: RF(12) }}>
-          Actions
+          {t('employee.employeeHome.actions')}
         </AppText>
         {visible.map((a, i) => (
           <TouchableOpacity key={i} style={styles.actionCard} onPress={() => navigation.navigate(a.screen)} activeOpacity={0.85}>

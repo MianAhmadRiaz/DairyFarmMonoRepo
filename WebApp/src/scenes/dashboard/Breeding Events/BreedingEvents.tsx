@@ -8,6 +8,7 @@ import {
   Grid
 } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import CustomCardMedia from './CustomCardMedia'; // Import the reusable CardMedia component
 import protocolsImage from '/assets/breeding/protocols.png';
 import aiBreedImage from '/assets/breeding/AiBreading.png';
@@ -21,55 +22,56 @@ import PageContainer from '../../../shared/components/Layout/PageContainer';
 
 const BreedingEvents = () => {
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const events = [
     {
-      title: 'PROTOCOL',
-      description: 'Setting Schedule of Cows Injection before AI Breeding.',
+      title: t('breeding.eventsMenu.protocol.title'),
+      description: t('breeding.eventsMenu.protocol.description'),
       image: protocolsImage,
       route: '/protocol' // Route for this card
     },
     {
-      title: 'HEAT DETECTION',
-      description: 'Detect heat of animals for insemination or bull breeding',
+      title: t('breeding.eventsMenu.heatDetection.title'),
+      description: t('breeding.eventsMenu.heatDetection.description'),
       image: heatImage,
       route: '/heat-detection'
     },
     {
-      title: 'AI BREEDING',
-      description: 'Artificial insemination of cows through injection.',
+      title: t('breeding.eventsMenu.aiBreeding.title'),
+      description: t('breeding.eventsMenu.aiBreeding.description'),
       image: aiBreedImage,
       route: '/ai-breeding'
     },
     {
-      title: 'BULL BREEDING',
-      description: 'Natural breeding of cow through bull for inseminating',
+      title: t('breeding.eventsMenu.bullBreeding.title'),
+      description: t('breeding.eventsMenu.bullBreeding.description'),
       image: bullBreedingImage,
       route: '/bull-breeding'
     },
 
     {
-      title: 'PREGNANCY CHECK',
-      description: 'Check Cows pregnancy after breeding.',
+      title: t('breeding.eventsMenu.pregnancyCheck.title'),
+      description: t('breeding.eventsMenu.pregnancyCheck.description'),
       image: pregnancyImage, // Replace with actual image URL
       route: '/pregnancy-check'
     },
 
     {
-      title: 'ABORTION',
-      description: 'Abortion of Cattles.',
+      title: t('breeding.eventsMenu.abortion.title'),
+      description: t('breeding.eventsMenu.abortion.description'),
       image: abortionImage, // Replace with actual image URL
       route: '/abortion'
     },
 
     {
-      title: 'CALVING',
-      description: 'After 270 days!! Its time for Calving..!',
+      title: t('breeding.eventsMenu.calving.title'),
+      description: t('breeding.eventsMenu.calving.description'),
       image: calvingImage, // Replace with actual image URL
       route: '/calving'
     },
     {
-      title: 'DRY OFF',
-      description: 'Remove Cow from milking.',
+      title: t('breeding.eventsMenu.dryOff.title'),
+      description: t('breeding.eventsMenu.dryOff.description'),
       image: dryOffImage, // Replace with actual image URL
       route: '/dry-off'
     }
@@ -78,7 +80,7 @@ const BreedingEvents = () => {
   ];
 
   return (
-    <PageContainer title="Breeding Events">
+    <PageContainer title={t('breeding.eventsMenu.pageTitle')}>
       {/* Grid of Cards */}
       <Grid container spacing={3}>
         {events.map((event, index) => (
@@ -118,7 +120,7 @@ const BreedingEvents = () => {
                   }}
                   onClick={() => navigate(event.route)} // Navigate to the route
                 >
-                  View Details
+                  {t('breeding.eventsMenu.viewDetails')}
                 </Button>
               </CardContent>
             </Card>

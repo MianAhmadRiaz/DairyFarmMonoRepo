@@ -6,6 +6,7 @@ import {
   TextField,
   MenuItem
 } from "@mui/material";
+import { useTranslation } from "react-i18next";
 import {  getAllTags } from "../../../shared/services/herdinfo.services"; // Import the tag API
 
 interface DropdownObject {
@@ -14,6 +15,7 @@ interface DropdownObject {
 }
 
 const CmtTest: React.FC = () => {
+  const { t } = useTranslation();
   const [tagOptions, setTagOptions] = useState<DropdownObject[]>([]);
   const [selectedTag, setSelectedTag] = useState("");
   const [eventDate, setEventDate] = useState("");
@@ -40,7 +42,7 @@ const CmtTest: React.FC = () => {
       date: eventDate,
       remarks: remarks
     });
-    alert("Event Registered Successfully!");
+    alert(t("herd.cmtTest.eventRegistered"));
   };
 
   const handleCancel = () => {
@@ -61,7 +63,7 @@ const CmtTest: React.FC = () => {
       }}
     >
       <Typography variant="h5" sx={{ mb: 2, fontWeight: "bold" }}>
-        CMT TEST
+        {t("herd.cmtTest.title")}
       </Typography>
 
       {/* --- First Card: Form --- */}
@@ -86,7 +88,7 @@ const CmtTest: React.FC = () => {
           {/* Tag ID Dropdown */}
           <Box sx={{ display: "flex", flexDirection: "column", flex: 1 }}>
             <Typography fontWeight="500" mb={1}>
-              Tag ID
+              {t("herd.cmtTest.tagId")}
             </Typography>
             <TextField
               fullWidth
@@ -94,7 +96,7 @@ const CmtTest: React.FC = () => {
               value={selectedTag}
               onChange={(e) => setSelectedTag(e.target.value)}
               variant="outlined"
-              placeholder="Select Tag"
+              placeholder={t("herd.cmtTest.selectTag")}
             >
               {tagOptions.map((tag) => (
                 <MenuItem key={tag.uuid} value={tag.uuid}>
@@ -107,7 +109,7 @@ const CmtTest: React.FC = () => {
           {/* Date Picker */}
           <Box sx={{ display: "flex", flexDirection: "column", flex: 1 }}>
             <Typography fontWeight="500" mb={1}>
-              Date
+              {t("herd.cmtTest.date")}
             </Typography>
             <TextField
               fullWidth
@@ -122,13 +124,13 @@ const CmtTest: React.FC = () => {
         {/* Row 2: Remarks textarea */}
         <Box sx={{ display: "flex", flexDirection: "column", mb: 2 }}>
           <Typography fontWeight="500" mb={1}>
-            Enter event remarks
+            {t("herd.cmtTest.enterRemarks")}
           </Typography>
           <TextField
             fullWidth
             multiline
             rows={3}
-            placeholder="Enter event remarks"
+            placeholder={t("herd.cmtTest.enterRemarks")}
             value={remarks}
             onChange={(e) => setRemarks(e.target.value)}
             variant="outlined"
@@ -142,14 +144,14 @@ const CmtTest: React.FC = () => {
             sx={{ backgroundColor: "#295d5d", "&:hover": { backgroundColor: "#1f4848" }, textTransform: "none" }}
             onClick={handleRegisterEvent}
           >
-            Register Event
+            {t("herd.cmtTest.registerEvent")}
           </Button>
           <Button
             variant="contained"
             sx={{ backgroundColor: "#e0e0e0", color: "#333", "&:hover": { backgroundColor: "#cfcfcf" }, textTransform: "none" }}
             onClick={handleCancel}
           >
-            Cancel
+            {t("common.cancel")}
           </Button>
         </Box>
       </Box>
@@ -164,18 +166,18 @@ const CmtTest: React.FC = () => {
         }}
       >
         <Typography variant="h6" sx={{ mb: 2, fontWeight: "medium" }}>
-          Recent Event
+          {t("herd.cmtTest.recentEvent")}
         </Typography>
 
         <Box sx={{ display: "flex", flexWrap: "wrap", gap: 1 }}>
-          <TextField placeholder="Search" size="small" sx={{ maxWidth: "200px" }} />
+          <TextField placeholder={t("common.search")} size="small" sx={{ maxWidth: "200px" }} />
           <TextField type="date" size="small" />
           <TextField type="date" size="small" />
           <Button
             variant="contained"
             sx={{ backgroundColor: "#c7e596", color: "#333", textTransform: "none", "&:hover": { backgroundColor: "#b8d986" } }}
           >
-            Search
+            {t("common.search")}
           </Button>
         </Box>
       </Box>

@@ -1,14 +1,16 @@
 import React, { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Box, Card, CardContent, Typography } from '@mui/material';
 import PageContainer from '../../shared/components/Layout/PageContainer';
 import { getEmployeeCount } from '../../shared/services/EmployeeAPI/viewemployee.service';
 
 export default function EmployeeDashboard() {
+  const { t } = useTranslation();
   const [employeeData, setEmployeeData] = useState([
-    { value: 0, label: 'Total Employee', icon: '👥' },
-    { value: 0, label: 'Total Salary Paid', icon: '💰' },
-    { value: 0, label: 'Active Employees', icon: '✅' },
-    { value: 0, label: 'Pending Salaries', icon: '⏳' }
+    { value: 0, label: t('employee.dashboard.totalEmployee'), icon: '👥' },
+    { value: 0, label: t('employee.dashboard.totalSalaryPaid'), icon: '💰' },
+    { value: 0, label: t('employee.dashboard.activeEmployees'), icon: '✅' },
+    { value: 0, label: t('employee.dashboard.pendingSalaries'), icon: '⏳' }
   ]);
   const [employeeCount, setEmployeeCount] = useState(0);
 
@@ -20,10 +22,10 @@ export default function EmployeeDashboard() {
         setEmployeeCount(count);
 
         setEmployeeData([
-          { value: count, label: 'Total Employee', icon: '👥' },
-          { value: 0, label: 'Total Salary Paid', icon: '💰' },
-          { value: count, label: 'Active Employees', icon: '✅' },
-          { value: 0, label: 'Pending Salaries', icon: '⏳' }
+          { value: count, label: t('employee.dashboard.totalEmployee'), icon: '👥' },
+          { value: 0, label: t('employee.dashboard.totalSalaryPaid'), icon: '💰' },
+          { value: count, label: t('employee.dashboard.activeEmployees'), icon: '✅' },
+          { value: 0, label: t('employee.dashboard.pendingSalaries'), icon: '⏳' }
         ]);
       } catch (error) {
         console.error('Failed to fetch employee count:', error);
@@ -31,10 +33,10 @@ export default function EmployeeDashboard() {
     };
 
     fetchCount();
-  }, []);
+  }, [t]);
 
   return (
-    <PageContainer title="Employee Dashboard">
+    <PageContainer title={t('employee.dashboard.title')}>
       <Card sx={{ mb: 3, boxShadow: 3, borderRadius: 2 }}>
         <CardContent>
           <Box

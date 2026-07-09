@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Grid, Box, Typography, CircularProgress, useTheme } from '@mui/material';
+import { useTranslation } from 'react-i18next';
 import GlassCard from '../../../../shared/components/charts/GlassCard';
 import EmptyState from '../../../../shared/components/charts/EmptyState';
 import DonutChart from '../../../../shared/components/DonutChart/DonutChart';
@@ -14,6 +15,7 @@ const CATEGORY_COLORS: Record<string, string> = {
 
 const CompositionTab: React.FC = () => {
   const theme = useTheme();
+  const { t } = useTranslation();
   const [herdInfo, setHerdInfo] = useState<any>(null);
   const [loading, setLoading] = useState(true);
 
@@ -33,7 +35,7 @@ const CompositionTab: React.FC = () => {
   }
 
   const categories = ['milk', 'dry', 'heifers', 'calves'].filter(c => (herdInfo as any)?.[c] !== undefined);
-  const compositionData = categories.map(c => ({ name: c, value: (herdInfo as any)[c] || 0 }));
+  const compositionData = categories.map(c => ({ name: t('dashboard.composition.categories.' + c, c), value: (herdInfo as any)[c] || 0 }));
   const compositionColors = categories.map(c => CATEGORY_COLORS[c]);
   const totalComposition = compositionData.reduce((s, d) => s + d.value, 0);
 
@@ -41,7 +43,7 @@ const CompositionTab: React.FC = () => {
     <Grid container spacing={2.5}>
       <Grid item xs={12} md={6}>
         <GlassCard delay={0}>
-          <Typography sx={{ fontWeight: 700, mb: 1.5 }}>Herd Composition</Typography>
+          <Typography sx={{ fontWeight: 700, mb: 1.5 }}>{t('dashboard.composition.herdCompositionTitle')}</Typography>
           {totalComposition > 0 ? (
             <Box>
               <DonutChart data={compositionData} colors={compositionColors} height={200} />
@@ -55,31 +57,31 @@ const CompositionTab: React.FC = () => {
               </Box>
             </Box>
           ) : (
-            <EmptyState title="No animals recorded yet" icon="🐄" />
+            <EmptyState title={t('dashboard.composition.noAnimals')} icon="🐄" />
           )}
         </GlassCard>
       </Grid>
 
       <Grid item xs={12} md={6}>
         <GlassCard delay={0.1}>
-          <Typography sx={{ fontWeight: 700, mb: 1.5 }}>Pregnancy Status</Typography>
+          <Typography sx={{ fontWeight: 700, mb: 1.5 }}>{t('dashboard.composition.pregnancyStatusTitle')}</Typography>
           {herdInfo?.totalAnimals ? (
             <Box>
               <DonutChart
                 data={[
-                  { name: 'Pregnant', value: herdInfo.pregnantPercentage || 0 },
-                  { name: 'Open', value: 100 - (herdInfo.pregnantPercentage || 0) },
+                  { name: t('dashboard.composition.pregnant'), value: herdInfo.pregnantPercentage || 0 },
+                  { name: t('dashboard.composition.open'), value: 100 - (herdInfo.pregnantPercentage || 0) },
                 ]}
                 colors={['#4cceac', '#e2a23b']}
                 height={200}
               />
               <Box sx={{ display: 'flex', justifyContent: 'center', gap: 2, mt: 1.5 }}>
-                <Typography sx={{ fontSize: 12 }}>🟢 {(herdInfo.pregnantPercentage || 0).toFixed(1)}% Pregnant</Typography>
-                <Typography sx={{ fontSize: 12 }}>🟠 {(100 - (herdInfo.pregnantPercentage || 0)).toFixed(1)}% Open</Typography>
+                <Typography sx={{ fontSize: 12 }}>🟢 {t('dashboard.composition.pregnantPct', { pct: (herdInfo.pregnantPercentage || 0).toFixed(1) })}</Typography>
+                <Typography sx={{ fontSize: 12 }}>🟠 {t('dashboard.composition.openPct', { pct: (100 - (herdInfo.pregnantPercentage || 0)).toFixed(1) })}</Typography>
               </Box>
             </Box>
           ) : (
-            <EmptyState title="No pregnancy data yet" icon="🤰" />
+            <EmptyState title={t('dashboard.composition.noPregnancyData')} icon="🤰" />
           )}
         </GlassCard>
       </Grid>

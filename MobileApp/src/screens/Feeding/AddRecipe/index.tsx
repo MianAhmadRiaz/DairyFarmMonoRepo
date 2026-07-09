@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { useNavigation } from '@react-navigation/native'
 import { ScrollView, TouchableOpacity, View } from 'react-native'
 import Toast from 'react-native-toast-message'
@@ -19,6 +20,7 @@ import { RF } from 'shared/theme/responsive'
 type IngRow = { label: string; quantity: string }
 
 const AddRecipe = () => {
+  const { t } = useTranslation()
   const navigation = useNavigation<any>()
   const { can } = usePermissions()
   const canManage = can(PERMISSIONS.FEED_MANAGE)
@@ -43,7 +45,7 @@ const AddRecipe = () => {
 
   const onSubmit = async () => {
     if (!name.trim()) {
-      Toast.show({ type: 'error', text1: 'Validation', text2: 'Recipe name is required' })
+      Toast.show({ type: 'error', text1: t('feeding.common.validation'), text2: t('feeding.addRecipe.nameRequired') })
       return
     }
     const group = groups.find(g => g.name === groupLabel)
@@ -54,16 +56,16 @@ const AddRecipe = () => {
       })
       .filter(Boolean)
     if (items.length === 0) {
-      Toast.show({ type: 'error', text1: 'Validation', text2: 'Add at least one ingredient' })
+      Toast.show({ type: 'error', text1: t('feeding.common.validation'), text2: t('feeding.addRecipe.ingredientRequired') })
       return
     }
     try {
       setLoading(true)
       await createRecipe({ name: name.trim(), description, recipeGroupId: group?.uuid, ingredients: items })
-      Toast.show({ type: 'success', text1: 'Success', text2: 'Recipe created' })
+      Toast.show({ type: 'success', text1: t('feeding.common.success'), text2: t('feeding.addRecipe.recipeCreated') })
       navigation.goBack()
     } catch (e) {
-      Toast.show({ type: 'error', text1: 'Error', text2: getNormalizedError(e) })
+      Toast.show({ type: 'error', text1: t('feeding.common.error'), text2: getNormalizedError(e) })
     } finally {
       setLoading(false)
     }
@@ -72,9 +74,9 @@ const AddRecipe = () => {
   if (!canManage) {
     return (
       <AppContainer>
-        <AppHeader title="Add Recipe" showBack />
+        <AppHeader title={t('feeding.addRecipe.title')} showBack />
         <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-          <AppText color="error">You do not have permission to create recipes.</AppText>
+          <AppText color="error">{t('feeding.addRecipe.noPermission')}</AppText>
         </View>
       </AppContainer>
     )
@@ -82,19 +84,19 @@ const AddRecipe = () => {
 
   return (
     <AppContainer>
-      <AppHeader title="Add Recipe" showBack />
+      <AppHeader title={t('feeding.addRecipe.title')} showBack />
       <ScrollView contentContainerStyle={{ padding: RF(16), paddingBottom: RF(40) }}>
-        <AppInput label="Recipe Name" value={name} onChangeText={setName} placeholder="e.g. Lactating TMR" />
-        <AppInput label="Description" value={description} onChangeText={setDescription} placeholder="Optional" />
-        <Dropdown label="Recipe Group" options={groups.map(g => g.name)} value={groupLabel} onChange={setGroupLabel} />
+        <AppInput label={t('feeding.addRecipe.recipeName')} value={name} onChangeText={setName} placeholder={t('feeding.addRecipe.recipeNamePlaceholder')} />
+        <AppInput label={t('feeding.addRecipe.description')} value={description} onChangeText={setDescription} placeholder={t('feeding.addRecipe.descriptionPlaceholder')} />
+        <Dropdown label={t('feeding.addRecipe.recipeGroup')} options={groups.map(g => g.name)} value={groupLabel} onChange={setGroupLabel} />
 
         <AppText fontSize="h7" semiBold style={{ marginTop: RF(16), marginBottom: RF(8) }}>
-          Ingredients
+          {t('feeding.addRecipe.ingredients')}
         </AppText>
         {rows.map((row, i) => (
           <View key={i} style={{ marginBottom: RF(12), backgroundColor: COLORS.white, borderRadius: RF(10), padding: RF(10) }}>
             <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
-              <AppText fontSize="caption" color="labelGrey">Ingredient {i + 1}</AppText>
+              <AppText fontSize="caption" color="labelGrey">{t('feeding.addRecipe.ingredientN', { count: i + 1 })}</AppText>
               {rows.length > 1 ? (
                 <TouchableOpacity onPress={() => removeRow(i)}>
                   <AnyIcon disabled type={Icons.Feather} name="x" size={RF(18)} color={COLORS.error} />
@@ -102,15 +104,15 @@ const AddRecipe = () => {
               ) : null}
             </View>
             <Dropdown label="" options={ingredients.map(x => x.name || x.item_name)} value={row.label} onChange={v => updateRow(i, 'label', v)} />
-            <AppInput label="Quantity (kg)" value={row.quantity} onChangeText={v => updateRow(i, 'quantity', v)} keyboardType="numeric" placeholder="0" />
+            <AppInput label={t('feeding.addRecipe.quantityKg')} value={row.quantity} onChangeText={v => updateRow(i, 'quantity', v)} keyboardType="numeric" placeholder="0" />
           </View>
         ))}
         <TouchableOpacity onPress={addRow} style={{ flexDirection: 'row', alignItems: 'center', marginBottom: RF(16) }}>
           <AnyIcon disabled type={Icons.Ionicons} name="add-circle" size={RF(22)} color={COLORS.primaryMain} />
-          <AppText color="primaryMain" medium style={{ marginLeft: RF(6) }}>Add Ingredient</AppText>
+          <AppText color="primaryMain" medium style={{ marginLeft: RF(6) }}>{t('feeding.addRecipe.addIngredient')}</AppText>
         </TouchableOpacity>
 
-        <PrimaryButton title="Create Recipe" loading={loading} loaderColor={COLORS.white} onPress={onSubmit} />
+        <PrimaryButton title={t('feeding.addRecipe.createRecipe')} loading={loading} loaderColor={COLORS.white} onPress={onSubmit} />
       </ScrollView>
     </AppContainer>
   )

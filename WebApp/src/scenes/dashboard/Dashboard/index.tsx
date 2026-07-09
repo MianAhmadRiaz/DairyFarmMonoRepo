@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Box, Tabs, Tab, Typography, useTheme } from '@mui/material';
+import { useTranslation } from 'react-i18next';
 import PageContainer from '../../../shared/components/Layout/PageContainer';
 import { useScrollToTopOnMount } from '../../../shared/components/Hooks/useScrollToTop';
 
@@ -12,26 +13,27 @@ import FinancialsTab from './tabs/FinancialsTab';
 import YearOverYearTab from './tabs/YearOverYearTab';
 import AlertsTab from './tabs/AlertsTab';
 
-const TABS = [
-  { label: 'Overview', component: OverviewTab },
-  { label: 'Production', component: ProductionTab },
-  { label: 'Reproduction', component: ReproductionTab },
-  { label: 'Health & Disease', component: HealthTab },
-  { label: 'Composition', component: CompositionTab },
-  { label: 'Financials', component: FinancialsTab },
-  { label: 'Year-over-Year', component: YearOverYearTab },
-  { label: 'Alerts & Tasks', component: AlertsTab },
+const TAB_COMPONENTS = [
+  { key: 'overview', component: OverviewTab },
+  { key: 'production', component: ProductionTab },
+  { key: 'reproduction', component: ReproductionTab },
+  { key: 'health', component: HealthTab },
+  { key: 'composition', component: CompositionTab },
+  { key: 'financials', component: FinancialsTab },
+  { key: 'yearOverYear', component: YearOverYearTab },
+  { key: 'alerts', component: AlertsTab },
 ];
 
 const HerdDashboard: React.FC = () => {
   const theme = useTheme();
+  const { t } = useTranslation();
   useScrollToTopOnMount();
   const [tab, setTab] = useState(0);
 
-  const ActiveTabComponent = TABS[tab].component;
+  const ActiveTabComponent = TAB_COMPONENTS[tab].component;
 
   return (
-    <PageContainer title="Herd Dashboard" subtitle="Your farm, at a glance — production, health, breeding & more" maxWidth={1250}>
+    <PageContainer title={t('dashboard.pageTitle')} subtitle={t('dashboard.pageSubtitle')} maxWidth={1250}>
       <Box sx={{ borderBottom: 1, borderColor: 'divider', mb: 3, overflowX: 'auto' }}>
         <Tabs
           value={tab}
@@ -43,8 +45,8 @@ const HerdDashboard: React.FC = () => {
             '& .MuiTab-root': { textTransform: 'none', fontSize: 13.5, minHeight: 42, fontWeight: 600 },
           }}
         >
-          {TABS.map((t) => (
-            <Tab key={t.label} label={t.label} />
+          {TAB_COMPONENTS.map((tc) => (
+            <Tab key={tc.key} label={t('dashboard.tabs.' + tc.key)} />
           ))}
         </Tabs>
       </Box>

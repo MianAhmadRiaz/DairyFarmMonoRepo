@@ -11,6 +11,7 @@ import {
   Stack,
   Paper,
 } from '@mui/material';
+import { useTranslation } from 'react-i18next';
 import { tokens } from '../../shared/theme/theme';
 import PageContainer from '../../shared/components/Layout/PageContainer';
 
@@ -24,6 +25,13 @@ const COMPANY_OPTIONS = [
 ];
 
 const PRODUCT_OPTIONS = ['Milk', 'Skim Milk', 'Cream'];
+
+// i18n label keys for product options (values stay in English for the API)
+const PRODUCT_LABEL_KEYS: Record<string, string> = {
+  Milk: 'milk',
+  'Skim Milk': 'skimMilk',
+  Cream: 'cream',
+};
 
 // ------- Types -------
 interface FormState {
@@ -44,6 +52,7 @@ const cardRadius = 16;
 const isNumber = (v: unknown): v is number => typeof v === 'number' && !Number.isNaN(v);
 
 export default function MilkDispatch() {
+  const { t } = useTranslation();
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   const pageBg = theme.palette.mode === 'dark' ? colors.primary[500] : '#F5FAF7';
@@ -65,11 +74,11 @@ export default function MilkDispatch() {
 
   const errors = useMemo(() => {
     const e: Partial<Record<keyof FormState, string>> = {};
-    if (!form.company) e.company = 'Required';
-    if (!form.product) e.product = 'Required';
-    if (!form.date) e.date = 'Required';
+    if (!form.company) e.company = t('accounts.common.required');
+    if (!form.product) e.product = t('accounts.common.required');
+    if (!form.date) e.date = t('accounts.common.required');
     return e;
-  }, [form.company, form.product, form.date]);
+  }, [form.company, form.product, form.date, t]);
 
   const onChange = (
     key: keyof FormState,
@@ -90,14 +99,14 @@ export default function MilkDispatch() {
     });
 
   const save = () => {
-    if (Object.keys(errors).length) return alert('Please fill required fields');
+    if (Object.keys(errors).length) return alert(t('accounts.common.fillRequiredFields'));
     // Replace with API call
     console.log('Saving dispatch...', form);
-    alert('Saved! (demo)');
+    alert(t('accounts.milkDispatch.savedDemo'));
   };
 
   return (
-    <PageContainer title="Corporate Company Milk Dispatch">
+    <PageContainer title={t('accounts.milkDispatch.title')}>
         {/* Card */}
         <Paper
           elevation={0}
@@ -115,7 +124,7 @@ export default function MilkDispatch() {
                 select
                 fullWidth
                 size="small"
-                label="Choose Company"
+                label={t('accounts.milkDispatch.chooseCompany')}
                 value={form.company}
                 error={!!errors.company}
                 helperText={errors.company || ' '}
@@ -131,14 +140,14 @@ export default function MilkDispatch() {
                 select
                 fullWidth
                 size="small"
-                label="Milk Product"
+                label={t('accounts.milkDispatch.milkProduct')}
                 value={form.product}
                 error={!!errors.product}
                 helperText={errors.product || ' '}
                 onChange={(e) => onChange('product', e.target.value)}
               >
                 {PRODUCT_OPTIONS.map((p) => (
-                  <MenuItem key={p} value={p}>{p}</MenuItem>
+                  <MenuItem key={p} value={p}>{t(`accounts.milkDispatch.products.${PRODUCT_LABEL_KEYS[p]}`, p)}</MenuItem>
                 ))}
               </TextField>
             </Grid>
@@ -147,7 +156,7 @@ export default function MilkDispatch() {
                 fullWidth
                 size="small"
                 type="date"
-                label="Date"
+                label={t('accounts.milkDispatch.date')}
                 value={form.date}
                 error={!!errors.date}
                 helperText={errors.date || ' '}
@@ -160,17 +169,17 @@ export default function MilkDispatch() {
               <TextField
                 fullWidth
                 size="small"
-                label="Current Milk"
+                label={t('accounts.milkDispatch.currentMilk')}
                 value={form.currentMilk}
                 InputProps={{ readOnly: true }}
-                helperText="Litres currently available"
+                helperText={t('accounts.milkDispatch.litresAvailable')}
               />
             </Grid>
             <Grid item xs={12} md={4}>
               <TextField
                 fullWidth
                 size="small"
-                label="Volume (L)"
+                label={t('accounts.milkDispatch.volume')}
                 type="number"
                 value={form.volume}
                 onChange={(e) => onChange('volume', e.target.value === '' ? '' : Number(e.target.value))}
@@ -181,7 +190,7 @@ export default function MilkDispatch() {
               <TextField
                 fullWidth
                 size="small"
-                label="Fat (%)"
+                label={t('accounts.milkDispatch.fat')}
                 type="number"
                 value={form.fat}
                 onChange={(e) => onChange('fat', e.target.value === '' ? '' : Number(e.target.value))}
@@ -193,7 +202,7 @@ export default function MilkDispatch() {
               <TextField
                 fullWidth
                 size="small"
-                label="LR"
+                label={t('accounts.milkDispatch.lr')}
                 type="number"
                 value={form.lr}
                 onChange={(e) => onChange('lr', e.target.value === '' ? '' : Number(e.target.value))}
@@ -204,7 +213,7 @@ export default function MilkDispatch() {
               <TextField
                 fullWidth
                 size="small"
-                label="S.N.F (%)"
+                label={t('accounts.milkDispatch.snf')}
                 type="number"
                 value={form.snf}
                 onChange={(e) => onChange('snf', e.target.value === '' ? '' : Number(e.target.value))}
@@ -215,7 +224,7 @@ export default function MilkDispatch() {
               <TextField
                 fullWidth
                 size="small"
-                label="Adjusted Volume (L)"
+                label={t('accounts.milkDispatch.adjustedVolume')}
                 type="number"
                 value={form.adjustedVolume}
                 onChange={(e) => onChange('adjustedVolume', e.target.value === '' ? '' : Number(e.target.value))}
@@ -237,7 +246,7 @@ export default function MilkDispatch() {
                  sx={{ backgroundColor: "#005f73", color: "#ffffff", marginTop: "20px",padding:"5px 20px" }}
 
             >
-              Save Changes
+              {t('accounts.common.saveChanges')}
             </Button>
             <Button
               variant="outlined"
@@ -251,7 +260,7 @@ sx={{
     textTransform: 'none',
     backgroundColor: '#CECECE'
   }}            >
-              Reset
+              {t('accounts.common.reset')}
             </Button>
           </Stack>
         </Paper>

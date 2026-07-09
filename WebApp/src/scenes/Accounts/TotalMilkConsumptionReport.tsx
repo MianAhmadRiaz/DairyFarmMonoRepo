@@ -25,6 +25,7 @@ import {
   PictureAsPdf as PictureAsPdfIcon,
   CalendarToday as CalendarTodayIcon
 } from '@mui/icons-material';
+import { useTranslation } from 'react-i18next';
 import { tokens } from '../../shared/theme/theme';
 import PageContainer from '../../shared/components/Layout/PageContainer';
 
@@ -53,6 +54,7 @@ interface SnackbarState {
 }
 
 const TotalMilkConsumptionReport: React.FC = () => {
+  const { t } = useTranslation();
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   const pageBg = theme.palette.mode === 'dark' ? colors.primary[500] : '#F5FAF7';
@@ -313,18 +315,35 @@ const TotalMilkConsumptionReport: React.FC = () => {
   // Handle GET Result
   const handleGetResult = () => {
     if (!startingDate || !endingDate) {
-      setSnackbar({ open: true, message: 'Please select both starting and ending dates', severity: 'error' });
+      setSnackbar({ open: true, message: t('accounts.common.selectDatesError'), severity: 'error' });
       return;
     }
-    
+
     setShowData(true);
-    setSnackbar({ open: true, message: 'Milk consumption report generated successfully!', severity: 'success' });
+    setSnackbar({ open: true, message: t('accounts.totalMilkConsumptionReport.reportGenerated'), severity: 'success' });
   };
+
+  // Export headers (translated once, reused by CSV/Excel/Copy)
+  const exportHeaders = [
+    '#',
+    t('accounts.common.columns.date'),
+    t('accounts.totalMilkConsumptionReport.columns.milk', { num: 1 }),
+    t('accounts.totalMilkConsumptionReport.columns.milk', { num: 2 }),
+    t('accounts.totalMilkConsumptionReport.columns.milk', { num: 3 }),
+    t('accounts.common.total'),
+    t('accounts.totalMilkConsumptionReport.columns.purchaseReturn'),
+    t('accounts.totalMilkConsumptionReport.columns.officeMainMilk', { num: 1 }),
+    t('accounts.totalMilkConsumptionReport.columns.officeMainMilk', { num: 2 }),
+    t('accounts.totalMilkConsumptionReport.columns.officeMainMilk', { num: 3 }),
+    t('accounts.totalMilkConsumptionReport.columns.calvesConsumption'),
+    t('accounts.totalMilkConsumptionReport.columns.localDispatch'),
+    t('accounts.totalMilkConsumptionReport.columns.overallRemainingMilk')
+  ];
 
   // Handle CSV export
   const handleCsvExport = () => {
     const csvContent = [
-      ['#', 'Date', 'Milk 1', 'Milk 2', 'Milk 3', 'Total', 'Purchase/Return', 'Office (Main) Milk 1', 'Office (Main) Milk 2', 'Office (Main) Milk 3', 'Calves Consumption', 'Local Dispatch', 'Overall Remaining Milk'],
+      exportHeaders,
       ...milkConsumptionData.map((entry: MilkConsumptionEntry) => [
         entry.srNo,
         entry.date,
@@ -358,7 +377,7 @@ const TotalMilkConsumptionReport: React.FC = () => {
   // Handle Excel export
   const handleExcelExport = () => {
     const xlsContent = [
-      '#\tDate\tMilk 1\tMilk 2\tMilk 3\tTotal\tPurchase/Return\tOffice (Main) Milk 1\tOffice (Main) Milk 2\tOffice (Main) Milk 3\tCalves Consumption\tLocal Dispatch\tOverall Remaining Milk',
+      exportHeaders.join('\t'),
       ...milkConsumptionData.map((entry: MilkConsumptionEntry) => 
         `${entry.srNo}\t${entry.date}\t${entry.milk1}\t${entry.milk2}\t${entry.milk3}\t${entry.total}\t${entry.purchaseReturn}\t${entry.officeMainMilk1}\t${entry.officeMainMilk2}\t${entry.officeMainMilk3}\t${entry.calvesConsumption}\t${entry.localDispatch}\t${entry.overallRemainingMilk}`
       )
@@ -380,16 +399,16 @@ const TotalMilkConsumptionReport: React.FC = () => {
   // Handle Copy to clipboard
   const handleCopy = () => {
     const textContent = [
-      '#\tDate\tMilk 1\tMilk 2\tMilk 3\tTotal\tPurchase/Return\tOffice (Main) Milk 1\tOffice (Main) Milk 2\tOffice (Main) Milk 3\tCalves Consumption\tLocal Dispatch\tOverall Remaining Milk',
+      exportHeaders.join('\t'),
       ...milkConsumptionData.map((entry: MilkConsumptionEntry) => 
         `${entry.srNo}\t${entry.date}\t${entry.milk1}\t${entry.milk2}\t${entry.milk3}\t${entry.total}\t${entry.purchaseReturn}\t${entry.officeMainMilk1}\t${entry.officeMainMilk2}\t${entry.officeMainMilk3}\t${entry.calvesConsumption}\t${entry.localDispatch}\t${entry.overallRemainingMilk}`
       )
     ].join('\n');
 
     navigator.clipboard.writeText(textContent).then(() => {
-      setSnackbar({ open: true, message: 'Data copied to clipboard!', severity: 'success' });
+      setSnackbar({ open: true, message: t('accounts.common.copiedToClipboard'), severity: 'success' });
     }).catch(() => {
-      setSnackbar({ open: true, message: 'Failed to copy data', severity: 'error' });
+      setSnackbar({ open: true, message: t('accounts.common.copyFailed'), severity: 'error' });
     });
   };
 
@@ -400,7 +419,7 @@ const TotalMilkConsumptionReport: React.FC = () => {
       pdfWindow.document.write(`
         <html>
           <head>
-            <title>Total Milk Consumption Report PDF</title>
+            <title>${t('accounts.totalMilkConsumptionReport.pdfTitle')}</title>
             <style>
               body { font-family: Arial, sans-serif; padding: 10px; }
               table { width: 100%; border-collapse: collapse; margin: 20px 0; font-size: 8px; }
@@ -412,26 +431,26 @@ const TotalMilkConsumptionReport: React.FC = () => {
           </head>
           <body>
             <div class="header">
-              <h2>Total Milk Consumption Report</h2>
-              <p>Period: ${startingDate} to ${endingDate}</p>
-              <p>Opening Milk: ${openingMilk}</p>
+              <h2>${t('accounts.totalMilkConsumptionReport.title')}</h2>
+              <p>${t('accounts.common.period', { start: startingDate, end: endingDate })}</p>
+              <p>${t('accounts.totalMilkConsumptionReport.openingMilk')} ${openingMilk}</p>
             </div>
             <table>
               <thead>
                 <tr>
                   <th>#</th>
-                  <th>Date</th>
-                  <th>Milk 1</th>
-                  <th>Milk 2</th>
-                  <th>Milk 3</th>
-                  <th>Total</th>
-                  <th>Purchase/Return</th>
-                  <th>Office Milk 1</th>
-                  <th>Office Milk 2</th>
-                  <th>Office Milk 3</th>
-                  <th>Calves</th>
-                  <th>Local Dispatch</th>
-                  <th>Remaining</th>
+                  <th>${t('accounts.common.columns.date')}</th>
+                  <th>${t('accounts.totalMilkConsumptionReport.columns.milk', { num: 1 })}</th>
+                  <th>${t('accounts.totalMilkConsumptionReport.columns.milk', { num: 2 })}</th>
+                  <th>${t('accounts.totalMilkConsumptionReport.columns.milk', { num: 3 })}</th>
+                  <th>${t('accounts.common.total')}</th>
+                  <th>${t('accounts.totalMilkConsumptionReport.columns.purchaseReturn')}</th>
+                  <th>${t('accounts.totalMilkConsumptionReport.columns.officeMilkShort', { num: 1 })}</th>
+                  <th>${t('accounts.totalMilkConsumptionReport.columns.officeMilkShort', { num: 2 })}</th>
+                  <th>${t('accounts.totalMilkConsumptionReport.columns.officeMilkShort', { num: 3 })}</th>
+                  <th>${t('accounts.totalMilkConsumptionReport.columns.calvesShort')}</th>
+                  <th>${t('accounts.totalMilkConsumptionReport.columns.localDispatch')}</th>
+                  <th>${t('accounts.totalMilkConsumptionReport.columns.remainingShort')}</th>
                 </tr>
               </thead>
               <tbody>
@@ -453,7 +472,7 @@ const TotalMilkConsumptionReport: React.FC = () => {
                   </tr>
                 `).join('')}
                 <tr class="totals">
-                  <td>Total</td>
+                  <td>${t('accounts.common.total')}</td>
                   <td></td>
                   <td>${totals.milk1.toFixed(2)}</td>
                   <td>${totals.milk2.toFixed(2)}</td>
@@ -479,7 +498,7 @@ const TotalMilkConsumptionReport: React.FC = () => {
 
   // Handle Column Visibility
   const handleColumnVisibility = () => {
-    setSnackbar({ open: true, message: 'Column visibility options would open here', severity: 'success' });
+    setSnackbar({ open: true, message: t('accounts.common.columnVisibilityInfo'), severity: 'success' });
   };
 
   // Handle export functions
@@ -498,7 +517,7 @@ const TotalMilkConsumptionReport: React.FC = () => {
         handleCopy();
         break;
       default:
-        setSnackbar({ open: true, message: `Exporting to ${format.toUpperCase()}...`, severity: 'success' });
+        setSnackbar({ open: true, message: t('accounts.common.exportingTo', { format: format.toUpperCase() }), severity: 'success' });
     }
   };
 
@@ -512,14 +531,14 @@ const TotalMilkConsumptionReport: React.FC = () => {
   };
 
   return (
-    <PageContainer title="Total Milk Consumption Report" maxWidth={1400}>
+    <PageContainer title={t('accounts.totalMilkConsumptionReport.title')} maxWidth={1400}>
         {/* Date Range Selection */}
         <Paper elevation={0} sx={{ p: 3, mb: 2, borderRadius: 2, border: `1px solid ${theme.palette.divider}`, bgcolor: 'background.paper' }}>
           <Stack direction={{ xs: 'column', md: 'row' }} spacing={3} alignItems="center" justifyContent="space-between">
             <Stack direction={{ xs: 'column', sm: 'row' }} spacing={3} alignItems="center">
               <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                 <CalendarTodayIcon sx={{ color: '#005f73' }} />
-                <Typography variant="body2" fontWeight={600}>Starting Date:</Typography>
+                <Typography variant="body2" fontWeight={600}>{t('accounts.common.startingDate')}</Typography>
                 <TextField
                   type="date"
                   size="small"
@@ -531,7 +550,7 @@ const TotalMilkConsumptionReport: React.FC = () => {
               
               <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                 <CalendarTodayIcon sx={{ color: '#005f73' }} />
-                <Typography variant="body2" fontWeight={600}>Ending Date:</Typography>
+                <Typography variant="body2" fontWeight={600}>{t('accounts.common.endingDate')}</Typography>
                 <TextField
                   type="date"
                   size="small"
@@ -555,7 +574,7 @@ const TotalMilkConsumptionReport: React.FC = () => {
                 }
               }}
             >
-              GET Result
+              {t('accounts.common.getResult')}
             </Button>
           </Stack>
         </Paper>
@@ -564,10 +583,10 @@ const TotalMilkConsumptionReport: React.FC = () => {
         <Paper elevation={0} sx={{ p: 2, mb: 2, borderRadius: 2, border: `1px solid ${theme.palette.divider}`, bgcolor: 'background.paper' }}>
           <Stack direction="row" justifyContent="space-between" alignItems="center">
             <Typography variant="h6" fontWeight={600} sx={{ color: '#005f73' }}>
-              Total Milk Consumption Report
+              {t('accounts.totalMilkConsumptionReport.title')}
             </Typography>
             <Typography variant="body1" fontWeight={600}>
-              Opening Milk: <span style={{ color: '#d32f2f' }}>{openingMilk}</span>
+              {t('accounts.totalMilkConsumptionReport.openingMilk')} <span style={{ color: '#d32f2f' }}>{openingMilk}</span>
             </Typography>
           </Stack>
         </Paper>
@@ -587,7 +606,7 @@ const TotalMilkConsumptionReport: React.FC = () => {
                     onClick={handleColumnVisibility}
                     sx={{ textTransform: 'none', fontSize: '0.75rem' }}
                   >
-                    Column visibility
+                    {t('accounts.common.columnVisibility')}
                   </Button>
                   <Button 
                     size="small" 
@@ -596,7 +615,7 @@ const TotalMilkConsumptionReport: React.FC = () => {
                     onClick={() => handleExport('copy')}
                     sx={{ textTransform: 'none', fontSize: '0.75rem' }}
                   >
-                    Copy
+                    {t('accounts.common.copy')}
                   </Button>
                   <Button 
                     size="small" 
@@ -629,7 +648,7 @@ const TotalMilkConsumptionReport: React.FC = () => {
                 
                 <TextField
                   size="small"
-                  placeholder="Search"
+                  placeholder={t('common.search')}
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
                   InputProps={{
@@ -650,18 +669,18 @@ const TotalMilkConsumptionReport: React.FC = () => {
                 <TableHead>
                   <TableRow>
                     <TableCell sx={{ fontWeight: 600, bgcolor: theme.palette.mode === 'dark' ? colors.primary[400] : '#f5f5f5', border: `1px solid ${theme.palette.divider}`, minWidth: 60 }}>#</TableCell>
-                    <TableCell sx={{ fontWeight: 600, bgcolor: theme.palette.mode === 'dark' ? colors.primary[400] : '#f5f5f5', border: `1px solid ${theme.palette.divider}`, minWidth: 100 }}>Date</TableCell>
-                    <TableCell sx={{ fontWeight: 600, bgcolor: theme.palette.mode === 'dark' ? colors.primary[400] : '#f5f5f5', border: `1px solid ${theme.palette.divider}`, minWidth: 80, textAlign: 'right' }}>Milk 1</TableCell>
-                    <TableCell sx={{ fontWeight: 600, bgcolor: theme.palette.mode === 'dark' ? colors.primary[400] : '#f5f5f5', border: `1px solid ${theme.palette.divider}`, minWidth: 80, textAlign: 'right' }}>Milk 2</TableCell>
-                    <TableCell sx={{ fontWeight: 600, bgcolor: theme.palette.mode === 'dark' ? colors.primary[400] : '#f5f5f5', border: `1px solid ${theme.palette.divider}`, minWidth: 80, textAlign: 'right' }}>Milk 3</TableCell>
-                    <TableCell sx={{ fontWeight: 600, bgcolor: theme.palette.mode === 'dark' ? colors.primary[400] : '#f5f5f5', border: `1px solid ${theme.palette.divider}`, minWidth: 80, textAlign: 'right' }}>Total</TableCell>
-                    <TableCell sx={{ fontWeight: 600, bgcolor: theme.palette.mode === 'dark' ? colors.primary[400] : '#f5f5f5', border: `1px solid ${theme.palette.divider}`, minWidth: 120, textAlign: 'right' }}>Purchase/Return</TableCell>
-                    <TableCell sx={{ fontWeight: 600, bgcolor: theme.palette.mode === 'dark' ? colors.primary[400] : '#f5f5f5', border: `1px solid ${theme.palette.divider}`, minWidth: 120, textAlign: 'right' }}>Office (Main) Milk 1</TableCell>
-                    <TableCell sx={{ fontWeight: 600, bgcolor: theme.palette.mode === 'dark' ? colors.primary[400] : '#f5f5f5', border: `1px solid ${theme.palette.divider}`, minWidth: 120, textAlign: 'right' }}>Office (Main) Milk 2</TableCell>
-                    <TableCell sx={{ fontWeight: 600, bgcolor: theme.palette.mode === 'dark' ? colors.primary[400] : '#f5f5f5', border: `1px solid ${theme.palette.divider}`, minWidth: 120, textAlign: 'right' }}>Office (Main) Milk 3</TableCell>
-                    <TableCell sx={{ fontWeight: 600, bgcolor: theme.palette.mode === 'dark' ? colors.primary[400] : '#f5f5f5', border: `1px solid ${theme.palette.divider}`, minWidth: 120, textAlign: 'right' }}>Calves Consumption</TableCell>
-                    <TableCell sx={{ fontWeight: 600, bgcolor: theme.palette.mode === 'dark' ? colors.primary[400] : '#f5f5f5', border: `1px solid ${theme.palette.divider}`, minWidth: 100, textAlign: 'right' }}>Local Dispatch</TableCell>
-                    <TableCell sx={{ fontWeight: 600, bgcolor: theme.palette.mode === 'dark' ? colors.primary[400] : '#f5f5f5', border: `1px solid ${theme.palette.divider}`, minWidth: 140, textAlign: 'right' }}>Overall Remaining Milk</TableCell>
+                    <TableCell sx={{ fontWeight: 600, bgcolor: theme.palette.mode === 'dark' ? colors.primary[400] : '#f5f5f5', border: `1px solid ${theme.palette.divider}`, minWidth: 100 }}>{t('accounts.common.columns.date')}</TableCell>
+                    <TableCell sx={{ fontWeight: 600, bgcolor: theme.palette.mode === 'dark' ? colors.primary[400] : '#f5f5f5', border: `1px solid ${theme.palette.divider}`, minWidth: 80, textAlign: 'right' }}>{t('accounts.totalMilkConsumptionReport.columns.milk', { num: 1 })}</TableCell>
+                    <TableCell sx={{ fontWeight: 600, bgcolor: theme.palette.mode === 'dark' ? colors.primary[400] : '#f5f5f5', border: `1px solid ${theme.palette.divider}`, minWidth: 80, textAlign: 'right' }}>{t('accounts.totalMilkConsumptionReport.columns.milk', { num: 2 })}</TableCell>
+                    <TableCell sx={{ fontWeight: 600, bgcolor: theme.palette.mode === 'dark' ? colors.primary[400] : '#f5f5f5', border: `1px solid ${theme.palette.divider}`, minWidth: 80, textAlign: 'right' }}>{t('accounts.totalMilkConsumptionReport.columns.milk', { num: 3 })}</TableCell>
+                    <TableCell sx={{ fontWeight: 600, bgcolor: theme.palette.mode === 'dark' ? colors.primary[400] : '#f5f5f5', border: `1px solid ${theme.palette.divider}`, minWidth: 80, textAlign: 'right' }}>{t('accounts.common.total')}</TableCell>
+                    <TableCell sx={{ fontWeight: 600, bgcolor: theme.palette.mode === 'dark' ? colors.primary[400] : '#f5f5f5', border: `1px solid ${theme.palette.divider}`, minWidth: 120, textAlign: 'right' }}>{t('accounts.totalMilkConsumptionReport.columns.purchaseReturn')}</TableCell>
+                    <TableCell sx={{ fontWeight: 600, bgcolor: theme.palette.mode === 'dark' ? colors.primary[400] : '#f5f5f5', border: `1px solid ${theme.palette.divider}`, minWidth: 120, textAlign: 'right' }}>{t('accounts.totalMilkConsumptionReport.columns.officeMainMilk', { num: 1 })}</TableCell>
+                    <TableCell sx={{ fontWeight: 600, bgcolor: theme.palette.mode === 'dark' ? colors.primary[400] : '#f5f5f5', border: `1px solid ${theme.palette.divider}`, minWidth: 120, textAlign: 'right' }}>{t('accounts.totalMilkConsumptionReport.columns.officeMainMilk', { num: 2 })}</TableCell>
+                    <TableCell sx={{ fontWeight: 600, bgcolor: theme.palette.mode === 'dark' ? colors.primary[400] : '#f5f5f5', border: `1px solid ${theme.palette.divider}`, minWidth: 120, textAlign: 'right' }}>{t('accounts.totalMilkConsumptionReport.columns.officeMainMilk', { num: 3 })}</TableCell>
+                    <TableCell sx={{ fontWeight: 600, bgcolor: theme.palette.mode === 'dark' ? colors.primary[400] : '#f5f5f5', border: `1px solid ${theme.palette.divider}`, minWidth: 120, textAlign: 'right' }}>{t('accounts.totalMilkConsumptionReport.columns.calvesConsumption')}</TableCell>
+                    <TableCell sx={{ fontWeight: 600, bgcolor: theme.palette.mode === 'dark' ? colors.primary[400] : '#f5f5f5', border: `1px solid ${theme.palette.divider}`, minWidth: 100, textAlign: 'right' }}>{t('accounts.totalMilkConsumptionReport.columns.localDispatch')}</TableCell>
+                    <TableCell sx={{ fontWeight: 600, bgcolor: theme.palette.mode === 'dark' ? colors.primary[400] : '#f5f5f5', border: `1px solid ${theme.palette.divider}`, minWidth: 140, textAlign: 'right' }}>{t('accounts.totalMilkConsumptionReport.columns.overallRemainingMilk')}</TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
@@ -700,7 +719,7 @@ const TotalMilkConsumptionReport: React.FC = () => {
                   
                   {/* Totals Row */}
                   <TableRow sx={{ bgcolor: theme.palette.mode === 'dark' ? colors.primary[400] : '#f9f9f9' }}>
-                    <TableCell sx={{ border: `1px solid ${theme.palette.divider}`, fontWeight: 600 }}>Total</TableCell>
+                    <TableCell sx={{ border: `1px solid ${theme.palette.divider}`, fontWeight: 600 }}>{t('accounts.common.total')}</TableCell>
                     <TableCell sx={{ border: `1px solid ${theme.palette.divider}` }}></TableCell>
                     <TableCell sx={{ border: `1px solid ${theme.palette.divider}`, textAlign: 'right', fontWeight: 600 }}>{totals.milk1.toFixed(2)}</TableCell>
                     <TableCell sx={{ border: `1px solid ${theme.palette.divider}`, textAlign: 'right', fontWeight: 600 }}>{totals.milk2.toFixed(2)}</TableCell>
@@ -721,7 +740,7 @@ const TotalMilkConsumptionReport: React.FC = () => {
             {/* Entries Count */}
             <Box sx={{ p: 2, bgcolor: theme.palette.mode === 'dark' ? colors.primary[400] : '#f8f9fa', borderTop: `1px solid ${theme.palette.divider}` }}>
               <Typography variant="body2" color="text.secondary">
-                Showing 1 to {filteredData.length} of {milkConsumptionData.length} entries
+                {t('accounts.common.showingEntriesRange', { start: 1, end: filteredData.length, total: milkConsumptionData.length })}
               </Typography>
             </Box>
           </Paper>

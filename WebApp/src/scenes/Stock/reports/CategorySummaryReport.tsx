@@ -7,6 +7,7 @@ import {
 } from '../../../shared/services/stockModule.services';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { useTranslation } from 'react-i18next';
 
 interface SummaryRow {
   id: number;
@@ -65,6 +66,7 @@ const CategorySummaryReport: React.FC<CategorySummaryReportProps> = ({
   categoryName,
   typeLabel
 }) => {
+  const { t } = useTranslation();
   const defaultEnd = formatDate(new Date());
   const defaultStartDate = () => {
     const d = new Date();
@@ -94,10 +96,10 @@ const CategorySummaryReport: React.FC<CategorySummaryReportProps> = ({
         });
         setRows(result.map((row, index) => toSummaryRow(row, index, typeLabel)));
       } catch (error: any) {
-        toast.error(error?.response?.data?.message || 'Failed to fetch summary report.');
+        toast.error(error?.response?.data?.message || t('stock.categorySummaryReport.fetchError'));
       }
     },
-    [categoryName, typeLabel]
+    [categoryName, typeLabel, t]
   );
 
   useEffect(() => {

@@ -39,6 +39,7 @@ import CustomPagination from '../../../shared/components/Custom Pagination/Custo
 import { ToastContainer, toast,Id } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
 type Animal = {
   uuid: string;
@@ -47,6 +48,7 @@ type Animal = {
 };
 
  const MoveToPen = () => {
+  const { t } = useTranslation();
   const [recentEntries, setRecentEntries] = useState<any[]>([]);
   const [selectedTagId, setSelectedTagId] = useState<string>('');
   const [selectedPenId, setSelectedPenId] = useState<string>('');
@@ -86,7 +88,7 @@ const handleSubmit = async (e: React.FormEvent) => {
 
   const isFormValid = selectedTagId && selectedPenId && date && reason;
   if (!isFormValid) {
-    const warningMsg = "Please fill all the missing required fields";
+    const warningMsg = t("herd.moveToPen.warnRequired");
     if (toastId.current === null || !toast.isActive(toastId.current)) {
       toastId.current = toast.warning(warningMsg);
     }
@@ -110,7 +112,7 @@ const handleSubmit = async (e: React.FormEvent) => {
     const historyData = await fetchPenHistory();
     setRecentEntries(historyData);
 
-    toast.success("Pen move registered successfully!");
+    toast.success(t("herd.moveToPen.moveSuccess"));
 
     // Reset fields
     setSelectedTagId('');
@@ -120,7 +122,7 @@ const handleSubmit = async (e: React.FormEvent) => {
   } catch (err) {
     console.error('API Error:', err);
     if (toastId.current === null || !toast.isActive(toastId.current)) {
-      toastId.current = toast.error("Failed to register pen move. Please try again.");
+      toastId.current = toast.error(t("herd.moveToPen.moveError"));
 
     }
 
@@ -133,7 +135,7 @@ const handleSubmit = async (e: React.FormEvent) => {
  
 
   return (
-    <PageContainer title="Move to Pen" maxWidth={1200}>
+    <PageContainer title={t("herd.moveToPen.title")} maxWidth={1200}>
        {/* Form Section */}
       <Box sx={{
          padding: '20px', 
@@ -149,7 +151,7 @@ const handleSubmit = async (e: React.FormEvent) => {
               <TextField
                 fullWidth
                 select
-                label="Tag ID"
+                label={t("herd.moveToPen.tagId")}
                 variant="outlined"
                 value={selectedTagId}
                 onChange={(e) => setSelectedTagId(e.target.value)}
@@ -167,14 +169,14 @@ const handleSubmit = async (e: React.FormEvent) => {
               <TextField
                 fullWidth
                 select
-                label="Move To"
+                label={t("herd.moveToPen.moveTo")}
                 variant="outlined"
                 value={selectedPenId}
                 onChange={(e) => setSelectedPenId(e.target.value)}
                 disabled={loading}
                 sx={{ marginLeft: {xs:'-5px',md:'4px'} }}
               >
-                <MenuItem value="">Select Pen</MenuItem>
+                <MenuItem value="">{t("herd.moveToPen.selectPen")}</MenuItem>
                 {pens.map((pen) => (
                   <MenuItem key={pen.uuid} value={pen.uuid}>
                     {pen.name}
@@ -185,7 +187,7 @@ const handleSubmit = async (e: React.FormEvent) => {
             <Grid item xs={12} md={4}>
               <TextField
                 fullWidth
-                label="Date"
+                label={t("herd.moveToPen.date")}
                 type="date"
                 value={date}
                 onChange={(e) => setDate(e.target.value)}
@@ -196,7 +198,7 @@ const handleSubmit = async (e: React.FormEvent) => {
             </Grid>
             <Grid item xs={12}>
     <Typography marginLeft="10px" fontWeight="bold" gutterBottom>
-      Reason
+      {t("herd.moveToPen.reason")}
     </Typography>
     <TextField
       fullWidth
@@ -204,7 +206,7 @@ const handleSubmit = async (e: React.FormEvent) => {
       rows={4}
       value={reason}
       onChange={(e) => setReason(e.target.value)}
-      placeholder="Enter the reason here..."
+      placeholder={t("herd.moveToPen.reasonPlaceholder")}
       variant="outlined"
       disabled={loading}
       sx={{
@@ -240,7 +242,7 @@ const handleSubmit = async (e: React.FormEvent) => {
               }}
             >
             
-                 {loading ? <CircularProgress size={24} sx={{color:"#0F7C8F"}} /> : "Move"}
+                 {loading ? <CircularProgress size={24} sx={{color:"#0F7C8F"}} /> : t("herd.moveToPen.move")}
             </Button>
             <Button
               variant="outlined"
@@ -262,7 +264,7 @@ const handleSubmit = async (e: React.FormEvent) => {
                 setError('');
               }}
             >
-              Cancel
+              {t("common.cancel")}
             </Button>
           </Box>
         </form>
@@ -281,11 +283,11 @@ const handleSubmit = async (e: React.FormEvent) => {
         <Box sx={{ px: 2, pt: 2 }}>
         <Box mb={3} display="flex" justifyContent="space-between" alignItems="center">
           <Typography variant="h6" fontWeight="bold" sx={{ marginLeft: '10px' }}>
-            Recent Entries
+            {t("herd.moveToPen.recentEntries")}
           </Typography>
           <TextField
             variant="outlined"
-            placeholder="Search"
+            placeholder={t("common.search")}
             size="small"
             disabled={historyLoading}
             InputProps={{
@@ -304,12 +306,12 @@ const handleSubmit = async (e: React.FormEvent) => {
           <Table sx={{ width: '100%' }}>
             <TableHead sx={{backgroundColor: theme.palette.mode === 'dark' ? colors.primary[400] : '#F8F9FA'}}>
               <TableRow >
-                <TableCell sx={{ fontWeight: 'bold' }}>SR #</TableCell>
-                <TableCell sx={{ fontWeight: 'bold' }}>Animal ID</TableCell>
-                <TableCell sx={{ fontWeight: 'bold' }}>New Pen</TableCell>
-                <TableCell sx={{ fontWeight: 'bold' }}>Date</TableCell>
-                <TableCell sx={{ fontWeight: 'bold' }}>Reason</TableCell>
-                <TableCell sx={{ fontWeight: 'bold' }}>Old Pen</TableCell>
+                <TableCell sx={{ fontWeight: 'bold' }}>{t("herd.moveToPen.srNo")}</TableCell>
+                <TableCell sx={{ fontWeight: 'bold' }}>{t("herd.moveToPen.animalId")}</TableCell>
+                <TableCell sx={{ fontWeight: 'bold' }}>{t("herd.moveToPen.newPen")}</TableCell>
+                <TableCell sx={{ fontWeight: 'bold' }}>{t("herd.moveToPen.date")}</TableCell>
+                <TableCell sx={{ fontWeight: 'bold' }}>{t("herd.moveToPen.reason")}</TableCell>
+                <TableCell sx={{ fontWeight: 'bold' }}>{t("herd.moveToPen.oldPen")}</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -322,7 +324,7 @@ const handleSubmit = async (e: React.FormEvent) => {
   ) : recentEntries.length === 0 ? (
     <TableRow>
       <TableCell colSpan={6} align="center">
-        No entries found
+        {t("herd.moveToPen.noEntries")}
       </TableCell>
     </TableRow>
   ) : (
@@ -334,7 +336,7 @@ const handleSubmit = async (e: React.FormEvent) => {
           <TableRow key={entry.uuid}>
             <TableCell>{(currentPage - 1) * itemsPerPage + index + 1}</TableCell>
             <TableCell>
-              {tags.find(tag => tag.uuid === animal?.tagId)?.name || 'N/A'}
+              {tags.find(tag => tag.uuid === animal?.tagId)?.name || t("herd.moveToPen.na")}
             </TableCell>
             <TableCell>{entry.newPen?.name}</TableCell>
             <TableCell>{new Date(entry.date).toLocaleDateString()}</TableCell>

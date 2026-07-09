@@ -1,5 +1,6 @@
 import { ICONS } from 'assets/icons';
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { FlatList, StyleSheet, View } from 'react-native';
 import FastImage from 'react-native-fast-image';
 import AnyIcon, { Icons } from 'shared/components/AnyIcon';
@@ -10,28 +11,29 @@ import GLOBAL_STYLE from 'shared/theme/global';
 import { RF } from 'shared/theme/responsive';
 
 const AdditionalKpis = () => {
+  const { t } = useTranslation();
   const productionStats = [
     {
       id: '1',
-      label: 'Conception Rate',
+      label: t('main.additionalKpis.conceptionRate'),
       value: '41.2%',
     },
     {
       id: '2',
-      label: 'Age at 1st Calving',
+      label: t('main.additionalKpis.ageAtFirstCalving'),
       value: '24m',
     },
     {
       id: '3',
-      label: 'Mortality Rate',
+      label: t('main.additionalKpis.mortalityRate'),
       value: '1.8%',
     },
     {
       id: '4',
-      label: 'Abortion Ration',
+      label: t('main.additionalKpis.abortionRatio'),
       value: '4.75',
     },
-    { id: '5', label: 'Cost / Liter', value: '$0.36' },
+    { id: '5', label: t('main.additionalKpis.costPerLiter'), value: '$0.36' },
   ];
   const size = RF(30);
   const renderItem = ({ item }: any) => (
@@ -51,7 +53,7 @@ const AdditionalKpis = () => {
   return (
     <View style={styles.container}>
       <AppText semiBold fontSize="h7" style={styles.header}>
-        Additional KPIs
+        {t('main.additionalKpis.title')}
       </AppText>
 
       <FlatList

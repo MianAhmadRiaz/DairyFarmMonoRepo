@@ -1,5 +1,6 @@
 import { useNavigation } from '@react-navigation/native'
 import React, { ReactNode } from 'react'
+import { useTranslation } from 'react-i18next'
 import {
   ActivityIndicator,
   FlatList,
@@ -39,13 +40,14 @@ function ListScreen<T>({
   loading,
   refreshing,
   onRefresh,
-  emptyText = 'No records found.',
+  emptyText,
   headerRight,
   onPressAdd,
   addIcon = 'add',
   ListHeaderComponent
 }: Props<T>) {
   const navigation = useNavigation<any>()
+  const { t } = useTranslation()
 
   return (
     <AppContainer>
@@ -89,7 +91,7 @@ function ListScreen<T>({
                 color={COLORS.lightSilver}
               />
               <AppText color="descriptionColor" style={{ marginTop: RF(10) }}>
-                {emptyText}
+                {emptyText || t('shared.listScreen.empty')}
               </AppText>
             </View>
           }

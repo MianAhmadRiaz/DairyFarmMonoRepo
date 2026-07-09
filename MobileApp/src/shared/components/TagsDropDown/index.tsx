@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useCallback } from 'react'
+import { useTranslation } from 'react-i18next'
 import {
   View,
   TouchableOpacity,
@@ -39,6 +40,7 @@ const TagsDropDown: React.FC<TagsDropDownProps> = ({
   error,
   style
 }) => {
+  const { t } = useTranslation()
   const [visible, setVisible] = useState(false)
   const [loading, setLoading] = useState(false)
   const [searchText, setSearchText] = useState('')
@@ -75,7 +77,7 @@ const TagsDropDown: React.FC<TagsDropDownProps> = ({
   return (
     <>
       <TouchableOpacity activeOpacity={1} onPress={() => setVisible(true)}>
-        <AppText style={[styles.label]}>Choose Tag Id</AppText>
+        <AppText style={[styles.label]}>{t('shared.tagsDropdown.label')}</AppText>
         <View style={[styles.container, style]}>
           <Text
             style={[
@@ -83,7 +85,7 @@ const TagsDropDown: React.FC<TagsDropDownProps> = ({
               { color: value ? COLORS.darkestGrey : COLORS.placeholder }
             ]}
           >
-            {value?.name || 'Select Tag'}
+            {value?.name || t('shared.tagsDropdown.placeholder')}
           </Text>
           <AnyIcon
             disabled

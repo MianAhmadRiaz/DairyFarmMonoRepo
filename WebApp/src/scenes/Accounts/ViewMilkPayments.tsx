@@ -10,6 +10,7 @@ import PrintOutlinedIcon from '@mui/icons-material/PrintOutlined';
 import SearchIcon from '@mui/icons-material/Search';
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined';
+import { useTranslation } from 'react-i18next';
 import { tokens } from '../../shared/theme/theme';
 import PageContainer from '../../shared/components/Layout/PageContainer';
 
@@ -65,23 +66,24 @@ const demoRows: PaymentRow[] = [
 
 // ----- columns -----
 const columns = [
-  { key: 'paymentDate',  label: 'Payment Date',  width: 140 },
-  { key: 'company',      label: 'Company',       width: 260 },
-  { key: 'startDate',    label: 'Start Date',    width: 130 },
-  { key: 'endDate',      label: 'End Date',      width: 130 },
-  { key: 'volume',       label: 'Volume',        width: 110 },
-  { key: 'adjustedVolume', label: 'Adjusted Volume', width: 150 },
-  { key: 'baseRate',     label: 'Base Rate',     width: 110 },
-  { key: 'grossRate',    label: 'Gross Rate',    width: 110 },
-  { key: 'incentive',    label: 'Incentive',     width: 120 },
-  { key: 'billTotal',    label: 'Bill Total',    width: 140 },
-  { key: 'incomeAccount',label: 'Income Account',width: 220 },
-  { key: 'cashBank',     label: 'Cash/ Bank',    width: 210 },
-  { key: 'actions',      label: 'Actions',       width: 110 },
+  { key: 'paymentDate',  labelKey: 'accounts.viewMilkPayments.columns.paymentDate',  width: 140 },
+  { key: 'company',      labelKey: 'accounts.common.company',       width: 260 },
+  { key: 'startDate',    labelKey: 'shared.common.startDate',    width: 130 },
+  { key: 'endDate',      labelKey: 'shared.common.endDate',      width: 130 },
+  { key: 'volume',       labelKey: 'accounts.viewMilkPayments.columns.volume',        width: 110 },
+  { key: 'adjustedVolume', labelKey: 'accounts.viewMilkPayments.columns.adjustedVolume', width: 150 },
+  { key: 'baseRate',     labelKey: 'accounts.common.baseRate',     width: 110 },
+  { key: 'grossRate',    labelKey: 'accounts.viewMilkPayments.columns.grossRate',    width: 110 },
+  { key: 'incentive',    labelKey: 'accounts.viewMilkPayments.columns.incentive',     width: 120 },
+  { key: 'billTotal',    labelKey: 'accounts.viewMilkPayments.columns.billTotal',    width: 140 },
+  { key: 'incomeAccount',labelKey: 'accounts.viewMilkPayments.columns.incomeAccount',width: 220 },
+  { key: 'cashBank',     labelKey: 'accounts.viewMilkPayments.columns.cashBank',    width: 210 },
+  { key: 'actions',      labelKey: 'accounts.common.actions',       width: 110 },
 ] as const;
 type ColKey = typeof columns[number]['key'];
 
 export default function ViewMilkPayments() {
+  const { t } = useTranslation();
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   const pageBg = theme.palette.mode === 'dark' ? colors.primary[500] : '#F5FAF7';
@@ -123,9 +125,9 @@ export default function ViewMilkPayments() {
         default:            return (r as any)[c.key];
       }
     }));
-    const csv = toCsv(vCols.map(c => c.label), data);
+    const csv = toCsv(vCols.map(c => t(c.labelKey)), data);
     await navigator.clipboard.writeText(csv);
-    alert('Copied table (CSV) to clipboard');
+    alert(t('accounts.common.copiedCsv'));
   };
 
   const downloadCsv = (filename: string) => {
@@ -142,7 +144,7 @@ export default function ViewMilkPayments() {
         default:            return (r as any)[c.key];
       }
     }));
-    const csv = toCsv(vCols.map(c => c.label), data);
+    const csv = toCsv(vCols.map(c => t(c.labelKey)), data);
     const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a'); a.href = url; a.download = filename; a.click();
@@ -150,12 +152,12 @@ export default function ViewMilkPayments() {
   };
 
   return (
-    <PageContainer title="View Corporate Milk Payments">
+    <PageContainer title={t('accounts.viewMilkPayments.title')}>
         {/* Header + toolbar */}
         <Stack direction="row" alignItems="center" justifyContent="flex-end" sx={{ mb: 1 }}>
           <TextField
             size="small"
-            placeholder="Search"
+            placeholder={t('common.search')}
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             InputProps={{
@@ -174,7 +176,7 @@ export default function ViewMilkPayments() {
               variant="outlined"
               sx={{ textTransform: 'none', borderColor: theme.palette.divider, color: 'text.secondary', background: theme.palette.background.paper }}
             >
-              Column visibility
+              {t('accounts.common.columnVisibility')}
             </Button>
             <Button
               size="small"
@@ -183,7 +185,7 @@ export default function ViewMilkPayments() {
               variant="outlined"
               sx={{ textTransform: 'none', borderColor: theme.palette.divider, color: 'text.secondary', background: theme.palette.background.paper }}
             >
-              Copy
+              {t('accounts.common.copy')}
             </Button>
             <Button
               size="small"
@@ -192,7 +194,7 @@ export default function ViewMilkPayments() {
               variant="outlined"
               sx={{ textTransform: 'none', borderColor: theme.palette.divider, color: 'text.secondary', background: theme.palette.background.paper }}
             >
-              CSV
+              {t('accounts.viewMilkPayments.csv')}
             </Button>
             <Button
               size="small"
@@ -201,7 +203,7 @@ export default function ViewMilkPayments() {
               variant="outlined"
               sx={{ textTransform: 'none', borderColor: theme.palette.divider, color: 'text.secondary', background: theme.palette.background.paper }}
             >
-              Excel
+              {t('accounts.viewMilkPayments.excel')}
             </Button>
             <Button
               size="small"
@@ -210,7 +212,7 @@ export default function ViewMilkPayments() {
               variant="outlined"
               sx={{ textTransform: 'none', borderColor: theme.palette.divider, color: 'text.secondary', background: theme.palette.background.paper }}
             >
-              PDF
+              {t('accounts.viewMilkPayments.pdf')}
             </Button>
             <Button
               size="small"
@@ -219,7 +221,7 @@ export default function ViewMilkPayments() {
               variant="outlined"
               sx={{ textTransform: 'none', borderColor: theme.palette.divider, color: 'text.secondary', background: theme.palette.background.paper }}
             >
-              Print
+              {t('accounts.viewMilkPayments.print')}
             </Button>
           </Stack>
         </Paper>
@@ -229,7 +231,7 @@ export default function ViewMilkPayments() {
           {columns.map(c => (
             <MenuItem key={c.key} onClick={() => setVisible(v => ({ ...v, [c.key]: !v[c.key] }))}>
               <Checkbox checked={visible[c.key]} />
-              <ListItemText>{c.label}</ListItemText>
+              <ListItemText>{t(c.labelKey)}</ListItemText>
             </MenuItem>
           ))}
         </Menu>
@@ -248,7 +250,7 @@ export default function ViewMilkPayments() {
                           borderBottom: `1px solid ${theme.palette.divider}`,
                           minWidth: c.width
                         }}>
-                      {c.label}
+                      {t(c.labelKey)}
                     </th>
                   ))}
                 </tr>
@@ -270,14 +272,14 @@ export default function ViewMilkPayments() {
                     {visible.cashBank     && <td style={td}>{r.cashBank}</td>}
                     {visible.actions && (
                       <td style={td}>
-                        <Tooltip title="Edit"><IconButton size="small"><EditOutlinedIcon fontSize="small" /></IconButton></Tooltip>
-                        <Tooltip title="Delete"><IconButton size="small"><DeleteOutlineOutlinedIcon fontSize="small" /></IconButton></Tooltip>
+                        <Tooltip title={t('common.edit')}><IconButton size="small"><EditOutlinedIcon fontSize="small" /></IconButton></Tooltip>
+                        <Tooltip title={t('common.delete')}><IconButton size="small"><DeleteOutlineOutlinedIcon fontSize="small" /></IconButton></Tooltip>
                       </td>
                     )}
                   </tr>
                 ))}
                 {filtered.length === 0 && (
-                  <tr><td style={{ ...td, padding: 24 }} colSpan={Object.values(visible).filter(Boolean).length}>No data</td></tr>
+                  <tr><td style={{ ...td, padding: 24 }} colSpan={Object.values(visible).filter(Boolean).length}>{t('accounts.common.noData')}</td></tr>
                 )}
               </tbody>
             </table>

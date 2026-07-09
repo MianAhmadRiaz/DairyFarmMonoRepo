@@ -10,6 +10,7 @@ import {
   useTheme,
 } from "@mui/material";
 import { fetchHerdAlerts, HerdAlerts as HerdAlertsData, HerdAlertAnimal } from "../../../shared/services/treatment.services";
+import { useTranslation } from "react-i18next";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import PageContainer from "../../../shared/components/Layout/PageContainer";
@@ -23,6 +24,7 @@ interface AlertSectionProps {
 }
 
 const AlertSection: React.FC<AlertSectionProps> = ({ title, color, hint, animals, extra }) => {
+  const { t } = useTranslation();
   const theme = useTheme();
   return (
     <Card
@@ -47,7 +49,7 @@ const AlertSection: React.FC<AlertSectionProps> = ({ title, color, hint, animals
         </Typography>
         {animals.length === 0 ? (
           <Typography variant="body2" color="text.secondary">
-            Nothing due.
+            {t("herd.herdAlerts.nothingDue")}
           </Typography>
         ) : (
           animals.map((a) => (
@@ -75,6 +77,7 @@ const AlertSection: React.FC<AlertSectionProps> = ({ title, color, hint, animals
 };
 
 const HerdAlerts: React.FC = () => {
+  const { t } = useTranslation();
   const [alerts, setAlerts] = useState<HerdAlertsData | null>(null);
   const [loading, setLoading] = useState(true);
 
@@ -85,7 +88,7 @@ const HerdAlerts: React.FC = () => {
         setAlerts(data);
       } catch (error) {
         console.error("HerdAlerts => load error:", error);
-        toast.error("Failed to load herd alerts.");
+        toast.error(t("herd.herdAlerts.loadError"));
       } finally {
         setLoading(false);
       }
@@ -93,61 +96,61 @@ const HerdAlerts: React.FC = () => {
   }, []);
 
   return (
-    <PageContainer title="Herd Alerts — Action List" maxWidth={1100}>
+    <PageContainer title={t("herd.herdAlerts.title")} maxWidth={1100}>
       {loading ? (
         <Box sx={{ display: "flex", justifyContent: "center", py: 6 }}>
           <CircularProgress sx={{ color: "#0F7C8F" }} />
         </Box>
       ) : !alerts ? (
-        <Typography>No alert data available.</Typography>
+        <Typography>{t("herd.herdAlerts.noData")}</Typography>
       ) : (
         <Grid container spacing={3}>
           <Grid item xs={12} md={6}>
             <AlertSection
-              title="Pregnancy Check Due"
+              title={t("herd.herdAlerts.pregnancyCheckDue")}
               color="warning"
-              hint="Inseminated 30+ days ago with no pregnancy result yet."
+              hint={t("herd.herdAlerts.pregnancyCheckDueHint")}
               animals={alerts.pregnancyCheckDue}
-              extra={(a) => (a.inseminated_date ? `inseminated ${String(a.inseminated_date).slice(0, 10)}` : "")}
+              extra={(a) => (a.inseminated_date ? t("herd.herdAlerts.inseminated", { date: String(a.inseminated_date).slice(0, 10) }) : "")}
             />
           </Grid>
           <Grid item xs={12} md={6}>
             <AlertSection
-              title="Dry-Off Due"
+              title={t("herd.herdAlerts.dryOffDue")}
               color="warning"
-              hint="Pregnant cows within 60 days of expected calving that are still milking."
+              hint={t("herd.herdAlerts.dryOffDueHint")}
               animals={alerts.dryOffDue}
-              extra={(a) => (a.dryOffDueDate ? `dry off by ${a.dryOffDueDate}` : "")}
+              extra={(a) => (a.dryOffDueDate ? t("herd.herdAlerts.dryOffBy", { date: a.dryOffDueDate }) : "")}
             />
           </Grid>
           <Grid item xs={12} md={6}>
             <AlertSection
-              title="Calving Expected"
+              title={t("herd.herdAlerts.calvingExpected")}
               color="error"
-              hint="Expected to calve within the next 14 days (283-day gestation)."
+              hint={t("herd.herdAlerts.calvingExpectedHint")}
               animals={alerts.calvingExpected}
-              extra={(a) => (a.expectedCalvingDate ? `due ${a.expectedCalvingDate}` : "")}
+              extra={(a) => (a.expectedCalvingDate ? t("herd.herdAlerts.due", { date: a.expectedCalvingDate }) : "")}
             />
           </Grid>
           <Grid item xs={12} md={6}>
             <AlertSection
-              title="Heat Watch"
+              title={t("herd.herdAlerts.heatWatch")}
               color="info"
-              hint="Expected return to heat (18–24 day cycle) — observe closely."
+              hint={t("herd.herdAlerts.heatWatchHint")}
               animals={alerts.heatWatch}
               extra={(a) => a.reason}
             />
           </Grid>
           <Grid item xs={12}>
             <AlertSection
-              title="Active Milk Withdrawals"
+              title={t("herd.herdAlerts.activeMilkWithdrawals")}
               color="error"
-              hint="Milk from these animals must NOT be sold or sent to the tank."
+              hint={t("herd.herdAlerts.activeMilkWithdrawalsHint")}
               animals={alerts.activeMilkWithdrawals.map((w: any) => ({
                 uuid: w.animal?.uuid || w.animalId,
                 tagName: w.animal?.tagName,
                 name: w.animal?.name,
-                reason: `${w.medicineName || w.treatmentType} — until ${w.milkWithdrawalUntil}`,
+                reason: t("herd.herdAlerts.withdrawalUntil", { medicine: w.medicineName || w.treatmentType, date: w.milkWithdrawalUntil }),
               }))}
               extra={(a) => a.reason}
             />

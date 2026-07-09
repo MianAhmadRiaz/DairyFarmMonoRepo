@@ -35,8 +35,10 @@ import GlobalTextField from '../../../shared/components/GlobalTextField/GlobalTe
 import { fetchStockCategories, fetchStockItems } from '../../../shared/services/stock.services';
 import { StockItemWithTotal, StockCategory, StockItem, PaginatedResponse } from './types';
 import { tokens } from '../../../shared/theme/theme';
+import { useTranslation } from 'react-i18next';
 
 const OpenVoucher: React.FC = () => {
+  const { t } = useTranslation();
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   const [categories, setCategories] = useState<StockCategory[]>([]);
@@ -114,7 +116,7 @@ const OpenVoucher: React.FC = () => {
   );
 
   return (
-    <PageContainer title="Stock Opening Voucher" subtitle="Create and manage stock opening vouchers">
+    <PageContainer title={t('stock.openVoucher.title')} subtitle={t('stock.openVoucher.subtitle')}>
       <Container maxWidth="lg"  sx={{
     px: isMobile ? '11px' : undefined,
   }}>
@@ -133,10 +135,10 @@ const OpenVoucher: React.FC = () => {
               <Grid container spacing={2} alignItems="center">
                 <Grid item xs={12} md={4}>
                   <FormControl fullWidth size="small">
-                    <InputLabel sx={{ color: '#005f73' }}>Select Category</InputLabel>
+                    <InputLabel sx={{ color: '#005f73' }}>{t('stock.common.selectCategory')}</InputLabel>
                     <Select
                       value={selectedCategory}
-                      label="Select Category"
+                      label={t('stock.common.selectCategory')}
                       onChange={handleCategoryChange}
                       sx={{
                         '& .MuiOutlinedInput-notchedOutline': {
@@ -151,7 +153,7 @@ const OpenVoucher: React.FC = () => {
                         color: '#005f73'
                       }}
                     >
-                      <MenuItem value="">All Categories</MenuItem>
+                      <MenuItem value="">{t('stock.common.allCategories')}</MenuItem>
                       {categories.map((category) => (
                         <MenuItem key={category.uuid} value={category.uuid}>
                           {category.name}
@@ -172,7 +174,7 @@ const OpenVoucher: React.FC = () => {
                       }
                     }}
                   >
-                    Save
+                    {t('common.save')}
                   </Button>
                 </Grid>
               </Grid>
@@ -196,7 +198,7 @@ const OpenVoucher: React.FC = () => {
                 value={searchQuery}
                 onChange={handleSearch}
                 name="search"
-                label="Search items"
+                label={t('stock.common.searchItems')}
                 sx={{ 
                   width: 300,
                   '& .MuiOutlinedInput-root': {
@@ -223,10 +225,10 @@ const OpenVoucher: React.FC = () => {
                 <TableHead>
                   <TableRow sx={{ backgroundColor: theme.palette.mode === 'dark' ? colors.primary[400] : '#F8F9FA' }}>
                     <TableCell sx={{ fontWeight: 'bold', width: '20%', px: 1 }}>#</TableCell>
-                    <TableCell sx={{ fontWeight: 'bold', width: '20%', px: 1 }}>Name</TableCell>
-                    <TableCell sx={{ fontWeight: 'bold', width: '20%', px: 1 }}>Rate</TableCell>
-                    <TableCell sx={{ fontWeight: 'bold', width: '20%', px: 1 }}>Quantity</TableCell>
-                    <TableCell sx={{ fontWeight: 'bold', width: '20%', px: 1 }}>Total</TableCell>
+                    <TableCell sx={{ fontWeight: 'bold', width: '20%', px: 1 }}>{t('stock.common.name')}</TableCell>
+                    <TableCell sx={{ fontWeight: 'bold', width: '20%', px: 1 }}>{t('stock.common.rate')}</TableCell>
+                    <TableCell sx={{ fontWeight: 'bold', width: '20%', px: 1 }}>{t('stock.common.quantity')}</TableCell>
+                    <TableCell sx={{ fontWeight: 'bold', width: '20%', px: 1 }}>{t('stock.common.total')}</TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>

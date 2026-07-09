@@ -25,6 +25,7 @@ import {
 } from '@mui/material';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { useTranslation, Trans } from 'react-i18next';
 
 import {
   Farm,
@@ -51,6 +52,7 @@ const statusColor: Record<string, any> = {
 };
 
 const Farms: React.FC = () => {
+  const { t } = useTranslation();
   const [farms, setFarms] = useState<Farm[]>([]);
   const [plans, setPlans] = useState<SubscriptionPlan[]>([]);
   const [loading, setLoading] = useState(true);
@@ -98,7 +100,7 @@ const Farms: React.FC = () => {
       setFarms(farmRes.farms);
       setPlans(planRes);
     } catch (err: any) {
-      toast.error(err?.response?.data?.message || 'Failed to load farms');
+      toast.error(err?.response?.data?.message || t('softwareAdmin.farms.loadFailed'));
     } finally {
       setLoading(false);
     }
@@ -111,20 +113,24 @@ const Farms: React.FC = () => {
   const handleApproval = async (farm: Farm, status: 'APPROVED' | 'REJECTED') => {
     try {
       await approveOrRejectFarm(farm.uuid, status);
-      toast.success(`Farm ${status.toLowerCase()}`);
+      toast.success(
+        status === 'APPROVED'
+          ? t('softwareAdmin.farms.toast.approved')
+          : t('softwareAdmin.farms.toast.rejected')
+      );
       load();
     } catch (err: any) {
-      toast.error(err?.response?.data?.message || 'Action failed');
+      toast.error(err?.response?.data?.message || t('softwareAdmin.farms.actionFailed'));
     }
   };
 
   const handleBlock = async (farm: Farm) => {
     try {
       await blockUnblockFarm(farm.uuid);
-      toast.success(farm.isBlocked ? 'Farm unblocked' : 'Farm blocked');
+      toast.success(farm.isBlocked ? t('softwareAdmin.farms.toast.unblocked') : t('softwareAdmin.farms.toast.blocked'));
       load();
     } catch (err: any) {
-      toast.error(err?.response?.data?.message || 'Action failed');
+      toast.error(err?.response?.data?.message || t('softwareAdmin.farms.actionFailed'));
     }
   };
 
@@ -137,7 +143,7 @@ const Farms: React.FC = () => {
 
   const handleAssign = async () => {
     if (!assignFarm || !planId) {
-      toast.error('Select a plan');
+      toast.error(t('softwareAdmin.farms.selectPlan'));
       return;
     }
     setSaving(true);
@@ -147,11 +153,11 @@ const Farms: React.FC = () => {
         planId,
         grace_days: Number(graceDays) || 7
       });
-      toast.success('Subscription assigned');
+      toast.success(t('softwareAdmin.farms.toast.subscriptionAssigned'));
       setAssignOpen(false);
       load();
     } catch (err: any) {
-      toast.error(err?.response?.data?.message || 'Failed to assign');
+      toast.error(err?.response?.data?.message || t('softwareAdmin.farms.failedAssign'));
     } finally {
       setSaving(false);
     }
@@ -164,7 +170,7 @@ const Farms: React.FC = () => {
     try {
       setFlags(await getFeatureFlags(farm.uuid));
     } catch (err: any) {
-      toast.error(err?.response?.data?.message || 'Failed to load modules');
+      toast.error(err?.response?.data?.message || t('softwareAdmin.farms.failedLoadModules'));
     } finally {
       setFlagsLoading(false);
     }
@@ -176,7 +182,7 @@ const Farms: React.FC = () => {
     try {
       await setFeatureFlag(flagsFarm.uuid, moduleKey, value);
     } catch (err: any) {
-      toast.error(err?.response?.data?.message || 'Failed to update module');
+      toast.error(err?.response?.data?.message || t('softwareAdmin.farms.failedUpdateModule'));
       // revert on error
       setFlags(prev => prev.map(f => (f.module_key === moduleKey ? { ...f, is_enabled: !value } : f)));
     }
@@ -194,11 +200,11 @@ const Farms: React.FC = () => {
     setSaving(true);
     try {
       await revokeFarm(revokeFarmTarget.uuid, true, revokeReason || undefined);
-      toast.success('Farm access revoked');
+      toast.success(t('softwareAdmin.farms.toast.accessRevoked'));
       setRevokeOpen(false);
       load();
     } catch (err: any) {
-      toast.error(err?.response?.data?.message || 'Failed to revoke');
+      toast.error(err?.response?.data?.message || t('softwareAdmin.farms.failedRevoke'));
     } finally {
       setSaving(false);
     }
@@ -207,10 +213,10 @@ const Farms: React.FC = () => {
   const handleRestore = async (farm: Farm) => {
     try {
       await revokeFarm(farm.uuid, false);
-      toast.success('Farm access restored');
+      toast.success(t('softwareAdmin.farms.toast.accessRestored'));
       load();
     } catch (err: any) {
-      toast.error(err?.response?.data?.message || 'Failed to restore');
+      toast.error(err?.response?.data?.message || t('softwareAdmin.farms.failedRestore'));
     }
   };
 
@@ -226,7 +232,7 @@ const Farms: React.FC = () => {
   const handleDiscount = async () => {
     if (!discountFarm) return;
     if (discountType !== 'none' && (discountValue === '' || isNaN(Number(discountValue)))) {
-      toast.error('Enter a valid discount value');
+      toast.error(t('softwareAdmin.farms.enterValidDiscount'));
       return;
     }
     setSaving(true);
@@ -237,11 +243,11 @@ const Farms: React.FC = () => {
         discount_value: discountType === 'none' ? 0 : Number(discountValue),
         discount_note: discountNote || undefined
       });
-      toast.success('Discount updated');
+      toast.success(t('softwareAdmin.farms.toast.discountUpdated'));
       setDiscountOpen(false);
       load();
     } catch (err: any) {
-      toast.error(err?.response?.data?.message || 'Failed to update discount');
+      toast.error(err?.response?.data?.message || t('softwareAdmin.farms.failedUpdateDiscount'));
     } finally {
       setSaving(false);
     }
@@ -256,7 +262,7 @@ const Farms: React.FC = () => {
     try {
       setUsage(await getFarmUsage(farm.uuid));
     } catch (err: any) {
-      toast.error(err?.response?.data?.message || 'Failed to load usage');
+      toast.error(err?.response?.data?.message || t('softwareAdmin.farms.failedLoadUsage'));
     } finally {
       setUsageLoading(false);
     }
@@ -273,16 +279,16 @@ const Farms: React.FC = () => {
       setImpToken(res.token);
       setImpOpen(true);
     } catch (err: any) {
-      toast.error(err?.response?.data?.message || 'Failed to impersonate');
+      toast.error(err?.response?.data?.message || t('softwareAdmin.farms.failedImpersonate'));
     }
   };
 
   const copyToken = async () => {
     try {
       await navigator.clipboard.writeText(impToken);
-      toast.success('Token copied');
+      toast.success(t('softwareAdmin.farms.toast.tokenCopied'));
     } catch {
-      toast.error('Copy failed — select the token manually');
+      toast.error(t('softwareAdmin.farms.copyFailed'));
     }
   };
 
@@ -297,23 +303,23 @@ const Farms: React.FC = () => {
   return (
     <Box>
       <Typography variant="h4" fontWeight={700} mb={3}>
-        Farms
+        {t('softwareAdmin.farms.title')}
       </Typography>
 
       <Paper sx={{ borderRadius: 3 }}>
         <Table>
           <TableHead>
             <TableRow>
-              <TableCell>Name</TableCell>
-              <TableCell>Approval</TableCell>
-              <TableCell>Access</TableCell>
-              <TableCell align="right">Actions</TableCell>
+              <TableCell>{t('softwareAdmin.farms.columns.name')}</TableCell>
+              <TableCell>{t('softwareAdmin.farms.columns.approval')}</TableCell>
+              <TableCell>{t('softwareAdmin.farms.columns.access')}</TableCell>
+              <TableCell align="right">{t('softwareAdmin.farms.columns.actions')}</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             {farms.length === 0 && (
               <TableRow>
-                <TableCell colSpan={4}>No farms found.</TableCell>
+                <TableCell colSpan={4}>{t('softwareAdmin.farms.noFarms')}</TableCell>
               </TableRow>
             )}
             {farms.map(farm => (
@@ -325,22 +331,22 @@ const Farms: React.FC = () => {
                   </Typography>
                 </TableCell>
                 <TableCell>
-                  <Chip size="small" label={farm.status} color={statusColor[farm.status] || 'default'} />
+                  <Chip size="small" label={t('softwareAdmin.farms.status.' + farm.status, farm.status)} color={statusColor[farm.status] || 'default'} />
                 </TableCell>
                 <TableCell>
                   <Stack direction="row" spacing={1} flexWrap="wrap" useFlexGap>
                     <Chip
                       size="small"
-                      label={farm.is_active ? 'Active' : 'Inactive'}
+                      label={farm.is_active ? t('softwareAdmin.farms.active') : t('softwareAdmin.farms.inactive')}
                       color={farm.is_active ? 'success' : 'default'}
                     />
-                    {farm.isBlocked && <Chip size="small" label="Blocked" color="error" />}
-                    {farm.is_revoked && <Chip size="small" label="Revoked" color="error" variant="outlined" />}
+                    {farm.isBlocked && <Chip size="small" label={t('softwareAdmin.farms.blocked')} color="error" />}
+                    {farm.is_revoked && <Chip size="small" label={t('softwareAdmin.farms.revoked')} color="error" variant="outlined" />}
                     {farm.discount_type && farm.discount_type !== 'none' && (
                       <Chip
                         size="small"
                         color="secondary"
-                        label={`Discount ${farm.discount_value}${farm.discount_type === 'percentage' ? '%' : ''}`}
+                        label={t('softwareAdmin.farms.discountChip', { value: `${farm.discount_value}${farm.discount_type === 'percentage' ? '%' : ''}` })}
                       />
                     )}
                   </Stack>
@@ -350,18 +356,18 @@ const Farms: React.FC = () => {
                     {farm.status === 'PENDING' && (
                       <>
                         <Button size="small" color="success" variant="outlined" onClick={() => handleApproval(farm, 'APPROVED')}>
-                          Approve
+                          {t('softwareAdmin.farms.actions.approve')}
                         </Button>
                         <Button size="small" color="error" variant="outlined" onClick={() => handleApproval(farm, 'REJECTED')}>
-                          Reject
+                          {t('softwareAdmin.farms.actions.reject')}
                         </Button>
                       </>
                     )}
                     <Button size="small" variant="outlined" onClick={() => openAssign(farm)}>
-                      Assign Plan
+                      {t('softwareAdmin.farms.actions.assignPlan')}
                     </Button>
                     <Button size="small" variant="outlined" onClick={() => openFlags(farm)}>
-                      Modules
+                      {t('softwareAdmin.farms.actions.modules')}
                     </Button>
                     <Button
                       size="small"
@@ -369,24 +375,24 @@ const Farms: React.FC = () => {
                       variant="outlined"
                       onClick={() => handleBlock(farm)}
                     >
-                      {farm.isBlocked ? 'Unblock' : 'Block'}
+                      {farm.isBlocked ? t('softwareAdmin.farms.actions.unblock') : t('softwareAdmin.farms.actions.block')}
                     </Button>
                     <Button size="small" variant="outlined" onClick={() => openUsage(farm)}>
-                      Usage
+                      {t('softwareAdmin.farms.actions.usage')}
                     </Button>
                     <Button size="small" variant="outlined" onClick={() => openDiscount(farm)}>
-                      Discount
+                      {t('softwareAdmin.farms.actions.discount')}
                     </Button>
                     <Button size="small" color="info" variant="outlined" onClick={() => handleImpersonate(farm)}>
-                      Impersonate
+                      {t('softwareAdmin.farms.actions.impersonate')}
                     </Button>
                     {farm.is_revoked ? (
                       <Button size="small" color="success" variant="outlined" onClick={() => handleRestore(farm)}>
-                        Restore
+                        {t('softwareAdmin.farms.actions.restore')}
                       </Button>
                     ) : (
                       <Button size="small" color="error" variant="outlined" onClick={() => openRevoke(farm)}>
-                        Revoke
+                        {t('softwareAdmin.farms.actions.revoke')}
                       </Button>
                     )}
                   </Stack>
@@ -399,17 +405,17 @@ const Farms: React.FC = () => {
 
       {/* Assign subscription dialog */}
       <Dialog open={assignOpen} onClose={() => setAssignOpen(false)} fullWidth maxWidth="xs">
-        <DialogTitle>Assign Plan — {assignFarm?.name}</DialogTitle>
+        <DialogTitle>{t('softwareAdmin.farms.assignDialog.title', { name: assignFarm?.name })}</DialogTitle>
         <DialogContent>
           <TextField
             select
             fullWidth
             margin="normal"
-            label="Plan"
+            label={t('softwareAdmin.farms.assignDialog.plan')}
             value={planId}
             onChange={e => setPlanId(e.target.value)}
           >
-            {plans.length === 0 && <MenuItem disabled value="">No active plans</MenuItem>}
+            {plans.length === 0 && <MenuItem disabled value="">{t('softwareAdmin.farms.assignDialog.noActivePlans')}</MenuItem>}
             {plans.map(p => (
               <MenuItem key={p.uuid} value={p.uuid}>
                 {p.name} — {p.price} {p.currency}/{p.billing_cycle}
@@ -419,23 +425,23 @@ const Farms: React.FC = () => {
           <TextField
             fullWidth
             margin="normal"
-            label="Grace Days"
+            label={t('softwareAdmin.farms.assignDialog.graceDays')}
             type="number"
             value={graceDays}
             onChange={e => setGraceDays(e.target.value)}
           />
         </DialogContent>
         <DialogActions>
-          <Button onClick={() => setAssignOpen(false)}>Cancel</Button>
+          <Button onClick={() => setAssignOpen(false)}>{t('common.cancel')}</Button>
           <Button variant="contained" onClick={handleAssign} disabled={saving}>
-            {saving ? 'Assigning…' : 'Assign'}
+            {saving ? t('softwareAdmin.farms.assignDialog.assigning') : t('softwareAdmin.farms.assignDialog.assign')}
           </Button>
         </DialogActions>
       </Dialog>
 
       {/* Feature flags dialog */}
       <Dialog open={flagsOpen} onClose={() => setFlagsOpen(false)} fullWidth maxWidth="xs">
-        <DialogTitle>Modules — {flagsFarm?.name}</DialogTitle>
+        <DialogTitle>{t('softwareAdmin.farms.modulesDialog.title', { name: flagsFarm?.name })}</DialogTitle>
         <DialogContent>
           {flagsLoading ? (
             <Box display="flex" justifyContent="center" p={3}>
@@ -453,27 +459,27 @@ const Farms: React.FC = () => {
                     onChange={e => toggleFlag(flag.module_key, e.target.checked)}
                   />
                 }
-                label={<Typography textTransform="capitalize">{flag.module_key}</Typography>}
+                label={<Typography textTransform="capitalize">{t('softwareAdmin.farms.modules.' + flag.module_key, flag.module_key)}</Typography>}
               />
             ))
           )}
         </DialogContent>
         <DialogActions>
-          <Button onClick={() => setFlagsOpen(false)}>Close</Button>
+          <Button onClick={() => setFlagsOpen(false)}>{t('common.close')}</Button>
         </DialogActions>
       </Dialog>
 
       {/* Revoke dialog */}
       <Dialog open={revokeOpen} onClose={() => setRevokeOpen(false)} fullWidth maxWidth="xs">
-        <DialogTitle>Revoke Access — {revokeFarmTarget?.name}</DialogTitle>
+        <DialogTitle>{t('softwareAdmin.farms.revokeDialog.title', { name: revokeFarmTarget?.name })}</DialogTitle>
         <DialogContent>
           <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
-            This hard-revokes the farm's access to the app. You can restore it later.
+            {t('softwareAdmin.farms.revokeDialog.description')}
           </Typography>
           <TextField
             fullWidth
             margin="normal"
-            label="Reason (optional)"
+            label={t('softwareAdmin.farms.revokeDialog.reason')}
             multiline
             rows={2}
             value={revokeReason}
@@ -481,34 +487,34 @@ const Farms: React.FC = () => {
           />
         </DialogContent>
         <DialogActions>
-          <Button onClick={() => setRevokeOpen(false)}>Cancel</Button>
+          <Button onClick={() => setRevokeOpen(false)}>{t('common.cancel')}</Button>
           <Button color="error" variant="contained" onClick={handleRevoke} disabled={saving}>
-            {saving ? 'Revoking…' : 'Revoke'}
+            {saving ? t('softwareAdmin.farms.revokeDialog.revoking') : t('softwareAdmin.farms.revokeDialog.revoke')}
           </Button>
         </DialogActions>
       </Dialog>
 
       {/* Discount dialog */}
       <Dialog open={discountOpen} onClose={() => setDiscountOpen(false)} fullWidth maxWidth="xs">
-        <DialogTitle>Discount — {discountFarm?.name}</DialogTitle>
+        <DialogTitle>{t('softwareAdmin.farms.discountDialog.title', { name: discountFarm?.name })}</DialogTitle>
         <DialogContent>
           <TextField
             select
             fullWidth
             margin="normal"
-            label="Discount Type"
+            label={t('softwareAdmin.farms.discountDialog.type')}
             value={discountType}
             onChange={e => setDiscountType(e.target.value as any)}
           >
-            <MenuItem value="none">None</MenuItem>
-            <MenuItem value="percentage">Percentage</MenuItem>
-            <MenuItem value="flat">Flat</MenuItem>
+            <MenuItem value="none">{t('softwareAdmin.farms.discountDialog.none')}</MenuItem>
+            <MenuItem value="percentage">{t('softwareAdmin.farms.discountDialog.percentage')}</MenuItem>
+            <MenuItem value="flat">{t('softwareAdmin.farms.discountDialog.flat')}</MenuItem>
           </TextField>
           {discountType !== 'none' && (
             <TextField
               fullWidth
               margin="normal"
-              label={discountType === 'percentage' ? 'Percentage (%)' : 'Flat Amount'}
+              label={discountType === 'percentage' ? t('softwareAdmin.farms.discountDialog.percentageLabel') : t('softwareAdmin.farms.discountDialog.flatLabel')}
               type="number"
               value={discountValue}
               onChange={e => setDiscountValue(e.target.value)}
@@ -517,22 +523,22 @@ const Farms: React.FC = () => {
           <TextField
             fullWidth
             margin="normal"
-            label="Note (optional)"
+            label={t('softwareAdmin.farms.discountDialog.note')}
             value={discountNote}
             onChange={e => setDiscountNote(e.target.value)}
           />
         </DialogContent>
         <DialogActions>
-          <Button onClick={() => setDiscountOpen(false)}>Cancel</Button>
+          <Button onClick={() => setDiscountOpen(false)}>{t('common.cancel')}</Button>
           <Button variant="contained" onClick={handleDiscount} disabled={saving}>
-            {saving ? 'Saving…' : 'Save'}
+            {saving ? t('softwareAdmin.farms.discountDialog.saving') : t('common.save')}
           </Button>
         </DialogActions>
       </Dialog>
 
       {/* Usage dialog */}
       <Dialog open={usageOpen} onClose={() => setUsageOpen(false)} fullWidth maxWidth="xs">
-        <DialogTitle>Usage — {usageFarm?.name}</DialogTitle>
+        <DialogTitle>{t('softwareAdmin.farms.usageDialog.title', { name: usageFarm?.name })}</DialogTitle>
         <DialogContent>
           {usageLoading ? (
             <Box display="flex" justifyContent="center" p={3}>
@@ -540,18 +546,18 @@ const Farms: React.FC = () => {
             </Box>
           ) : usage ? (
             <Box>
-              {([['Animals', usage.animals], ['Employees', usage.employees]] as const).map(([label, m]) => {
+              {([['animals', t('softwareAdmin.farms.usageDialog.animals'), usage.animals], ['employees', t('softwareAdmin.farms.usageDialog.employees'), usage.employees]] as const).map(([key, label, m]) => {
                 const limit = m.limit;
                 const pct = limit ? Math.min(100, (m.used / limit) * 100) : 0;
                 return (
-                  <Box key={label} sx={{ mb: 2 }}>
+                  <Box key={key} sx={{ mb: 2 }}>
                     <Box display="flex" justifyContent="space-between">
                       <Typography variant="body2" fontWeight={600}>
                         {label}
                       </Typography>
                       <Typography variant="body2" color={m.overLimit ? 'error' : 'text.secondary'}>
                         {m.used} / {limit ?? '∞'}
-                        {m.overLimit ? ' (over limit)' : ''}
+                        {m.overLimit ? ` ${t('softwareAdmin.farms.usageDialog.overLimit')}` : ''}
                       </Typography>
                     </Box>
                     <LinearProgress
@@ -565,31 +571,29 @@ const Farms: React.FC = () => {
               })}
               <Divider sx={{ my: 1 }} />
               <Typography variant="body2" color="text.secondary">
-                Plan: {usage.subscription?.plan_name || '—'} ({usage.subscription?.status || '—'})
+                {t('softwareAdmin.farms.usageDialog.plan', { plan: usage.subscription?.plan_name || '—', status: usage.subscription?.status || '—' })}
               </Typography>
               {usage.subscription?.pricing_model === 'per_animal' && (
                 <Typography variant="body2" color="text.secondary">
-                  Per-animal rate: {usage.subscription?.per_animal_rate} · billed{' '}
-                  {usage.subscription?.billed_animal_count} animals
+                  {t('softwareAdmin.farms.usageDialog.perAnimalRate', { rate: usage.subscription?.per_animal_rate, count: usage.subscription?.billed_animal_count })}
                 </Typography>
               )}
             </Box>
           ) : (
-            <Typography>No usage data.</Typography>
+            <Typography>{t('softwareAdmin.farms.usageDialog.noData')}</Typography>
           )}
         </DialogContent>
         <DialogActions>
-          <Button onClick={() => setUsageOpen(false)}>Close</Button>
+          <Button onClick={() => setUsageOpen(false)}>{t('common.close')}</Button>
         </DialogActions>
       </Dialog>
 
       {/* Impersonate token dialog */}
       <Dialog open={impOpen} onClose={() => setImpOpen(false)} fullWidth maxWidth="sm">
-        <DialogTitle>Impersonation Started — {impFarm?.name}</DialogTitle>
+        <DialogTitle>{t('softwareAdmin.farms.impersonateDialog.title', { name: impFarm?.name })}</DialogTitle>
         <DialogContent>
           <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
-            A new tab was opened logged in as this farm. If it was blocked, copy the token below and
-            open <code>/?impersonate=&lt;token&gt;</code> manually.
+            <Trans i18nKey="softwareAdmin.farms.impersonateDialog.description" components={{ code: <code /> }} />
           </Typography>
           <TextField
             fullWidth
@@ -600,9 +604,9 @@ const Farms: React.FC = () => {
           />
         </DialogContent>
         <DialogActions>
-          <Button onClick={copyToken}>Copy Token</Button>
+          <Button onClick={copyToken}>{t('softwareAdmin.farms.impersonateDialog.copyToken')}</Button>
           <Button variant="contained" onClick={() => setImpOpen(false)}>
-            Done
+            {t('softwareAdmin.farms.impersonateDialog.done')}
           </Button>
         </DialogActions>
       </Dialog>

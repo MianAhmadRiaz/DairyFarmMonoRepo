@@ -19,6 +19,7 @@ import CircularProgress from '@mui/material/CircularProgress';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css'; // Import Quill styles
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { fetchAnimals } from '../../../shared/services/animalinfo.service';
 import { addCalvingEvent } from '../../../shared/services/breeds.services';
 import { DropdownObject, fetchBreedTypes, fetchPenList, getAllTags } from '../../../shared/services/herdinfo.services';
@@ -31,6 +32,7 @@ import PageContainer from '../../../shared/components/Layout/PageContainer';
 
 const Calving: React.FC = () => {
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const [tags, setTags] = useState([]);
   const [tagId, setTagId] = useState('');
   const [childTagId, setChildTagId] = useState('');
@@ -156,7 +158,7 @@ const handleSubmit = async () => {
   const allValid = isMainFormValid && isAliveValid && isDeadValid;
 
   if (!allValid) {
-    const msg = "Please fill all the missing required fields";
+    const msg = t('breeding.common.fillMissingFields');
     if (toastId.current === null || !toast.isActive(toastId.current)) {
       toastId.current = toast.warning(msg);
     }
@@ -199,13 +201,13 @@ const handleSubmit = async () => {
 
     console.log(' Final Payload to submit:', JSON.stringify(payload, null, 2));
     await addCalvingEvent(payload);
-    toast.success('Calving event added successfully!');
+    toast.success(t('breeding.calving.addSuccess'));
     setTimeout(() => {
       window.location.reload();
     }, 3000);
   } catch (error) {
     if (toastId.current === null || !toast.isActive(toastId.current)) {
-                    toastId.current = toast.error("Failed to add calving event. Please try again.");
+                    toastId.current = toast.error(t('breeding.calving.addError'));
                   }
     console.error('Error submitting form:', error);
     // toast.error('Failed to add calving event');
@@ -271,7 +273,7 @@ tagIDs:tags,
  
 
   return (
-    <PageContainer title="Calving">
+    <PageContainer title={t('breeding.calving.pageTitle')}>
       {/* Back Button */}
       <Typography
         variant="body2"
@@ -286,7 +288,7 @@ tagIDs:tags,
 
 
       >
-        ← Back
+        ← {t('breeding.common.back')}
       </Typography>
 
       <Box
@@ -307,7 +309,7 @@ tagIDs:tags,
           <Grid item xs={12} sm={6} md={3.5}>
             <TextField
               fullWidth
-              label="Tag Id"
+              label={t('breeding.common.tagId')}
               select
               value={tagId}
               onChange={handleTagChange}
@@ -323,7 +325,7 @@ tagIDs:tags,
           <Grid item xs={12} sm={4}>
             <TextField
               fullWidth
-              label="Date"
+              label={t('breeding.common.date')}
               type="date"
               InputLabelProps={{ shrink: true }}
               variant="outlined"
@@ -334,7 +336,7 @@ tagIDs:tags,
           <Grid item xs={12} sm={4}>
             <TextField
               fullWidth
-              label="Calving Ease"
+              label={t('breeding.calving.calvingEase')}
               type="number"
               variant="outlined"
               value={calvingEase}
@@ -346,7 +348,7 @@ tagIDs:tags,
            <TextField
   select
   fullWidth
-  label="Change Pen"
+  label={t('breeding.calving.changePen')}
   name="penId"
   value={formData.penId}
   onChange={handleInputChange}
@@ -364,7 +366,7 @@ tagIDs:tags,
           <Grid item xs={12} sm={4}>
             <TextField
               fullWidth
-              label="Cost"
+              label={t('breeding.common.cost')}
               type="number"
               variant="outlined"
               value={cost}
@@ -374,7 +376,7 @@ tagIDs:tags,
           <Grid item xs={12} sm={4}>
             <TextField
               fullWidth
-              label="Lactation"
+              label={t('breeding.calving.lactation')}
               type="number"
               variant="outlined"
               value={lactation|| ''}
@@ -386,22 +388,22 @@ tagIDs:tags,
           <Grid item xs={12} sm={4}>
             <TextField
               fullWidth
-              label="Calving Problems"
+              label={t('breeding.calving.calvingProblems')}
               variant="outlined"
               select
               value={calvingProblems}
               onChange={e => setCalvingProblems(e.target.value)}
             >
-              <SelectMenuItem value="Assisted">Assisted</SelectMenuItem>
-              <SelectMenuItem value="Normal">Normal</SelectMenuItem>
-              <SelectMenuItem value="Dystocia">Dystocia</SelectMenuItem>
+              <SelectMenuItem value="Assisted">{t('breeding.calving.problems.assisted')}</SelectMenuItem>
+              <SelectMenuItem value="Normal">{t('breeding.calving.problems.normal')}</SelectMenuItem>
+              <SelectMenuItem value="Dystocia">{t('breeding.calving.problems.dystocia')}</SelectMenuItem>
             </TextField>
           </Grid>
         </Grid>
 
         {/* Category Selector */}
         <Typography variant="h6" fontWeight="bold" sx={{ marginTop: '20px' }}>
-          Child
+          {t('breeding.calving.child')}
         </Typography>
         <Grid container justifyContent="space-between" alignItems="center">
           <Grid item xs={12} sm={4}>
@@ -412,8 +414,8 @@ tagIDs:tags,
               displayEmpty
               variant="outlined"
             >
-              <SelectMenuItem value="Alive Child">Alive Child</SelectMenuItem>
-              <SelectMenuItem value="Dead Child">Dead Child</SelectMenuItem>
+              <SelectMenuItem value="Alive Child">{t('breeding.calving.aliveChild')}</SelectMenuItem>
+              <SelectMenuItem value="Dead Child">{t('breeding.calving.deadChild')}</SelectMenuItem>
             </Select>
           </Grid>
           <Grid item>
@@ -426,7 +428,7 @@ tagIDs:tags,
               }}
               onClick={handleAddChild}
             >
-              Add New Child
+              {t('breeding.calving.addNewChild')}
             </Button>
           </Grid>
         </Grid>
@@ -462,7 +464,7 @@ tagIDs:tags,
       zIndex: 1
     }}
   >
-    Alive
+    {t('breeding.calving.alive')}
   </Typography>
 )}
 
@@ -480,7 +482,7 @@ tagIDs:tags,
 )}
             <Grid container spacing={2}>
               <Grid item xs={12} sm={3.5}>
-                <TextField select fullWidth label="Shed" variant="outlined" value={child.shed} onChange={(e) => 
+                <TextField select fullWidth label={t('breeding.calving.shed')} variant="outlined" value={child.shed} onChange={(e) =>
     handleChildChange(index, 'shed', e.target.value, 'Alive Child') 
   } >
                  {dropdownOptions.penIDs.map((option) => (
@@ -495,7 +497,7 @@ tagIDs:tags,
                 <TextField
                 select
                   fullWidth
-                  label="Tag Id"
+                  label={t('breeding.common.tagId')}
                   variant='outlined'
        value={child.tagId}  // Changed from formData.tagId to child.tagId
   onChange={(e) => 
@@ -521,7 +523,7 @@ tagIDs:tags,
                 <TextField
                   select
                   fullWidth
-                  label="Breed Type"
+                  label={t('breeding.common.breedType')}
                   variant="outlined"
                   value={child.breedType}
                   onChange={e =>
@@ -565,7 +567,7 @@ tagIDs:tags,
         mt:1.3
       }}
     >
-      Alive
+      {t('breeding.calving.alive')}
     </Typography>
   )}
                 <IconButton
@@ -581,7 +583,7 @@ tagIDs:tags,
                 <TextField
                   select
                   fullWidth
-                  label="Sex"
+                  label={t('breeding.common.sex')}
                   variant="outlined"
                   value={child.sex}
                   onChange={e =>
@@ -593,16 +595,16 @@ tagIDs:tags,
                     )
                   }
                 >
-                  <SelectMenuItem value="male">Male</SelectMenuItem>
-                  <SelectMenuItem value="female">Female</SelectMenuItem>
+                  <SelectMenuItem value="male">{t('breeding.common.male')}</SelectMenuItem>
+                  <SelectMenuItem value="female">{t('breeding.common.female')}</SelectMenuItem>
                 </TextField>
               </Grid>
               {/* Weight Field */}
               <Grid item xs={12} sm={3.5}>
                 <TextField
                   fullWidth
-                  label="Weight"
-                  placeholder="in Kgs"
+                  label={t('breeding.common.weight')}
+                  placeholder={t('breeding.calving.inKgs')}
                   value={child.weight}
                   onChange={e =>
                     handleChildChange(
@@ -620,8 +622,8 @@ tagIDs:tags,
                 <TextField
                   fullWidth
                   name="identity"
-                  label="Identity (if no tag)"
-                  placeholder="Set Temporary ID"
+                  label={t('breeding.calving.identity')}
+                  placeholder={t('breeding.calving.setTemporaryId')}
                   value={child.identity}
                   onChange={e =>
                     handleChildChange(
@@ -656,7 +658,7 @@ tagIDs:tags,
                 <TextField
                   select
                   fullWidth
-                  label="Sex"
+                  label={t('breeding.common.sex')}
                   value={child.sex}
                   onChange={e =>
                     handleChildChange(
@@ -668,15 +670,15 @@ tagIDs:tags,
                   }
                   variant="outlined"
                 >
-                  <SelectMenuItem value="1">Male</SelectMenuItem>
-                  <SelectMenuItem value="2">Female</SelectMenuItem>
+                  <SelectMenuItem value="1">{t('breeding.common.male')}</SelectMenuItem>
+                  <SelectMenuItem value="2">{t('breeding.common.female')}</SelectMenuItem>
                 </TextField>
               </Grid>
               <Grid item xs={12} sm={3.5}>
                 <TextField
                   fullWidth
-                  label="Weight"
-                  placeholder="in Kgs"
+                  label={t('breeding.common.weight')}
+                  placeholder={t('breeding.calving.inKgs')}
                   value={child.weight}
                   onChange={e =>
                     handleChildChange(
@@ -692,7 +694,7 @@ tagIDs:tags,
               <Grid item xs={12} sm={3.5}>
                 <TextField
                   fullWidth
-                  label="Remarks"
+                  label={t('breeding.calving.remarks')}
                   value={child.remarks}
                   onChange={e =>
                     handleChildChange(
@@ -733,10 +735,10 @@ tagIDs:tags,
     top: { xs: '1px', sm: 'auto' },
     left: { xs: '6px', sm: 'auto' },
     zIndex: 1,
-    
+
   }}
 >
-  Dead
+  {t('breeding.calving.dead')}
 </Typography>
 
               </Grid>
@@ -748,7 +750,7 @@ tagIDs:tags,
         <Grid item xs={12}>
           <ReactQuill
             theme="snow"
-            placeholder="Enter your comments"
+            placeholder={t('breeding.common.enterComments')}
             style={{ height: '150px', marginBottom: '20px', marginTop: '25px' }}
           />
         </Grid>
@@ -778,7 +780,7 @@ tagIDs:tags,
   {isLoading ? (
     <CircularProgress size={24} sx={{ color: '#0F7C8F' }} />
   ) : (
-    'Save Changes'
+    t('breeding.common.saveChanges')
   )}
 </Button>
           <Button
@@ -792,7 +794,7 @@ tagIDs:tags,
               border: '1px solid #d6d6d6'
             }}
           >
-            Cancel
+            {t('breeding.common.cancel')}
           </Button>
         </Box>
       </Box>

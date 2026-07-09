@@ -17,6 +17,7 @@ import {
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import CircularProgress from '@mui/material/CircularProgress';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { fetchAnimals } from '../../../shared/services/animalinfo.service';
 import { addAiBreedingEvent, addBullBreedingEvent, fetchBullBreedingList, fetchBullList } from '../../../shared/services/breeds.services';
 import { ToastContainer, toast,Id } from 'react-toastify';
@@ -26,6 +27,7 @@ import PageContainer from '../../../shared/components/Layout/PageContainer';
 
 const AddBullBreedingEvent: React.FC = () => {
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
   // Form states
   
@@ -79,7 +81,7 @@ const AddBullBreedingEvent: React.FC = () => {
           !comments
         ) {
           if (toastId.current === null || !toast.isActive(toastId.current)) {
-            toastId.current = toast.warn('Please fill all the missing required fields');
+            toastId.current = toast.warn(t('breeding.common.fillMissingFields'));
           }
           return;
         }
@@ -95,12 +97,12 @@ const AddBullBreedingEvent: React.FC = () => {
     };
       await addBullBreedingEvent(data);
         toast.dismiss(); // Remove previous error toast
-            toast.success('New Bull Breeding Event Added Successfully!', {
+            toast.success(t('breeding.bullBreedingAdd.addSuccess'), {
               onClose: () => window.location.reload()
             });
           } catch (error) {
              if (toastId.current === null || !toast.isActive(toastId.current)) {
-                toastId.current = toast.error("Failed to remove animal. Please try again.");
+                toastId.current = toast.error(t('breeding.bullBreedingAdd.addError'));
               }
             // toast.error('Failed to Add Bull Breeding Event!');
             console.error('Add AI error:', error);
@@ -127,7 +129,7 @@ const AddBullBreedingEvent: React.FC = () => {
   };
 
   return (
-    <PageContainer title="Bull Breeding / Add New Event">
+    <PageContainer title={t('breeding.bullBreedingAdd.pageTitle')}>
       {/* Back button */}
       <Button
         variant="text"
@@ -140,7 +142,7 @@ const AddBullBreedingEvent: React.FC = () => {
           fontWeight: 'bold'
         }}
       >
-        Back
+        {t('breeding.common.back')}
       </Button>
 
       {/* Main Card */}
@@ -163,7 +165,7 @@ const AddBullBreedingEvent: React.FC = () => {
            <Grid item xs={12} sm={6} md={4}>
                                    <TextField
                                      fullWidth
-                                     label="Tag Id"
+                                     label={t('breeding.common.tagId')}
                                      select
                                      value={animalId}
                                      onChange={handleTagChange}
@@ -179,7 +181,7 @@ const AddBullBreedingEvent: React.FC = () => {
             {/* Date */}
             <Grid item xs={12} md={4}>
               <TextField
-                label="Date"
+                label={t('breeding.common.date')}
                 type="date"
                 value={date}
                 onChange={(e) => setDate(e.target.value)}
@@ -192,7 +194,7 @@ const AddBullBreedingEvent: React.FC = () => {
             <Grid item xs={12} sm={6} md={3.5}>
                                     <TextField
                                       fullWidth
-                                      label="Bull Id"
+                                      label={t('breeding.bullBreedingAdd.bullId')}
                                       select
                                       value={bullId}
                 onChange={handleBullId}
@@ -208,16 +210,16 @@ const AddBullBreedingEvent: React.FC = () => {
             {/* Double Dose */}
             <Grid item xs={12} md={4}>
               <FormControl fullWidth>
-                <InputLabel id="doubleDose-label">Double Dose</InputLabel>
+                <InputLabel id="doubleDose-label">{t('breeding.common.doubleDose')}</InputLabel>
                 <Select
                   labelId="doubleDose-label"
-                  label="Double Dose"
+                  label={t('breeding.common.doubleDose')}
                   value={doubleDose}
                   onChange={(e) => setDoubleDose(e.target.value as string)}
                 >
-                 
-                  <MenuItem value="Yes">Yes</MenuItem>
-                  <MenuItem value="No">No</MenuItem>
+
+                  <MenuItem value="Yes">{t('breeding.common.yes')}</MenuItem>
+                  <MenuItem value="No">{t('breeding.common.no')}</MenuItem>
                 </Select>
               </FormControl>
             </Grid>
@@ -225,7 +227,7 @@ const AddBullBreedingEvent: React.FC = () => {
             {/* Comments */}
             <Grid item xs={12}>
               <TextField
-                label="Enter your comments"
+                label={t('breeding.common.enterComments')}
                 multiline
                 rows={4}
                 value={comments}
@@ -257,7 +259,7 @@ const AddBullBreedingEvent: React.FC = () => {
   {isLoading ? (
     <CircularProgress size={24} sx={{ color: '#0F7C8F' }} />
   ) : (
-    'Add New'
+    t('breeding.common.addNew')
   )}
 </Button>
             <Button variant="outlined" sx={{borderRadius:'12px' ,  padding:'8px 40px',
@@ -266,7 +268,7 @@ const AddBullBreedingEvent: React.FC = () => {
                 color: '#000',
                 border: '1px solid #d6d6d6'
 }}  onClick={handleCancel}>
-              Cancel
+              {t('breeding.common.cancel')}
             </Button>
           </Box>
           </Box>

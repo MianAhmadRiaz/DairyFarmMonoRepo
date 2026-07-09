@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import {
   View,
   TouchableOpacity,
@@ -36,6 +37,7 @@ const TimePicker: React.FC<TimePickerProps> = ({
   style,
   placeholderStyle,
 }) => {
+  const { t } = useTranslation();
   const [time, setTime] = useState<Date | undefined>(undefined);
   const [showPicker, setShowPicker] = useState(false);
 
@@ -67,7 +69,7 @@ const TimePicker: React.FC<TimePickerProps> = ({
               { color: value ? COLORS.darkestGrey : COLORS.placeholder },
             ]}
           >
-            {value || placeholder || 'Select Time'}
+            {value || placeholder || t('shared.timePicker.select')}
           </Text>
 
           <AnyIcon

@@ -6,7 +6,9 @@ import ConsumptionTable, { ConsumptionItem } from '../../../../../shared/compone
 import { addMedicineConsumption } from '../../../../../shared/services/feeding.services';
 
 import { StockItemResponse ,ConsumptionPayload} from '../../types';
+import { useTranslation } from 'react-i18next';
 const AddMedicineConsumption: React.FC = () => {
+   const { t } = useTranslation();
    const theme = useTheme();
    const isMobile = useMediaQuery(theme.breakpoints.down('md'));
   const [date, setDate] = useState('2025-04-15');
@@ -29,7 +31,7 @@ const AddMedicineConsumption: React.FC = () => {
       const medicineCategory = categories?.find(item => item.name.toLowerCase() === "medicine");
       
       if (!medicineCategory?.uuid) {
-        throw new Error('Medicine category not found');
+        throw new Error(t('stock.addMedicineConsumption.categoryNotFound'));
       }
 
       const response = await fetchStockItems(pageNumber + 1, limit, medicineCategory.uuid);
@@ -47,7 +49,7 @@ const AddMedicineConsumption: React.FC = () => {
       setMedicines(medicineItems);
       setTotalCount(response.data.totalCount);
     } catch (err) {
-      setError('Failed to fetch medicines. Please try again.');
+      setError(t('stock.addMedicineConsumption.fetchError'));
       console.error('Error fetching medicines:', err);
 
       
@@ -92,7 +94,7 @@ const AddMedicineConsumption: React.FC = () => {
       const selectedMedicines = medicines.filter(medicine => medicine.selected);
       
       if (selectedMedicines.length === 0) {
-        setError('Please select at least one medicine');
+        setError(t('stock.addMedicineConsumption.selectAtLeastOne'));
         return;
       }
 
@@ -106,7 +108,7 @@ const AddMedicineConsumption: React.FC = () => {
 
       const invalidItems = payload.items.filter(item => item.quantity <= 0);
       if (invalidItems.length > 0) {
-        setError('Please enter valid quantities for all selected medicines');
+        setError(t('stock.addMedicineConsumption.enterValidQuantities'));
         return;
       }
       console.log('🚀 ~ handleSave ~ payload:', payload)
@@ -129,7 +131,7 @@ const AddMedicineConsumption: React.FC = () => {
 
       fetchMedicines(page, rowsPerPage);
     } catch (err) {
-      setError('Failed to save medicine consumption. Please try again.');
+      setError(t('stock.addMedicineConsumption.saveError'));
       console.error('Error saving medicine consumption:', err);
       setSnackbar({
         open: true,
@@ -143,7 +145,7 @@ const AddMedicineConsumption: React.FC = () => {
   };
 
   return (
-    <PageContainer title="Medicine Consumption" subtitle={`Total Products: ${totalCount}`}>
+    <PageContainer title={t('stock.addMedicineConsumption.title')} subtitle={t('stock.common.totalProducts', { count: totalCount })}>
       <Paper
         elevation={3} 
         sx={{ 
@@ -183,7 +185,7 @@ const AddMedicineConsumption: React.FC = () => {
           >
             <TextField
               type="date"
-              label="Date"
+              label={t('stock.common.date')}
               size="small"
               value={date}
               onChange={(e) => setDate(e.target.value)}
@@ -206,7 +208,7 @@ const AddMedicineConsumption: React.FC = () => {
                 }
               }}
             >
-              Save Consumption
+              {t('stock.common.saveConsumption')}
             </Button>
           </Box>
         </Box>

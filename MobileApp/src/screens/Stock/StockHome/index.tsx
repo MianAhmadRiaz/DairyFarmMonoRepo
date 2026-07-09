@@ -1,5 +1,6 @@
 import { useNavigation, useFocusEffect } from '@react-navigation/native'
-import React, { useCallback, useState } from 'react'
+import React, { useCallback, useMemo, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { RefreshControl, ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native'
 import AppContainer from 'shared/components/AppContainer'
 import AppHeader from 'shared/components/AppHeader'
@@ -13,17 +14,18 @@ import { RF } from 'shared/theme/responsive'
 
 type Action = { label: string; desc: string; screen: string; icon: { type: any; name: string }; permission: PermissionName }
 
-const ACTIONS: Action[] = [
-  { label: 'Stock Items', desc: 'View inventory & levels', screen: 'StockItems', icon: { type: Icons.MaterialCommunityIcons, name: 'package-variant' }, permission: PERMISSIONS.STOCK_VIEW },
-  { label: 'Purchases', desc: 'Record & view purchases', screen: 'Purchases', icon: { type: Icons.MaterialCommunityIcons, name: 'cart-plus' }, permission: PERMISSIONS.STOCK_PURCHASE },
-  { label: 'Consumption', desc: 'Issue stock usage', screen: 'Consumption', icon: { type: Icons.MaterialCommunityIcons, name: 'package-down' }, permission: PERMISSIONS.STOCK_MANAGE },
-  { label: 'Suppliers', desc: 'Manage suppliers', screen: 'Suppliers', icon: { type: Icons.MaterialCommunityIcons, name: 'account-tie' }, permission: PERMISSIONS.STOCK_PURCHASE },
-  { label: 'Reports', desc: 'Reorder & expiry alerts', screen: 'StockReports', icon: { type: Icons.MaterialCommunityIcons, name: 'chart-box-outline' }, permission: PERMISSIONS.STOCK_VIEW }
-]
-
 const StockHome = () => {
+  const { t } = useTranslation()
   const navigation = useNavigation<any>()
   const { can } = usePermissions()
+
+  const ACTIONS: Action[] = useMemo(() => [
+    { label: t('stock.stockHome.stockItems'), desc: t('stock.stockHome.stockItemsDesc'), screen: 'StockItems', icon: { type: Icons.MaterialCommunityIcons, name: 'package-variant' }, permission: PERMISSIONS.STOCK_VIEW },
+    { label: t('stock.stockHome.purchases'), desc: t('stock.stockHome.purchasesDesc'), screen: 'Purchases', icon: { type: Icons.MaterialCommunityIcons, name: 'cart-plus' }, permission: PERMISSIONS.STOCK_PURCHASE },
+    { label: t('stock.stockHome.consumption'), desc: t('stock.stockHome.consumptionDesc'), screen: 'Consumption', icon: { type: Icons.MaterialCommunityIcons, name: 'package-down' }, permission: PERMISSIONS.STOCK_MANAGE },
+    { label: t('stock.stockHome.suppliers'), desc: t('stock.stockHome.suppliersDesc'), screen: 'Suppliers', icon: { type: Icons.MaterialCommunityIcons, name: 'account-tie' }, permission: PERMISSIONS.STOCK_PURCHASE },
+    { label: t('stock.stockHome.reports'), desc: t('stock.stockHome.reportsDesc'), screen: 'StockReports', icon: { type: Icons.MaterialCommunityIcons, name: 'chart-box-outline' }, permission: PERMISSIONS.STOCK_VIEW }
+  ], [t])
   const [totalItems, setTotalItems] = useState(0)
   const [lowStock, setLowStock] = useState(0)
   const [expiring, setExpiring] = useState(0)
@@ -61,18 +63,18 @@ const StockHome = () => {
 
   return (
     <AppContainer>
-      <AppHeader title="Stock & Inventory" showHam onPressHam={() => navigation.openDrawer?.()} />
+      <AppHeader title={t('stock.stockHome.title')} showHam onPressHam={() => navigation.openDrawer?.()} />
       <ScrollView
         contentContainerStyle={{ padding: RF(16), paddingBottom: RF(40) }}
         refreshControl={<RefreshControl refreshing={refreshing} onRefresh={() => { setRefreshing(true); load() }} colors={[COLORS.primaryMain]} />}
       >
         <View style={styles.statsRow}>
-          {stat('Total Items', totalItems)}
-          {stat('Low Stock', lowStock, 'warning')}
-          {stat('Expiring', expiring, 'error')}
+          {stat(t('stock.stockHome.totalItems'), totalItems)}
+          {stat(t('stock.stockHome.lowStock'), lowStock, 'warning')}
+          {stat(t('stock.stockHome.expiring'), expiring, 'error')}
         </View>
 
-        <AppText fontSize="h7" semiBold style={{ marginBottom: RF(12) }}>Actions</AppText>
+        <AppText fontSize="h7" semiBold style={{ marginBottom: RF(12) }}>{t('stock.stockHome.actions')}</AppText>
         {visible.map((a, i) => (
           <TouchableOpacity key={i} style={styles.actionCard} onPress={() => navigation.navigate(a.screen)} activeOpacity={0.85}>
             <View style={styles.iconCircle}>

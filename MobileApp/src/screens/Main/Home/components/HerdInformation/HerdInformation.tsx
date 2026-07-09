@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { SafeAreaView, ScrollView, StyleSheet, View } from 'react-native';
 import AppText from 'shared/components/AppText/AppText';
 import { COLORS } from 'shared/theme';
@@ -9,10 +10,11 @@ import HealthAlertCard from './HealthAlertCard';
 import BorderLine from 'shared/components/BorderLine/BorderLine';
 
 const HerdInformation = () => {
+  const { t } = useTranslation();
   return (
     <View style={styles.container}>
       <AppText semiBold fontSize="h7" style={styles.header}>
-        Herd Information
+        {t('main.herdInfo.title')}
       </AppText>
       <BorderLine />
       <HerdInfoCardsView />

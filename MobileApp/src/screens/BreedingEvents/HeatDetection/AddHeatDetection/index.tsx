@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { Alert, View } from 'react-native'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import Toast from 'react-native-toast-message'
@@ -20,6 +21,7 @@ interface Props {
 }
 
 const AddHeatDetection = (props: Props) => {
+  const { t } = useTranslation()
   const [reasonOptions, setReasonOptions] = useState([
     'Ridding Others',
     'Being Ridden',
@@ -42,7 +44,10 @@ const AddHeatDetection = (props: Props) => {
 
   const handleSaveChanges = async () => {
     if (!tag?.uuid || !date || !selectedReason) {
-      Alert.alert('Missing Fields', 'Please fill all required fields.')
+      Alert.alert(
+        t('breeding.addHeatDetection.missingFieldsTitle'),
+        t('breeding.addHeatDetection.missingFieldsMessage')
+      )
       return
     }
 
@@ -56,8 +61,8 @@ const AddHeatDetection = (props: Props) => {
     try {
       const response = await addNewHeatDetection(payload)
       Toast.show({
-        text1: 'Success',
-        text2: 'Heat detection event recorded Successfully',
+        text1: t('breeding.common.success'),
+        text2: t('breeding.addHeatDetection.recordedSuccessfully'),
         type: 'success'
       })
 
@@ -70,7 +75,7 @@ const AddHeatDetection = (props: Props) => {
       console.log('error adding detection: ', error?.response?.data.message)
 
       Toast.show({
-        text1: 'Failed',
+        text1: t('breeding.common.failed'),
         text2: error?.response?.data.message,
         type: 'error'
       })
@@ -81,7 +86,10 @@ const AddHeatDetection = (props: Props) => {
     <>
       <KeyboardAwareScrollView style={{ flex: 1 }}>
         <View style={styles.container}>
-          <AppHeader title="Heat Detection" showBack />
+          <AppHeader
+            title={t('breeding.addHeatDetection.headerTitle')}
+            showBack
+          />
           <View style={styles.cardContainer}>
             <TagsDropDown
               style={styles.customContainer}
@@ -92,21 +100,21 @@ const AddHeatDetection = (props: Props) => {
             />
 
             <DatePicker
-              label="Date"
+              label={t('breeding.common.date')}
               value={date}
               onChange={setDate}
               style={styles.customContainer}
             />
 
             <AppInput
-              label="Comments"
+              label={t('breeding.addHeatDetection.commentsLabel')}
               value={comments}
               onChangeText={setComments}
               style={styles.customContainer}
             />
 
             <DropDown
-              label="Choose Reason"
+              label={t('breeding.addHeatDetection.chooseReason')}
               options={['Add New', ...reasonOptions]}
               value={selectedReason}
               onChange={value => {
@@ -118,7 +126,7 @@ const AddHeatDetection = (props: Props) => {
 
             <View style={styles.buttonContainer}>
               <PrimaryButton
-                title="Cancel"
+                title={t('breeding.addHeatDetection.cancel')}
                 buttonStyle={styles.button2}
                 textStyle={styles.buttonText2}
                 onPress={() => {
@@ -129,7 +137,7 @@ const AddHeatDetection = (props: Props) => {
                 }}
               />
               <PrimaryButton
-                title="Save Changes"
+                title={t('breeding.addHeatDetection.saveChanges')}
                 buttonStyle={styles.button1}
                 textStyle={styles.buttonText1}
                 onPress={handleSaveChanges}

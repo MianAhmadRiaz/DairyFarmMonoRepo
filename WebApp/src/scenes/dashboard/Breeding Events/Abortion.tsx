@@ -21,6 +21,7 @@ import {
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { fetchAbortionEvent } from '../../../shared/services/breeds.services';
 import useLayoutShift from '../../../shared/components/Hooks/useLayoutShift';
 import PageContainer from '../../../shared/components/Layout/PageContainer';
@@ -38,6 +39,7 @@ interface AbortionRow {
 
 const Abortion: React.FC = () => {
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const [rows, setRows] = useState<AbortionRow[]>([]);
   const [search, setSearch] = useState('');
   const [sort, setSort] = useState('');
@@ -94,7 +96,7 @@ const Abortion: React.FC = () => {
   };
 
   return (
-    <PageContainer title="Abortion">
+    <PageContainer title={t('breeding.abortion.pageTitle')}>
       {/* Back Button */}
       <Button
         variant="text"
@@ -107,7 +109,7 @@ const Abortion: React.FC = () => {
           fontWeight: 'bold'
         }}
       >
-        Back
+        {t('breeding.common.back')}
       </Button>
 
       {/* Header */}
@@ -129,7 +131,7 @@ const Abortion: React.FC = () => {
           }}
           onClick={handleAddNew}
         >
-          Add New
+          {t('breeding.common.addNew')}
         </Button>
       </Box>
 
@@ -152,7 +154,7 @@ const Abortion: React.FC = () => {
       >
         <TextField
           fullWidth
-          placeholder="Search"
+          placeholder={t('breeding.common.search')}
           value={search}
           onChange={e => setSearch(e.target.value)}
         />
@@ -162,10 +164,10 @@ const Abortion: React.FC = () => {
           displayEmpty
           sx={{ marginLeft: '10px' }}
         >
-          <MenuItem value="">Sort</MenuItem>
-          <MenuItem value="date">By Date</MenuItem>
-          <MenuItem value="status">By Status</MenuItem>
-          <MenuItem value="price">By Price</MenuItem>
+          <MenuItem value="">{t('breeding.common.sort')}</MenuItem>
+          <MenuItem value="date">{t('breeding.common.byDate')}</MenuItem>
+          <MenuItem value="status">{t('breeding.common.byStatus')}</MenuItem>
+          <MenuItem value="price">{t('breeding.common.byPrice')}</MenuItem>
         </Select>
       </Box>
 
@@ -182,12 +184,12 @@ const Abortion: React.FC = () => {
                  }}>
               <TableHead sx={{backgroundColor: "#F8F9FA"}}>
                 <TableRow>
-                  <TableCell sx={{ fontWeight: 'bold' }}>SR #</TableCell>
-                  <TableCell sx={{ fontWeight: 'bold' }}>TAG ID</TableCell>
-                  <TableCell sx={{ fontWeight: 'bold' }}>ABORTION DATE</TableCell>
-                  <TableCell sx={{ fontWeight: 'bold' }}>STATUS</TableCell>
-                  <TableCell sx={{ fontWeight: 'bold' }}>PRICE</TableCell>
-                  <TableCell sx={{ fontWeight: 'bold' }}>COMMENTS</TableCell>
+                  <TableCell sx={{ fontWeight: 'bold' }}>{t('breeding.common.srNo')}</TableCell>
+                  <TableCell sx={{ fontWeight: 'bold' }}>{t('breeding.abortion.columns.tagId')}</TableCell>
+                  <TableCell sx={{ fontWeight: 'bold' }}>{t('breeding.abortion.columns.abortionDate')}</TableCell>
+                  <TableCell sx={{ fontWeight: 'bold' }}>{t('breeding.abortion.columns.status')}</TableCell>
+                  <TableCell sx={{ fontWeight: 'bold' }}>{t('breeding.abortion.columns.price')}</TableCell>
+                  <TableCell sx={{ fontWeight: 'bold' }}>{t('breeding.abortion.columns.comments')}</TableCell>
                   <TableCell />
                 </TableRow>
               </TableHead>
@@ -199,7 +201,7 @@ const Abortion: React.FC = () => {
                     <TableCell>{row.abortionDate}</TableCell>
                     <TableCell>
                       <Chip
-                        label={row.status.toUpperCase()}
+                        label={t('breeding.abortion.status.' + row.status, row.status).toUpperCase()}
                         sx={{
                           backgroundColor:
                             row.status === 'Milkable' ? '#e8f5e9' : '#fbe9e7',
@@ -222,7 +224,7 @@ const Abortion: React.FC = () => {
                 {paginatedRows.length === 0 && (
                   <TableRow>
                     <TableCell colSpan={7} align="center">
-                      No data found.
+                      {t('breeding.common.noDataFound')}
                     </TableCell>
                   </TableRow>
                 )}

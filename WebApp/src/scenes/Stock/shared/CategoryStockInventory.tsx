@@ -9,6 +9,7 @@ import {
 import { fetchStockCategories, fetchUnits } from '../../../shared/services/stock.services';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { useTranslation } from 'react-i18next';
 
 interface CategoryStockInventoryProps {
   title: string;
@@ -39,6 +40,7 @@ const CategoryStockInventory: React.FC<CategoryStockInventoryProps> = ({
   categoryName,
   otherCategories = false
 }) => {
+  const { t } = useTranslation();
   const [rows, setRows] = useState<StockItem[]>([]);
 
   useEffect(() => {
@@ -76,7 +78,7 @@ const CategoryStockInventory: React.FC<CategoryStockInventoryProps> = ({
         if (!cancelled) setRows(items.map(item => toRow(item, unitNames)));
       } catch (error: any) {
         if (!cancelled) {
-          toast.error(error?.response?.data?.message || 'Failed to fetch stock items.');
+          toast.error(error?.response?.data?.message || t('stock.common.fetchItemsError'));
         }
       }
     };
@@ -84,7 +86,7 @@ const CategoryStockInventory: React.FC<CategoryStockInventoryProps> = ({
     return () => {
       cancelled = true;
     };
-  }, [categoryName, otherCategories]);
+  }, [categoryName, otherCategories, t]);
 
   return (
     <>

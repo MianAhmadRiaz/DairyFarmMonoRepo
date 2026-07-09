@@ -6,6 +6,7 @@ import {
   TextField,
   CircularProgress
 } from "@mui/material";
+import { useTranslation } from "react-i18next";
 import AddItemModal from "../../../Item Modal/AddItemModal"; // your existing modal
 
 export interface DropdownObject {
@@ -39,6 +40,7 @@ const FormInputComponent: React.FC<FormInputComponentProps> = ({
   onFetchNeeded,
   onAddItem
 }) => {
+  const { t } = useTranslation();
   const [loading, setLoading] = useState(false);
   const [isModalOpen, setModalOpen] = useState(false);
   const [localOptions, setLocalOptions] = useState<DropdownObject[]>(options);
@@ -129,7 +131,7 @@ const FormInputComponent: React.FC<FormInputComponentProps> = ({
                 borderTop: "1px solid #ddd"
               }}
             >
-              Add New {label}
+              {t("herd.common.addNewNamed", { name: label })}
             </MenuItem>
           )}
         </TextField>

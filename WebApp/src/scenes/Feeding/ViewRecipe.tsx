@@ -21,6 +21,7 @@ import {
 import SearchIcon from '@mui/icons-material/Search';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import { ToastContainer, toast } from 'react-toastify';
+import { useTranslation } from 'react-i18next';
 import 'react-toastify/dist/ReactToastify.css';
 import CustomPagination from '../../shared/components/Custom Pagination/CustomPagination';
 import { AlterationRow } from '../../shared/components/View Alteration/ViewAlterations';
@@ -39,6 +40,7 @@ interface RecipeGroupView {
 }
 
 const ViewRecipe: React.FC = () => {
+  const { t } = useTranslation();
   /* search + paging for the **group** table */
   const [query, setQuery] = useState('');
   const [page, setPage] = useState(1);
@@ -63,7 +65,7 @@ const ViewRecipe: React.FC = () => {
         const grouped = new Map<string, RecipeGroupView>();
         recipes.forEach(recipe => {
           const groupId = recipe.recipeGroup?.uuid || 'ungrouped';
-          const groupName = recipe.recipeGroup?.name || 'Ungrouped';
+          const groupName = recipe.recipeGroup?.name || t('feeding.viewRecipe.ungrouped');
           if (!grouped.has(groupId)) {
             grouped.set(groupId, { id: groupId, name: groupName, alterations: [] });
           }
@@ -79,7 +81,7 @@ const ViewRecipe: React.FC = () => {
         });
         setGroups(Array.from(grouped.values()));
       } catch (error: any) {
-        toast.error(error?.response?.data?.message || "Can't load recipes");
+        toast.error(error?.response?.data?.message || t('feeding.common.cantLoadRecipes'));
       } finally {
         setLoading(false);
       }
@@ -107,7 +109,7 @@ const ViewRecipe: React.FC = () => {
 
   /* render */
   return (
-    <PageContainer title="Feeding Recipe List" maxWidth="1100px">
+    <PageContainer title={t('feeding.viewRecipe.title')} maxWidth="1100px">
       {/* Search bar */}
       <Paper
         elevation={1}
@@ -120,7 +122,7 @@ const ViewRecipe: React.FC = () => {
         }}
       >
         <TextField
-          placeholder="Search"
+          placeholder={t('common.search')}
           variant="standard"
           fullWidth
           value={query}
@@ -150,13 +152,13 @@ const ViewRecipe: React.FC = () => {
             <TableHead>
               <TableRow sx={{ backgroundColor: '#F8F9FA' }}>
                 <TableCell width={80} sx={{ fontWeight: 600, fontSize: 16 }}>
-                  Sr#
+                  {t('feeding.viewRecipe.columns.sr')}
                 </TableCell>
                 <TableCell sx={{ fontWeight: 600, fontSize: 16 }}>
-                  Recipe Name
+                  {t('feeding.viewRecipe.columns.recipeName')}
                 </TableCell>
                 <TableCell sx={{ fontWeight: 600, fontSize: 16 }}>
-                  Recipe Alteration
+                  {t('feeding.viewRecipe.columns.recipeAlteration')}
                 </TableCell>
                 <TableCell width={180} />
               </TableRow>
@@ -198,7 +200,7 @@ const ViewRecipe: React.FC = () => {
                         }}
                         onClick={() => handleOpen(g)}
                       >
-                        View Alterations
+                        {t('feeding.common.viewAlterations')}
                       </Button>
                     </TableCell>
                   </TableRow>
@@ -207,7 +209,7 @@ const ViewRecipe: React.FC = () => {
               {!loading && pagedGroups.length === 0 && (
                 <TableRow>
                   <TableCell colSpan={4} align="center" sx={{ fontSize: 15 }}>
-                    No recipes found.
+                    {t('feeding.common.noRecipesFound')}
                   </TableCell>
                 </TableRow>
               )}
@@ -236,7 +238,7 @@ const ViewRecipe: React.FC = () => {
         <DialogContent sx={{ p: { xs: 2, md: 4 } }}>
           {openGroup && (
             <ViewAlterations
-              title={`${openGroup.name} Recipes`}
+              title={t('feeding.viewRecipe.recipesDialogTitle', { name: openGroup.name })}
               rows={openGroup.alterations}
             />
           )}

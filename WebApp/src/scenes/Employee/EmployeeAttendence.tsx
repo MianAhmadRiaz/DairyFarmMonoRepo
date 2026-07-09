@@ -15,20 +15,21 @@ import {
   getAttendance,
   MappedAttendance
 } from '../../shared/services/EmployeeAPI/attendance.service';
+import { useTranslation } from 'react-i18next';
 
-const monthsData = [
-  'January',
-  'February',
-  'March',
-  'April',
-  'May',
-  'June',
-  'July',
-  'August',
-  'September',
-  'October',
-  'November',
-  'December'
+const monthKeys = [
+  'january',
+  'february',
+  'march',
+  'april',
+  'may',
+  'june',
+  'july',
+  'august',
+  'september',
+  'october',
+  'november',
+  'december'
 ];
 
 interface AttendanceProps {
@@ -36,6 +37,7 @@ interface AttendanceProps {
 }
 
 const Attendance: React.FC<AttendanceProps> = ({ employeeId }) => {
+  const { t } = useTranslation();
   const [records, setRecords] = useState<
     MappedAttendance['attendance']
   >([]);
@@ -84,7 +86,7 @@ const Attendance: React.FC<AttendanceProps> = ({ employeeId }) => {
   }, [records]);
 
   const monthlyTotals = useMemo(() => {
-    const totals = monthsData.map(() => ({
+    const totals = monthKeys.map(() => ({
       present: 0,
       absent: 0,
       leave: 0
@@ -102,17 +104,17 @@ const Attendance: React.FC<AttendanceProps> = ({ employeeId }) => {
 
   const attendanceSummary = [
     {
-      label: 'Total Presents',
+      label: t('employee.employeeAttendance.totalPresents'),
       value: summary.present,
       icon: <EventAvailableIcon color="primary" fontSize="large" />
     },
     {
-      label: 'Total Absents',
+      label: t('employee.employeeAttendance.totalAbsents'),
       value: summary.absent,
       icon: <EventBusyIcon sx={{ color: '#f87171' }} fontSize="large" />
     },
     {
-      label: 'Total Leaves',
+      label: t('employee.employeeAttendance.totalLeaves'),
       value: summary.leave,
       icon: <EventNoteIcon sx={{ color: '#facc15' }} fontSize="large" />
     }
@@ -151,7 +153,7 @@ const Attendance: React.FC<AttendanceProps> = ({ employeeId }) => {
       <Card sx={{ mt: 3 }}>
         <CardContent>
           <Typography fontWeight="bold" fontSize="1.2rem" mb={3}>
-            Attendance ({year})
+            {t('employee.employeeAttendance.attendanceYear', { year })}
           </Typography>
 
           {/* Table Header */}
@@ -168,14 +170,14 @@ const Attendance: React.FC<AttendanceProps> = ({ employeeId }) => {
               fontSize: '1rem'
             }}
           >
-            <Typography>MONTH</Typography>
-            <Typography>PRESENTS</Typography>
-            <Typography>ABSENTS</Typography>
-            <Typography>LEAVES</Typography>
+            <Typography>{t('employee.employeeAttendance.monthColumn')}</Typography>
+            <Typography>{t('employee.employeeAttendance.presentsColumn')}</Typography>
+            <Typography>{t('employee.employeeAttendance.absentsColumn')}</Typography>
+            <Typography>{t('employee.employeeAttendance.leavesColumn')}</Typography>
           </Box>
 
           {/* Table Rows */}
-          {monthsData.map((month, idx) => (
+          {monthKeys.map((month, idx) => (
             <Box
               key={idx}
               sx={{
@@ -189,7 +191,7 @@ const Attendance: React.FC<AttendanceProps> = ({ employeeId }) => {
                 fontSize: '0.95rem'
               }}
             >
-              <Typography>{month}</Typography>
+              <Typography>{t('employee.employeeAttendance.months.' + month)}</Typography>
               <Typography>{monthlyTotals[idx].present}</Typography>
               <Typography>{monthlyTotals[idx].absent}</Typography>
               <Typography>{monthlyTotals[idx].leave}</Typography>
